@@ -1,0 +1,579 @@
+{
+  "version": 1,
+  "source": "docs/06-findings-library.md",
+  "last_updated": "2026-05-20",
+  "notes": "Source of truth for the 35 seeded findings. Sync from Notion back to this file as Rob adds/edits entries during real audits. Variables in {ALL_CAPS} are per-customer substitutions.",
+  "variables": {
+    "ACTUAL_NAME": "Customer's product name from intake form",
+    "ACTUAL_EMAIL": "Customer's support email",
+    "ONE_LINE_DESCRIPTION": "What the app does (intake form)",
+    "PAGE": "Specific page name where issue appears",
+    "BUTTON_NAME": "Actual visible button label",
+    "FORM_NAME": "Actual form label",
+    "EXPECTED_BEHAVIOR": "What the button/form should do",
+    "LIST": "Array of items (broken links, errors, etc.)",
+    "LIST_OF_BROKEN_LINKS": "List of broken internal links",
+    "LIST_WITH_SIZES": "List of oversized images with sizes",
+    "LIST_WITH_STATUS_CODES": "Failed network requests with status codes",
+    "LIST_OF_ELEMENTS": "Tap targets that are too small",
+    "LIST_OF_PAGES": "Pages missing loading states",
+    "ERROR_LIST": "Console errors with stack traces",
+    "REQUEST_LIST": "Failed network requests",
+    "PROTECTED_ROUTES": "Routes loaded without auth",
+    "DATA_TYPE": "Type of cross-user data exposed",
+    "TABLE_NAME": "Supabase table that needs RLS",
+    "EXAMPLE": "Specific instance of cross-user data leakage",
+    "SIZE": "Numeric size (px, MB, etc.)",
+    "N": "Count",
+    "ITEMS": "Plural noun for empty-state items",
+    "PREFERRED_TERM": "Chosen terminology after consultation",
+    "SPECIFIC_BEHAVIOR_NEEDED": "What the form should do after submission"
+  },
+  "categories": [
+    "Placeholders & forgotten content",
+    "Trust pages & legal",
+    "Broken functionality",
+    "Mobile & responsive",
+    "Authentication & permissions",
+    "Sharing & meta",
+    "User experience",
+    "Performance & polish"
+  ],
+  "severity_levels": ["Critical", "High", "Medium", "Low"],
+  "findings": [
+    {
+      "id": "FL-001",
+      "name": "Generic 'Your Company Name' left in headers/footers",
+      "category": "Placeholders & forgotten content",
+      "severity": "High",
+      "detection": {
+        "type": "regex",
+        "pattern": "your\\s+(company|business|brand)\\s+name",
+        "flags": "i"
+      },
+      "explanation": "Your site still shows \"Your Company Name\" instead of your actual product name. This is one of the first things visitors notice — it signals \"this isn't finished.\"",
+      "fix_prompts": {
+        "lovable": "On every page, find any instance of 'Your Company Name' or similar placeholder text in headers, footers, navigation, and metadata. Replace with the actual product name: {ACTUAL_NAME}. Don't change any code structure or styling — only the visible text.",
+        "bolt": "Search the entire codebase for placeholder text like 'Your Company Name' and replace with '{ACTUAL_NAME}'. Update headers, footers, page titles, and meta tags. Preserve all other code.",
+        "generic": "Find any instance of 'Your Company Name' or similar placeholder text and replace with the actual product name: {ACTUAL_NAME}. Check headers, footers, navigation, and metadata."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-002",
+      "name": "Lorem ipsum still visible",
+      "category": "Placeholders & forgotten content",
+      "severity": "High",
+      "detection": {
+        "type": "regex",
+        "pattern": "lorem\\s+ipsum|consectetur\\s+adipiscing",
+        "flags": "i"
+      },
+      "explanation": "There's lorem ipsum placeholder text still showing on your site. Visitors will recognize it immediately.",
+      "fix_prompts": {
+        "generic": "Find any lorem ipsum or placeholder paragraph text on the site and replace it with real content. The content should be about: {ONE_LINE_DESCRIPTION}. Keep paragraphs roughly the same length as the placeholders."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-003",
+      "name": "Default platform copy (Lovable starter text)",
+      "category": "Placeholders & forgotten content",
+      "severity": "High",
+      "detection": {
+        "type": "manual",
+        "description": "Look for known Lovable starter phrases like 'Your AI-powered web application,' 'Welcome to your new app,' 'Get started by editing'"
+      },
+      "explanation": "Some of Lovable's default starter copy is still on your homepage. Visitors who've seen other Lovable apps will recognize it.",
+      "fix_prompts": {
+        "lovable": "Replace any default Lovable starter copy on the homepage with content specific to my app. My app is {ONE_LINE_DESCRIPTION}. Write a real hero headline, subheadline, and CTA. Keep the visual layout the same."
+      },
+      "notes": "Build per-platform default-copy detection lists as patterns are observed."
+    },
+    {
+      "id": "FL-004",
+      "name": "'[Insert X here]' brackets",
+      "category": "Placeholders & forgotten content",
+      "severity": "High",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\[insert\\s+\\w+|\\[your\\s+\\w+|\\[add\\s+\\w+",
+        "flags": "i"
+      },
+      "explanation": "There are template instructions like \"[Insert tagline here]\" still visible on the page. These are meant to be replaced before launch.",
+      "fix_prompts": {
+        "generic": "Find any text in square brackets that looks like a template instruction (e.g., '[Insert tagline]', '[Your value prop]'). Replace each with actual content based on the surrounding context."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-005",
+      "name": "TODO/FIXME comments rendered to users",
+      "category": "Placeholders & forgotten content",
+      "severity": "Medium",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bTODO\\b|\\bFIXME\\b",
+        "flags": ""
+      },
+      "explanation": "Internal developer notes (\"TODO: add real description\") are showing up on the live site as actual user-facing text.",
+      "fix_prompts": {
+        "generic": "Find any visible 'TODO' or 'FIXME' text on the live site and replace with the real content the note was asking for. Use the surrounding context to figure out what should be there."
+      },
+      "notes": "Detect only visible text, not code comments. False positive risk: legitimate \"TODO\" in a real to-do app's UI."
+    },
+    {
+      "id": "FL-006",
+      "name": "Placeholder email addresses",
+      "category": "Placeholders & forgotten content",
+      "severity": "Critical",
+      "detection": {
+        "type": "regex",
+        "pattern": "(support|hello|info|contact)@(example|yourdomain|domain|test)\\.com",
+        "flags": "i"
+      },
+      "explanation": "Your contact/support email is still a placeholder like `support@example.com`. Visitors who try to reach you will bounce.",
+      "fix_prompts": {
+        "generic": "Find every instance of placeholder email addresses (anything @example.com, @yourdomain.com, @test.com) and replace with the real support email: {ACTUAL_EMAIL}. Check footer, contact page, mailto: links, and any 'help' or 'support' sections."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-007",
+      "name": "'Acme Inc' / 'Example Corp' default company",
+      "category": "Placeholders & forgotten content",
+      "severity": "High",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bacme\\b|example\\s+(corp|inc|company|llc)",
+        "flags": "i"
+      },
+      "explanation": "References to \"Acme Inc\" or \"Example Corp\" are still showing up. These are default placeholder company names.",
+      "fix_prompts": {
+        "generic": "Replace any references to 'Acme', 'Example Corp', or similar placeholder company names with the actual product name: {ACTUAL_NAME}."
+      },
+      "notes": "'Acme' can be a legitimate brand name — verify before flagging."
+    },
+    {
+      "id": "FL-008",
+      "name": "Missing /privacy page",
+      "category": "Trust pages & legal",
+      "severity": "High",
+      "detection": {
+        "type": "http",
+        "description": "Try GET /privacy, /privacy-policy — returns 404"
+      },
+      "explanation": "Your site has no privacy policy page. Most users — and almost certainly the App Store, payment processors, and ad platforms — expect one.",
+      "fix_prompts": {
+        "generic": "Add a /privacy route with a basic privacy policy page. Include sections for: what data we collect, how we use it, how we share it (or don't), data retention, user rights, and contact info. Use {ACTUAL_EMAIL} for the contact section. Link to it from the footer."
+      },
+      "notes": "Bump to Critical if the app collects any user data."
+    },
+    {
+      "id": "FL-009",
+      "name": "Missing /terms page",
+      "category": "Trust pages & legal",
+      "severity": "High",
+      "detection": {
+        "type": "http",
+        "description": "404 on /terms, /terms-of-service, /tos"
+      },
+      "explanation": "Your site has no Terms of Service. Users have nothing to agree to, and payment processors usually require one.",
+      "fix_prompts": {
+        "generic": "Add a /terms route with basic Terms of Service. Include sections for: acceptance of terms, service description, user obligations, prohibited uses, termination, disclaimers, and contact info. Link from the footer."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-010",
+      "name": "Missing /contact or contact info",
+      "category": "Trust pages & legal",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "No visible contact email, no /contact page, no contact form"
+      },
+      "explanation": "Visitors can't easily find how to contact you. This hurts trust and conversion.",
+      "fix_prompts": {
+        "generic": "Add a visible way for users to contact me. Either add a /contact page with an email address ({ACTUAL_EMAIL}) and optional contact form, or put a clear support email in the footer of every page."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-011",
+      "name": "Buttons that do nothing on click",
+      "category": "Broken functionality",
+      "severity": "Critical",
+      "detection": {
+        "type": "manual",
+        "description": "Click each visible button, observe DOM/navigation"
+      },
+      "explanation": "The \"{BUTTON_NAME}\" button doesn't do anything when clicked. Users will think the site is broken.",
+      "fix_prompts": {
+        "generic": "The {BUTTON_NAME} button on {PAGE} is not working — it appears clickable but does nothing when clicked. Investigate why and fix it so it performs its intended action: {EXPECTED_BEHAVIOR}. Don't change the button's appearance."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-012",
+      "name": "Broken internal links (404s)",
+      "category": "Broken functionality",
+      "severity": "High",
+      "detection": {
+        "type": "http",
+        "description": "Crawl all <a href> values, check status codes"
+      },
+      "explanation": "Some internal links lead to \"page not found\" errors. Specifically: {LIST_OF_BROKEN_LINKS}.",
+      "fix_prompts": {
+        "generic": "Fix these broken internal links: {LIST}. For each link, either point it to the correct page if it exists, or create the missing page, or remove the link entirely if no longer needed."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-013",
+      "name": "Forms that don't submit",
+      "category": "Broken functionality",
+      "severity": "Critical",
+      "detection": {
+        "type": "manual",
+        "description": "Fill out form with test data, click submit, observe network tab and DOM"
+      },
+      "explanation": "The {FORM_NAME} form doesn't actually submit. Users fill it out, click submit, and nothing happens.",
+      "fix_prompts": {
+        "generic": "The {FORM_NAME} form on {PAGE} doesn't work — when users fill it out and click submit, nothing happens. Fix the form so submissions are saved or sent properly. {SPECIFIC_BEHAVIOR_NEEDED}."
+      },
+      "notes": "Crawler must NEVER submit forms automatically. Manual-only detection."
+    },
+    {
+      "id": "FL-014",
+      "name": "Forms submit with no confirmation",
+      "category": "Broken functionality",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Submit form, observe whether user receives any confirmation"
+      },
+      "explanation": "When users submit the {FORM_NAME} form, they don't get any confirmation that it worked. They'll wonder if it submitted at all.",
+      "fix_prompts": {
+        "generic": "After the {FORM_NAME} form submits, show a clear success message or redirect to a confirmation page. The user needs to know their submission worked."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-015",
+      "name": "Console errors on page load",
+      "category": "Broken functionality",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Open DevTools, load page, capture all console errors"
+      },
+      "explanation": "Your browser shows {N} errors when the page loads. Some of these might be causing features to fail.",
+      "fix_prompts": {
+        "generic": "These JavaScript errors appear in the console when {PAGE} loads: {ERROR_LIST}. Investigate each and fix the underlying cause. Don't suppress errors — fix them."
+      },
+      "notes": "Bump to High if functional features depend on the failing code."
+    },
+    {
+      "id": "FL-016",
+      "name": "Failed network requests (4xx/5xx)",
+      "category": "Broken functionality",
+      "severity": "High",
+      "detection": {
+        "type": "manual",
+        "description": "Open Network tab, load page, filter for non-2xx responses"
+      },
+      "explanation": "When the page loads, some background requests are failing: {REQUEST_LIST}. Features depending on these requests will be broken.",
+      "fix_prompts": {
+        "generic": "These network requests are failing on {PAGE}: {LIST_WITH_STATUS_CODES}. Investigate each and fix the underlying issue — wrong URL, missing endpoint, auth failure, etc."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-017",
+      "name": "Mobile layout overflow / horizontal scroll",
+      "category": "Mobile & responsive",
+      "severity": "High",
+      "detection": {
+        "type": "manual",
+        "description": "Open in 375px viewport, look for document.body.scrollWidth > window.innerWidth"
+      },
+      "explanation": "On mobile, your page scrolls sideways because something is wider than the screen. This makes the site feel broken on phones.",
+      "fix_prompts": {
+        "generic": "On mobile devices, {PAGE} has horizontal scrolling — something is wider than the viewport. Find what's overflowing (often a wide image, table, or container with fixed width) and make it responsive. Don't break the desktop layout."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-018",
+      "name": "Text too small on mobile",
+      "category": "Mobile & responsive",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Body text rendering under ~14px on mobile"
+      },
+      "explanation": "Body text on mobile is too small to read comfortably (currently {SIZE}px). Most apps use at least 16px for body text on mobile.",
+      "fix_prompts": {
+        "generic": "On mobile, increase the body text to at least 16px. Currently it's rendering at {SIZE}px which is hard to read on phones."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-019",
+      "name": "Tap targets too small",
+      "category": "Mobile & responsive",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Buttons/links smaller than 44×44px on mobile"
+      },
+      "explanation": "Some buttons are too small to tap easily on mobile (under 44×44 pixels). Apple and Google both recommend 44px as a minimum.",
+      "fix_prompts": {
+        "generic": "On mobile, increase tap target sizes for {LIST_OF_ELEMENTS} to at least 44×44 pixels. Either add padding or increase the button size directly."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-020",
+      "name": "Logged-out access to protected pages",
+      "category": "Authentication & permissions",
+      "severity": "Critical",
+      "detection": {
+        "type": "http",
+        "description": "Try GET /dashboard, /admin, /settings etc. without auth"
+      },
+      "explanation": "Users who aren't logged in can access {PROTECTED_ROUTES}. This may expose data they shouldn't see.",
+      "fix_prompts": {
+        "lovable": "These routes load content even when no user is signed in: {LIST}. Add authentication checks so that visiting these routes while logged out redirects to /login or shows an empty/error state. Use Supabase auth state to verify.",
+        "bolt": "Add auth guards to these routes: {LIST}. Verify the user has an active session before rendering content. Redirect unauthenticated users to /login."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-021",
+      "name": "Cross-user data visible",
+      "category": "Authentication & permissions",
+      "severity": "Critical",
+      "detection": {
+        "type": "manual",
+        "description": "Sign in as User A, then as User B, compare what each can see"
+      },
+      "explanation": "User A can see User B's data (specifically: {EXAMPLE}). This means anyone who signs up can see other users' information.",
+      "fix_prompts": {
+        "lovable": "User A can see User B's {DATA_TYPE} on the {PAGE} page. This means Supabase queries aren't filtering by user. Add row-level security policies on the {TABLE_NAME} table that restrict reads to `auth.uid() = user_id`. Also update the query in the page component to filter by current user."
+      },
+      "notes": "Cornerstone Critical finding. Requires two-account intake (Launch Pack+)."
+    },
+    {
+      "id": "FL-022",
+      "name": "Signup confirmation email never arrives",
+      "category": "Authentication & permissions",
+      "severity": "Critical",
+      "detection": {
+        "type": "manual",
+        "description": "Sign up with fresh email, wait 5+ minutes"
+      },
+      "explanation": "When new users sign up, the confirmation email never arrives. They can't complete signup.",
+      "fix_prompts": {
+        "generic": "When users sign up, they should receive a confirmation email but none arrives. Check the email provider configuration (Resend, SendGrid, or Supabase's built-in email), verify the sender domain is set up, and ensure the signup flow actually triggers the email send."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-023",
+      "name": "Default meta description (platform default)",
+      "category": "Sharing & meta",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Check <meta name=\"description\"> against known platform defaults"
+      },
+      "explanation": "When your link is shared on social media, it shows the platform's default description instead of one about your actual app.",
+      "fix_prompts": {
+        "generic": "Update the meta description to describe my actual app: {ONE_LINE_DESCRIPTION}. Also set Open Graph tags (og:title, og:description, og:image) so the link previews well when shared on Twitter, LinkedIn, Slack, etc."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-024",
+      "name": "No favicon (showing default platform icon)",
+      "category": "Sharing & meta",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Check <link rel=\"icon\"> — verify it's custom, not platform default"
+      },
+      "explanation": "Your site uses the default browser icon (or the platform's). It should have your own favicon so users recognize tabs.",
+      "fix_prompts": {
+        "generic": "Add a custom favicon. I'll provide an image (or generate a simple one based on the app name '{ACTUAL_NAME}'). Update the <link rel='icon'> tag and add the necessary icon files."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-025",
+      "name": "Page title is generic ('My App' or platform default)",
+      "category": "Sharing & meta",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Check <title> tag and per-page title overrides"
+      },
+      "explanation": "Your page titles in browser tabs are generic. Users won't see your app name in their tab list.",
+      "fix_prompts": {
+        "generic": "Update page titles so each page has a meaningful title with the app name. Format: 'Page Name | {ACTUAL_NAME}'. Update both the default <title> and any per-page overrides."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-026",
+      "name": "No empty states (blank dashboards for new users)",
+      "category": "User experience",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Sign in with brand-new account, observe dashboard/main pages"
+      },
+      "explanation": "When a new user signs in for the first time, the dashboard is completely empty with no instructions. They won't know what to do.",
+      "fix_prompts": {
+        "generic": "When a user has no {ITEMS} yet, the {PAGE} page shows nothing. Add a friendly empty state with: an icon or illustration, a short message ('No {ITEMS} yet'), and a clear CTA button to create the first one."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-027",
+      "name": "No loading states",
+      "category": "User experience",
+      "severity": "Low",
+      "detection": {
+        "type": "manual",
+        "description": "Slow network throttle in DevTools, observe page during data fetch"
+      },
+      "explanation": "While data is loading, the page shows nothing — users see a blank screen and may think it's broken.",
+      "fix_prompts": {
+        "generic": "Add loading states (skeleton screens, spinners, or 'Loading...' text) to {LIST_OF_PAGES} so users see something is happening while data loads."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-028",
+      "name": "Error states swallow errors silently",
+      "category": "User experience",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Force errors (disconnect network, submit invalid data) and observe UI"
+      },
+      "explanation": "When something goes wrong, users get no feedback — the action just silently fails.",
+      "fix_prompts": {
+        "generic": "When operations fail (network errors, validation errors, server errors), show users a clear error message instead of failing silently. Use a toast notification or inline error text. Be specific about what went wrong when possible."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-029",
+      "name": "No 'back' or navigation context",
+      "category": "User experience",
+      "severity": "Low",
+      "detection": {
+        "type": "manual",
+        "description": "Navigate deep into the app, observe whether back/breadcrumb is clear"
+      },
+      "explanation": "When users navigate deep into the app, there's no clear way back to where they came from.",
+      "fix_prompts": {
+        "generic": "Add either a back button or breadcrumb navigation on deeper pages so users can navigate back to where they were."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-030",
+      "name": "Massive unoptimized images",
+      "category": "Performance & polish",
+      "severity": "Medium",
+      "detection": {
+        "type": "http",
+        "description": "Check Network tab for >1MB images"
+      },
+      "explanation": "Some images on your site are very large (e.g., {SIZE}MB) and slow down page loads.",
+      "fix_prompts": {
+        "generic": "These images are oversized: {LIST_WITH_SIZES}. Compress them and use modern formats (WebP). Aim for under 200KB per image for hero/featured images and under 50KB for thumbnails."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-031",
+      "name": "Render-blocking resources",
+      "category": "Performance & polish",
+      "severity": "Low",
+      "detection": {
+        "type": "manual",
+        "description": "Lighthouse / WebPageTest"
+      },
+      "explanation": "Some scripts and stylesheets are blocking the page from rendering quickly. Users see a blank page for longer than necessary.",
+      "fix_prompts": {
+        "generic": "Defer non-critical JavaScript with the `defer` or `async` attributes. Inline critical CSS for above-the-fold content. The goal is for users to see content within 1.5 seconds on a typical connection."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-032",
+      "name": "No 404 page",
+      "category": "Performance & polish",
+      "severity": "Low",
+      "detection": {
+        "type": "http",
+        "description": "Visit /nonexistent-route-12345"
+      },
+      "explanation": "When users hit a URL that doesn't exist, they get a generic browser error instead of a friendly 404 page.",
+      "fix_prompts": {
+        "generic": "Add a custom 404 page that shows when users visit URLs that don't exist. Include: a clear 'Page not found' message, a link back to home, and optionally a search or sitemap. Style it consistently with the rest of the site."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-033",
+      "name": "Inconsistent terminology (customer/client/user)",
+      "category": "Performance & polish",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Manual scan for multiple terms referring to the same entity"
+      },
+      "explanation": "Your app uses \"customer,\" \"client,\" and \"user\" interchangeably to refer to the same thing. Pick one and use it consistently — it makes the app feel more thought-through.",
+      "fix_prompts": {
+        "generic": "The app uses 'customer,' 'client,' and 'user' to refer to the same role. Pick {PREFERRED_TERM} and replace the others everywhere in the UI. Don't change database table or column names — only user-facing labels."
+      },
+      "notes": "This is the light-touch preview of the v1 Brand Tokens feature. Lead with it when offering an upsell."
+    },
+    {
+      "id": "FL-034",
+      "name": "Capitalization inconsistency on UI labels",
+      "category": "Performance & polish",
+      "severity": "Low",
+      "detection": {
+        "type": "manual",
+        "description": "Manual scan of buttons, headers, nav items"
+      },
+      "explanation": "Buttons and labels use inconsistent capitalization — some use Title Case, some use sentence case, some are ALL CAPS.",
+      "fix_prompts": {
+        "generic": "Standardize capitalization across all UI elements. Use sentence case for buttons ('Save changes', not 'Save Changes' or 'SAVE CHANGES') and title case for page headings. Apply this consistently throughout the app."
+      },
+      "notes": null
+    },
+    {
+      "id": "FL-035",
+      "name": "Default Lovable / Bolt / Base44 branding still showing",
+      "category": "Performance & polish",
+      "severity": "High",
+      "detection": {
+        "type": "manual",
+        "description": "Search for 'Built with Lovable' or platform branding"
+      },
+      "explanation": "Your site still shows \"Built with Lovable\" or similar platform branding. If you're on a paid plan, you can remove this.",
+      "fix_prompts": {
+        "lovable": "Remove the 'Built with Lovable' badge from the site. This is in the project settings under branding. (Note: requires a paid Lovable plan.)"
+      },
+      "notes": "Bolt/Base44 equivalents to be added when first observed."
+    }
+  ]
+}

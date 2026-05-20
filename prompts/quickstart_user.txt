@@ -1,0 +1,36 @@
+Write a Quick Start Guide for the following web app:
+
+APP NAME: {app_name}
+
+ONE-LINE DESCRIPTION:
+{one_line_description}
+
+TARGET USER:
+{target_user_description}
+
+MAIN WORKFLOW:
+{main_workflow_description}
+
+PLATFORM BUILT WITH: {platform}
+
+CRAWLED HOMEPAGE COPY:
+"""
+{homepage_text}
+"""
+
+CRAWLED POST-SIGNUP COPY:
+"""
+{post_signup_text}
+"""
+
+VISIBLE NAVIGATION LABELS:
+{nav_labels}
+
+VISIBLE CTAs / BUTTON LABELS:
+{cta_labels}
+
+SUPPORT EMAIL OR CONTACT INFO:
+{support_contact}
+
+ANY SPECIFIC NOTES FROM THE FOUNDER:
+{founder_notes}

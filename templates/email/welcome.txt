@@ -1,0 +1,21 @@
+Subject: Got it — checkup for {APP_NAME} coming in {TURNAROUND}
+
+Hi {NAME},
+
+Thanks for trusting Onceover with {APP_NAME}. I'll have your checkup ready in {TURNAROUND} from now.
+
+To get started, please fill out the short intake form here:
+{INTAKE_FORM_LINK}
+
+It takes about 3 minutes. The more context you give me, the more useful the report will be.
+
+Talk soon,
+Rob
+hello@onceover.app
+
+---
+Variables:
+- {NAME} — customer first name
+- {APP_NAME} — app name from intake
+- {TURNAROUND} — "24 hours" (Quick Checkup) / "12 hours" (Launch Pack) / "12 hours" (Polish)
+- {INTAKE_FORM_LINK} — Tally.so form URL

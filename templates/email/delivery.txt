@@ -1,0 +1,26 @@
+Subject: Your Onceover checkup is ready
+
+Hi {NAME},
+
+Your checkup for {APP_NAME} is ready. Here's the link:
+
+{NOTION_REPORT_LINK}
+
+A few notes:
+- The findings are ranked by severity. Start at the top.
+- Every finding has a copy-paste fix prompt for {PLATFORM}. Just paste them in and let your builder fix it.
+- If you're at the Launch Pack tier or above, the Quick Start Guide is in the second half of the report.
+- The report is yours to share. Feel free to forward the link to teammates or freelancers.
+
+If anything isn't clear, just reply to this email. I'll respond within a few hours.
+
+Good luck with the launch.
+
+— Rob
+
+---
+Variables:
+- {NAME} — customer first name
+- {APP_NAME} — app name from intake
+- {NOTION_REPORT_LINK} — Notion page shareable URL
+- {PLATFORM} — Lovable / Bolt / Base44 / Replit / v0 / their builder

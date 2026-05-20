@@ -1,0 +1,34 @@
+APP NAME: TaskRoom
+
+ONE-LINE DESCRIPTION:
+A simple shared to-do list for small teams.
+
+TARGET USER:
+Small business owners or team leads who want to assign and track tasks without using something heavy like Asana or Jira.
+
+MAIN WORKFLOW:
+Create a task, assign it to a teammate, mark it done when finished.
+
+PLATFORM BUILT WITH: Lovable
+
+CRAWLED HOMEPAGE COPY:
+"""
+TaskRoom — shared tasks for small teams. Stop losing track of who's doing what. Add a task, assign it, get it done. Sign up free.
+"""
+
+CRAWLED POST-SIGNUP COPY:
+"""
+Welcome to TaskRoom. Create your first task to get started. Invite teammates from Settings.
+"""
+
+VISIBLE NAVIGATION LABELS:
+Tasks, Team, Settings, Help
+
+VISIBLE CTAs / BUTTON LABELS:
+Add Task, Assign, Mark Done, Invite Teammate, Sign Out
+
+SUPPORT EMAIL OR CONTACT INFO:
+hello@taskroom.app
+
+ANY SPECIFIC NOTES FROM THE FOUNDER:
+Most users will be inviting 2–5 teammates. There's no Slack integration yet, just email notifications.

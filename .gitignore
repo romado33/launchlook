@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node (in case landing-page tooling needs it later)
+node_modules/
+dist/
+build/
+.next/
+.cache/
+.parcel-cache/
+
+# Env and secrets — never commit
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# Generated output (scans, screenshots, intermediate artifacts)
+output/
+!output/.gitkeep
+scans/
+screenshots/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cursor / Claude internals
+.cursor/
+.claude/

@@ -1,0 +1,54 @@
+[project]
+name = "onceover"
+version = "0.1.0"
+description = "A friendly pre-launch checkup for vibe-coded apps."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "Rob Dods" }]
+keywords = ["vibe-coding", "lovable", "bolt", "audit", "quick-start-guide"]
+
+dependencies = [
+    "python-dotenv>=1.0",
+    "notion-client>=2.2",
+    "resend>=2.0",
+    "stripe>=10.0",
+    "jinja2>=3.1",
+    "markdown>=3.5",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+# Installed only when the crawler is ready (BL-14)
+crawler = [
+    "playwright>=1.40",
+]
+
+# AI providers — only needed if QSG pipeline is automated (BL-09 v2)
+ai = [
+    "anthropic>=0.40",
+    "openai>=1.50",
+]
+
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"

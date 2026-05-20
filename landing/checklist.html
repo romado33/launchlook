@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Pre-Launch Checkup for Vibe-Coded Apps — free checklist | Onceover</title>
+  <meta name="description" content="A free, comprehensive checklist for anyone about to share their Lovable, Bolt, Base44, or Replit app with real users. Go through it before you launch." />
+
+  <meta property="og:title" content="The Pre-Launch Checkup for Vibe-Coded Apps" />
+  <meta property="og:description" content="A free checklist for anyone about to share their Lovable / Bolt / Base44 / Replit app with real users." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://onceover.app/checklist" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%93%3C/text%3E%3C/svg%3E" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Fraunces', 'Georgia', 'serif'],
+          },
+          colors: {
+            paper: '#FAF7F2',
+            ink: '#1F1B16',
+            muted: '#6B6359',
+            accent: '#B45309',
+            line: '#E7E0D6',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .prose-list li { padding: 0.25rem 0; }
+    .prose-list input[type=checkbox] { margin-right: 0.5rem; transform: translateY(2px); }
+  </style>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header class="border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
+      <a href="/" class="font-serif text-xl font-medium">Onceover</a>
+      <nav class="flex items-center gap-6 text-sm text-muted">
+        <a href="/#pricing" class="hover:text-ink">Pricing</a>
+        <a href="/#faq" class="hover:text-ink">FAQ</a>
+        <a href="/checklist.html" class="text-ink">Free checklist</a>
+      </nav>
+    </div>
+  </header>
+
+  <article class="max-w-3xl mx-auto px-6 py-16 sm:py-20">
+    <p class="text-sm uppercase tracking-wider text-muted">Free checklist</p>
+    <h1 class="font-serif text-4xl sm:text-5xl leading-tight mt-2">The Pre-Launch Checkup for Vibe-Coded Apps</h1>
+
+    <blockquote class="mt-8 border-l-2 border-accent pl-6 text-muted leading-relaxed">
+      <p>A free, comprehensive checklist for anyone about to share their Lovable / Bolt / Base44 / Replit app with real users.</p>
+      <p class="mt-3">Go through this list before you launch. Fix what you can. The stuff you can't fix yourself, hire help for — but don't ship without checking.</p>
+      <p class="mt-3 text-sm italic">Maintained by <a class="underline hover:text-ink" href="/">Onceover</a>. Free to copy, fork, share.</p>
+    </blockquote>
+
+    <h2 class="font-serif text-2xl mt-14 mb-4">How to use this checklist</h2>
+    <ol class="list-decimal pl-6 text-muted space-y-1">
+      <li>Open your app in a normal browser (not the platform's preview).</li>
+      <li>Work through each section in order.</li>
+      <li>For each item: mark ✅ Pass, ⚠️ Issue, or ❓ Unsure.</li>
+      <li>The "Issue" items are your fix list. The "Unsure" items need a second opinion.</li>
+    </ol>
+    <p class="mt-4 text-muted">This list focuses on what your <em>users</em> will notice, not deep security. For deep security scans, tools like <a class="underline hover:text-ink" href="https://vibeappscanner.com">VAS</a> and <a class="underline hover:text-ink" href="https://vibe-eval.com">VibeEval</a> are good complements to this.</p>
+
+    <!-- Section 1 -->
+    <h2 class="font-serif text-2xl mt-14 mb-4">Section 1: First impressions (5 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> Homepage loads in under 3 seconds on a normal connection</li>
+      <li><input type="checkbox" /> The page title in the browser tab is meaningful (not "My App" or platform default)</li>
+      <li><input type="checkbox" /> The favicon is custom, not the platform default</li>
+      <li><input type="checkbox" /> The hero headline tells a visitor what the app actually does within 5 seconds of reading</li>
+      <li><input type="checkbox" /> There are no <code>Lorem ipsum</code>, <code>[insert text here]</code>, or <code>TODO</code> comments visible</li>
+      <li><input type="checkbox" /> There's no "Your Company Name" or "Acme Inc" placeholder text anywhere</li>
+      <li><input type="checkbox" /> Your actual product name appears in the header/logo, not the platform's default</li>
+      <li><input type="checkbox" /> Any default Lovable / Bolt / Base44 copy has been replaced with your own</li>
+      <li><input type="checkbox" /> The first call-to-action button is clear about what happens when clicked</li>
+    </ul>
+
+    <!-- Section 2 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 2: Trust pages (3 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> <code>/privacy</code> returns a real privacy policy page</li>
+      <li><input type="checkbox" /> <code>/terms</code> returns Terms of Service</li>
+      <li><input type="checkbox" /> There's a visible way to contact you (email, form, or <code>/contact</code> page)</li>
+      <li><input type="checkbox" /> Your support email is a real address you check (not <code>support@example.com</code>)</li>
+      <li><input type="checkbox" /> If you process payments, you have a refund policy somewhere</li>
+      <li><input type="checkbox" /> If you collect emails, you have a clear unsubscribe path</li>
+      <li><input type="checkbox" /> Footer links to privacy/terms work and don't 404</li>
+    </ul>
+
+    <!-- Section 3 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 3: Functionality (15 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> Every visible button does what its label suggests when clicked</li>
+      <li><input type="checkbox" /> Every internal link goes somewhere that exists (no 404s)</li>
+      <li><input type="checkbox" /> The signup form actually creates an account</li>
+      <li><input type="checkbox" /> The signup confirmation email actually arrives (check spam too)</li>
+      <li><input type="checkbox" /> Email links in the confirmation actually work</li>
+      <li><input type="checkbox" /> You can log in successfully after signing up</li>
+      <li><input type="checkbox" /> You can log out and the session actually ends</li>
+      <li><input type="checkbox" /> You can reset your password if you forget it</li>
+      <li><input type="checkbox" /> The main user workflow (the thing your app is for) actually works end-to-end</li>
+      <li><input type="checkbox" /> Any payment flow you have completes successfully with a test card</li>
+      <li><input type="checkbox" /> Stripe / payment provider success page actually loads after payment</li>
+      <li><input type="checkbox" /> Stripe / payment provider cancel page actually loads if you cancel</li>
+    </ul>
+
+    <!-- Section 4 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 4: Empty and error states (10 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> When a brand-new user signs up, the dashboard shows clear guidance about what to do</li>
+      <li><input type="checkbox" /> When a user has zero items / posts / tasks / whatever, there's a helpful empty state with a clear CTA</li>
+      <li><input type="checkbox" /> When you submit a form, you get clear feedback about success or failure</li>
+      <li><input type="checkbox" /> When the network fails (try airplane mode), the app shows a clear error message instead of silently breaking</li>
+      <li><input type="checkbox" /> Invalid inputs (wrong email format, weak password) show clear validation messages</li>
+      <li><input type="checkbox" /> You can't accidentally submit the same form twice with a double-click</li>
+      <li><input type="checkbox" /> Trying to access a URL that doesn't exist shows a custom 404, not a broken page</li>
+    </ul>
+
+    <!-- Section 5 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 5: Mobile (10 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> The site looks acceptable on a 375px wide viewport (iPhone SE)</li>
+      <li><input type="checkbox" /> There's no horizontal scrolling on mobile</li>
+      <li><input type="checkbox" /> Body text is at least 16px and readable without zooming</li>
+      <li><input type="checkbox" /> Buttons are at least 44×44 pixels (easy to tap)</li>
+      <li><input type="checkbox" /> Forms are usable on mobile — fields don't get cut off, keyboard doesn't cover the submit button</li>
+      <li><input type="checkbox" /> Images aren't oversized (causing slow loads)</li>
+      <li><input type="checkbox" /> The main user workflow can be completed on mobile, not just desktop</li>
+    </ul>
+
+    <!-- Section 6 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 6: Sharing and discovery (5 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> When you paste your URL into Twitter/X, LinkedIn, or Slack, the preview card looks intentional (right title, description, image)</li>
+      <li><input type="checkbox" /> Open Graph meta tags are set (<code>og:title</code>, <code>og:description</code>, <code>og:image</code>)</li>
+      <li><input type="checkbox" /> Each page has a meaningful <code>&lt;title&gt;</code> tag with your app name</li>
+      <li><input type="checkbox" /> The meta description describes your actual app, not the platform default</li>
+    </ul>
+
+    <!-- Section 7 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 7: Permissions (10 minutes, requires two test accounts)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> Sign up two test accounts. Sign in as User A. Note what you can see.</li>
+      <li><input type="checkbox" /> Sign in as User B. Verify you CAN'T see any of User A's data.</li>
+      <li><input type="checkbox" /> Specifically: User A's email, name, content, or any other identifiers should never appear on User B's screen</li>
+      <li><input type="checkbox" /> If you have admin features, verify a non-admin account can't access <code>/admin</code> routes</li>
+      <li><input type="checkbox" /> Log out completely. Try to visit <code>/dashboard</code>, <code>/settings</code>, <code>/admin</code> directly. You should be redirected to login, not see data.</li>
+      <li><input type="checkbox" /> If you have API endpoints, verify they require authentication</li>
+      <li><input type="checkbox" /> If you store sensitive data (medical, financial, personal), have an expert verify your row-level security policies</li>
+    </ul>
+
+    <!-- Section 8 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 8: Performance (5 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> Open Chrome DevTools → Lighthouse → run a Performance audit. Aim for a Performance score above 70.</li>
+      <li><input type="checkbox" /> No single image is over 1MB</li>
+      <li><input type="checkbox" /> The page has no console errors when loaded</li>
+      <li><input type="checkbox" /> The Network tab shows no failed requests (4xx or 5xx status codes)</li>
+      <li><input type="checkbox" /> First Contentful Paint is under 1.8 seconds</li>
+    </ul>
+
+    <!-- Section 9 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 9: Brand consistency (5 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> You use one term consistently for your users (pick: "customer," "client," "user," "member," etc. — don't mix)</li>
+      <li><input type="checkbox" /> Button capitalization is consistent (all sentence case OR all title case, not mixed)</li>
+      <li><input type="checkbox" /> Your product name is spelled identically everywhere</li>
+      <li><input type="checkbox" /> Your support email is the same address in every place it appears</li>
+      <li><input type="checkbox" /> The visual style (colors, fonts, spacing) feels consistent page to page</li>
+    </ul>
+
+    <!-- Section 10 -->
+    <h2 class="font-serif text-2xl mt-12 mb-4">Section 10: The "would I share this?" gut check (3 minutes)</h2>
+    <ul class="prose-list text-ink">
+      <li><input type="checkbox" /> If a friend visited your homepage, would you be proud or embarrassed?</li>
+      <li><input type="checkbox" /> If someone screenshotted your dashboard and posted it on Twitter, would you be okay with that?</li>
+      <li><input type="checkbox" /> If a journalist reviewed your app today, what's the worst thing they'd say?</li>
+      <li><input type="checkbox" /> If a competitor saw it, would they think you knew what you were doing?</li>
+    </ul>
+    <p class="mt-4 text-muted">If any of those answers are bad, fix the underlying issues before launching.</p>
+
+    <!-- What to do -->
+    <h2 class="font-serif text-2xl mt-14 mb-4">What to do with the results</h2>
+    <ul class="list-disc pl-6 text-muted space-y-1">
+      <li>Count your ⚠️ Issues. If you have more than 10, don't launch yet.</li>
+      <li>Critical issues (data leaks, broken signup, missing privacy policy) must be fixed before launch.</li>
+      <li>High-severity issues (placeholders visible, broken buttons, missing trust pages) should be fixed within 24 hours of launching if not before.</li>
+      <li>Medium and low issues can be fixed in the first 2 weeks.</li>
+    </ul>
+
+    <!-- CTA -->
+    <div class="mt-14 rounded-lg border border-line bg-white p-6 sm:p-8">
+      <h3 class="font-serif text-2xl">Want help running this?</h3>
+      <p class="mt-3 text-muted leading-relaxed">This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what Onceover does. $7 for a Quick Checkup, $29 for a Launch Pack that includes a Quick Start Guide for your users.</p>
+      <a href="/#pricing" class="mt-5 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition">See pricing</a>
+    </div>
+
+    <h2 class="font-serif text-2xl mt-14 mb-4">License</h2>
+    <p class="text-muted">This checklist is free to use, copy, fork, and republish. Attribution appreciated but not required.</p>
+  </article>
+
+  <footer class="border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">Onceover</p>
+        <p class="mt-1">A friendly pre-launch checkup for vibe-coded apps.</p>
+      </div>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        <li><a href="mailto:hello@onceover.app" class="hover:text-ink">hello@onceover.app</a></li>
+        <li><a href="/" class="hover:text-ink">Home</a></li>
+        <li><a href="https://github.com/REPLACE_ME/onceover-prelaunch-checklist" class="hover:text-ink">GitHub</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>

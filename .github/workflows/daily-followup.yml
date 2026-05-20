@@ -1,0 +1,42 @@
+name: Daily follow-up sender (BL-13)
+
+on:
+  schedule:
+    # 14:00 UTC daily (9 AM US Eastern)
+    - cron: '0 14 * * *'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no emails sent, no Notion updates)'
+        type: boolean
+        default: true
+
+jobs:
+  send-followups:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Send day-3 follow-ups
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_CUSTOMERS_DB_ID: ${{ secrets.NOTION_CUSTOMERS_DB_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python scripts/followup_send.py --days-after 3 --dry-run
+          else
+            python scripts/followup_send.py --days-after 3
+          fi
