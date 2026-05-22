@@ -44,6 +44,47 @@
       border-radius: 9999px;
       background: linear-gradient(90deg, #B45309, #FDE68A);
     }
+    .launchlook-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      text-decoration: none;
+      border: 1px solid transparent;
+      box-shadow: 0 1px 2px rgba(31, 27, 22, 0.08);
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .launchlook-btn:hover { box-shadow: 0 2px 4px rgba(31, 27, 22, 0.1); }
+    .launchlook-btn-primary {
+      background-color: #1F1B16;
+      color: #FAF7F2;
+      border-color: #1F1B16;
+    }
+    .launchlook-btn-primary:hover { background-color: #B45309; border-color: #B45309; }
+    .launchlook-btn-secondary {
+      background-color: #FFFFFF;
+      color: #1F1B16;
+      border-color: #E7E0D6;
+    }
+    .launchlook-btn-secondary:hover { border-color: #1F1B16; background-color: #FBF6EE; }
+    .launchlook-btn-accent {
+      background-color: #B45309;
+      color: #FAF7F2;
+      border-color: #B45309;
+    }
+    .launchlook-btn-accent:hover { background-color: #1F1B16; border-color: #1F1B16; }
+    .launchlook-btn[aria-disabled="true"] {
+      opacity: 0.55;
+      pointer-events: none;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
   </style>
 </head>
 
@@ -76,13 +117,13 @@
       Send your app URL. Get a plain-English Notion report with screenshots, prioritized fixes, and prompts you can paste back into <strong class="font-medium text-ink">your AI builder</strong> — Lovable, Bolt, Base44, Replit, v0, Cursor, or similar.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
-      <a href="#pricing" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-primary">
         Get Starter Package — $9
       </a>
-      <a href="/sample" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md border border-line text-ink font-medium hover:border-ink transition">
+      <a href="/sample" class="launchlook-btn launchlook-btn-secondary">
         See a sample report
       </a>
-      <a href="/checklist" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md text-muted font-medium hover:text-ink transition sm:ml-0">
+      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">
         Free checklist (~20 min)
       </a>
     </div>
@@ -161,7 +202,7 @@
           <li>🔴 "Developer Tools" on the live homepage</li>
           <li>🟠 /privacy and /terms return 404</li>
         </ul>
-        <a href="/sample" class="mt-5 inline-flex text-sm font-medium text-accent hover:text-ink transition">Read full sample report →</a>
+        <a href="/sample" class="launchlook-btn launchlook-btn-secondary mt-5">Read full sample report</a>
       </div>
     </div>
   </section>
@@ -179,8 +220,8 @@
       <p class="text-muted leading-relaxed mt-4">
         Built for non-technical founders using vibe-coded tools — including Lovable, Bolt, Base44, Replit, v0, Cursor, and others. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
       </p>
-      <p data-launchlook-linkedin-wrap class="mt-4 text-sm hidden">
-        <a data-launchlook-linkedin href="#" class="text-accent hover:text-ink underline underline-offset-2 transition">Connect on LinkedIn</a>
+      <p data-launchlook-linkedin-wrap class="mt-4 hidden">
+        <a data-launchlook-linkedin href="#" class="launchlook-btn launchlook-btn-secondary">Connect on LinkedIn</a>
       </p>
       </div>
     </div>
@@ -194,7 +235,7 @@
         <h2 class="font-serif text-xl mt-1">Not ready to pay? Run the checklist yourself.</h2>
         <p class="text-sm text-muted mt-2 max-w-prose">Plain-English, ~20 minutes — what visitors notice before you share your link. Share <code class="text-xs bg-white/80 px-1 py-0.5 rounded">launchlook.app/checklist</code> with a founder friend.</p>
       </div>
-      <a href="/checklist" class="inline-flex shrink-0 items-center justify-center min-h-11 px-5 py-2.5 rounded-md border border-line bg-white text-sm font-medium hover:border-ink transition">Open free checklist</a>
+      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary shrink-0">Open free checklist</a>
     </div>
   </section>
 
@@ -204,7 +245,11 @@
       <p class="section-label">Proof</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-4">What founders get</h2>
-      <p class="text-sm text-muted mb-6 max-w-prose">We're early — no fake testimonials. Read the <a href="/sample" class="underline hover:text-ink">sample report</a> or try the <a href="/checklist" class="underline hover:text-ink">free checklist</a>. After your checkup, we'll ask (optional) for a one-line quote you can use on LinkedIn.</p>
+      <p class="text-sm text-muted mb-4 max-w-prose">We're early — no fake testimonials. After your checkup, we'll ask (optional) for a one-line quote you can use on LinkedIn.</p>
+      <div class="flex flex-wrap gap-3 mb-6">
+        <a href="/sample" class="launchlook-btn launchlook-btn-secondary">View sample report</a>
+        <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist</a>
+      </div>
       <div class="grid sm:grid-cols-2 gap-4 text-sm">
         <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
           <p class="text-ink font-medium">Prioritized, paste-ready fixes</p>
@@ -241,7 +286,7 @@
             <li><strong>Quick Start Guide</strong> for your users</li>
             <li>24-hour delivery</li>
           </ul>
-          <a href="#" data-launchlook-stripe="starter" class="mt-6 inline-flex items-center justify-center min-h-11 px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition">
+          <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary mt-6 w-full sm:w-auto">
             Get Starter Package — $9
           </a>
         </div>
@@ -258,7 +303,7 @@
             <li>Shareable report link</li>
             <li>12-hour delivery</li>
           </ul>
-          <a href="#" data-launchlook-stripe="launch" class="mt-6 inline-flex items-center justify-center min-h-11 px-4 py-2.5 rounded-md bg-accent text-paper text-sm font-medium hover:bg-ink transition">
+          <a href="#" data-launchlook-stripe="launch" class="launchlook-btn launchlook-btn-accent mt-6 w-full sm:w-auto">
             Get Full Package — $29
           </a>
         </div>
@@ -320,7 +365,7 @@
       <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
       <h2 class="font-serif text-2xl sm:text-3xl mt-3">Stop guessing if it's ready.</h2>
       <p class="text-paper/75 mt-2 text-sm">Starter Package $9 · Full Package $29</p>
-      <a href="#pricing" class="mt-6 inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md bg-accent text-paper font-medium hover:bg-accent-soft hover:text-ink transition">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-accent mt-6">
         See pricing
       </a>
     </div>
