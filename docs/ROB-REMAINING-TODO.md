@@ -180,7 +180,9 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 | Tally paste (text only) | [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) |
 | Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) · `python scripts/customers_track.py stats` |
 | At 10 paying | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) |
-| `intakeFormUrl` in repo | `https://tally.so/r/9qodVE` (deploy to go live on site) |
+| Intake form (Tally) | `https://tally.so/r/9qodVE` → wired in `config.js` |
+| After intake (Tally thanks) | `https://tally.so/r/Y5xO5J` → set as redirect on form 9qodVE in Tally |
+| Site after Stripe | `https://launchlook.app/thanks` → button opens intake 9qodVE |
 
 ---
 

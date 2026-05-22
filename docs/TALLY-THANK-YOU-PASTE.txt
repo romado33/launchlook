@@ -18,5 +18,5 @@ Privacy policy: https://launchlook.app/privacy
 Questions: hello@launchlook.app
 <<< PASTE END
 
-Optional redirect URL (separate field in Tally):
-https://launchlook.app/thanks
+Optional redirect URL (separate field in Tally intake form 9qodVE):
+https://tally.so/r/Y5xO5J
