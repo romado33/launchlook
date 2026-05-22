@@ -4,6 +4,8 @@ A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](ht
 
 > **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
 
+**Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)
+
 ## Read this first
 
 If you (human or AI assistant) are about to touch any code in this repo, read the handoff docs in `docs/` **in order** before writing anything:
