@@ -1,18 +1,18 @@
 # Notion templates
 
-Files Rob imports into Notion to set up the `LaunchLook Ops` workspace (BL-03).
+Files Rob imports into Notion to set up the `Onceover Ops` workspace (BL-03).
 
 ## Order of setup
 
-1. Create a new Notion workspace called **LaunchLook Ops** (free tier is fine).
+1. Create a new Notion workspace called **Onceover Ops** (free tier is fine).
 2. Inside it, create these as **full-page databases**:
    - `Customers` — import `customers-db.csv`
    - `Outreach Tracker` — import `outreach-db.csv`
    - `Findings Library` — import `../../findings_library/findings.csv`
 3. Create a top-level page called **Report Templates**. Inside it, create three sub-pages from the templates in this folder:
-   - `Template — Starter` (from `report-quick-checkup.md`)
-   - `Template — Launch` (from `report-launch-pack.md`)
-   - `Template — follow-up` (from `report-polish.md`)
+   - `Template — Quick Checkup` (from `report-quick-checkup.md`)
+   - `Template — Launch Pack` (from `report-launch-pack.md`)
+   - `Template — Launch Pack + Polish` (from `report-polish.md`)
 4. Create a page called **Crawler Wishlist** (from `crawler-wishlist.md`).
 5. Mark each report template page as a **Notion Template** so duplicating is one click per customer.
 
@@ -36,7 +36,7 @@ Notion natively supports Markdown import on page creation:
 | Name | Title | The row title |
 | Email | Email | |
 | App URL | URL | |
-| Tier | Select | Starter / Launch / Polish |
+| Tier | Select | Quick Checkup / Launch Pack / Polish |
 | Payment Date | Date | |
 | Intake Received | Checkbox | |
 | Delivery Due | Date | Formula: Payment Date + tier turnaround (24h / 12h / 12h) |
@@ -63,6 +63,8 @@ Notion natively supports Markdown import on page creation:
 | Notes | Text | |
 
 ## What to share with the Notion integration (BL-04)
+
+Before delivering any report, skim `templates/report-voice-guide.md` — findings use plain language; fix prompts can be technical.
 
 When Rob creates the Notion integration token (`secret_...`), he must explicitly **share** each of these databases with the integration via the `Share` button:
 

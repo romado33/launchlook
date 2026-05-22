@@ -74,13 +74,14 @@ Used by: founders launching publicly this week who need depth and a privacy sani
 
 ## Voice and tone
 
-- Warm, plain, second person.
+- Warm, plain, second person — written for **non-technical founders**.
+- **Reports:** "What I saw" and "Why it matters" use everyday language; **fix prompts** may use builder jargon (Lovable, Supabase, etc.). See `templates/report-voice-guide.md`.
 - No marketing words: leverage, seamless, robust, innovative, cutting-edge, powerful, streamline.
 - Active voice over passive.
 - Short sentences. Concrete verbs.
 - Acknowledge that vibe coders are smart people building real things — never condescending.
 - Acknowledge what AI builders do well — they're not the enemy.
-- Reference UI elements by their actual visible label, in quotes, not internal names.
+- Reference UI elements by their actual visible label, in quotes, not internal names or file paths (unless the customer would recognize them, e.g. `/privacy`).
 
 ## What success looks like at each timescale
 

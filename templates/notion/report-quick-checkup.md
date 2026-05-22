@@ -2,70 +2,74 @@
 
 > **Tier:** Starter Package ($9) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
+**Audience:** You built this with an AI coding tool — you don't need to be technical to use this report. Technical wording only appears inside the gray **Fix prompt** boxes (paste those into Lovable, Bolt, etc.).
+
 ---
 
 ## Summary
 
 **Overall verdict:** {🟢 Ready to share / 🟡 Needs a few fixes first / 🔴 Don't ship yet}
 
-{1–2 sentences. Warm but honest. Match the founder's anxiety level from intake field 13.}
+{1–2 sentences. Warm, plain English. Say what's good first if you can. Match how anxious they said they are in intake.}
 
-You're getting **{N} findings** in this report. They're sorted by severity. Start at the top.
+You have **{N} findings** below, starting with the most important. You don't have to fix everything at once — but fix anything marked 🔴 before you share the link widely.
 
 ---
 
 ## How to read this report
 
-Every finding has:
+Each finding has three parts:
 
-1. **What I saw** — plain-English description of the problem with screenshot
-2. **Why it matters** — what your users would experience
-3. **Fix prompt** — paste this into {PLATFORM} (Lovable / Bolt / Base44 / Replit) and let your builder fix it
+| Part | For you |
+|------|---------|
+| **What I saw** | What I noticed on your live app, in everyday language |
+| **Why it matters** | What your visitors or users would think or run into |
+| **Fix prompt** | Copy the box into your builder — your AI can handle the technical details |
 
-Severity scale (one row per finding):
+**How serious is it?**
 
-| Severity | Meaning |
-|----------|---------|
-| 🔴 Critical | Will cause real harm if not fixed before launch |
-| 🟠 High | Most users will notice on first visit |
-| 🟡 Medium | Visible to engaged users or specific flows |
-| ⚪ Low | Polish — fix when you can |
+| | Plain English |
+|---|----------------|
+| 🔴 Critical | Fix before real people use the link |
+| 🟠 High | Most people will notice quickly |
+| 🟡 Medium | Fix soon after launch |
+| ⚪ Low | Polish when you have time |
+
+*Voice guide for Rob: `templates/report-voice-guide.md`*
 
 ---
 
-## 🔴 Critical findings
-
-> Fix these before sharing with real users. No exceptions.
+## 🔴 Critical — fix before you share the link
 
 ### Finding 1 — {short title}
 
-**What I saw**
-{1–2 sentences. Reference the visible UI label in quotes.}
+**What I saw**  
+{1–2 sentences. Quote the button or text exactly: **"Get started"**, **"Your Company Name"**. No code.}
 
 > 📸 [Screenshot]
 
-**Why it matters**
-{1–2 sentences. Concrete, not abstract.}
+**Why it matters**  
+{What a real visitor would think or what could go wrong — e.g. "People won't trust the app" or "Anyone could get in without signing up."}
 
-**Fix prompt for {PLATFORM}**
+**Fix prompt for {PLATFORM}** *(paste into your builder)*
 
 ```
-{paste-ready prompt with {ACTUAL_NAME}, {ACTUAL_EMAIL}, {PAGE} substituted}
+{paste-ready prompt — technical terms OK here only}
 ```
 
 ---
 
-## 🟠 High findings
+## 🟠 High — most visitors will notice
 
 ### Finding 2 — {short title}
 
-**What I saw**
+**What I saw**  
 {description}
 
 > 📸 [Screenshot]
 
-**Why it matters**
-{impact}
+**Why it matters**  
+{impact in plain language}
 
 **Fix prompt for {PLATFORM}**
 
@@ -81,7 +85,7 @@ Severity scale (one row per finding):
 
 ---
 
-## 🟡 Medium findings
+## 🟡 Medium — fix after launch if needed
 
 ### Finding 4 — {short title}
 
@@ -89,7 +93,7 @@ Severity scale (one row per finding):
 
 ---
 
-## ⚪ Low findings
+## ⚪ Low — polish
 
 ### Finding 5 — {short title}
 
@@ -99,24 +103,20 @@ Severity scale (one row per finding):
 
 ## What's next
 
-You have **{N} fixes** to work through. My suggestion:
+You have **{N} items** to work through. Suggested order:
 
-1. **Today** — fix the 🔴 Critical findings. None of them should take more than 20 minutes each.
-2. **Within 24 hours of launch** — knock out the 🟠 High findings.
-3. **First two weeks after launch** — Medium and Low can wait.
+1. **Today** — everything marked 🔴 (usually quick with the fix prompts)
+2. **Before you promote the link** — 🟠 High items
+3. **First couple of weeks live** — 🟡 and ⚪ when you have time
 
-After you've applied the fixes, take another pass through your app yourself. If you want me to verify after fixes, email hello@launchlook.app for a quoted follow-up re-scan.
-
----
-
-## Know another vibe coder launching soon?
-
-If you found this useful, forward it to someone else who's about to ship their first app. Use the code below — they get **$5 off** their first checkup, and you'll get **$5 off** your next one too.
-
-Your code: **{REFERRAL_CODE}**
-
-(They enter it at checkout.)
+After you fix things, click through the app yourself like a new visitor. Want a second look? Email **hello@launchlook.app** for a quoted follow-up re-scan.
 
 ---
 
-*LaunchLook · A friendly pre-launch checkup for vibe-coded apps · hello@launchlook.app*
+## Know someone else launching?
+
+Forward this to a friend who's about to share their first app. Your referral code: **{REFERRAL_CODE}** ($5 off for them, $5 off for you).
+
+---
+
+*LaunchLook · One last look before you launch · hello@launchlook.app*

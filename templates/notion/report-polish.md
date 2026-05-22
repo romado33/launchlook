@@ -2,35 +2,33 @@
 
 > **Tier:** Follow-up (quoted by email) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
+**Audience:** Non-technical founder. Plain English in **What I saw** / **Why it matters**; technical detail only in **Fix prompt** boxes. See `templates/report-voice-guide.md`.
+
 ---
 
 ## Summary
 
 **Overall verdict:** {🟢 Ready to share / 🟡 Needs a few fixes first / 🔴 Don't ship yet}
 
-{2–3 sentences. Acknowledge what the app does well first, then summarize the gaps.}
+{2–3 sentences. Plain language. Say what's improved since last time if this is a re-scan.}
 
-You're getting **{N} findings** plus a **Quick Start Guide** your users can read. There's also a **follow-up scan section** at the bottom of this report — once you've applied the fixes, ping me and I'll re-run the audit and update that section.
+You get **{N} findings**, a **Quick Start Guide** for your users, and a **follow-up section** at the bottom after you've applied fixes.
 
 ---
 
 ## How to read this report
 
-Same structure as Launch Pack:
+1. **Part 1** — Findings (most important first)
+2. **Part 2** — Quick Start Guide (for your users, not developers)
+3. **Part 3** — Follow-up scan (Rob updates after you fix things)
+4. **Part 4** — 7-day check-in (scheduled {DATE_PLUS_7})
 
-1. **Part 1** — Findings (sorted by severity)
-2. **Part 2** — Quick Start Guide for your users
-3. **Part 3** — Follow-up scan (filled in by Rob after you apply fixes)
-4. **Part 4** — 7-day post-launch check-in (scheduled for {DATE_PLUS_7})
-
-Severity scale:
-
-| Severity | Meaning |
-|----------|---------|
-| 🔴 Critical | Will cause real harm if not fixed before launch |
-| 🟠 High | Most users will notice on first visit |
-| 🟡 Medium | Visible to engaged users or specific flows |
-| ⚪ Low | Polish — fix when you can |
+| | Plain English |
+|---|----------------|
+| 🔴 Critical | Fix before sharing the link |
+| 🟠 High | Obvious on a first visit |
+| 🟡 Medium | Fix once people are using it |
+| ⚪ Low | Polish |
 
 ---
 

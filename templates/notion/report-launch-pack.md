@@ -2,53 +2,53 @@
 
 > **Tier:** Full Package ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
+**Audience:** Non-technical founder. Keep **What I saw** and **Why it matters** in plain English. Only the **Fix prompt** boxes should sound technical (those go straight into your AI builder).
+
 ---
 
 ## Summary
 
 **Overall verdict:** {🟢 Ready to share / 🟡 Needs a few fixes first / 🔴 Don't ship yet}
 
-{2–3 sentences. Acknowledge what the app does well first, then summarize the gaps.}
+{2–3 sentences. Start with something that's working well. Then the main gaps — no jargon.}
 
-You're getting **{N} findings** in this report plus a **Quick Start Guide** your users can read. They're sorted by severity. Start at the top of the findings, then check the Quick Start Guide in the second half.
+This report has **{N} findings** (most important first) and a **Quick Start Guide** you can give your users. Work through the findings first, then scroll to Part 2 for the guide.
 
 ---
 
 ## How to read this report
 
-Every finding has:
+| Part | What's in it |
+|------|----------------|
+| **What I saw** | What shows up on your live site |
+| **Why it matters** | What users would experience |
+| **Fix prompt** | Paste into {PLATFORM} — builder handles the tech |
 
-1. **What I saw** — plain-English description with screenshot
-2. **Why it matters** — what your users would experience
-3. **Fix prompt** — paste this into {PLATFORM} (Lovable / Bolt / Base44 / Replit) and let your builder fix it
+| | Plain English |
+|---|----------------|
+| 🔴 Critical | Fix before sharing the link |
+| 🟠 High | Obvious on a first visit |
+| 🟡 Medium | Fix once people are using it |
+| ⚪ Low | Polish |
 
-Severity scale:
-
-| Severity | Meaning |
-|----------|---------|
-| 🔴 Critical | Will cause real harm if not fixed before launch |
-| 🟠 High | Most users will notice on first visit |
-| 🟡 Medium | Visible to engaged users or specific flows |
-| ⚪ Low | Polish — fix when you can |
+*Voice guide: `templates/report-voice-guide.md`*
 
 ---
 
 # Part 1 — Findings
 
-## 🔴 Critical findings
-
-> Fix these before sharing with real users. No exceptions.
+## 🔴 Critical — fix before you share the link
 
 ### Finding 1 — {short title}
 
-**What I saw**
-{1–2 sentences. Reference the visible UI label in quotes.}
+**What I saw**  
+{Quote visible labels. Avoid: route, endpoint, RLS, console, metadata.}
 
-> 📸 [Screenshot — desktop]
-> 📸 [Screenshot — mobile, if different]
+> 📸 [Screenshot — desktop]  
+> 📸 [Screenshot — phone, if different]
 
-**Why it matters**
-{1–2 sentences. Concrete.}
+**Why it matters**  
+{Real-world impact for users or trust.}
 
 **Fix prompt for {PLATFORM}**
 
@@ -58,68 +58,58 @@ Severity scale:
 
 ---
 
-(repeat structure for each finding, sorted: Critical → High → Medium → Low; aim for 10–15 findings total)
+(repeat for each finding: Critical → High → Medium → Low; up to 15 total)
 
 ---
 
-## 🟠 Cross-user check (Full Package only)
+## Two-account check (Full Package)
 
-You gave me two test accounts. Here's what I found when I logged in as each.
+You gave me two temporary test accounts. I signed in as each person and looked for anything **User A shouldn't see from User B** (and what happens when you're **not signed in**).
 
-### Logged in as User A
+### As test account 1
 
-{What User A could see — note any cross-user data visible}
+{Plain description: "On the bookings page, I could see the other account's name…" — not "cross-user data on /bookings."}
 
-### Logged in as User B
+### As test account 2
 
-{What User B could see — note any cross-user data visible}
+{Same — everyday language.}
 
-### Logged out
+### Without signing in
 
-{What's accessible without auth — list any protected routes that loaded data}
+{E.g. "I opened your dashboard page in a private window — it should ask me to log in, but instead it showed…"}
 
-{If everything checks out, write: "No cross-user data exposure found. Each test account only saw its own data. Good."}
+{if clean: "Good news: each account only saw its own information, and private pages asked me to sign in."}
 
 ---
 
 # Part 2 — Quick Start Guide for your users
 
-This is a one-page guide you can publish, embed, or hand to your users on day one. It's written in plain language, references your actual UI, and is short enough that people will read it.
+A **one-page help doc** for people using your app — short, friendly, no developer jargon. You can put it on a Help page, in Notion, or link from your app menu.
 
-You can copy this section into a `/help` page in your app, paste it into a Notion or Linear doc your users can access, or share the rendered HTML version at the link below.
-
-> 📄 **Styled HTML version**: [link to rendered Quick Start Guide]
-> 📝 **Plain Markdown**: copy from the section below
+> 📄 **Styled version**: [link to HTML]  
+> 📝 **Copy-paste Markdown**: below
 
 ---
 
-{Paste the AI-generated Quick Start Guide here. After it's generated:
-1. Read top to bottom
-2. Spot-edit for accuracy
-3. Verify no marketing words
-4. Confirm UI labels match what's actually in the app}
+{Paste edited QSG here — written for end users, not engineers}
 
 ---
 
 ## What's next
 
-You have **{N} fixes** to work through. My suggestion:
+1. **Today** — 🔴 Critical items  
+2. **Before you promote** — 🟠 High  
+3. **After launch** — 🟡 / ⚪  
+4. **Before users arrive** — publish the Quick Start Guide somewhere they can find it  
 
-1. **Today** — fix the 🔴 Critical findings. None of them should take more than 20 minutes each.
-2. **Within 24 hours of launch** — knock out the 🟠 High findings.
-3. **First two weeks after launch** — Medium and Low can wait.
-4. **Before sharing with users** — paste the Quick Start Guide into your app's help section or share the link.
-
-After you've applied the fixes, take another pass through your app yourself. If you want me to verify everything works after fixes, email hello@launchlook.app for a quoted follow-up re-scan.
+Questions or want a re-check after fixes? **hello@launchlook.app**
 
 ---
 
-## Know another vibe coder launching soon?
+## Referral
 
-If you found this useful, forward it to someone else who's about to ship their first app. Use the code below — they get **$5 off** their first checkup, and you'll get **$5 off** your next one too.
-
-Your code: **{REFERRAL_CODE}**
+Code **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you.
 
 ---
 
-*LaunchLook · A friendly pre-launch checkup for vibe-coded apps · hello@launchlook.app*
+*LaunchLook · hello@launchlook.app*

@@ -39,7 +39,12 @@
     "User experience",
     "Performance & polish"
   ],
-  "severity_levels": ["Critical", "High", "Medium", "Low"],
+  "severity_levels": [
+    "Critical",
+    "High",
+    "Medium",
+    "Low"
+  ],
   "findings": [
     {
       "id": "FL-001",
@@ -163,7 +168,7 @@
         "type": "http",
         "description": "Try GET /privacy, /privacy-policy — returns 404"
       },
-      "explanation": "Your site has no privacy policy page. Most users — and almost certainly the App Store, payment processors, and ad platforms — expect one.",
+      "explanation": "There is no privacy policy page. People expect one before they sign up or pay.",
       "fix_prompts": {
         "generic": "Add a /privacy route with a basic privacy policy page. Include sections for: what data we collect, how we use it, how we share it (or don't), data retention, user rights, and contact info. Use {ACTUAL_EMAIL} for the contact section. Link to it from the footer."
       },
@@ -178,7 +183,7 @@
         "type": "http",
         "description": "404 on /terms, /terms-of-service, /tos"
       },
-      "explanation": "Your site has no Terms of Service. Users have nothing to agree to, and payment processors usually require one.",
+      "explanation": "There is no Terms of Service page. Users have nothing clear to agree to.",
       "fix_prompts": {
         "generic": "Add a /terms route with basic Terms of Service. Include sections for: acceptance of terms, service description, user obligations, prohibited uses, termination, disclaimers, and contact info. Link from the footer."
       },
@@ -268,7 +273,7 @@
         "type": "manual",
         "description": "Open DevTools, load page, capture all console errors"
       },
-      "explanation": "Your browser shows {N} errors when the page loads. Some of these might be causing features to fail.",
+      "explanation": "When the page loads, something in the background is failing (the browser reports {N} hidden errors). Features may not work reliably.",
       "fix_prompts": {
         "generic": "These JavaScript errors appear in the console when {PAGE} loads: {ERROR_LIST}. Investigate each and fix the underlying cause. Don't suppress errors — fix them."
       },
@@ -283,7 +288,7 @@
         "type": "manual",
         "description": "Open Network tab, load page, filter for non-2xx responses"
       },
-      "explanation": "When the page loads, some background requests are failing: {REQUEST_LIST}. Features depending on these requests will be broken.",
+      "explanation": "When the page loads, some pieces of the app fail to load in the background: {REQUEST_LIST}. Anything that depends on those pieces may be broken.",
       "fix_prompts": {
         "generic": "These network requests are failing on {PAGE}: {LIST_WITH_STATUS_CODES}. Investigate each and fix the underlying issue — wrong URL, missing endpoint, auth failure, etc."
       },
@@ -298,7 +303,7 @@
         "type": "manual",
         "description": "Open in 375px viewport, look for document.body.scrollWidth > window.innerWidth"
       },
-      "explanation": "On mobile, your page scrolls sideways because something is wider than the screen. This makes the site feel broken on phones.",
+      "explanation": "On a phone, the page scrolls sideways — something is wider than the screen.",
       "fix_prompts": {
         "generic": "On mobile devices, {PAGE} has horizontal scrolling — something is wider than the viewport. Find what's overflowing (often a wide image, table, or container with fixed width) and make it responsive. Don't break the desktop layout."
       },
@@ -313,7 +318,7 @@
         "type": "manual",
         "description": "Body text rendering under ~14px on mobile"
       },
-      "explanation": "Body text on mobile is too small to read comfortably (currently {SIZE}px). Most apps use at least 16px for body text on mobile.",
+      "explanation": "Text on mobile is hard to read (about {SIZE}px). Most apps use at least 16px on phones.",
       "fix_prompts": {
         "generic": "On mobile, increase the body text to at least 16px. Currently it's rendering at {SIZE}px which is hard to read on phones."
       },
@@ -328,7 +333,7 @@
         "type": "manual",
         "description": "Buttons/links smaller than 44×44px on mobile"
       },
-      "explanation": "Some buttons are too small to tap easily on mobile (under 44×44 pixels). Apple and Google both recommend 44px as a minimum.",
+      "explanation": "Some buttons on mobile are too small to tap comfortably.",
       "fix_prompts": {
         "generic": "On mobile, increase tap target sizes for {LIST_OF_ELEMENTS} to at least 44×44 pixels. Either add padding or increase the button size directly."
       },
@@ -343,7 +348,7 @@
         "type": "http",
         "description": "Try GET /dashboard, /admin, /settings etc. without auth"
       },
-      "explanation": "Users who aren't logged in can access {PROTECTED_ROUTES}. This may expose data they shouldn't see.",
+      "explanation": "People who are not signed in can still open pages that should be private, such as {PROTECTED_ROUTES}. They may see information they should not.",
       "fix_prompts": {
         "lovable": "These routes load content even when no user is signed in: {LIST}. Add authentication checks so that visiting these routes while logged out redirects to /login or shows an empty/error state. Use Supabase auth state to verify.",
         "bolt": "Add auth guards to these routes: {LIST}. Verify the user has an active session before rendering content. Redirect unauthenticated users to /login."
@@ -359,7 +364,7 @@
         "type": "manual",
         "description": "Sign in as User A, then as User B, compare what each can see"
       },
-      "explanation": "User A can see User B's data (specifically: {EXAMPLE}). This means anyone who signs up can see other users' information.",
+      "explanation": "Someone signed in as one user could see another person's information — for example: {EXAMPLE}. New signups might see other people's data.",
       "fix_prompts": {
         "lovable": "User A can see User B's {DATA_TYPE} on the {PAGE} page. This means Supabase queries aren't filtering by user. Add row-level security policies on the {TABLE_NAME} table that restrict reads to `auth.uid() = user_id`. Also update the query in the page component to filter by current user."
       },
@@ -374,7 +379,7 @@
         "type": "manual",
         "description": "Sign up with fresh email, wait 5+ minutes"
       },
-      "explanation": "When new users sign up, the confirmation email never arrives. They can't complete signup.",
+      "explanation": "New users sign up but never get the confirmation email, so they cannot finish creating an account.",
       "fix_prompts": {
         "generic": "When users sign up, they should receive a confirmation email but none arrives. Check the email provider configuration (Resend, SendGrid, or Supabase's built-in email), verify the sender domain is set up, and ensure the signup flow actually triggers the email send."
       },
@@ -389,7 +394,7 @@
         "type": "manual",
         "description": "Check <meta name=\"description\"> against known platform defaults"
       },
-      "explanation": "When your link is shared on social media, it shows the platform's default description instead of one about your actual app.",
+      "explanation": "When you paste your link into Slack, Twitter, or iMessage, the preview still shows generic builder text — not a real description of your app.",
       "fix_prompts": {
         "generic": "Update the meta description to describe my actual app: {ONE_LINE_DESCRIPTION}. Also set Open Graph tags (og:title, og:description, og:image) so the link previews well when shared on Twitter, LinkedIn, Slack, etc."
       },
@@ -404,7 +409,7 @@
         "type": "manual",
         "description": "Check <link rel=\"icon\"> — verify it's custom, not platform default"
       },
-      "explanation": "Your site uses the default browser icon (or the platform's). It should have your own favicon so users recognize tabs.",
+      "explanation": "The small icon in the browser tab is still the default. Your app should have its own so people recognize the tab.",
       "fix_prompts": {
         "generic": "Add a custom favicon. I'll provide an image (or generate a simple one based on the app name '{ACTUAL_NAME}'). Update the <link rel='icon'> tag and add the necessary icon files."
       },
@@ -419,7 +424,7 @@
         "type": "manual",
         "description": "Check <title> tag and per-page title overrides"
       },
-      "explanation": "Your page titles in browser tabs are generic. Users won't see your app name in their tab list.",
+      "explanation": "Browser tabs show a generic title instead of your app name.",
       "fix_prompts": {
         "generic": "Update page titles so each page has a meaningful title with the app name. Format: 'Page Name | {ACTUAL_NAME}'. Update both the default <title> and any per-page overrides."
       },
@@ -494,7 +499,7 @@
         "type": "http",
         "description": "Check Network tab for >1MB images"
       },
-      "explanation": "Some images on your site are very large (e.g., {SIZE}MB) and slow down page loads.",
+      "explanation": "The first time someone signs in, the main screen is empty with no hint about what to do next.",
       "fix_prompts": {
         "generic": "These images are oversized: {LIST_WITH_SIZES}. Compress them and use modern formats (WebP). Aim for under 200KB per image for hero/featured images and under 50KB for thumbnails."
       },
@@ -509,7 +514,7 @@
         "type": "manual",
         "description": "Lighthouse / WebPageTest"
       },
-      "explanation": "Some scripts and stylesheets are blocking the page from rendering quickly. Users see a blank page for longer than necessary.",
+      "explanation": "While content is loading, the screen stays blank — people may think the app froze.",
       "fix_prompts": {
         "generic": "Defer non-critical JavaScript with the `defer` or `async` attributes. Inline critical CSS for above-the-fold content. The goal is for users to see content within 1.5 seconds on a typical connection."
       },
@@ -524,7 +529,7 @@
         "type": "http",
         "description": "Visit /nonexistent-route-12345"
       },
-      "explanation": "When users hit a URL that doesn't exist, they get a generic browser error instead of a friendly 404 page.",
+      "explanation": "If someone types a wrong web address, they get a generic error instead of a friendly \"page not found\" screen with a way home.",
       "fix_prompts": {
         "generic": "Add a custom 404 page that shows when users visit URLs that don't exist. Include: a clear 'Page not found' message, a link back to home, and optionally a search or sitemap. Style it consistently with the rest of the site."
       },
@@ -539,7 +544,7 @@
         "type": "manual",
         "description": "Manual scan for multiple terms referring to the same entity"
       },
-      "explanation": "Your app uses \"customer,\" \"client,\" and \"user\" interchangeably to refer to the same thing. Pick one and use it consistently — it makes the app feel more thought-through.",
+      "explanation": "The app calls the same type of person different names (e.g. customer, client, user). That feels confusing.",
       "fix_prompts": {
         "generic": "The app uses 'customer,' 'client,' and 'user' to refer to the same role. Pick {PREFERRED_TERM} and replace the others everywhere in the UI. Don't change database table or column names — only user-facing labels."
       },
