@@ -62,15 +62,18 @@
     }
     .launchlook-btn:hover { box-shadow: 0 2px 4px rgba(31, 27, 22, 0.1); }
     .launchlook-btn-primary {
-      background-color: #1F1B16;
-      color: #FAF7F2;
-      border-color: #1F1B16;
+      background-color: #1F1B16 !important;
+      color: #FAF7F2 !important;
+      border: 2px solid #1F1B16 !important;
     }
-    .launchlook-btn-primary:hover { background-color: #B45309; border-color: #B45309; }
+    .launchlook-btn-primary:hover {
+      background-color: #B45309 !important;
+      border-color: #B45309 !important;
+    }
     .launchlook-btn-secondary {
-      background-color: #FFFFFF;
-      color: #1F1B16;
-      border-color: #E7E0D6;
+      background-color: #FFFFFF !important;
+      color: #1F1B16 !important;
+      border: 1px solid #E7E0D6 !important;
     }
     .launchlook-btn-secondary:hover { border-color: #1F1B16; background-color: #FBF6EE; }
     .launchlook-btn-accent {
@@ -117,13 +120,13 @@
       Send your app URL. Get a plain-English Notion report with screenshots, prioritized fixes, and prompts you can paste back into <strong class="font-medium text-ink">your AI builder</strong> — Lovable, Bolt, Base44, Replit, v0, Cursor, or similar.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
-      <a href="#pricing" class="launchlook-btn launchlook-btn-primary">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-primary inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md border-2 border-ink bg-ink text-paper text-sm font-medium shadow-sm hover:bg-accent hover:border-accent transition">
         Get Starter Package — $9
       </a>
-      <a href="/sample" class="launchlook-btn launchlook-btn-secondary">
+      <a href="/sample" class="launchlook-btn launchlook-btn-secondary inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md border border-line bg-white text-ink text-sm font-medium shadow-sm hover:border-ink transition">
         See a sample report
       </a>
-      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">
+      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md border border-line bg-white text-ink text-sm font-medium shadow-sm hover:border-ink transition">
         Free checklist (~20 min)
       </a>
     </div>
