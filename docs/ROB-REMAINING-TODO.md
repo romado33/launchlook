@@ -40,7 +40,7 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 - [ ] Set conditionals (Q9–Q12 Full only; Q10–Q11 when “Yes — I'll provide two test accounts”)
 - [ ] Paste thank-you page + enable email to **hello@launchlook.app**
 - [ ] (Optional) Tally → Notion **Customers**
-- [ ] Publish → copy URL → `landing/assets/config.js` → `intakeFormUrl` → push (or send URL to Cursor)
+- [x] Publish → `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (push to deploy)
 
 ### 2. Stripe Payment Links (~15 min)
 
@@ -180,7 +180,7 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 | Tally paste (text only) | [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) |
 | Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) · `python scripts/customers_track.py stats` |
 | At 10 paying | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) |
-| `intakeFormUrl` in repo | **Empty until you publish Tally** |
+| `intakeFormUrl` in repo | `https://tally.so/r/9qodVE` (deploy to go live on site) |
 
 ---
 

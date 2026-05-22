@@ -5,7 +5,7 @@
 window.LAUNCHLOOK_CONFIG = {
   domain: "launchlook.app",
   supportEmail: "hello@launchlook.app", // Site-wide mailto + thanks fallback; set Tally notifications to same inbox
-  intakeFormUrl: "", // Paste Tally publish URL: https://tally.so/r/YOUR_FORM_ID
+  intakeFormUrl: "https://tally.so/r/9qodVE",
   stripe: {
     starter: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
     launch: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02", // Full Package tier ($29)
