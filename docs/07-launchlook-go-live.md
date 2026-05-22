@@ -11,7 +11,7 @@
 
 ## 2. Stripe
 
-- [ ] Two Payment Links only: **Starter Package $9**, **Launch $29**
+- [ ] Two Payment Links only: **Starter Package $9**, **Ship Package $29**
 - [ ] Success URL on both: `https://launchlook.app/thanks`
 - [x] URLs in `landing/assets/config.js` (`stripe.starter`, `stripe.launch`)
 
@@ -47,10 +47,18 @@
 - [ ] `/checklist`, `/sample`, `/privacy`, `/terms`
 - [ ] Footer GitHub link works
 
-## 8. Start selling
+## 8. Start shmoozing (do this next)
 
-- [ ] 30 targeted DMs/Looms (see `templates/cold-outreach-loom-script.md`)
-- [ ] Goal: **3 strangers pay $9** before more automation
+- [ ] Tally `intakeFormUrl` in `landing/assets/config.js`
+- [ ] Test $9 + $29 checkout on phone (incognito)
+- [ ] 30 targeted DMs/Looms (`templates/cold-outreach-loom-script.md`)
+- [ ] Goal: **3 strangers pay $9** — stop polishing code after that
+
+## 9. Consistency quick check
+
+- [ ] Site says **Starter Package** / **Ship Package** (not Launch tier on homepage)
+- [ ] Stripe product names can say "Ship" — customer-facing copy uses **Ship Package**
+- [ ] `python scripts/copy-landing-for-vercel.mjs` not needed — root `vercel.json` handles deploy
 
 ## Brand reference
 
@@ -58,5 +66,5 @@
 |---|--------|
 | Name | **LaunchLook** |
 | Domain | **launchlook.app** |
-| Tiers | **Starter Package $9**, **Launch $29** |
+| Tiers | **Starter Package $9**, **Ship Package $29** |
 | Config | `window.LAUNCHLOOK_CONFIG` |

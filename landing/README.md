@@ -11,7 +11,9 @@ Static site for **LaunchLook** at [launchlook.app](https://launchlook.app). No b
 | `privacy.html`, `terms.html`, `thanks.html` | Legal + post-checkout |
 | `assets/config.js` | Default `LAUNCHLOOK_CONFIG` (domain, emails) |
 | `assets/config.local.js` | Stripe / Tally / GitHub URLs (gitignored) |
+| `assets/tailwind-brand.js` | Shared Tailwind theme (load before CDN) |
 | `assets/apply-config.js` | Wires `data-launchlook-*` elements |
+| `images/og.png` | Social preview image (1200×630) |
 | `vercel.json` | Clean URLs, security headers |
 
 ## Local preview

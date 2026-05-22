@@ -1,6 +1,6 @@
 # LaunchLook — Launch tier checkup for {APP_NAME}
 
-> **Tier:** Launch ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
+> **Tier:** Ship Package ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
 ---
 
@@ -62,7 +62,7 @@ Severity scale:
 
 ---
 
-## 🟠 Cross-user check (Launch tier only)
+## 🟠 Cross-user check (Ship Package only)
 
 You gave me two test accounts. Here's what I found when I logged in as each.
 

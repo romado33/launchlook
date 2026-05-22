@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thanks for your purchase — LaunchLook</title>
   <meta name="robots" content="noindex" />
+  <script src="/assets/tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','system-ui'], serif: ['Fraunces','Georgia'] }, colors: { paper: '#FAF7F2', ink: '#1F1B16', muted: '#6B6359', accent: '#B45309', line: '#E7E0D6' } } } };
-  </script>
 </head>
 <body class="bg-paper text-ink font-sans antialiased">
   <header class="border-b border-line">
@@ -44,7 +44,7 @@
         href="mailto:hello@launchlook.app?subject=LaunchLook%20intake&body=App%20URL%3A%0A%0AOne-line%20description%3A%0A%0ABuilder%20(Lovable%2C%20Bolt%2C%20v0%2C%20Cursor%2C%20etc.)%3A%0A%0ATier%20purchased%20(Starter%20Package%20%2F%20Ship%20Package)%3A%0A"
         data-launchlook-intake
         data-launchlook-keep-text
-        class="inline-flex items-center justify-center px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition"
+        class="inline-flex items-center justify-center min-h-11 px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition"
       >
         Complete intake form
       </a>

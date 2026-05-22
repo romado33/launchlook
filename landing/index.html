@@ -11,39 +11,20 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://launchlook.app/" />
   <meta property="og:image" content="https://launchlook.app/images/og.png" />
+  <link rel="canonical" href="https://launchlook.app/" />
 
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
   <meta name="twitter:title" content="LaunchLook — One last look before you launch" />
   <meta name="twitter:description" content="Pre-launch checkup for vibe-coded web apps. From $9." />
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%93%3C/text%3E%3C/svg%3E" />
 
+  <script src="/assets/tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            serif: ['Fraunces', 'Georgia', 'serif'],
-          },
-          colors: {
-            paper: '#FAF7F2',
-            ink: '#1F1B16',
-            muted: '#6B6359',
-            accent: '#B45309',
-            'accent-soft': '#FDE68A',
-            line: '#E7E0D6',
-          },
-          maxWidth: { prose: '40rem' },
-        },
-      },
-    }
-  </script>
 
   <style>
     html { scroll-behavior: smooth; }
@@ -76,10 +57,10 @@
       Send your app URL. Get a plain-English Notion report with screenshots, prioritized fixes, and prompts you can paste back into <strong class="font-medium text-ink">your AI builder</strong> — Lovable, Bolt, Base44, Replit, v0, Cursor, or similar.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row gap-3">
-      <a href="#pricing" class="inline-flex items-center justify-center px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
+      <a href="#pricing" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
         Get Starter Package — $9
       </a>
-      <a href="/sample" class="inline-flex items-center justify-center px-5 py-3 rounded-md border border-line text-ink font-medium hover:border-ink transition">
+      <a href="/sample" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md border border-line text-ink font-medium hover:border-ink transition">
         See a sample report
       </a>
     </div>
@@ -181,7 +162,7 @@
             <li><strong>Quick Start Guide</strong> for your users</li>
             <li>24-hour delivery</li>
           </ul>
-          <a href="#" data-launchlook-stripe="starter" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition">
+          <a href="#" data-launchlook-stripe="starter" class="mt-6 inline-flex items-center justify-center min-h-11 px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition">
             Get Starter Package — $9
           </a>
         </div>
@@ -198,7 +179,7 @@
             <li>Shareable report link</li>
             <li>12-hour delivery</li>
           </ul>
-          <a href="#" data-launchlook-stripe="launch" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-accent text-paper text-sm font-medium hover:bg-ink transition">
+          <a href="#" data-launchlook-stripe="launch" class="mt-6 inline-flex items-center justify-center min-h-11 px-4 py-2.5 rounded-md bg-accent text-paper text-sm font-medium hover:bg-ink transition">
             Get Ship Package — $29
           </a>
         </div>

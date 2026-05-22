@@ -41,7 +41,7 @@ We review your live web URL like a first-time visitor — then send a Notion rep
 - AI builder fingerprints (placeholders, default copy)
 - Trust gaps (privacy/terms, generic meta)
 
-Cross-user data check: **Launch ($29)** only.
+Cross-user data check: **Ship Package ($29)** only.
 
 ### Pricing section
 
@@ -55,13 +55,13 @@ Cross-user data check: **Launch ($29)** only.
 - 24-hour delivery
 - CTA: `Get Starter — $9`
 
-**Launch ($29)** *(best before launch)*
+**Ship Package ($29)** *(deeper pass)*
 - Everything in Starter, plus:
 - Up to 15 findings (deeper pass)
 - Cross-user data check (two test accounts)
 - Shareable report link
 - 12-hour delivery
-- CTA: `Get Launch — $29`
+- CTA: `Get Ship Package — $29`
 
 Follow-up re-scan: email for quote (replaces old $59 tier on site).
 
@@ -389,7 +389,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ### Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter Package $9** (includes Quick Start Guide) or **Launch $29** for a deeper pass and cross-user checks.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter Package $9** (includes Quick Start Guide) or **Ship Package $29** for a deeper pass and cross-user checks.
 
 ### License
 
