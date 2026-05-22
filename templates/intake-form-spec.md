@@ -76,7 +76,7 @@ Paste as a **Statement** or **Text** block before questions:
 - Type: Multiple choice (single select)
 - Required: yes
 - Options:
-  - Starter ($9)
+  - Starter Package ($9)
   - Launch ($29)
 - Help text: "We know — we'll match against Stripe, but this confirms what you expect."
 
