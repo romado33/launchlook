@@ -35,7 +35,7 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 - ✅ Free checklist: `/checklist` + GitHub mirror
 - ✅ Stripe Payment Link URLs in `landing/assets/config.js`
 - ✅ LinkedIn, site-wide `hello@launchlook.app`, growth email/report templates
-- ✅ **Tally copy-paste doc:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+- ✅ **Tally plain-text paste files:** [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt), [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt), [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)
 - ✅ **Customer tracker CLI:** `scripts/customers_track.py` ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md))
 - ✅ **Customer 10 runbook:** [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) (BL-14/15 gate)
 
@@ -75,7 +75,7 @@ Read all docs in order. Then:
 
 ## What Rob should do (in order)
 
-1. **Blocking:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1–4 — Tally ([`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)), Stripe thanks URL, email, E2E test.
+1. **Blocking:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1–4 — Tally ([`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) or [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)), Stripe thanks URL, email, E2E test.
 2. **Delivery:** Notion workspace + first customer report (`templates/notion/`, `manual-audit-checklist.md`).
 3. **Outreach:** [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) + 5 Looms (`templates/cold-outreach-loom-script.md`) — lead with `launchlook.app/checklist`.
 4. Track each payment: `python scripts/customers_track.py add ...` and mirror in Notion **Customers** ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)).

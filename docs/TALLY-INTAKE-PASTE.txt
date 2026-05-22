@@ -1,0 +1,393 @@
+================================================================================
+LAUNCHLOOK — TALLY INTAKE + THANK YOU (PLAIN TEXT ONLY)
+================================================================================
+
+Tally cannot paste markdown. Copy ONLY the lines between:
+
+  >>> PASTE START
+  <<< PASTE END
+
+Do not copy the separator lines or the INSTRUCTION lines.
+
+FASTEST METHOD: use TALLY-AI-ONE-SHOT.txt in Tally "Create form with AI" instead
+of building question-by-question.
+
+FILE: docs/TALLY-INTAKE-PASTE.txt (this file)
+THANK YOU ONLY: see section at bottom "THANK YOU PAGE"
+AFTER PUBLISH: paste https://tally.so/r/xxxxx into landing/assets/config.js intakeFormUrl
+
+
+================================================================================
+FORM SETTINGS (click in Tally sidebar — nothing to paste into a block)
+================================================================================
+
+Form title:
+>>> PASTE START
+LaunchLook — Post-purchase intake
+<<< PASTE END
+
+Layout: one page
+Login required: off
+Language: English
+
+
+================================================================================
+BLOCK 0 — Add block type: Text (statement, NOT a question)
+================================================================================
+
+>>> PASTE START
+Please read before submitting
+
+• Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+
+• For Full Package ($29) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+
+• We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+<<< PASTE END
+
+
+================================================================================
+QUESTION 1 — Block type: Short text | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+What's your name?
+<<< PASTE END
+
+Placeholder:
+>>> PASTE START
+First name is fine
+<<< PASTE END
+
+
+================================================================================
+QUESTION 2 — Block type: Email | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+Email
+<<< PASTE END
+
+Description (help text under title):
+>>> PASTE START
+Match the email you used at checkout if you can — makes things easier.
+<<< PASTE END
+
+
+================================================================================
+QUESTION 3 — Block type: Link (URL) | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+App URL
+<<< PASTE END
+
+Description:
+>>> PASTE START
+The live URL. Staging URLs work too if they're publicly reachable.
+<<< PASTE END
+
+INSTRUCTION: Turn on URL validation if Tally shows that option.
+
+
+================================================================================
+QUESTION 4 — Block type: Short text | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+What does your app do?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+One sentence. Plain language.
+<<< PASTE END
+
+Placeholder:
+>>> PASTE START
+A shared to-do list for small teams.
+<<< PASTE END
+
+INSTRUCTION: Set max length 200 if Tally offers it.
+
+
+================================================================================
+QUESTION 5 — Block type: Long text | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+Who's your main user?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+1–2 sentences. Who's going to use this? What do they do?
+<<< PASTE END
+
+
+================================================================================
+QUESTION 6 — Block type: Long text | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+What's the main thing they do in your app?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+The one thing your app is for. The main workflow.
+<<< PASTE END
+
+
+================================================================================
+QUESTION 7 — Block type: Multiple choice (single answer) | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+Which platform built it?
+<<< PASTE END
+
+Options — use "Bulk insert options" and paste this whole block:
+>>> PASTE START
+Lovable
+Bolt
+Base44
+Replit
+v0
+Other
+<<< PASTE END
+
+
+================================================================================
+QUESTION 8 — Block type: Multiple choice (single answer) | Required: YES
+================================================================================
+
+Question title:
+>>> PASTE START
+Which tier did you purchase?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+We'll match against Stripe — this confirms what you expect.
+<<< PASTE END
+
+Options — MUST match exactly (logic uses this text):
+>>> PASTE START
+Starter Package ($9)
+Full Package ($29)
+<<< PASTE END
+
+
+================================================================================
+QUESTION 9 — Block type: Multiple choice (single answer) | Required when shown
+================================================================================
+
+Question title:
+>>> PASTE START
+Can we use test accounts?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+The cross-user check needs two signed-in sessions. We can sign up fresh test accounts ourselves if you prefer — we delete them after the audit.
+<<< PASTE END
+
+Options:
+>>> PASTE START
+Yes — I'll provide two test accounts
+I'll create test accounts using my own signup flow — you provision them
+No — skip the cross-user check
+<<< PASTE END
+
+INSTRUCTION — Conditional logic:
+  Show this question WHEN "Which tier did you purchase?" IS "Full Package ($29)"
+
+
+================================================================================
+QUESTION 10 — Block type: Long text | Required when shown
+================================================================================
+
+Question title:
+>>> PASTE START
+Test account 1 — email and password
+<<< PASTE END
+
+Description:
+>>> PASTE START
+We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+<<< PASTE END
+
+Placeholder:
+>>> PASTE START
+Email: ... / Password: ...
+<<< PASTE END
+
+INSTRUCTION — Conditional logic:
+  Show WHEN "Can we use test accounts?" IS "Yes — I'll provide two test accounts"
+
+
+================================================================================
+QUESTION 11 — Block type: Long text | Required when shown
+================================================================================
+
+Question title:
+>>> PASTE START
+Test account 2 — email and password
+<<< PASTE END
+
+Description:
+>>> PASTE START
+We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+<<< PASTE END
+
+Placeholder:
+>>> PASTE START
+Email: ... / Password: ...
+<<< PASTE END
+
+INSTRUCTION — Conditional logic:
+  Same as Question 10
+
+
+================================================================================
+QUESTION 12 — Block type: Email | Required when shown
+================================================================================
+
+Question title:
+>>> PASTE START
+Your support email (for the Quick Start Guide)
+<<< PASTE END
+
+Description:
+>>> PASTE START
+We'll put this in your one-page user guide so people know how to reach you.
+<<< PASTE END
+
+INSTRUCTION — Conditional logic:
+  Show WHEN "Which tier did you purchase?" IS "Full Package ($29)"
+
+
+================================================================================
+QUESTION 13 — Block type: Long text | Required: NO (optional)
+================================================================================
+
+Question title:
+>>> PASTE START
+Anything specific you want us to check?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+Anything broken you're worried about? Optional.
+<<< PASTE END
+
+Placeholder:
+>>> PASTE START
+I'm not sure the booking page works on mobile...
+<<< PASTE END
+
+
+================================================================================
+QUESTION 14 — Block type: Linear scale | Required: NO (optional)
+================================================================================
+
+Question title:
+>>> PASTE START
+How anxious are you about launching?
+<<< PASTE END
+
+Description:
+>>> PASTE START
+Optional. Helps me match the tone of your report.
+<<< PASTE END
+
+INSTRUCTION: Set scale minimum 1, maximum 10.
+
+Label at 1 (minimum):
+>>> PASTE START
+Calm, just curious
+<<< PASTE END
+
+Label at 10 (maximum):
+>>> PASTE START
+Not sleeping
+<<< PASTE END
+
+
+================================================================================
+QUESTION 15 — Block type: Checkbox | Required: YES (put just above Submit button)
+================================================================================
+
+Checkbox label (entire label text):
+>>> PASTE START
+I confirm I am submitting only temporary test credentials (if any) and no sensitive production data — no personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+<<< PASTE END
+
+
+================================================================================
+THANK YOU PAGE — Settings → Thank you page (after submit message)
+================================================================================
+
+Copy everything between PASTE markers into the thank-you / confirmation message box.
+NOT into a form question.
+
+>>> PASTE START
+Thanks — you're in.
+
+We'll start your checkup within a few hours of this submission.
+
+• Starter Package: report within 24 hours
+• Full Package: report within 12 hours
+
+Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
+
+Privacy policy: https://launchlook.app/privacy
+Questions: hello@launchlook.app
+<<< PASTE END
+
+INSTRUCTION — Optional redirect URL (separate field in Tally settings):
+https://launchlook.app/thanks
+(You can leave redirect empty if Stripe already sends people to /thanks.)
+
+
+================================================================================
+EMAIL NOTIFICATIONS — Settings → Notifications (not pasted into form body)
+================================================================================
+
+Turn ON: email on new submission
+Send to:
+>>> PASTE START
+hello@launchlook.app
+<<< PASTE END
+
+Include: all answers in the email
+
+
+================================================================================
+CONDITIONAL LOGIC CHEAT SHEET (set in Tally per question, not pasted)
+================================================================================
+
+Question 9 and 12:  show when Question 8 = Full Package ($29)
+
+Question 10 and 11: show when Question 9 = Yes — I'll provide two test accounts
+
+In Tally: open question → Logic → Add condition
+
+
+================================================================================
+TEST BEFORE GO LIVE
+================================================================================
+
+- Pick Starter Package ($9): questions 9-12 should NOT appear
+- Pick Full Package ($29): questions 9-12 should appear
+- Pick "Yes — I'll provide two test accounts": questions 10-11 appear
+- Checkbox 15 must be checked to submit
+- You receive email at hello@launchlook.app with full answers

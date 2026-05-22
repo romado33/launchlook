@@ -1,0 +1,22 @@
+================================================================================
+TALLY THANK YOU PAGE ONLY — copy into Settings → Thank you page
+================================================================================
+
+Do not paste this into a question block.
+
+>>> PASTE START
+Thanks — you're in.
+
+We'll start your checkup within a few hours of this submission.
+
+• Starter Package: report within 24 hours
+• Full Package: report within 12 hours
+
+Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
+
+Privacy policy: https://launchlook.app/privacy
+Questions: hello@launchlook.app
+<<< PASTE END
+
+Optional redirect URL (separate field in Tally):
+https://launchlook.app/thanks

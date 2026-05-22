@@ -34,10 +34,10 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 
 ### 1. Tally intake form (~30–45 min)
 
-**Paste every block from:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)  
-**Checkbox walkthrough:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) · Spec: [`templates/intake-form-spec.md`](../templates/intake-form-spec.md)
+**Plain text (not markdown):** [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) (AI) or [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) (manual) · Thank you: [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)  
+**Checkbox walkthrough:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
 
-- [ ] Create form at [tally.so](https://tally.so) — paste Block 0 + Questions 1–15 from **TALLY-COPY-PASTE.md**
+- [ ] Create form at [tally.so](https://tally.so) — AI one-shot OR field-by-field from `.txt` files above
 - [ ] Set conditionals (Q9–Q12 Full only; Q10–Q11 when “Yes — I'll provide two test accounts”)
 - [ ] Paste thank-you page + enable email to **hello@launchlook.app**
 - [ ] (Optional) Tally → Notion **Customers**
@@ -178,7 +178,7 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 | Config file | `landing/assets/config.js` |
 | Go-live detail | [`07-launchlook-go-live.md`](07-launchlook-go-live.md) |
 | Security posture | [`08-launchlook-security.md`](08-launchlook-security.md) |
-| Tally copy-paste | [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) |
+| Tally paste files | [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) · [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) · [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt) |
 | Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) · `python scripts/customers_track.py stats` |
 | At 10 paying | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) |
 | `intakeFormUrl` in repo | **Empty until you publish Tally** |

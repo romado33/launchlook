@@ -1,0 +1,73 @@
+================================================================================
+PASTE THIS ENTIRE FILE INTO TALLY "CREATE FORM WITH AI"
+================================================================================
+Tally: New form → Create with AI (or similar) → paste everything below the line
+--- COPY FROM HERE ---
+
+Create a single-page form in English.
+
+Form title: LaunchLook — Post-purchase intake
+
+First add a text block (not a question) with this content:
+
+Please read before submitting
+
+Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+
+For Full Package ($29) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+
+We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+
+Then add these questions in order:
+
+1. Short answer, required. Title: What's your name? Placeholder: First name is fine
+
+2. Email, required. Title: Email. Description: Match the email you used at checkout if you can — makes things easier.
+
+3. URL link, required. Title: App URL. Description: The live URL. Staging URLs work too if they're publicly reachable.
+
+4. Short answer, required, max 200 characters. Title: What does your app do? Description: One sentence. Plain language. Placeholder: A shared to-do list for small teams.
+
+5. Long text, required. Title: Who's your main user? Description: 1-2 sentences. Who's going to use this? What do they do?
+
+6. Long text, required. Title: What's the main thing they do in your app? Description: The one thing your app is for. The main workflow.
+
+7. Multiple choice, single select, required. Title: Which platform built it? Options exactly: Lovable, Bolt, Base44, Replit, v0, Other
+
+8. Multiple choice, single select, required. Title: Which tier did you purchase? Description: We'll match against Stripe — this confirms what you expect. Options exactly: Starter Package ($9), Full Package ($29)
+
+9. Multiple choice, single select, required when visible. Title: Can we use test accounts? Description: The cross-user check needs two signed-in sessions. We can sign up fresh test accounts ourselves if you prefer — we delete them after the audit. Options exactly: Yes — I'll provide two test accounts, I'll create test accounts using my own signup flow — you provision them, No — skip the cross-user check. Show only when question 8 answer is Full Package ($29)
+
+10. Long text, required when visible. Title: Test account 1 — email and password. Description: We'll only use these for the audit. Credentials are deleted within 24 hours of delivery. Placeholder: Email: ... / Password: ... Show only when question 9 answer is Yes — I'll provide two test accounts
+
+11. Long text, required when visible. Title: Test account 2 — email and password. Description: We'll only use these for the audit. Credentials are deleted within 24 hours of delivery. Placeholder: Email: ... / Password: ... Same visibility as question 10
+
+12. Email, required when visible. Title: Your support email (for the Quick Start Guide). Description: We'll put this in your one-page user guide so people know how to reach you. Show only when question 8 answer is Full Package ($29)
+
+13. Long text, optional. Title: Anything specific you want us to check? Description: Anything broken you're worried about? Optional. Placeholder: I'm not sure the booking page works on mobile...
+
+14. Linear scale 1 to 10, optional. Title: How anxious are you about launching? Description: Optional. Helps me match the tone of your report. Label at 1: Calm, just curious. Label at 10: Not sleeping
+
+15. Checkbox, required, place before submit. Label: I confirm I am submitting only temporary test credentials (if any) and no sensitive production data — no personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+
+Thank you page message:
+
+Thanks — you're in.
+
+We'll start your checkup within a few hours of this submission.
+
+Starter Package: report within 24 hours
+Full Package: report within 12 hours
+
+Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
+
+Privacy policy: https://launchlook.app/privacy
+Questions: hello@launchlook.app
+
+--- END COPY ---
+
+After AI generates the form:
+1. Open each multiple-choice question and confirm option text matches EXACTLY (especially Full Package ($29))
+2. Re-add conditional logic on questions 9-12 if AI missed it
+3. Test Starter vs Full paths
+4. Settings → Notifications → email hello@launchlook.app on submit

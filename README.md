@@ -5,7 +5,7 @@ A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](ht
 > **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
 
 **Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)  
-**Build Tally intake (copy-paste):** [`docs/TALLY-COPY-PASTE.md`](docs/TALLY-COPY-PASTE.md)  
+**Build Tally intake:** [`docs/TALLY-AI-ONE-SHOT.txt`](docs/TALLY-AI-ONE-SHOT.txt) (paste into Tally AI) or [`docs/TALLY-INTAKE-PASTE.txt`](docs/TALLY-INTAKE-PASTE.txt)  
 **All docs index:** [`docs/README.md`](docs/README.md)
 
 ## Read this first
@@ -21,7 +21,7 @@ If you (human or AI assistant) are about to touch any code in this repo, read th
 7. `docs/05-technical-architecture.md`
 8. `docs/06-findings-library.md`
 9. `docs/07-launchlook-go-live.md` — Stripe, Tally, E2E
-10. `docs/TALLY-COPY-PASTE.md` — when building the intake form
+10. `docs/TALLY-AI-ONE-SHOT.txt` — when building the intake form in Tally
 
 The biggest risk to this project is over-building. The manual-first strategy is deliberate, not a placeholder for "real" engineering.
 
