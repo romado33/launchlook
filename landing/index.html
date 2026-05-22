@@ -31,6 +31,19 @@
     body { font-feature-settings: "ss01", "cv11"; }
     details > summary { list-style: none; cursor: pointer; }
     details > summary::-webkit-details-marker { display: none; }
+    .section-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #B45309;
+    }
+    .section-rule {
+      width: 2.5rem;
+      height: 3px;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #B45309, #FDE68A);
+    }
   </style>
 </head>
 
@@ -51,7 +64,10 @@
   </header>
 
   <!-- Hero -->
-  <section class="max-w-3xl mx-auto px-6 pt-14 pb-10 sm:pt-20 sm:pb-14">
+  <section class="relative overflow-hidden border-b border-line">
+    <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
+    <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
     <p class="text-xs font-medium text-accent uppercase tracking-widest">Lovable · Bolt · Base44 · Replit · v0 · Cursor · and more</p>
     <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
       Find the embarrassing bugs, trust gaps, and confusing screens before your first users do.
@@ -68,11 +84,14 @@
       </a>
     </div>
     <p class="mt-5 text-sm text-muted">Includes a one-page <strong class="text-ink font-medium">Quick Start Guide</strong> for your users. Delivered in 24 hours.</p>
+    </div>
   </section>
 
   <!-- How it works -->
-  <section class="border-t border-line bg-white/50">
+  <section class="bg-surface-tint border-y border-line">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <p class="section-label">Process</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-8">How it works</h2>
       <ol class="space-y-6">
         <li class="flex gap-4">
@@ -101,24 +120,37 @@
   </section>
 
   <!-- What you get -->
-  <section class="border-t border-line">
+  <section class="bg-paper">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <p class="section-label">Scope</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-6">What we catch</h2>
-      <ul class="space-y-4 text-muted leading-relaxed">
-        <li class="flex gap-3"><span class="text-accent font-medium">→</span><span><strong class="text-ink font-medium">Embarrassing polish</strong> — dead CTAs, broken links, layout breaks on phone width, dev leftovers on your public URL.</span></li>
-        <li class="flex gap-3"><span class="text-accent font-medium">→</span><span><strong class="text-ink font-medium">AI builder fingerprints</strong> — “Your Company Name,” lorem ipsum, placeholder host labels still showing.</span></li>
-        <li class="flex gap-3"><span class="text-accent font-medium">→</span><span><strong class="text-ink font-medium">Trust gaps</strong> — missing privacy/terms, generic meta, anything that screams “not finished.”</span></li>
+      <ul class="space-y-3">
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
+          <span><strong class="text-ink font-medium">Embarrassing polish</strong> — dead CTAs, broken links, layout breaks on phone width, dev leftovers on your public URL.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
+          <span><strong class="text-ink font-medium">AI builder fingerprints</strong> — “Your Company Name,” lorem ipsum, placeholder host labels still showing.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
+          <span><strong class="text-ink font-medium">Trust gaps</strong> — missing privacy/terms, generic meta, anything that screams “not finished.”</span>
+        </li>
       </ul>
       <p class="mt-6 text-sm text-muted">On <strong class="text-ink">Full Package ($29)</strong> we also check whether signed-in users can see each other's data (you provide two temporary test accounts). Test logins are used only during the review and deleted within 24 hours. This is a basic visibility check, not a full security audit.</p>
     </div>
   </section>
 
   <!-- Sample -->
-  <section id="sample" class="border-t border-line bg-white/50">
+  <section id="sample" class="bg-surface-warm border-y border-line">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <p class="section-label">Preview</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-4">See what you get</h2>
       <p class="text-muted text-sm mb-6 max-w-prose">Real reports include screenshots, severity labels, and copy-paste fix prompts. No jargon, no fear-mongering.</p>
-      <div class="rounded-lg border border-line bg-white p-6 sm:p-8">
+      <div class="rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
         <p class="font-serif text-lg mb-1">LaunchLook — Starter Package report (anonymized)</p>
         <p class="text-sm text-muted mb-5">🟡 Needs a few fixes before sharing publicly — 7 findings</p>
         <ul class="space-y-2 text-sm text-muted">
@@ -132,21 +164,27 @@
   </section>
 
   <!-- Trust -->
-  <section class="border-t border-line">
+  <section class="bg-paper">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <p class="section-label">Trust</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-4">Who's behind this</h2>
-      <p class="text-muted leading-relaxed max-w-prose">
+      <div class="rounded-xl border border-line bg-surface-tint px-5 py-5 sm:px-6 sm:py-6 max-w-prose">
+      <p class="text-muted leading-relaxed">
         I'm <strong class="text-ink">Rob</strong> — a technical writer who's shipped products and documentation for years. Every LaunchLook checkup is reviewed by me manually. We don't need access to your codebase, only a URL (and optional temporary test accounts for Full Package).
       </p>
-      <p class="text-muted leading-relaxed max-w-prose mt-4">
+      <p class="text-muted leading-relaxed mt-4">
         Built for non-technical founders using vibe-coded tools — including Lovable, Bolt, Base44, Replit, v0, Cursor, and others. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
       </p>
+      </div>
     </div>
   </section>
 
   <!-- Pricing -->
-  <section id="pricing" class="border-t border-line">
+  <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <p class="section-label">Pricing</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl sm:text-3xl mb-2">Two options. Same human review.</h2>
       <p class="text-muted mb-4">Pick depth — not a different quality of care.</p>
       <p class="text-sm text-muted mb-8 max-w-prose rounded-lg border border-line bg-white/80 px-4 py-3">
@@ -154,7 +192,7 @@
       </p>
 
       <div class="grid sm:grid-cols-2 gap-5 max-w-2xl">
-        <div class="rounded-xl border border-line bg-white p-6 flex flex-col">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Starter Package</h3>
           <p class="font-serif text-4xl mt-2">$9</p>
           <p class="text-sm text-muted mt-1">Cover the basics with confidence</p>
@@ -193,10 +231,12 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="border-t border-line bg-white/50">
+  <section id="faq" class="bg-paper">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <p class="section-label">Questions</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-6">FAQ</h2>
-      <div class="divide-y divide-line border-y border-line">
+      <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps — also v0, Cursor-built apps, and others. If your builder outputs a shareable link, we can usually review it.</p>
@@ -233,11 +273,12 @@
     </div>
   </section>
 
-  <section class="border-t border-line">
-    <div class="max-w-3xl mx-auto px-6 py-14 text-center">
-      <h2 class="font-serif text-2xl">Stop guessing if it's ready.</h2>
-      <p class="text-muted mt-2 text-sm">Starter Package $9 · Full Package $29</p>
-      <a href="#pricing" class="mt-6 inline-flex items-center justify-center px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
+  <section class="bg-ink text-paper border-t border-ink">
+    <div class="max-w-3xl mx-auto px-6 py-14 sm:py-16 text-center">
+      <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mt-3">Stop guessing if it's ready.</h2>
+      <p class="text-paper/75 mt-2 text-sm">Starter Package $9 · Full Package $29</p>
+      <a href="#pricing" class="mt-6 inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md bg-accent text-paper font-medium hover:bg-accent-soft hover:text-ink transition">
         See pricing
       </a>
     </div>

@@ -12,6 +12,8 @@ tailwind.config = {
         muted: "#6B6359",
         accent: "#B45309",
         "accent-soft": "#FDE68A",
+        "surface-warm": "#F3EDE4",
+        "surface-tint": "#FBF6EE",
         line: "#E7E0D6",
       },
       maxWidth: { prose: "40rem" },
