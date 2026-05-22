@@ -12,5 +12,12 @@
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/checklist", "destination": "/checklist.html" },
+    { "source": "/thanks", "destination": "/thanks.html" },
+    { "source": "/sample", "destination": "/sample.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" }
   ]
 }
