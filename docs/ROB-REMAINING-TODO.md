@@ -24,9 +24,9 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 
 ### 1. Tally intake form (~30–45 min)
 
-Spec: [`templates/intake-form-spec.md`](../templates/intake-form-spec.md)
+Spec: [`templates/intake-form-spec.md`](../templates/intake-form-spec.md) · **Step-by-step:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
 
-- [ ] Create form at [tally.so](https://tally.so) from the spec (15 fields + **required checkbox** before Submit)
+- [ ] Create form at [tally.so](https://tally.so) — follow **TALLY-INTAKE-SETUP.md** (copy-paste labels + conditionals)
 - [ ] Paste **security notice** at top (wording in spec — no passwords, API keys, etc.)
 - [ ] Tier question options: **Starter Package ($9)** and **Full Package ($29)**
 - [ ] Conditional test-account fields only when Full Package is selected
