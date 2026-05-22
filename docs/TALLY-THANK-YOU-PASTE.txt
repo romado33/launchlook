@@ -16,6 +16,7 @@ Your responses are stored privately. Test account credentials are deleted within
 
 Privacy policy: https://launchlook.app/privacy
 Questions: hello@launchlook.app
+Back to LaunchLook: https://launchlook.app/
 <<< PASTE END
 
 Optional redirect URL (separate field in Tally intake form 9qodVE):
