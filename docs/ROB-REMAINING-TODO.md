@@ -5,6 +5,8 @@
 
 Use this as your single owner checklist. Code/deploy items below marked ✅ are already in GitHub unless noted.
 
+**Doc index:** [`docs/README.md`](README.md) · **Tally paste file:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+
 ---
 
 ## Already done (don’t redo)
@@ -30,16 +32,14 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 
 ### 1. Tally intake form (~30–45 min)
 
-Spec: [`templates/intake-form-spec.md`](../templates/intake-form-spec.md) · **Step-by-step:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
+**Paste every block from:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)  
+**Checkbox walkthrough:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) · Spec: [`templates/intake-form-spec.md`](../templates/intake-form-spec.md)
 
-- [ ] Create form at [tally.so](https://tally.so) — follow **TALLY-INTAKE-SETUP.md** (copy-paste labels + conditionals)
-- [ ] Paste **security notice** at top (wording in spec — no passwords, API keys, etc.)
-- [ ] Tier question options: **Starter Package ($9)** and **Full Package ($29)**
-- [ ] Conditional test-account fields only when Full Package is selected
-- [ ] Tally → email **hello@launchlook.app** on every submission
-- [ ] (Optional now) Tally → Notion **Customers** via integration
-- [ ] Copy publish URL → `landing/assets/config.js` → `intakeFormUrl`
-- [ ] Commit/push (or ask Cursor to wire the URL)
+- [ ] Create form at [tally.so](https://tally.so) — paste Block 0 + Questions 1–15 from **TALLY-COPY-PASTE.md**
+- [ ] Set conditionals (Q9–Q12 Full only; Q10–Q11 when “Yes — I'll provide two test accounts”)
+- [ ] Paste thank-you page + enable email to **hello@launchlook.app**
+- [ ] (Optional) Tally → Notion **Customers**
+- [ ] Publish → copy URL → `landing/assets/config.js` → `intakeFormUrl` → push (or send URL to Cursor)
 
 ### 2. Stripe Payment Links (~15 min)
 
@@ -52,8 +52,11 @@ Dashboard: [dashboard.stripe.com](https://dashboard.stripe.com) → **Payment Li
 
 ### 3. Email receiving (~15–30 min)
 
+Site and templates use **hello@launchlook.app** (matches launchlook.app). If you set up a different address, align DNS + Tally notifications + `supportEmail` in `config.js`.
+
 - [ ] **hello@launchlook.app** forwards to an inbox you actually check (ImprovMX, GoDaddy forward, or Google Workspace)
 - [ ] Send a test email from another account and confirm delivery
+- [ ] Tally test submission arrives at that inbox
 
 ### 4. End-to-end payment test (~20 min)
 
@@ -163,15 +166,18 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 | Config file | `landing/assets/config.js` |
 | Go-live detail | [`07-launchlook-go-live.md`](07-launchlook-go-live.md) |
 | Security posture | [`08-launchlook-security.md`](08-launchlook-security.md) |
-| `intakeFormUrl` today | **Empty** — Tally still required |
+| Tally copy-paste | [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) |
+| `intakeFormUrl` in repo | **Empty until you publish Tally** |
 
 ---
 
 ## What to send Cursor (one message)
 
-When Tally is ready, paste:
+When Tally is ready:
 
 > Tally URL: `https://tally.so/r/________` — wire `intakeFormUrl` and push.
+
+If email inbox is confirmed working, say so and we can note it in this file.
 
 ---
 

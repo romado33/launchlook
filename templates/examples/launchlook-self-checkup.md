@@ -8,7 +8,7 @@
 
 **Overall verdict:** 🟡 Wire Tally + verify routing after deploy
 
-The homepage is strong — clear value prop, Starter Package / Full Package pricing, sample teaser, and real privacy/terms content. **Routing** was failing because `cleanUrls` / rewrites lived only in `dist/vercel.json` (ignored by Vercel); they now live in **repo root** `vercel.json`. Remaining gap: **post-pay intake** on email until `intakeFormUrl` is set.
+The homepage is strong — clear value prop, Starter Package / Ship Package pricing, sample teaser, and real privacy/terms content. **Routing** was failing because `cleanUrls` / rewrites lived only in `dist/vercel.json` (ignored by Vercel); they now live in **repo root** `vercel.json`. Remaining gap: **post-pay intake** on email until `intakeFormUrl` is set.
 
 **6 findings** below (what LaunchLook would report to a paying customer).
 
@@ -41,12 +41,12 @@ Put `cleanUrls` + rewrites in **repo root** `vercel.json` (not only `landing/` o
 Pay → friction → email is OK for day 1, but strangers expect a form immediately after Stripe.
 
 **Fix**  
-Publish Tally from `templates/intake-form-spec.md`, paste URL into `config.js`, set Stripe success URL to `https://launchlook.app/thanks`, test pay → Tally.
+Publish Tally using [`docs/TALLY-COPY-PASTE.md`](../../docs/TALLY-COPY-PASTE.md), paste URL into `config.js` → `intakeFormUrl`, set Stripe success URL to `https://launchlook.app/thanks`, test pay → Tally. Owner steps: [`docs/ROB-REMAINING-TODO.md`](../../docs/ROB-REMAINING-TODO.md).
 
 ### 3 — "Who's behind this" lacked a human name (fixed in repo)
 
 **What we saw**  
-Anonymous "technical writer" copy — fine for $9, weak for Full Package + test credentials.
+Anonymous "technical writer" copy — fine for $9, weak for Ship Package + test credentials.
 
 **Fix**  
 Use first name ("Rob") + one credential line. Optional: LinkedIn link.
@@ -66,10 +66,10 @@ Share link in Slack/iMessage once; use opengraph.xyz if preview is blank.
 ### 5 — Pricing badge on wrong tier (fixed in repo)
 
 **What we saw**  
-"Best before launch" on Full Package while Starter had no anchor — confusing for first-time readers.
+"Best before launch" on Ship Package while Starter had no anchor — confusing for first-time readers.
 
 **Fix**  
-"Most popular" on Full Package; keep Starter without competing badge.
+"Most popular" on Ship Package; keep Starter without competing badge.
 
 ### 6 — Dogfood irony: you sell mobile checks
 
@@ -84,7 +84,7 @@ Product promises phone-width review; homepage should pass tap-target and stackin
 ## 🟢 What's already good
 
 - Plain-English hero and platform breadth ("and more")
-- Starter Package / Full Package naming matches Stripe intent
+- Starter Package / Ship Package naming matches Stripe intent
 - Privacy & terms are real LaunchLook policies (not Onceover leftovers)
 - Stripe URLs in `config.js`; pricing CTAs wire via `apply-config.js`
 - Public checklist repo linked from config
@@ -97,7 +97,7 @@ Product promises phone-width review; homepage should pass tap-target and stackin
 | Tier | For LaunchLook.app today |
 |------|---------------------------|
 | **Starter Package $9** | Findings 1–4 + 6 + QSG for "how to use LaunchLook" |
-| **Full Package $29** | Above + deeper pass; N/A cross-user (no auth on marketing site) |
+| **Ship Package $29** | Above + deeper pass; N/A cross-user (no auth on marketing site) |
 
 ---
 

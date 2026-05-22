@@ -8,7 +8,7 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 - A prioritized list of 5-10 findings (Critical / High / Medium / Low severity)
 - For each finding: plain-English explanation, screenshot evidence, and a copy-paste fix prompt for their AI builder
 - An AI-generated one-page Quick Start Guide for their users (included on Starter)
-- (Ship Package tier) Cross-user data isolation check with two temporary test accounts
+- (Full Package tier) Cross-user data isolation check with two temporary test accounts
 
 ## Two tiers (MVP)
 

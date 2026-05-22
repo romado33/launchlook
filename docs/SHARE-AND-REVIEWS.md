@@ -2,6 +2,8 @@
 
 Quick ops guide for Rob. No Supabase required.
 
+**Owner checklist:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) · **Tally intake:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+
 ## What to share publicly
 
 | Asset | URL | When |

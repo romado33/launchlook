@@ -9,8 +9,8 @@ Static site for **LaunchLook** at [launchlook.app](https://launchlook.app). No b
 | `index.html` | Home — hero, what we check, sample, pricing, FAQ, footer |
 | `checklist.html` | Free pre-launch checklist (BL-06) |
 | `privacy.html`, `terms.html`, `thanks.html` | Legal + post-checkout |
-| `assets/config.js` | Default `LAUNCHLOOK_CONFIG` (domain, emails) |
-| `assets/config.local.js` | Stripe / Tally / GitHub URLs (gitignored) |
+| `assets/config.js` | `LAUNCHLOOK_CONFIG` — Stripe links, `supportEmail`, `intakeFormUrl`, `linkedinUrl` |
+| `assets/config.local.js` | Optional overrides (gitignored) |
 | `assets/tailwind-brand.js` | Shared Tailwind theme (load before CDN) |
 | `assets/apply-config.js` | Wires `data-launchlook-*` elements |
 | `images/og.png` | Social preview — Option A minimal (1200×630) |
@@ -48,17 +48,16 @@ vercel --prod
 
 ## Site config
 
-Copy `assets/config.local.js.example` → `assets/config.local.js`:
+Edit `assets/config.js` (committed) or `config.local.js` (gitignored override):
 
-```javascript
-window.LAUNCHLOOK_CONFIG = Object.assign(window.LAUNCHLOOK_CONFIG || {}, {
-  stripe: { quickCheckup: "...", launchPack: "...", polish: "..." },
-  intakeFormUrl: "https://tally.so/r/...",
-  githubChecklist: "https://github.com/YOU/launchlook-prelaunch-checklist",
-});
-```
+- `intakeFormUrl` — after Tally publish; paste from [`docs/TALLY-COPY-PASTE.md`](../docs/TALLY-COPY-PASTE.md)
+- `stripe.starter` / `stripe.launch` — Payment Links ($9 / $29)
+- `supportEmail` — `hello@launchlook.app`
+- `linkedinUrl` — footer + Who's behind section
 
-Stripe Payment Link **success URL**: `https://launchlook.app/thanks`
+Stripe Payment Link **success URL** (dashboard): `https://launchlook.app/thanks`
+
+**Rob's remaining setup:** [`docs/ROB-REMAINING-TODO.md`](../docs/ROB-REMAINING-TODO.md)
 
 ## Routes
 

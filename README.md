@@ -4,20 +4,24 @@ A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](ht
 
 > **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
 
-**Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)
+**Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)  
+**Build Tally intake (copy-paste):** [`docs/TALLY-COPY-PASTE.md`](docs/TALLY-COPY-PASTE.md)  
+**All docs index:** [`docs/README.md`](docs/README.md)
 
 ## Read this first
 
 If you (human or AI assistant) are about to touch any code in this repo, read the handoff docs in `docs/` **in order** before writing anything:
 
 1. `docs/00-START-HERE.md`
-2. `docs/01-product-spec.md`
-3. `docs/02-strategy-and-context.md` — read before challenging any decision
-4. `docs/03-build-queue.md` — start work here
-5. `docs/04-content-and-copy.md`
-6. `docs/05-technical-architecture.md`
-7. `docs/06-findings-library.md`
-8. `docs/07-launchlook-go-live.md` — DNS, Stripe, email after domain purchase
+2. `docs/ROB-REMAINING-TODO.md` — owner checklist (what's still manual)
+3. `docs/01-product-spec.md`
+4. `docs/02-strategy-and-context.md` — read before challenging any decision
+5. `docs/03-build-queue.md` — BL-XX tickets
+6. `docs/04-content-and-copy.md`
+7. `docs/05-technical-architecture.md`
+8. `docs/06-findings-library.md`
+9. `docs/07-launchlook-go-live.md` — Stripe, Tally, E2E
+10. `docs/TALLY-COPY-PASTE.md` — when building the intake form
 
 The biggest risk to this project is over-building. The manual-first strategy is deliberate, not a placeholder for "real" engineering.
 
@@ -90,7 +94,7 @@ python scripts/qsg_render.py --input ...md --output ...html
 python scripts/notion_test.py --list-customers # after Notion is wired
 ```
 
-Landing deploy: `cd landing && vercel --prod`. Stripe/Tally URLs: `landing/assets/config.local.js`.
+Landing deploy: push to `main` (Vercel builds from repo root). Config: `landing/assets/config.js`; overrides: `config.local.js` (gitignored). After Tally publish, set `intakeFormUrl` — see [`docs/TALLY-COPY-PASTE.md`](docs/TALLY-COPY-PASTE.md).
 
 ## License
 

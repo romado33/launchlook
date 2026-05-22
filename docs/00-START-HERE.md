@@ -2,7 +2,7 @@
 
 ## What this is
 
-LaunchLook is a manual service (with growing automation) that gives non-technical founders a friendly pre-launch checkup of their vibe-coded apps. The founder pays (Starter Package $9 or Ship Package $29), sends a URL, and gets back:
+LaunchLook is a manual service (with growing automation) that gives non-technical founders a friendly pre-launch checkup of their vibe-coded apps. The founder pays (Starter Package $9 or Full Package $29), sends a URL, and gets back:
 
 - A Notion report with 5-10 findings (broken stuff, placeholder content, missing trust pages)
 - Copy-paste fix prompts tailored to their AI builder
@@ -21,23 +21,30 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 - Not a documentation platform. CodeGuide and others target developer-facing docs.
 - Not an automated SaaS yet. The product is currently a human service. Automation is being built in the background.
 
-## Current status (as of project handoff)
+## Current status (May 2026)
 
-- ✅ Product strategy defined (see `02-strategy-and-context.md`)
-- ✅ Pricing locked: **$9 Starter** / **$29 Launch** (two tiers; follow-up re-scan on request)
-- ✅ Name locked: LaunchLook
-- ✅ Findings library seeded with 35 entries (see `06-findings-library.md`)
-- ✅ Quick Start Guide prompt drafted (see `05-technical-architecture.md`)
-- ✅ Free public checklist drafted (see `04-content-and-copy.md`)
-- ✅ Domain purchased: **launchlook.app**
-- ✅ Landing page live on launchlook.app (see `07-launchlook-go-live.md`)
-- ✅ Rebrand complete: Onceover → LaunchLook in repo
-- ✅ Stripe Payment Link URLs in `config.js` (confirm success URLs + E2E in dashboard)
-- ❌ **Owner checklist:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md)
-- ❌ Tally intake not wired (`intakeFormUrl` empty)
-- ❌ Notion workspace not yet set up
+**Owner checklist (what Rob still does):** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md)  
+**Doc index:** [`docs/README.md`](README.md)
+
+### Done in repo / on site
+
+- ✅ Product strategy (`02-strategy-and-context.md`)
+- ✅ Pricing: **Starter Package $9** / **Full Package $29**
+- ✅ Findings library (~35 entries, `06-findings-library.md`)
+- ✅ Landing live: launchlook.app — clean URLs, security headers, sample, privacy/terms
+- ✅ Free checklist: `/checklist` + GitHub mirror
+- ✅ Stripe Payment Link URLs in `landing/assets/config.js`
+- ✅ LinkedIn, site-wide `hello@launchlook.app`, growth email/report templates
+- ✅ **Tally copy-paste doc:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+
+### Still blocking launch / outreach
+
+- ❌ Tally form published + `intakeFormUrl` wired in `config.js`
+- ❌ Stripe success URLs → `https://launchlook.app/thanks` (dashboard)
+- ❌ E2E: pay → thanks → Tally → email received
+- ❌ Notion **LaunchLook Ops** workspace (Customers, reports)
 - ❌ Zero paying customers yet
-- ❌ Playwright crawler not yet built (deliberately — not until customer 10)
+- ❌ Playwright crawler (deliberately after ~customer 10)
 
 ## Constraints
 
@@ -48,7 +55,7 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 
 ## 60-day success criteria
 
-- **8 paying customers minimum** (mix of Starter Package $9 and Ship Package $29)
+- **8 paying customers minimum** (mix of Starter Package $9 and Full Package $29)
 - **6 of 8 report the checkup as "useful" or better** on follow-up
 - **At least 2 referrals from existing customers**
 
@@ -64,13 +71,12 @@ Read all docs in order. Then:
 3. Do not skip ahead to the scanner, dashboard, or any user-facing automation. Those are deliberately deferred.
 4. Prioritize: domain setup → landing page → Notion templates → Stripe → Quick Start Guide pipeline. In that order.
 
-## What Rob should do (in parallel)
+## What Rob should do (in order)
 
-1. Buy the domain.
-2. Audit 5 real vibe-coded apps manually this weekend (see `03-build-queue.md` item BL-01).
-3. Send 5 cold outreach Looms.
-4. Participate in Lovable Discord daily.
-5. Track every customer interaction in a Google Sheet (template in `04-content-and-copy.md`).
+1. **Blocking:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1–4 — Tally ([`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)), Stripe thanks URL, email, E2E test.
+2. **Delivery:** Notion workspace + first customer report (`templates/notion/`, `manual-audit-checklist.md`).
+3. **Outreach:** [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) + 5 Looms (`templates/cold-outreach-loom-script.md`) — lead with `launchlook.app/checklist`.
+4. Track customers in Notion **Customers** or [`templates/notion/customers-db.csv`](../templates/notion/customers-db.csv).
 
 ## Anti-patterns to avoid
 

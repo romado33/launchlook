@@ -2,6 +2,8 @@
 
 Tally.so configuration for the post-purchase intake form. Tally is free, no-code, supports conditional logic, and posts results to Notion natively.
 
+> **Building the form?** Use **[`docs/TALLY-COPY-PASTE.md`](../docs/TALLY-COPY-PASTE.md)** for every label, help text, and option to paste into Tally. This file is the technical reference; the copy-paste doc is the operator manual.
+
 ## Where it lives
 
 - Form URL: `https://tally.so/r/{form_id}`

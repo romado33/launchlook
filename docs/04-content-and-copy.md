@@ -2,6 +2,8 @@
 
 All writing artifacts. Use this verbatim unless explicitly approved to change by Rob.
 
+**Operator docs:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) · **Tally intake (paste):** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) · **Live emails:** [`templates/email/`](../templates/email/) (prefer files there over duplicates below)
+
 ## Landing page copy
 
 ### Hero section
@@ -106,21 +108,9 @@ A: Yes, if it's accessible from the internet. Local URLs (localhost) won't work,
 
 ## Intake form fields
 
-**Page heading**: Tell us about your app
+**Authoritative copy-paste for Tally:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) (15 fields + security notice + checkbox + thank-you).
 
-1. **What's your name?** (text, required)
-2. **Email** (email, required — matches Stripe purchase email)
-3. **App URL** (text, required, validated as URL)
-4. **What does your app do?** (1-sentence text, required, 200 char max)
-5. **Who's your main user?** (1-2 sentences text, required)
-6. **What's the main thing they do in your app?** (1-2 sentences, required)
-7. **Which platform built it?** (radio: Lovable / Bolt / Base44 / Replit / v0 / Other)
-8. **Can we use test accounts? (Launch Pack and up)** (yes / no — if yes, conditional fields below)
-9. **Test account 1 email + password** (only if "yes" above, conditional)
-10. **Test account 2 email + password** (only if "yes" above, conditional)
-11. **Your support email** (for the Quick Start Guide, Launch Pack and up, conditional on tier)
-12. **Anything specific to check?** (textarea, optional)
-13. **How anxious are you about launching, 1-10?** (number 1-10, optional) *Tone-matching signal for the report.*
+Summary: name, email, app URL, one-line description, main user, main workflow, builder (Lovable/Bolt/…), tier (**Starter Package ($9)** / **Full Package ($29)**), optional Full-only test accounts + support email, optional notes, optional anxiety 1–10, required safety checkbox.
 
 ---
 
@@ -183,7 +173,7 @@ Your checkup for [app name] is ready. Here's the link:
 A few notes:
 - The findings are ranked by severity. Start at the top.
 - Every finding has a copy-paste fix prompt for [their platform]. Just paste them in and let your builder fix it.
-- If you're at the Launch Pack tier or above, the Quick Start Guide is in the second half of the report.
+- Starter Package and Full Package include a Quick Start Guide in your report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 
 If anything isn't clear, just reply to this email. I'll respond within a few hours.

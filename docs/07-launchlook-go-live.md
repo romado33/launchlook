@@ -2,6 +2,8 @@
 
 **Current pricing:** Starter Package **$9** · Full Package **$29** · Follow-up re-scan quoted by email.
 
+**Rob's master todo:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) · **Tally paste file:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+
 ## 1. Site (Vercel)
 
 - [x] Root `vercel.json` copies `landing/` → `dist/` and owns **cleanUrls + rewrites** (do **not** set Root Directory to `landing`)
@@ -17,10 +19,10 @@
 
 ## 3. Intake (required before cold outreach)
 
-- [ ] Tally form built from `templates/intake-form-spec.md` (security notice at top + required checkbox before Submit)
-- [ ] Paste publish URL into `landing/assets/config.js` → `intakeFormUrl`
+- [ ] Tally form built — paste all blocks from [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) (checklist: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
+- [ ] Paste publish URL into `landing/assets/config.js` → `intakeFormUrl` → push
 - [ ] Test: pay (or open `/thanks`) → intake button opens Tally
-- [ ] Until Tally is live: `/thanks` falls back to pre-filled email to hello@launchlook.app
+- [x] Until Tally is live: `/thanks` falls back to pre-filled email to hello@launchlook.app
 
 ## 4. Email
 
@@ -32,7 +34,8 @@
 
 - [x] `privacy.html` / `terms.html` say LaunchLook (not Onceover)
 - [x] Sample report at `/sample` (includes example copy-paste fix prompt)
-- [x] Founder + trust copy on homepage
+- [x] Founder + trust copy on homepage (LinkedIn when `linkedinUrl` set in `config.js`)
+- [x] Simplified free checklist at `/checklist`
 
 ## 6. Public checklist
 

@@ -73,11 +73,13 @@ Each item has:
 - **Depends on**: BL-05
 
 ### BL-07 — Intake form
-- **What**: A simple form (Tally.so or Google Forms — not custom code) that captures the data needed for an audit. Linked from Stripe success page. Fields per `04-content-and-copy.md` intake spec.
-- **Acceptance**: Form submission emails Rob the responses and optionally writes to Notion Customers database (via Zapier/Make or Notion API).
-- **Who**: Cursor (Rob configures)
-- **Effort**: 1 hour
+- **What**: Tally.so post-purchase intake (not custom code). Linked from `/thanks` via `intakeFormUrl` in `config.js`.
+- **Copy-paste content**: [`docs/TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) · Checklist: [`docs/TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) · Spec: [`templates/intake-form-spec.md`](../templates/intake-form-spec.md)
+- **Acceptance**: Form emails `hello@launchlook.app`; optional Notion Customers row; Full Package conditionals work; `intakeFormUrl` deployed.
+- **Who**: Rob builds in Tally; Cursor wires URL in `config.js`
+- **Effort**: ~45 min
 - **Depends on**: BL-03
+- **Owner status**: See [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1
 
 ## Phase 2 — Report templates and Quick Start Guide pipeline (days 5-10)
 
