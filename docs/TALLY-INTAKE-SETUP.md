@@ -18,7 +18,9 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 
 | Prerequisite | Value |
 |--------------|--------|
-| Stripe success URL | `https://launchlook.app/thanks` |
+| Intake form (edit in Tally) | `https://tally.so/r/9qodVE` — already in `config.js` |
+| After-submit redirect (set in Tally) | `https://tally.so/r/Y5xO5J` |
+| Stripe success URL (dashboard) | `https://launchlook.app/thanks` |
 | Notification email | `hello@launchlook.app` |
 
 ---
@@ -33,9 +35,10 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 - [ ] Logic on Q9, Q10, Q11, Q12 (see bottom of paste file)
 - [ ] Q15 checkbox required, above Submit
 - [ ] Thank you page — paste from file
+- [ ] **After submit** → redirect to `https://tally.so/r/Y5xO5J` (thanks form; URL also in `config.js` as `tallyThanksUrl`)
 - [ ] Notifications → `hello@launchlook.app`, all answers
 - [ ] Test Starter path (Q9–12 hidden) and Full path (Q9–12 visible)
-- [ ] Publish → `intakeFormUrl` in `config.js` → push
+- [x] `intakeFormUrl` in `config.js` → `9qodVE` (already deployed — skip unless you publish a new form)
 
 ---
 
@@ -48,4 +51,4 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 
 ---
 
-Paste your Tally URL in chat to wire `config.js`.
+Site already points at **9qodVE**. Only update `config.js` if you publish a new Tally URL.

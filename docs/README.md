@@ -46,12 +46,14 @@ Read in order for full context, or jump to what you need.
 
 | Done in repo | Still on Rob |
 |--------------|--------------|
-| Landing site, checklist, sample, security headers | Publish Tally + `intakeFormUrl` |
-| Stripe link URLs in `config.js` | Stripe success URLs in dashboard |
-| LinkedIn, email wiring, growth templates | Confirm `hello@launchlook.app` receives mail |
-| `customers_track.py` + milestone config | Run `customers_track.py init` locally |
-| Customer 10 runbook (BL-14/15 prep) | Notion ops workspace |
-| | E2E pay → thanks → intake |
-| | First paying customers + outreach |
+| Landing site, checklist, sample, security headers, homepage button CTAs | Finish Tally form in dashboard (paste, notifications, redirect → `Y5xO5J`) |
+| `intakeFormUrl` + `tallyThanksUrl` in `config.js` (deployed) | Stripe checkout tested ($9 + $29) ✅ |
+| Stripe Payment Link URLs in `config.js` | Confirm `hello@launchlook.app` receives mail + Tally submissions |
+| LinkedIn, email wiring, growth templates | Run `customers_track.py init` locally |
+| `customers_track.py` + milestone config | Notion ops workspace |
+| Customer 10 runbook (BL-14/15 prep) | E2E pay → thanks → Tally → inbox |
+| | First paying customers + outreach ([`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md)) |
+
+**Rob's next 3:** see top of [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md).
 
 Always treat [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) as the live owner checklist.

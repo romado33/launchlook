@@ -1,9 +1,15 @@
 # Everything left for Rob — LaunchLook
 
-**Last updated:** May 2026  
+**Last updated:** May 22, 2026  
 **Site:** https://launchlook.app · **Repo:** `romado33/launchlook`
 
 Use this as your single owner checklist. Code/deploy items below marked ✅ are already in GitHub unless noted.
+
+### Your next 3 actions (in order)
+
+1. **Tally** — Submit a test intake from `/thanks` → confirm email at `hello@launchlook.app` and redirect to `Y5xO5J`.
+2. **Tracker** — `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
+3. **Notion ops** — LaunchLook Ops workspace so you can deliver the first real checkup.
 
 **Doc index:** [`docs/README.md`](README.md) · **Tally paste file:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
 
@@ -25,6 +31,9 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 - [x] [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) growth playbook
 - [x] Paying-customer tracker: `scripts/customers_track.py` + [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)
 - [x] Customer 10 prep: [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) + `data/milestones.json`
+- [x] Tally URLs in `config.js`: intake `9qodVE`, post-intake thanks `Y5xO5J` (deployed)
+- [x] Homepage CTAs use shared button styles (all primary actions look clickable)
+- [x] Stripe checkout tested: **Starter $9** and **Full $29** both complete successfully (May 2026)
 
 ---
 
@@ -34,22 +43,25 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 
 ### 1. Tally intake form (~30–45 min)
 
-**Paste only (no extra lines):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)
+**Paste only (no extra lines):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) · **Setup steps:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
 
-- [ ] Create form at [tally.so](https://tally.so) → Start from scratch → paste from **TALLY-PASTE-ONLY.txt** top to bottom
+- [x] `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (live on site)
+- [x] `tallyThanksUrl` = `https://tally.so/r/Y5xO5J` in `config.js` (reference for redirect)
+- [ ] Open form **9qodVE** in Tally — paste fields from **TALLY-PASTE-ONLY.txt** if not already done
 - [ ] Set conditionals (Q9–Q12 Full only; Q10–Q11 when “Yes — I'll provide two test accounts”)
-- [ ] Paste thank-you page + enable email to **hello@launchlook.app**
+- [ ] Thank-you message (paste from file) + **after submit redirect** → `https://tally.so/r/Y5xO5J`
+- [ ] Notifications → **hello@launchlook.app** (all answers)
+- [ ] Test Starter path (Q9–Q12 hidden) and Full path (Q9–Q12 visible)
 - [ ] (Optional) Tally → Notion **Customers**
-- [x] Publish → `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (push to deploy)
 
 ### 2. Stripe Payment Links (~15 min)
 
 Dashboard: [dashboard.stripe.com](https://dashboard.stripe.com) → **Payment Links** (live mode when ready)
 
-- [ ] Exactly **two** links: $9 Starter, $29 Full (names in Stripe can differ)
-- [ ] **Success URL** on both: `https://launchlook.app/thanks`
-- [ ] Cancel URL (if offered): `https://launchlook.app/#pricing`
-- [ ] Confirm URLs still match `config.js` (`stripe.starter`, `stripe.launch`)
+- [x] Exactly **two** links: $9 Starter, $29 Full — both checkout successfully
+- [x] Success URL returns customers to `/thanks` (verified via live test)
+- [ ] Cancel URL (if offered): `https://launchlook.app/#pricing` (optional)
+- [x] URLs match `config.js` (`stripe.starter`, `stripe.launch`)
 
 ### 3. Email receiving (~15–30 min)
 
@@ -65,16 +77,16 @@ Use **incognito** on desktop and once on your **phone**. Detail: [`07-launchlook
 
 **Starter ($9)**
 
-- [ ] Click **Get Starter Package — $9** → Stripe opens
-- [ ] Complete payment (test or live)
-- [ ] Land on `https://launchlook.app/thanks` (not 404)
+- [x] Click **Get Starter Package — $9** → Stripe opens
+- [x] Complete payment (live test May 2026)
+- [x] Land on `https://launchlook.app/thanks` (not 404)
 - [ ] Intake opens **Tally** (not only mailto)
 - [ ] Submit test intake → you receive it at hello@launchlook.app
 - [ ] Form only asks safe fields; security checkbox required
 
 **Full ($29)**
 
-- [ ] Same flow for **Get Full Package — $29**
+- [x] Same flow for **Get Full Package — $29** (live test May 2026)
 - [ ] Full Package shows test-account questions when selected
 
 **Quick URL check**
@@ -186,15 +198,13 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 
 ---
 
-## What to send Cursor (one message)
+## Cursor / repo — nothing blocking you
 
-When Tally is ready:
-
-> Tally URL: `https://tally.so/r/________` — wire `intakeFormUrl` and push.
-
-If email inbox is confirmed working, say so and we can note it in this file.
+- Tally intake + thanks URLs are already in `landing/assets/config.js` — no need to ask Cursor to wire them.
+- If you change Tally publish URLs, update `config.js` and push (or ask Cursor to push).
+- When **hello@launchlook.app** reliably receives Tally + test mail, check off §3 and note the date here.
 
 ---
 
 
-*When this file is mostly checked off, you’re in outreach mode — not “one more site tweak” mode.*
+*When §1–4 are checked off, you’re in outreach mode — not “one more site tweak” mode.*

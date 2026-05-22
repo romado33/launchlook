@@ -12,6 +12,6 @@ Optional duplicate: [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)
 **Checklist:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)  
 **Owner todo:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md)
 
-After publish → `landing/assets/config.js` → `intakeFormUrl`
+**Live URLs (already in `config.js`):** intake `https://tally.so/r/9qodVE` · after submit redirect → `https://tally.so/r/Y5xO5J`
 
 *(Skip `TALLY-AI-ONE-SHOT.txt` unless your Tally plan includes Create with AI.)*

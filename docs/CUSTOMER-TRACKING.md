@@ -148,4 +148,4 @@ Writes `data/customers-export.csv` (gitignored) for backup or Sheets import.
 - Customer login dashboard
 - Stripe webhook → auto-insert (optional later; manual `add` is fine for customer 1–10)
 
-See [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) for go-live blockers.
+See [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) for go-live blockers (top of file: **next 3 actions**).

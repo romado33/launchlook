@@ -79,7 +79,7 @@ Each item has:
 - **Who**: Rob builds in Tally; Cursor wires URL in `config.js`
 - **Effort**: ~45 min
 - **Depends on**: BL-03
-- **Owner status**: See [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1
+- **Owner status**: `intakeFormUrl` deployed (`9qodVE`); Rob finishes Tally editor paste, notifications, redirect to `Y5xO5J` — [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1
 
 ## Phase 2 — Report templates and Quick Start Guide pipeline (days 5-10)
 

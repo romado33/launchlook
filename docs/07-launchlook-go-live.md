@@ -13,16 +13,18 @@
 
 ## 2. Stripe
 
-- [ ] Two Payment Links only: **Starter Package $9**, **Full Package $29**
-- [ ] Success URL on both: `https://launchlook.app/thanks`
-- [x] URLs in `landing/assets/config.js` (`stripe.starter`, `stripe.launch`)
+- [x] Two Payment Links: **Starter Package $9**, **Full Package $29** — both tested OK
+- [x] Success URL → `https://launchlook.app/thanks` (verified)
+- [x] Checkout URLs in `landing/assets/config.js` (`stripe.starter`, `stripe.launch`)
 
 ## 3. Intake (required before cold outreach)
 
-- [ ] Tally form built — paste from [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) (checklist: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
-- [ ] Paste publish URL into `landing/assets/config.js` → `intakeFormUrl` → push
-- [ ] Test: pay (or open `/thanks`) → intake button opens Tally
-- [x] Until Tally is live: `/thanks` falls back to pre-filled email to hello@launchlook.app
+- [x] `intakeFormUrl` in `config.js` → `https://tally.so/r/9qodVE` (deployed)
+- [x] `tallyThanksUrl` in `config.js` → `https://tally.so/r/Y5xO5J` (set as **redirect after submit** on form 9qodVE in Tally)
+- [ ] Tally form **9qodVE** — paste fields from [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) (guide: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
+- [ ] Notifications → `hello@launchlook.app` · test Starter + Full paths
+- [ ] Test: pay (or open `/thanks`) → intake button opens Tally (not mailto-only)
+- [x] `/thanks` mailto fallback if `intakeFormUrl` is ever empty
 
 ## 4. Email
 
@@ -51,19 +53,19 @@
 
 Run **both** tiers on desktop and once on your phone:
 
-- [ ] Click **Get Starter Package — $9** → Stripe checkout opens
-- [ ] Pay (test or live) → redirects to `https://launchlook.app/thanks`
+- [x] Click **Get Starter Package — $9** → Stripe checkout opens
+- [x] Pay → redirects to `https://launchlook.app/thanks` (Starter + Full tested)
 - [ ] Intake opens (Tally) or mailto fallback works
 - [ ] Intake asks only safe info; Full Package shows test-account fields only when selected
 - [ ] You receive the submission (Tally email → hello@launchlook.app)
 - [ ] Customer gets confirmation (welcome email when Resend is wired)
-- [ ] Repeat for **Get Full Package — $29**
+- [x] Repeat for **Get Full Package — $29**
 - [ ] `/checklist`, `/sample`, `/privacy`, `/terms` all load
 - [ ] Footer GitHub link works
 
 ## 9. Start shmoozing (do this next)
 
-- [ ] Tally `intakeFormUrl` in `landing/assets/config.js`
+- [x] Tally `intakeFormUrl` in `landing/assets/config.js` (site wired — finish Tally dashboard + §8 E2E first)
 - [ ] Section 8 complete on phone
 - [ ] 30 targeted DMs/Looms (`templates/cold-outreach-loom-script.md`)
 - [ ] Goal: **3 strangers pay $9** — stop polishing code after that
