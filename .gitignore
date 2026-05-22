@@ -33,6 +33,10 @@ secrets/
 # Vercel build output (copy of landing/)
 dist/
 
+# Customer tracker (PII — local only)
+data/customers.json
+data/customers-export.csv
+
 # Generated output (scans, screenshots, intermediate artifacts)
 output/
 !output/.gitkeep

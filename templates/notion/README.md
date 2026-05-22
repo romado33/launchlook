@@ -2,7 +2,7 @@
 
 Files Rob imports into Notion to set up the **LaunchLook Ops** workspace (BL-03).
 
-**Owner checklist:** [`docs/ROB-REMAINING-TODO.md`](../../docs/ROB-REMAINING-TODO.md) §5 · **Tally → Customers:** [`docs/TALLY-COPY-PASTE.md`](../../docs/TALLY-COPY-PASTE.md) § Notion integration
+**Owner checklist:** [`docs/ROB-REMAINING-TODO.md`](../../docs/ROB-REMAINING-TODO.md) · **CLI tracker:** [`docs/CUSTOMER-TRACKING.md`](../../docs/CUSTOMER-TRACKING.md) · **Tally → Customers:** [`docs/TALLY-COPY-PASTE.md`](../../docs/TALLY-COPY-PASTE.md)
 
 ## Order of setup
 

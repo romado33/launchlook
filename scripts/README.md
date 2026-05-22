@@ -8,6 +8,7 @@ Operational scripts for LaunchLook. All written for Python 3.11+. None are requi
 
 | Script | BL ID | Status | When to first run |
 |--------|-------|--------|-------------------|
+| `customers_track.py` | — | ready | After `init` — every payment / delivery |
 | `audit_checklist.py` | — | ready | Start of every manual audit |
 | `findings_lookup.py` | — | ready | During write-up — search library |
 | `email_render.py` | — | ready | Before sending any transactional email |
@@ -23,8 +24,9 @@ Operational scripts for LaunchLook. All written for Python 3.11+. None are requi
 ## Order of operations per customer
 
 ```
-1. Customer pays via Stripe → fills intake form → row lands in Notion Customers DB
-2. Rob audits manually using templates/notion/report-* template
+1. Customer pays via Stripe → customers_track.py add → row in Notion Customers DB
+2. Intake → customers_track.py mark-intake
+3. Rob audits manually using templates/notion/report-* template
    ↓
 3. (BL-09) For Launch Pack/Polish tier:
    python scripts/qsg_compose_prompt.py --app-name ... > qsg_prompt.txt

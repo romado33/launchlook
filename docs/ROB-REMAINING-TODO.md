@@ -23,6 +23,8 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 - [x] Homepage: free checklist band, share/referral FAQ, honest proof section
 - [x] Delivery email + Notion reports: share lines, quote ask, referral
 - [x] [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) growth playbook
+- [x] Paying-customer tracker: `scripts/customers_track.py` + [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)
+- [x] Customer 10 prep: [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) + `data/milestones.json`
 
 ---
 
@@ -86,7 +88,17 @@ Use **incognito** on desktop and once on your **phone**. Detail: [`07-launchlook
 
 ## 🟠 Important — first paying customer delivery
 
-### 5. Notion ops workspace
+### 5. Customer tracker (local — 2 min once)
+
+Guide: [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)
+
+- [ ] `python scripts/customers_track.py init` (creates gitignored `data/customers.json`)
+- [ ] After each Stripe payment: `customers_track.py add ...`
+- [ ] After intake: `mark-intake` · after report: `mark-delivered`
+- [ ] Weekly: `customers_track.py stats` (progress toward 8 and **10** paying)
+- [ ] At **10 paying**: read [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) → `acknowledge-milestone-10` → start BL-14/15
+
+### 6. Notion ops workspace
 
 Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`templates/notion/`](../templates/notion/)
 
@@ -97,7 +109,7 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
   - Full → `templates/notion/report-launch-pack.md`
 - [ ] Before each delivery: read [`templates/report-voice-guide.md`](../templates/report-voice-guide.md) (plain English for founders)
 
-### 6. Delivering a checkup (manual workflow)
+### 7. Delivering a checkup (manual workflow)
 
 - [ ] Audit pass: [`templates/manual-audit-checklist.md`](../templates/manual-audit-checklist.md) (~15 min)
 - [ ] Fill Notion report; paste fix prompts from `findings_library/findings.json`
@@ -105,14 +117,14 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
 - [ ] Email customer: [`templates/email/delivery.txt`](../templates/email/delivery.txt) (includes quote + share asks)
 - [ ] Optional 48h later: [`templates/email/ask-for-quote.txt`](../templates/email/ask-for-quote.txt)
 
-### 7. Resend (welcome / delivery automation)
+### 8. Resend (welcome / delivery automation)
 
 - [ ] [resend.com](https://resend.com) — verify domain **launchlook.app**
 - [ ] `.env` (never commit): `RESEND_API_KEY`, `FROM_EMAIL=hello@launchlook.app`, `ADMIN_EMAIL=…`
 - [ ] Test welcome email after purchase ([`templates/email/welcome.txt`](../templates/email/welcome.txt))
 - [ ] Optional: wire Stripe webhook or manual send for week 1
 
-### 8. Vercel dashboard sanity check (5 min)
+### 9. Vercel dashboard sanity check (5 min)
 
 - [ ] Project **Root Directory** = empty (repo root), **not** `landing`
 - [ ] Build: `node scripts/copy-landing-for-vercel.mjs` · Output: `dist`
@@ -167,6 +179,8 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 | Go-live detail | [`07-launchlook-go-live.md`](07-launchlook-go-live.md) |
 | Security posture | [`08-launchlook-security.md`](08-launchlook-security.md) |
 | Tally copy-paste | [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) |
+| Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) · `python scripts/customers_track.py stats` |
+| At 10 paying | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) |
 | `intakeFormUrl` in repo | **Empty until you publish Tally** |
 
 ---

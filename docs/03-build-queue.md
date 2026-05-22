@@ -147,6 +147,9 @@ Each item has:
 
 ## Phase 4 — Light scanner (defer until customer 10)
 
+**Operator runbook:** [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md)  
+**Milestone check:** `python scripts/customers_track.py stats`
+
 ### BL-14 — Playwright crawler v0.1
 - **What**: The Python crawler skeleton from `05-technical-architecture.md`. Single command: `python crawler.py <url>`. Outputs JSON of raw observations (screenshots, console errors, network failures, links, buttons, placeholder pattern matches, trust page status, logged-out access checks).
 - **Acceptance**:

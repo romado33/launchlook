@@ -1,0 +1,15 @@
+{
+  "goals": {
+    "paying_customers_60_day_target": 8,
+    "paying_customers_automation_unlock": 10,
+    "paying_customers_self_serve_defer": 30
+  },
+  "unlock_at_customer_10": {
+    "description": "Start BL-14 Playwright crawler and BL-15 Notion pre-population",
+    "runbook": "docs/CUSTOMER-10-RUNBOOK.md"
+  },
+  "counts_as_paying": {
+    "requires_payment_date": true,
+    "exclude_statuses": ["lead", "refunded"]
+  }
+}

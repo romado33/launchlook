@@ -86,6 +86,8 @@ Work is tracked in `docs/03-build-queue.md`. Tickets are referenced as **BL-XX**
 ## Operator quick reference
 
 ```bash
+python scripts/customers_track.py init         # once — creates data/customers.json
+python scripts/customers_track.py stats        # paying count / milestone to 10
 python scripts/audit_checklist.py              # 20-min audit steps
 python scripts/findings_lookup.py placeholder  # search findings library
 python scripts/email_render.py delivery --name X --app-name Y --report-link URL --platform Lovable

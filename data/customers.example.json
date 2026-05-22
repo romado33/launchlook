@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "updated_at": "2026-05-22T00:00:00Z",
+  "milestones": {
+    "customer_10_unlock_acknowledged": false,
+    "customer_10_unlocked_at": null
+  },
+  "customers": [
+    {
+      "id": "cust_example_001",
+      "name": "Alex",
+      "email": "alex@example.com",
+      "app_url": "https://example.com",
+      "app_name": "Example App",
+      "platform": "Lovable",
+      "tier": "starter",
+      "status": "paid",
+      "payment_date": "2026-05-20",
+      "intake_received": false,
+      "intake_received_at": null,
+      "delivery_due": "2026-05-21",
+      "delivered_at": null,
+      "notion_report_url": null,
+      "notion_page_id": null,
+      "stripe_payment_id": null,
+      "referral_code": null,
+      "referrals_count": 0,
+      "followup_d3_sent": false,
+      "followup_d7_sent": false,
+      "feedback_received": false,
+      "useful_rating": null,
+      "notes": "Example row — delete after init",
+      "created_at": "2026-05-20T12:00:00Z",
+      "updated_at": "2026-05-20T12:00:00Z"
+    }
+  ]
+}

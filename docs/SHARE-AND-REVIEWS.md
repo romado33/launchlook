@@ -30,8 +30,8 @@ Quick ops guide for Rob. No Supabase required.
 
 Replace a homepage proof card in `landing/index.html` (Proof section) with real text — keep it short, name optional.
 
-## Tracking (no database)
+## Tracking (no Supabase)
 
-- **Paid:** Stripe Dashboard
-- **Intake:** Tally + hello@launchlook.app inbox
-- **Pipeline:** Notion **Customers** or [`templates/notion/customers-db.csv`](../templates/notion/customers-db.csv) in Sheets
+- **Paid:** Stripe Dashboard → `python scripts/customers_track.py add ...` ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md))
+- **Intake:** Tally + hello@launchlook.app inbox → `mark-intake`
+- **Pipeline:** Notion **Customers** (mirror local tracker) · `customers_track.py stats` for milestone **10**

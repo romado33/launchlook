@@ -17,6 +17,8 @@ Read in order for full context, or jump to what you need.
 | [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) | **Complete Tally form text to paste** |
 | [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) | Tally build checklist (links to copy-paste doc) |
 | [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) | Share links, quotes, weekly outreach rhythm |
+| [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) | Paying customer tracker (CLI + Notion) |
+| [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) | What to do at 10 paying customers (BL-14/15) |
 | [`01-product-spec.md`](01-product-spec.md) | Tiers, deliverables, positioning |
 | [`02-strategy-and-context.md`](02-strategy-and-context.md) | Why manual-first, competitive context |
 | [`03-build-queue.md`](03-build-queue.md) | BL-XX tickets and gates |
@@ -47,7 +49,8 @@ Read in order for full context, or jump to what you need.
 | Landing site, checklist, sample, security headers | Publish Tally + `intakeFormUrl` |
 | Stripe link URLs in `config.js` | Stripe success URLs in dashboard |
 | LinkedIn, email wiring, growth templates | Confirm `hello@launchlook.app` receives mail |
-| | Notion ops workspace |
+| `customers_track.py` + milestone config | Run `customers_track.py init` locally |
+| Customer 10 runbook (BL-14/15 prep) | Notion ops workspace |
 | | E2E pay → thanks → intake |
 | | First paying customers + outreach |
 

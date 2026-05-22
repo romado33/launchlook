@@ -36,6 +36,8 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 - ✅ Stripe Payment Link URLs in `landing/assets/config.js`
 - ✅ LinkedIn, site-wide `hello@launchlook.app`, growth email/report templates
 - ✅ **Tally copy-paste doc:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+- ✅ **Customer tracker CLI:** `scripts/customers_track.py` ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md))
+- ✅ **Customer 10 runbook:** [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) (BL-14/15 gate)
 
 ### Still blocking launch / outreach
 
@@ -76,7 +78,7 @@ Read all docs in order. Then:
 1. **Blocking:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1–4 — Tally ([`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)), Stripe thanks URL, email, E2E test.
 2. **Delivery:** Notion workspace + first customer report (`templates/notion/`, `manual-audit-checklist.md`).
 3. **Outreach:** [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) + 5 Looms (`templates/cold-outreach-loom-script.md`) — lead with `launchlook.app/checklist`.
-4. Track customers in Notion **Customers** or [`templates/notion/customers-db.csv`](../templates/notion/customers-db.csv).
+4. Track each payment: `python scripts/customers_track.py add ...` and mirror in Notion **Customers** ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)).
 
 ## Anti-patterns to avoid
 
