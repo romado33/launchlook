@@ -1,41 +1,41 @@
-# LaunchLook — Build the Tally intake form (checklist)
+# LaunchLook — Build the Tally intake form (manual editor)
 
 **Time:** ~30–45 minutes
 
-## Which copy file?
+## Copy file (plain text)
 
-| Method | File |
-|--------|------|
-| **Recommended** | [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) → Tally **Create form with AI** |
-| Field-by-field | [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) |
-| Thank-you only | [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt) |
+Open **[`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)** in Notepad or VS Code.
 
-Do **not** paste from `TALLY-COPY-PASTE.md` (that file is only an index).
+Work top to bottom. For each section, add the Tally block type shown, then paste text between `>>> PASTE START` and `<<< PASTE END`.
 
-**When done:** paste publish URL into `landing/assets/config.js` → `intakeFormUrl` → push.
+Thank-you page text is at the bottom of the same file (or use [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)).
+
+Do **not** paste from `.md` files — Tally will show formatting junk.
 
 ---
 
 ## Before you open Tally
 
-| Prerequisite | Where |
+| Prerequisite | Value |
 |--------------|--------|
-| Stripe success URLs → `/thanks` | Stripe Payment Links dashboard |
-| Inbox works | `hello@launchlook.app` |
-| Notion (optional) | **LaunchLook Ops** → **Customers** — [`templates/notion/customers-db.csv`](../templates/notion/customers-db.csv) |
+| Stripe success URL | `https://launchlook.app/thanks` |
+| Notification email | `hello@launchlook.app` |
 
 ---
 
-## Build steps
+## Checklist
 
-- [ ] 1. **AI path:** Paste [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) into Tally Create with AI  
-      **OR manual path:** Add blocks from [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) in order
-- [ ] 2. Verify Q8 options are exactly `Starter Package ($9)` and `Full Package ($29)`
-- [ ] 3. Set conditional logic on Q9–Q12 (see end of TALLY-INTAKE-PASTE.txt)
-- [ ] 4. Paste thank-you from [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)
-- [ ] 5. Notifications → `hello@launchlook.app`, include all answers
-- [ ] 6. (Optional) Notion integration
-- [ ] 7. Publish → `intakeFormUrl` in `config.js` → test `/thanks`
+- [ ] New form → **Start from scratch**
+- [ ] Form title: `LaunchLook — Post-purchase intake`
+- [ ] Block 0: **Text** (security notice) — paste from file
+- [ ] Questions 1–15 in order — paste titles, descriptions, placeholders, options
+- [ ] Q7, Q8, Q9: use **Bulk insert options** for option lists
+- [ ] Logic on Q9, Q10, Q11, Q12 (see bottom of paste file)
+- [ ] Q15 checkbox required, above Submit
+- [ ] Thank you page — paste from file
+- [ ] Notifications → `hello@launchlook.app`, all answers
+- [ ] Test Starter path (Q9–12 hidden) and Full path (Q9–12 visible)
+- [ ] Publish → `intakeFormUrl` in `config.js` → push
 
 ---
 
@@ -43,10 +43,9 @@ Do **not** paste from `TALLY-COPY-PASTE.md` (that file is only an index).
 
 | Issue | Fix |
 |-------|-----|
-| Pasted markdown, looks wrong | Use `.txt` files only |
-| Conditionals don’t show | Tier text must be exactly `Full Package ($29)` |
-| Thanks page still mailto on site | Set `intakeFormUrl` and deploy |
+| Conditionals missing | Q8 options must be exactly `Starter Package ($9)` and `Full Package ($29)` |
+| Thanks page on site is mailto | Set `intakeFormUrl` in config and deploy |
 
 ---
 
-Paste your Tally URL in chat to wire `config.js` automatically.
+Paste your Tally URL in chat to wire `config.js`.

@@ -2,7 +2,7 @@
 
 Tally.so configuration for the post-purchase intake form. Tally is free, no-code, supports conditional logic, and posts results to Notion natively.
 
-> **Building the form?** Use **[`docs/TALLY-AI-ONE-SHOT.txt`](../docs/TALLY-AI-ONE-SHOT.txt)** (Tally AI) or **[`docs/TALLY-INTAKE-PASTE.txt`](../docs/TALLY-INTAKE-PASTE.txt)** (field-by-field). Thank you: **[`docs/TALLY-THANK-YOU-PASTE.txt`](../docs/TALLY-THANK-YOU-PASTE.txt)**. Do not paste markdown. This file is the technical reference.
+> **Building the form?** Use **[`docs/TALLY-INTAKE-PASTE.txt`](../docs/TALLY-INTAKE-PASTE.txt)** in Tally’s manual editor (plain text between `>>> PASTE START` / `<<< PASTE END`). Do not paste markdown. This file is the technical reference.
 
 ## Where it lives
 

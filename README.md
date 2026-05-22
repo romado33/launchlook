@@ -5,7 +5,7 @@ A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](ht
 > **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
 
 **Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)  
-**Build Tally intake:** [`docs/TALLY-AI-ONE-SHOT.txt`](docs/TALLY-AI-ONE-SHOT.txt) (paste into Tally AI) or [`docs/TALLY-INTAKE-PASTE.txt`](docs/TALLY-INTAKE-PASTE.txt)  
+**Build Tally intake (manual):** [`docs/TALLY-INTAKE-PASTE.txt`](docs/TALLY-INTAKE-PASTE.txt)  
 **All docs index:** [`docs/README.md`](docs/README.md)
 
 ## Read this first

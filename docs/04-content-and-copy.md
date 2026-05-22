@@ -108,7 +108,7 @@ A: Yes, if it's accessible from the internet. Local URLs (localhost) won't work,
 
 ## Intake form fields
 
-**Authoritative copy-paste for Tally (plain text, not markdown):** [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) or [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) + [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt).
+**Authoritative copy-paste for Tally manual editor:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) (includes thank-you).
 
 Summary: name, email, app URL, one-line description, main user, main workflow, builder (Lovable/Bolt/…), tier (**Starter Package ($9)** / **Full Package ($29)**), optional Full-only test accounts + support email, optional notes, optional anxiety 1–10, required safety checkbox.
 

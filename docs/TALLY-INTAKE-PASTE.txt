@@ -1,20 +1,36 @@
 ================================================================================
-LAUNCHLOOK — TALLY INTAKE + THANK YOU (PLAIN TEXT ONLY)
+LAUNCHLOOK — TALLY MANUAL EDITOR (PLAIN TEXT ONLY — NO MARKDOWN, NO AI)
 ================================================================================
 
-Tally cannot paste markdown. Copy ONLY the lines between:
+Use this file in Tally's normal form builder (Start from scratch).
 
-  >>> PASTE START
-  <<< PASTE END
+HOW TO COPY
+  Copy ONLY the text between these two lines (not the lines themselves):
 
-Do not copy the separator lines or the INSTRUCTION lines.
+    >>> PASTE START
+    <<< PASTE END
 
-FASTEST METHOD: use TALLY-AI-ONE-SHOT.txt in Tally "Create form with AI" instead
-of building question-by-question.
+  Do not copy lines that say INSTRUCTION (those tell you what to click in Tally).
 
-FILE: docs/TALLY-INTAKE-PASTE.txt (this file)
-THANK YOU ONLY: see section at bottom "THANK YOU PAGE"
-AFTER PUBLISH: paste https://tally.so/r/xxxxx into landing/assets/config.js intakeFormUrl
+HOW TO BUILD IN TALLY (manual editor)
+  1. tally.so → + Create form → Start from scratch
+  2. Set form title in settings (see FORM SETTINGS below)
+  3. For each section below, in order:
+     - Click + or type / to add a block
+     - Pick the block type shown (Text, Short text, Email, Link, Long text, etc.)
+     - Paste the Question title into the question field
+     - Paste Description / Placeholder where this file has them
+     - For multiple choice: add options one-by-one OR Block settings → Bulk insert options
+       → paste all option lines from the PASTE block (one option per line)
+     - Turn Required on/off as noted
+  4. After all questions: Settings → Thank you page → paste THANK YOU section
+  5. Settings → Notifications → email hello@launchlook.app
+  6. Set conditional logic on Q9–Q12 (see CONDITIONAL LOGIC at bottom)
+  7. Publish → copy URL → landing/assets/config.js → intakeFormUrl
+
+Tally slash shortcuts (if your editor has them): /text /short /long /email /link /choice /checkbox /scale
+
+AFTER PUBLISH: https://tally.so/r/xxxxx → config.js intakeFormUrl
 
 
 ================================================================================

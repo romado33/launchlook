@@ -19,7 +19,7 @@
 
 ## 3. Intake (required before cold outreach)
 
-- [ ] Tally form built — paste all blocks from [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) (checklist: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
+- [ ] Tally form built — paste from [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) (checklist: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
 - [ ] Paste publish URL into `landing/assets/config.js` → `intakeFormUrl` → push
 - [ ] Test: pay (or open `/thanks`) → intake button opens Tally
 - [x] Until Tally is live: `/thanks` falls back to pre-filled email to hello@launchlook.app

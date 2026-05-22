@@ -14,11 +14,8 @@ Read in order for full context, or jump to what you need.
 
 | Doc | Purpose |
 |-----|---------|
-| [`TALLY-AI-ONE-SHOT.txt`](TALLY-AI-ONE-SHOT.txt) | **Paste into Tally Create with AI** (fastest) |
-| [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) | Field-by-field plain text (`>>> PASTE START`) |
-| [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt) | Thank-you page only |
-| [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) | Tally build checklist |
-| [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) | Index (which .txt file to use) |
+| [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) | **Manual Tally editor** — all fields + thank-you (`>>> PASTE START`) |
+| [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) | Build checklist |
 | [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) | Share links, quotes, weekly outreach rhythm |
 | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) | Paying customer tracker (CLI + Notion) |
 | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) | What to do at 10 paying customers (BL-14/15) |
