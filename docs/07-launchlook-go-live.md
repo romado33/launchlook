@@ -4,9 +4,9 @@
 
 ## 1. Site (Vercel)
 
-- [x] Root `vercel.json` copies `landing/` → `dist/` (do **not** set Root Directory to `landing` unless you remove that build)
+- [x] Root `vercel.json` copies `landing/` → `dist/` and owns **cleanUrls + rewrites** (do **not** set Root Directory to `landing`)
 - [x] https://launchlook.app loads
-- [ ] `images/og.png` present (social preview)
+- [x] `images/og.png` present (social preview — verify in Slack after deploy)
 - [ ] Hard-refresh after each deploy
 
 ## 2. Stripe

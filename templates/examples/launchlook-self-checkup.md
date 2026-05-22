@@ -6,9 +6,9 @@
 
 ## Summary
 
-**Overall verdict:** 🟡 Fix a few things before heavy cold outreach
+**Overall verdict:** 🟡 Wire Tally + verify routing after deploy
 
-The homepage is strong — clear value prop, Starter Package / Ship Package pricing, sample teaser, and real privacy/terms content. The main gaps are **routing** (several clean URLs 404 while `.html` paths work), **post-pay intake** still on email fallback until Tally is wired, and a few **trust polish** items you'd flag on any vibe-coded site.
+The homepage is strong — clear value prop, Starter Package / Ship Package pricing, sample teaser, and real privacy/terms content. **Routing** was failing because `cleanUrls` / rewrites lived only in `dist/vercel.json` (ignored by Vercel); they now live in **repo root** `vercel.json`. Remaining gap: **post-pay intake** on email until `intakeFormUrl` is set.
 
 **6 findings** below (what LaunchLook would report to a paying customer).
 
@@ -16,7 +16,7 @@ The homepage is strong — clear value prop, Starter Package / Ship Package pric
 
 ## 🔴 Critical
 
-### 1 — `/sample`, `/thanks`, `/checklist` return 404 (clean URLs)
+### 1 — `/sample`, `/thanks`, `/checklist` return 404 (clean URLs) — **fix in repo**
 
 **What we saw**  
 `https://launchlook.app/sample` and `/thanks` return Vercel 404.  
@@ -26,22 +26,22 @@ The homepage is strong — clear value prop, Starter Package / Ship Package pric
 Homepage links to `/sample` twice as a trust signal. Broken sample = worse than no sample.
 
 **Fix**  
-In `landing/vercel.json`, add rewrites from extensionless paths to `.html` (or fix `cleanUrls` on Vercel). Redeploy and verify all footer links without `.html`.
+Put `cleanUrls` + rewrites in **repo root** `vercel.json` (not only `landing/` or `dist/`). Redeploy and verify `/sample`, `/thanks`, `/checklist`, `/privacy`, `/terms` return 200.
 
 ---
 
 ## 🟠 High
 
-### 2 — Post-payment intake not on Tally yet
+### 2 — Post-payment intake not on Tally yet — **blocked on you**
 
 **What we saw**  
-`intakeFormUrl` is still empty in `config.js`. Thanks page falls back to mailto.
+`intakeFormUrl` is still empty in `config.js`. Thanks page uses a clear mailto fallback (`/thanks`).
 
 **Why it matters**  
 Pay → friction → email is OK for day 1, but strangers expect a form immediately after Stripe.
 
 **Fix**  
-Publish Tally form from `templates/intake-form-spec.md`, paste URL into `config.js`, test Stripe → `/thanks` → Tally.
+Publish Tally from `templates/intake-form-spec.md`, paste URL into `config.js`, set Stripe success URL to `https://launchlook.app/thanks`, test pay → Tally.
 
 ### 3 — "Who's behind this" lacked a human name (fixed in repo)
 

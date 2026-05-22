@@ -26,11 +26,15 @@ python -m http.server 8000
 
 ## Deploy to Vercel
 
+Production deploys from the **repo root** (`vercel.json` copies `landing/` → `dist/`). **Clean URLs and rewrites** must live in root `vercel.json` — Vercel does not apply routing from `dist/vercel.json` after the build.
+
 ```bash
-npm install -g vercel
+# From repo root (recommended)
+git push origin main   # Vercel auto-deploys
+
+# Or CLI from landing/ (preview only; keep landing/vercel.json in sync with root)
 cd landing
-vercel          # first time — project name: LaunchLook
-vercel --prod   # production
+vercel --prod
 ```
 
 ## Custom domain (BL-01)
