@@ -53,7 +53,7 @@
 
   var stripeSelectors = {
     starter: "[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick'], [data-onceover-stripe='starter'], [data-onceover-stripe='quick']",
-    launch: "[data-launchlook-stripe='launch'], [data-onceover-stripe='launch']",
+    launch: "[data-launchlook-stripe='launch'], [data-launchlook-stripe='full'], [data-onceover-stripe='launch']",
   };
 
   setHref(stripeSelectors.starter, safeHttpsUrl(starterUrl));

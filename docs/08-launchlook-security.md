@@ -49,7 +49,7 @@ pip-audit -r <(python -c "import tomllib; ...")  # or audit your venv after pip 
 
 ## What LaunchLook does **not** guarantee
 
-- RLS / API / auth bugs in **customer** apps (Ship Package does a basic cross-user **visibility** check only).
+- RLS / API / auth bugs in **customer** apps (Full Package does a basic cross-user **visibility** check only).
 - OWASP Top 10 coverage, CVE scanning, or compliance (SOC2, HIPAA).
 - Security of Stripe, Tally, Notion, or Resend (use their dashboards and MFA).
 

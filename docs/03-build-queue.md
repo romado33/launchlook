@@ -20,7 +20,7 @@ Each item has:
 - **Depends on**: nothing
 
 ### BL-02 — Stripe account and payment links
-- **What**: Stripe account active. Two Payment Links: Starter Package ($9), Ship Package ($29). Success URL → https://launchlook.app/thanks. Optional: webhook to email on purchase.
+- **What**: Stripe account active. Two Payment Links: Starter Package ($9), Full Package ($29). Success URL → https://launchlook.app/thanks. Optional: webhook to email on purchase.
 - **Acceptance**: Test purchase completes end-to-end with Stripe test card. Webhook fires.
 - **Who**: Rob (Cursor can help with webhook setup if needed)
 - **Effort**: 1 hour

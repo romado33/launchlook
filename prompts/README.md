@@ -1,6 +1,6 @@
 # Prompts — Quick Start Guide pipeline
 
-The QSG is included on Starter Package ($9) and Ship Package ($29) tiers. The pipeline goes:
+The QSG is included on Starter Package ($9) and Full Package ($29) tiers. The pipeline goes:
 
 ```
 Intake form

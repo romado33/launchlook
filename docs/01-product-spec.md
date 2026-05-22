@@ -24,7 +24,7 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 
 Used by: founders about to share a link and want a fast sanity check plus user-facing docs.
 
-### Ship Package — $29
+### Full Package — $29
 
 - Everything in Starter Package, plus:
 - Up to 15 findings (deeper pass — not unlimited)

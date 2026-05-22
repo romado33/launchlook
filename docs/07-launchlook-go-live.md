@@ -1,6 +1,6 @@
 # LaunchLook — Go-live checklist
 
-**Current pricing:** Starter Package **$9** · Launch **$29** · Follow-up re-scan quoted by email.
+**Current pricing:** Starter Package **$9** · Full Package **$29** · Follow-up re-scan quoted by email.
 
 ## 1. Site (Vercel)
 
@@ -11,13 +11,13 @@
 
 ## 2. Stripe
 
-- [ ] Two Payment Links only: **Starter Package $9**, **Ship Package $29**
+- [ ] Two Payment Links only: **Starter Package $9**, **Full Package $29**
 - [ ] Success URL on both: `https://launchlook.app/thanks`
 - [x] URLs in `landing/assets/config.js` (`stripe.starter`, `stripe.launch`)
 
 ## 3. Intake (required before cold outreach)
 
-- [ ] Tally form built from `templates/intake-form-spec.md` (include security notice at top)
+- [ ] Tally form built from `templates/intake-form-spec.md` (security notice at top + required checkbox before Submit)
 - [ ] Paste publish URL into `landing/assets/config.js` → `intakeFormUrl`
 - [ ] Test: pay (or open `/thanks`) → intake button opens Tally
 - [ ] Until Tally is live: `/thanks` falls back to pre-filled email to hello@launchlook.app
@@ -31,7 +31,7 @@
 ## 5. Legal & trust
 
 - [x] `privacy.html` / `terms.html` say LaunchLook (not Onceover)
-- [x] Sample report at `/sample`
+- [x] Sample report at `/sample` (includes example copy-paste fix prompt)
 - [x] Founder + trust copy on homepage
 
 ## 6. Public checklist
@@ -44,26 +44,32 @@
 - [x] Headers + CSP in root `vercel.json` (see `docs/08-launchlook-security.md`)
 - [ ] After deploy: `/assets/config.local.js` returns 404; homepage has no CSP console errors
 
-## 8. Smoke test (do in incognito)
+## 8. Payment + intake E2E (do in incognito — blocks first paying customer)
 
-- [ ] Homepage hero + pricing (Starter Package / Launch)
-- [ ] Stripe $9 test → lands on `/thanks`
-- [ ] Stripe $29 test → lands on `/thanks`
-- [ ] `/checklist`, `/sample`, `/privacy`, `/terms`
+Run **both** tiers on desktop and once on your phone:
+
+- [ ] Click **Get Starter Package — $9** → Stripe checkout opens
+- [ ] Pay (test or live) → redirects to `https://launchlook.app/thanks`
+- [ ] Intake opens (Tally) or mailto fallback works
+- [ ] Intake asks only safe info; Full Package shows test-account fields only when selected
+- [ ] You receive the submission (Tally email → hello@launchlook.app)
+- [ ] Customer gets confirmation (welcome email when Resend is wired)
+- [ ] Repeat for **Get Full Package — $29**
+- [ ] `/checklist`, `/sample`, `/privacy`, `/terms` all load
 - [ ] Footer GitHub link works
 
 ## 9. Start shmoozing (do this next)
 
 - [ ] Tally `intakeFormUrl` in `landing/assets/config.js`
-- [ ] Test $9 + $29 checkout on phone (incognito)
+- [ ] Section 8 complete on phone
 - [ ] 30 targeted DMs/Looms (`templates/cold-outreach-loom-script.md`)
 - [ ] Goal: **3 strangers pay $9** — stop polishing code after that
 
 ## 10. Consistency quick check
 
-- [ ] Site says **Starter Package** / **Ship Package** (not Launch tier on homepage)
-- [ ] Stripe product names can say "Ship" — customer-facing copy uses **Ship Package**
-- [ ] `python scripts/copy-landing-for-vercel.mjs` not needed — root `vercel.json` handles deploy
+- [ ] Site says **Starter Package** / **Full Package** everywhere customer-facing
+- [ ] Stripe dashboard product names can differ; Payment Link success URLs must match `/thanks`
+- [ ] Internal code may still use `stripe.launch` — that's fine
 
 ## Brand reference
 
@@ -71,5 +77,5 @@
 |---|--------|
 | Name | **LaunchLook** |
 | Domain | **launchlook.app** |
-| Tiers | **Starter Package $9**, **Ship Package $29** |
+| Tiers | **Starter Package $9**, **Full Package $29** |
 | Config | `window.LAUNCHLOOK_CONFIG` |

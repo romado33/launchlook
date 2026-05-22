@@ -41,7 +41,7 @@ We review your live web URL like a first-time visitor — then send a Notion rep
 - AI builder fingerprints (placeholders, default copy)
 - Trust gaps (privacy/terms, generic meta)
 
-Cross-user data check: **Ship Package ($29)** only.
+Cross-user data check: **Full Package ($29)** only.
 
 ### Pricing section
 
@@ -55,13 +55,13 @@ Cross-user data check: **Ship Package ($29)** only.
 - 24-hour delivery
 - CTA: `Get Starter — $9`
 
-**Ship Package ($29)** *(deeper pass)*
+**Full Package ($29)** *(deeper pass)*
 - Everything in Starter, plus:
 - Up to 15 findings (deeper pass)
 - Cross-user data check (two test accounts)
 - Shareable report link
 - 12-hour delivery
-- CTA: `Get Ship Package — $29`
+- CTA: `Get Full Package — $29`
 
 Follow-up re-scan: email for quote (replaces old $59 tier on site).
 
@@ -71,10 +71,10 @@ Follow-up re-scan: email for quote (replaces old $59 tier on site).
 A: No — web apps only. Phone check = mobile-width browser view.
 
 **Q: How long does the checkup take?**
-A: Starter is 24 hours. Launch is 12 hours.
+A: Starter Package is 24 hours. Full Package is 12 hours.
 
 **Q: What do you need from me?**
-A: Your URL, one-line description, builder name. Launch tier: two test accounts.
+A: Your URL, one-line description, builder name. Full Package: two temporary test accounts.
 
 **Q: Is this safe to run on a live app?**
 A: Yes. We only read your app — we never submit forms, click destructive buttons, or modify any data. Think of us as a careful visitor.
@@ -389,7 +389,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ### Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter Package $9** (includes Quick Start Guide) or **Ship Package $29** for a deeper pass and cross-user checks.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter Package $9** (includes Quick Start Guide) or **Full Package $29** for a deeper pass and cross-user checks.
 
 ### License
 
