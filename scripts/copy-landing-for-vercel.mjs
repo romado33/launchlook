@@ -21,4 +21,14 @@ if (existsSync(dest)) {
 
 mkdirSync(dest, { recursive: true });
 cpSync(src, dest, { recursive: true });
+
+// Never deploy local overrides or env files (even if present on disk).
+for (const rel of ["assets/config.local.js", ".env", ".env.local"]) {
+  const p = join(dest, rel);
+  if (existsSync(p)) {
+    rmSync(p, { force: true });
+    console.warn("Removed", rel, "from dist (must not be public)");
+  }
+}
+
 console.log("Copied landing/ → dist/ for Vercel deploy");

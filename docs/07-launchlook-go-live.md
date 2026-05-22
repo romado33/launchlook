@@ -39,7 +39,12 @@
 - [x] https://github.com/romado33/launchlook-prelaunch-checklist
 - [x] `githubChecklist` in `config.js`
 
-## 7. Smoke test (do in incognito)
+## 7. Security (launchlook.app)
+
+- [x] Headers + CSP in root `vercel.json` (see `docs/08-launchlook-security.md`)
+- [ ] After deploy: `/assets/config.local.js` returns 404; homepage has no CSP console errors
+
+## 8. Smoke test (do in incognito)
 
 - [ ] Homepage hero + pricing (Starter Package / Launch)
 - [ ] Stripe $9 test → lands on `/thanks`
@@ -47,14 +52,14 @@
 - [ ] `/checklist`, `/sample`, `/privacy`, `/terms`
 - [ ] Footer GitHub link works
 
-## 8. Start shmoozing (do this next)
+## 9. Start shmoozing (do this next)
 
 - [ ] Tally `intakeFormUrl` in `landing/assets/config.js`
 - [ ] Test $9 + $29 checkout on phone (incognito)
 - [ ] 30 targeted DMs/Looms (`templates/cold-outreach-loom-script.md`)
 - [ ] Goal: **3 strangers pay $9** — stop polishing code after that
 
-## 9. Consistency quick check
+## 10. Consistency quick check
 
 - [ ] Site says **Starter Package** / **Ship Package** (not Launch tier on homepage)
 - [ ] Stripe product names can say "Ship" — customer-facing copy uses **Ship Package**
