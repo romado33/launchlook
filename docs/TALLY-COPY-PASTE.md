@@ -2,11 +2,9 @@
 
 Tally does **not** accept markdown. Use this plain text file in the normal builder:
 
-## [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)
+## [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) ← **only pasteable text, nothing else**
 
-- Every question + thank-you page + notification email
-- Copy only text between `>>> PASTE START` and `<<< PASTE END`
-- Step-by-step instructions at the top of that file
+## [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) ← same content + which Tally block each block is for
 
 Thank-you is at the bottom of the same file (section **THANK YOU PAGE**).  
 Optional duplicate: [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)

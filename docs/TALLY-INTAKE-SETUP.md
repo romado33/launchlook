@@ -4,9 +4,9 @@
 
 ## Copy file (plain text)
 
-Open **[`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)** in Notepad or VS Code.
+**Paste text only:** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) (no instructions in file)
 
-Work top to bottom. For each section, add the Tally block type shown, then paste text between `>>> PASTE START` and `<<< PASTE END`.
+**Which block type each line is:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)
 
 Thank-you page text is at the bottom of the same file (or use [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)).
 

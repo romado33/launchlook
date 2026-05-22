@@ -1,0 +1,107 @@
+LaunchLook — Post-purchase intake
+
+Please read before submitting
+
+• Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+
+• For Full Package ($29) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+
+• We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+
+What's your name?
+
+First name is fine
+
+Email
+
+Match the email you used at checkout if you can — makes things easier.
+
+App URL
+
+The live URL. Staging URLs work too if they're publicly reachable.
+
+What does your app do?
+
+One sentence. Plain language.
+
+A shared to-do list for small teams.
+
+Who's your main user?
+
+1–2 sentences. Who's going to use this? What do they do?
+
+What's the main thing they do in your app?
+
+The one thing your app is for. The main workflow.
+
+Which platform built it?
+
+Lovable
+Bolt
+Base44
+Replit
+v0
+Other
+
+Which tier did you purchase?
+
+We'll match against Stripe — this confirms what you expect.
+
+Starter Package ($9)
+Full Package ($29)
+
+Can we use test accounts?
+
+The cross-user check needs two signed-in sessions. We can sign up fresh test accounts ourselves if you prefer — we delete them after the audit.
+
+Yes — I'll provide two test accounts
+I'll create test accounts using my own signup flow — you provision them
+No — skip the cross-user check
+
+Test account 1 — email and password
+
+We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+
+Email: ... / Password: ...
+
+Test account 2 — email and password
+
+We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+
+Email: ... / Password: ...
+
+Your support email (for the Quick Start Guide)
+
+We'll put this in your one-page user guide so people know how to reach you.
+
+Anything specific you want us to check?
+
+Anything broken you're worried about? Optional.
+
+I'm not sure the booking page works on mobile...
+
+How anxious are you about launching?
+
+Optional. Helps me match the tone of your report.
+
+Calm, just curious
+
+Not sleeping
+
+I confirm I am submitting only temporary test credentials (if any) and no sensitive production data — no personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+
+Thanks — you're in.
+
+We'll start your checkup within a few hours of this submission.
+
+• Starter Package: report within 24 hours
+• Full Package: report within 12 hours
+
+Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
+
+Privacy policy: https://launchlook.app/privacy
+Questions: hello@launchlook.app
+
+hello@launchlook.app
+
+https://launchlook.app/thanks
