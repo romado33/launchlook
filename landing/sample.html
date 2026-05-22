@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sample report — LaunchLook</title>
+  <meta name="description" content="Anonymized example of a LaunchLook Starter pre-launch checkup report." />
+  <meta name="robots" content="noindex" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','system-ui'], serif: ['Fraunces','Georgia'] }, colors: { paper: '#FAF7F2', ink: '#1F1B16', muted: '#6B6359', accent: '#B45309', line: '#E7E0D6' } } } };
+  </script>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+  <header class="border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
+      <a href="/" class="font-serif text-xl font-medium">LaunchLook</a>
+      <a href="/#pricing" class="text-sm text-muted hover:text-ink">Get a checkup</a>
+    </div>
+  </header>
+
+  <article class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+    <p class="text-xs font-medium text-accent uppercase tracking-widest">Anonymized sample</p>
+    <h1 class="font-serif text-3xl sm:text-4xl mt-2">Starter report — marketplace app</h1>
+    <p class="text-sm text-muted mt-2">Practice audit · Lovable · URL redacted</p>
+
+    <div class="mt-8 rounded-lg border border-line bg-white p-6 sm:p-8">
+      <p class="font-medium">Overall verdict</p>
+      <p class="mt-2 text-muted">🟡 Needs a few fixes before sharing publicly</p>
+      <p class="mt-4 text-sm text-muted leading-relaxed">Polished at first glance — custom branding, booking, search, auth. Dev-only features still visible on the live URL, and the main booking flow dead-ends. Fix critical items before sharing outside your test circle.</p>
+      <p class="mt-4 text-sm"><strong class="text-ink">7 findings</strong> below, sorted by severity. Real reports include screenshots and full copy-paste fix prompts.</p>
+    </div>
+
+    <h2 class="font-serif text-xl mt-10 mb-4">🔴 Critical</h2>
+    <div class="space-y-6">
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Dev login bypass visible to everyone</h3>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> On /auth, a "Dev Bypass (Skip Login)" button lets anyone pick a role and sign in without credentials.</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Anyone with your link can skip authentication.</p>
+        <p class="text-xs text-muted mt-3 italic">+ Full Lovable fix prompt in delivered report</p>
+      </section>
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Developer Tools on the homepage</h3>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> "Seed Sample Data" and "Clear My Data" visible after sign-in.</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Real users will think the product is unfinished.</p>
+        <p class="text-xs text-muted mt-3 italic">+ Full fix prompt in delivered report</p>
+      </section>
+    </div>
+
+    <h2 class="font-serif text-xl mt-10 mb-4">🟠 High</h2>
+    <div class="space-y-6">
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Missing /privacy and /terms (404)</h3>
+        <p class="text-sm text-muted mt-2">Trust gap for an app that collects bookings and accounts.</p>
+      </section>
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Placeholder host name on every listing</h3>
+        <p class="text-sm text-muted mt-2">All cards show "Hosted by Local Host" instead of real host names.</p>
+      </section>
+    </div>
+
+    <p class="mt-10 text-sm text-muted">Starter reports also include a one-page <strong class="text-ink">Quick Start Guide</strong> for your users. Launch ($29) adds more findings plus a cross-user data check with two test accounts.</p>
+
+    <a href="/#pricing" class="mt-8 inline-flex items-center justify-center px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
+      Get Starter — $9
+    </a>
+  </article>
+
+  <footer class="border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 py-8 text-sm text-muted">
+      <a href="/" class="hover:text-ink">← Back to LaunchLook</a>
+    </div>
+  </footer>
+</body>
+</html>

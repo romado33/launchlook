@@ -8,12 +8,22 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Linked from each Stripe Payment Link's `success_url`
 - Also linked from the welcome email (template: `templates/email/welcome.txt`)
 
+## Security notice (show at top of form)
+
+Paste as a **Statement** or **Text** block before questions:
+
+> **Please read before submitting**
+> - Do not send your personal password, production admin logins, API keys, Stripe keys, or Supabase service keys.
+> - For Launch ($29) only: create **temporary test accounts** (not real users). Submit credentials here only — not by email.
+> - Do not submit apps with real customer health, financial, or children's data unless you have permission.
+> - We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+
 ## Form behavior
 
 - Single page, 13 questions
 - Mobile-friendly (Tally is by default)
 - Required vs. optional clearly marked
-- Conditional fields (test accounts, support email) only appear for Launch and Polish tiers
+- Conditional fields (test accounts) only appear for Launch ($29) tier
 - Submit → thank-you screen → optional redirect to `https://launchlook.app/thanks`
 - Tally → Notion integration writes each submission as a new row in the `Customers` database
 
@@ -66,15 +76,14 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Type: Multiple choice (single select)
 - Required: yes
 - Options:
-  - Starter ($7)
+  - Starter ($9)
   - Launch ($29)
-  - follow-up ($59)
 - Help text: "We know — we'll match against Stripe, but this confirms what you expect."
 
-### 9. Can we use test accounts? *(Launch and Polish only)*
+### 9. Can we use test accounts? *(Launch only)*
 - Type: Multiple choice (single select)
 - Required: yes (conditional on Q8 being Launch)
-- Show only if: Q8 = "Launch ($29)" OR Q8 = "follow-up ($59)"
+- Show only if: Q8 = "Launch ($29)"
 - Options:
   - Yes — I'll provide two test accounts
   - I'll create test accounts using my own signup flow — you provision them
@@ -93,10 +102,10 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Required: yes if Q9 = "Yes — I'll provide two test accounts"
 - Show only if: Q9 = "Yes — I'll provide two test accounts"
 
-### 12. Your support email *(Launch and Polish only)*
+### 12. Your support email *(Launch only)*
 - Type: Email
 - Required: yes (conditional)
-- Show only if: Q8 = "Launch ($29)" OR Q8 = "follow-up ($59)"
+- Show only if: Q8 = "Launch ($29)"
 - Help text: "We'll reference this in your Quick Start Guide so users know how to reach you."
 
 ### 13. Anything specific to check?
@@ -124,7 +133,7 @@ After form is built:
 
 In Tally form settings → **Notifications**:
 
-- Email **rob@launchlook.app** on every submission
+- Email **hello@launchlook.app** on every submission
 - Include all answers in the email body so Rob can start auditing without opening the form
 
 ## Privacy / data retention

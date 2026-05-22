@@ -70,17 +70,17 @@
   <section class="max-w-3xl mx-auto px-6 pt-14 pb-10 sm:pt-20 sm:pb-14">
     <p class="text-xs font-medium text-accent uppercase tracking-widest">For Lovable · Bolt · Base44 · Replit</p>
     <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
-      About to share your app link?<br class="hidden sm:block" /> Get a second pair of eyes first.
+      Find the embarrassing bugs, trust gaps, and confusing screens before your first users do.
     </h1>
     <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
-      We review your <strong class="font-medium text-ink">live web URL</strong> like a first-time visitor — broken flows, placeholder text, missing trust pages — then send a Notion report with copy-paste fix prompts for your AI builder.
+      Send your app URL. Get a plain-English Notion report with screenshots, prioritized fixes, and prompts you can paste back into <strong class="font-medium text-ink">Lovable, Bolt, Base44, or Replit</strong>.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row gap-3">
       <a href="#pricing" class="inline-flex items-center justify-center px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
         Get Starter — $9
       </a>
-      <a href="#sample" class="inline-flex items-center justify-center px-5 py-3 rounded-md border border-line text-ink font-medium hover:border-ink transition">
-        See sample findings
+      <a href="/sample" class="inline-flex items-center justify-center px-5 py-3 rounded-md border border-line text-ink font-medium hover:border-ink transition">
+        See a sample report
       </a>
     </div>
     <p class="mt-5 text-sm text-muted">Includes a one-page <strong class="text-ink font-medium">Quick Start Guide</strong> for your users. Delivered in 24 hours.</p>
@@ -125,33 +125,38 @@
         <li class="flex gap-3"><span class="text-accent font-medium">→</span><span><strong class="text-ink font-medium">AI builder fingerprints</strong> — “Your Company Name,” lorem ipsum, placeholder host labels still showing.</span></li>
         <li class="flex gap-3"><span class="text-accent font-medium">→</span><span><strong class="text-ink font-medium">Trust gaps</strong> — missing privacy/terms, generic meta, anything that screams “not finished.”</span></li>
       </ul>
-      <p class="mt-6 text-sm text-muted">On <strong class="text-ink">Ship ($29)</strong> we also check whether signed-in users can see each other's data (you provide two test accounts).</p>
+      <p class="mt-6 text-sm text-muted">On <strong class="text-ink">Launch ($29)</strong> we also check whether signed-in users can see each other's data (you provide two temporary test accounts). This is a basic visibility check, not a full security audit.</p>
     </div>
   </section>
 
   <!-- Sample -->
   <section id="sample" class="border-t border-line bg-white/50">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
-      <h2 class="font-serif text-2xl mb-4">Sample findings</h2>
-      <p class="text-muted text-sm mb-6 max-w-prose">Real reports include screenshots and fix prompts. No jargon, no fear-mongering.</p>
+      <h2 class="font-serif text-2xl mb-4">See what you get</h2>
+      <p class="text-muted text-sm mb-6 max-w-prose">Real reports include screenshots, severity labels, and copy-paste fix prompts. No jargon, no fear-mongering.</p>
       <div class="rounded-lg border border-line bg-white p-6 sm:p-8">
-        <p class="font-serif text-lg mb-1">LaunchLook — Starter report</p>
-        <p class="text-sm text-muted mb-5">🟡 Fix 3 things before you post this in Discord.</p>
-        <div class="space-y-4 text-sm">
-          <div class="flex gap-3 items-start">
-            <span class="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded shrink-0">Critical</span>
-            <p><span class="font-medium">Homepage CTA goes nowhere.</span> <span class="text-muted">Copy fix prompt →</span></p>
-          </div>
-          <div class="flex gap-3 items-start">
-            <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-0.5 rounded shrink-0">High</span>
-            <p><span class="font-medium">Footer still says “Your Company Name.”</span> <span class="text-muted">Copy fix prompt →</span></p>
-          </div>
-          <div class="flex gap-3 items-start">
-            <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-0.5 rounded shrink-0">High</span>
-            <p><span class="font-medium">/privacy returns 404.</span> <span class="text-muted">Copy fix prompt →</span></p>
-          </div>
-        </div>
+        <p class="font-serif text-lg mb-1">LaunchLook — Starter report (anonymized)</p>
+        <p class="text-sm text-muted mb-5">🟡 Needs a few fixes before sharing publicly — 7 findings</p>
+        <ul class="space-y-2 text-sm text-muted">
+          <li>🔴 Dev login bypass still visible on /auth</li>
+          <li>🔴 "Developer Tools" on the live homepage</li>
+          <li>🟠 /privacy and /terms return 404</li>
+        </ul>
+        <a href="/sample" class="mt-5 inline-flex text-sm font-medium text-accent hover:text-ink transition">Read full sample report →</a>
       </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <h2 class="font-serif text-2xl mb-4">Who's behind this</h2>
+      <p class="text-muted leading-relaxed max-w-prose">
+        LaunchLook is run by a technical writer who's shipped products and documentation for years. Every checkup is reviewed manually — we don't need access to your codebase, only a URL (and optional temporary test accounts for Launch).
+      </p>
+      <p class="text-muted leading-relaxed max-w-prose mt-4">
+        Built for non-technical founders using Lovable, Bolt, Base44, Replit, and similar tools. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
+      </p>
     </div>
   </section>
 
@@ -159,13 +164,16 @@
   <section id="pricing" class="border-t border-line">
     <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
       <h2 class="font-serif text-2xl sm:text-3xl mb-2">Two options. Same human review.</h2>
-      <p class="text-muted mb-8">Pick depth — not a different quality of care.</p>
+      <p class="text-muted mb-4">Pick depth — not a different quality of care.</p>
+      <p class="text-sm text-muted mb-8 max-w-prose rounded-lg border border-line bg-white/80 px-4 py-3">
+        Reviewed manually for vibe-coded web apps. No code repo access required. Pay → short intake form → Notion report with fix prompts. Full refund within 7 days if the report isn't useful.
+      </p>
 
       <div class="grid sm:grid-cols-2 gap-5 max-w-2xl">
         <div class="rounded-xl border border-line bg-white p-6 flex flex-col">
           <h3 class="font-serif text-xl">Starter</h3>
           <p class="font-serif text-4xl mt-2">$9</p>
-          <p class="text-sm text-muted mt-1">Ship the basics with confidence</p>
+          <p class="text-sm text-muted mt-1">Cover the basics with confidence</p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
             <li>Up to <strong>7</strong> prioritized findings</li>
             <li>Desktop + phone layout check</li>
@@ -180,7 +188,7 @@
 
         <div class="rounded-xl border-2 border-accent bg-white p-6 flex flex-col relative shadow-sm">
           <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Best before launch</div>
-          <h3 class="font-serif text-xl">Ship</h3>
+          <h3 class="font-serif text-xl">Launch</h3>
           <p class="font-serif text-4xl mt-2">$29</p>
           <p class="text-sm text-muted mt-1">Going public this week</p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
@@ -191,7 +199,7 @@
             <li>12-hour delivery</li>
           </ul>
           <a href="#" data-launchlook-stripe="launch" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-accent text-paper text-sm font-medium hover:bg-ink transition opacity-50 pointer-events-none" title="Add Stripe link in landing/assets/config.local.js">
-            Get Ship — $29
+            Get Launch — $29
           </a>
         </div>
       </div>
@@ -211,7 +219,7 @@
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">What do you need from me?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Your public or staging URL, a one-line description, and your builder. For Ship ($29), two test accounts so we can check data isolation.</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Your public or staging URL, a one-line description, and your builder. For Launch ($29), two temporary test accounts so we can check data isolation.</p>
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">How is this different from a security scanner?<span class="text-muted text-lg">+</span></summary>
@@ -236,7 +244,7 @@
   <section class="border-t border-line">
     <div class="max-w-3xl mx-auto px-6 py-14 text-center">
       <h2 class="font-serif text-2xl">Stop guessing if it's ready.</h2>
-      <p class="text-muted mt-2 text-sm">Starter $9 · Ship $29</p>
+      <p class="text-muted mt-2 text-sm">Starter $9 · Launch $29</p>
       <a href="#pricing" class="mt-6 inline-flex items-center justify-center px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
         See pricing
       </a>

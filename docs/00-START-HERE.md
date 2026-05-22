@@ -2,7 +2,7 @@
 
 ## What this is
 
-LaunchLook is a manual service (with growing automation) that gives non-technical founders a friendly pre-launch checkup of their vibe-coded apps. The founder pays $7, sends a URL, and gets back:
+LaunchLook is a manual service (with growing automation) that gives non-technical founders a friendly pre-launch checkup of their vibe-coded apps. The founder pays (Starter $9 or Launch $29), sends a URL, and gets back:
 
 - A Notion report with 5-10 findings (broken stuff, placeholder content, missing trust pages)
 - Copy-paste fix prompts tailored to their AI builder
@@ -31,7 +31,7 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 - ✅ Free public checklist drafted (see `04-content-and-copy.md`)
 - ✅ Domain purchased: **launchlook.app**
 - ✅ Landing page built (deploy to Vercel when ready — see `07-launchlook-go-live.md`)
-- ✅ Rebrand complete: LaunchLook → LaunchLook in repo
+- ✅ Rebrand complete: Onceover → LaunchLook in repo
 - ❌ Stripe payment links not yet set up
 - ❌ Notion workspace not yet set up
 - ❌ Zero paying customers yet
@@ -46,7 +46,7 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 
 ## 60-day success criteria
 
-- **8 paying customers minimum** (at $7 each = $56 revenue minimum)
+- **8 paying customers minimum** (mix of Starter $9 and Launch $29)
 - **6 of 8 report the checkup as "useful" or better** on follow-up
 - **At least 2 referrals from existing customers**
 

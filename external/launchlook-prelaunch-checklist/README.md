@@ -131,7 +131,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ## Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter $9** (includes a Quick Start Guide for your users) or **Ship $29** for a deeper pass and cross-user checks.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter $9** (includes a Quick Start Guide for your users) or **Launch $29** for a deeper pass and cross-user checks.
 
 ---
 

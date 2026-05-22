@@ -1,6 +1,6 @@
-# LaunchLook — Starter for LiLo
+# LaunchLook — Starter report for LiLo (anonymized)
 
-> **Tier:** Starter ($7) · **Practice audit** · **URL:** https://theliloapp.lovable.app/
+> **Tier:** Starter ($9) · **Practice audit** · **URL:** https://theliloapp.lovable.app/
 
 ---
 

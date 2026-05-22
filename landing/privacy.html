@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — Onceover</title>
-  <meta name="description" content="How Onceover handles your data when you purchase a pre-launch checkup." />
+  <title>Privacy Policy — LaunchLook</title>
+  <meta name="description" content="How LaunchLook handles your data when you purchase a pre-launch checkup." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <script>
@@ -14,53 +14,64 @@
 <body class="bg-paper text-ink font-sans antialiased">
   <header class="border-b border-line">
     <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
-      <a href="/" class="font-serif text-xl font-medium">Onceover</a>
+      <a href="/" class="font-serif text-xl font-medium">LaunchLook</a>
       <a href="/" class="text-sm text-muted hover:text-ink">Home</a>
     </div>
   </header>
-  <main class="max-w-3xl mx-auto px-6 py-16 sm:py-20 prose prose-neutral">
+  <main class="max-w-3xl mx-auto px-6 py-16 sm:py-20">
     <h1 class="font-serif text-3xl mb-2">Privacy Policy</h1>
-    <p class="text-sm text-muted mb-10">Last updated: May 20, 2026</p>
+    <p class="text-sm text-muted mb-10">Last updated: May 22, 2026</p>
 
-    <p class="text-muted leading-relaxed mb-6">Onceover ("we," "us") provides pre-launch checkup services for web applications. This policy describes what we collect and how we use it.</p>
+    <p class="text-muted leading-relaxed mb-6">LaunchLook ("we," "us") provides manual pre-launch checkup services for web applications. This policy describes what we collect and how we use it.</p>
 
     <h2 class="font-serif text-xl mt-10 mb-3">What we collect</h2>
     <ul class="list-disc pl-6 text-muted space-y-2">
-      <li><strong class="text-ink">Purchase info:</strong> name, email, and payment details (processed by Stripe — we do not store card numbers).</li>
-      <li><strong class="text-ink">Intake form:</strong> your app URL, description, platform, and optional test account credentials for Ship ($29) audits.</li>
-      <li><strong class="text-ink">Audit artifacts:</strong> screenshots and notes from reviewing your public app.</li>
+      <li><strong class="text-ink">Purchase info:</strong> name, email, and payment details (processed by <strong class="text-ink">Stripe</strong> — we do not store card numbers).</li>
+      <li><strong class="text-ink">Intake form (Tally):</strong> your app URL, description, builder/platform, tier purchased, and optional test account credentials for <strong class="text-ink">Launch ($29)</strong> audits.</li>
+      <li><strong class="text-ink">Audit artifacts:</strong> screenshots and notes from reviewing your publicly reachable app. Your delivered report may include these screenshots.</li>
     </ul>
 
-    <h2 class="font-serif text-xl mt-10 mb-3">How we use it</h2>
-    <p class="text-muted leading-relaxed">We use your information only to deliver your checkup report, send transactional email (welcome, delivery, follow-up), and improve our service. We do not sell your data.</p>
+    <h2 class="font-serif text-xl mt-10 mb-3">What not to submit</h2>
+    <p class="text-muted leading-relaxed mb-3">Please use the intake form only (not email) for credentials. Do <strong class="text-ink">not</strong> send:</p>
+    <ul class="list-disc pl-6 text-muted space-y-2">
+      <li>Your personal password or production admin credentials</li>
+      <li>API keys, Stripe keys, Supabase service keys, or database connection strings</li>
+      <li>Private customer data, health information, children's data, or financial records unless you have permission and understand the risks</li>
+    </ul>
+    <p class="text-muted leading-relaxed mt-4">For Launch ($29) cross-user checks, create <strong class="text-ink">temporary test accounts only</strong>. Delete or rotate those credentials after we deliver your report.</p>
+
+    <h2 class="font-serif text-xl mt-10 mb-3">How we use your information</h2>
+    <p class="text-muted leading-relaxed">We use your information only to deliver your checkup report, send transactional email, handle refunds, and improve our service. We do not sell your data.</p>
 
     <h2 class="font-serif text-xl mt-10 mb-3">Test account credentials</h2>
-    <p class="text-muted leading-relaxed">If you provide test logins for a Ship ($29) audit, we use them only during the audit and delete them within 24 hours of delivery.</p>
+    <p class="text-muted leading-relaxed">If you provide test logins for a Launch ($29) audit, we use them only during the audit. We will not make purchases, change production data, delete records, invite users, send messages, or perform destructive actions unless you explicitly agree in writing beforehand. Credentials are deleted within <strong class="text-ink">24 hours</strong> of report delivery.</p>
 
     <h2 class="font-serif text-xl mt-10 mb-3">Retention</h2>
-    <p class="text-muted leading-relaxed">Audit screenshots and notes are kept for 30 days, then deleted. Your customer record in our internal workspace may be kept longer for support and referral tracking.</p>
+    <p class="text-muted leading-relaxed mb-3"><strong class="text-ink">Audit artifacts</strong> (screenshots and review notes) are kept for <strong class="text-ink">30 days</strong>, then deleted.</p>
+    <p class="text-muted leading-relaxed"><strong class="text-ink">Customer record</strong> means: your name, email, order date, tier purchased, app URL, delivery status, and support/refund history. We may keep this longer in our internal workspace (Notion) for support, tax, refund handling, and referral tracking.</p>
 
-    <h2 class="font-serif text-xl mt-10 mb-3">Third parties</h2>
+    <h2 class="font-serif text-xl mt-10 mb-3">Third-party services</h2>
     <ul class="list-disc pl-6 text-muted space-y-2">
-      <li>Stripe (payments)</li>
-      <li>Resend or similar (transactional email)</li>
-      <li>Notion (internal report delivery and operations)</li>
-      <li>Tally.so or similar (intake forms)</li>
+      <li><strong class="text-ink">Stripe</strong> — payment processing</li>
+      <li><strong class="text-ink">Tally</strong> — post-purchase intake forms</li>
+      <li><strong class="text-ink">Notion</strong> — report delivery and internal operations</li>
+      <li><strong class="text-ink">Resend</strong> — transactional email (welcome, delivery, follow-up)</li>
     </ul>
 
     <h2 class="font-serif text-xl mt-10 mb-3">Your rights</h2>
-    <p class="text-muted leading-relaxed">Email <a href="mailto:hello@onceover.app" data-onceover-email="support" class="underline hover:text-ink">hello@onceover.app</a> to request access, correction, or deletion of your data.</p>
+    <p class="text-muted leading-relaxed">Email <a href="mailto:hello@launchlook.app" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> to request access, correction, or deletion of your data.</p>
 
-    <p class="text-sm text-muted mt-12 italic">This is a starter policy for an early-stage service. Have a lawyer review before scaling.</p>
+    <p class="text-sm text-muted mt-12 italic">Starter policy for an early-stage service. Have a lawyer review before scaling.</p>
   </main>
   <footer class="border-t border-line">
     <div class="max-w-3xl mx-auto px-6 py-8 text-sm text-muted flex gap-6">
       <a href="/" class="hover:text-ink">Home</a>
-      <a href="/terms.html" class="hover:text-ink">Terms</a>
-      <a href="/checklist.html" class="hover:text-ink">Free checklist</a>
+      <a href="/terms" class="hover:text-ink">Terms</a>
+      <a href="/checklist" class="hover:text-ink">Free checklist</a>
     </div>
   </footer>
   <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
 </body>
 </html>
