@@ -73,13 +73,24 @@
     });
   }
 
+  function intakeMailto(email) {
+    var subject = encodeURIComponent("LaunchLook intake");
+    var body = encodeURIComponent(
+      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Full Package):\n"
+    );
+    return "mailto:" + email + "?subject=" + subject + "&body=" + body;
+  }
+
   if (cfg.supportEmail) {
     var mailto = "mailto:" + cfg.supportEmail;
     document.querySelectorAll("[data-launchlook-email='support'], [data-onceover-email='support']").forEach(function (el) {
       el.setAttribute("href", mailto);
-      if (el.textContent.indexOf("@") === -1 && !el.getAttribute("data-launchlook-keep-text")) {
+      if (!el.getAttribute("data-launchlook-keep-text")) {
         el.textContent = cfg.supportEmail;
       }
+    });
+    document.querySelectorAll("[data-launchlook-email-display]").forEach(function (el) {
+      el.textContent = cfg.supportEmail;
     });
   }
 
@@ -96,12 +107,37 @@
   });
 
   var intakeUrl = safeIntakeUrl(cfg.intakeFormUrl);
+  var intakeEls = document.querySelectorAll("[data-launchlook-intake], [data-onceover-intake]");
   if (intakeUrl) {
-    document.querySelectorAll("[data-launchlook-intake], [data-onceover-intake]").forEach(function (el) {
+    intakeEls.forEach(function (el) {
       el.setAttribute("href", intakeUrl);
+      el.setAttribute("target", "_blank");
+      el.setAttribute("rel", "noopener noreferrer");
+      if (!el.getAttribute("data-launchlook-keep-text")) {
+        el.textContent = "Complete intake form";
+      }
       el.classList.remove("opacity-50", "pointer-events-none");
       el.removeAttribute("title");
       el.removeAttribute("aria-disabled");
+    });
+    document.querySelectorAll("[data-launchlook-intake-email-hint]").forEach(function (el) {
+      el.classList.add("hidden");
+    });
+  } else if (cfg.supportEmail) {
+    var intakeMail = intakeMailto(cfg.supportEmail);
+    intakeEls.forEach(function (el) {
+      el.setAttribute("href", intakeMail);
+      el.removeAttribute("target");
+      el.removeAttribute("rel");
+      if (!el.getAttribute("data-launchlook-keep-text")) {
+        el.textContent = "Email your intake details";
+      }
+      el.classList.remove("opacity-50", "pointer-events-none");
+      el.removeAttribute("title");
+      el.removeAttribute("aria-disabled");
+    });
+    document.querySelectorAll("[data-launchlook-intake-email-hint]").forEach(function (el) {
+      el.classList.remove("hidden");
     });
   }
 })();

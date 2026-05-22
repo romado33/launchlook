@@ -113,9 +113,16 @@ After you fix things, click through the app yourself like a new visitor. Want a 
 
 ---
 
-## Know someone else launching?
+## Share this checkup (optional)
 
-Forward this to a friend who's about to share their first app. Your referral code: **{REFERRAL_CODE}** ($5 off for them, $5 off for you).
+**Send a founder friend the free checklist:** https://launchlook.app/checklist
+
+**One-line you can post** (edit as you like):
+> Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. launchlook.app
+
+**Referral:** Code **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you on a follow-up.
+
+If this helped, reply to Rob with a one-sentence quote for the site (optional).
 
 ---
 

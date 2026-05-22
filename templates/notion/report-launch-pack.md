@@ -106,9 +106,16 @@ Questions or want a re-check after fixes? **hello@launchlook.app**
 
 ---
 
-## Referral
+## Share this checkup (optional)
 
-Code **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you.
+**Free checklist for friends:** https://launchlook.app/checklist
+
+**One-line post** (edit as you like):
+> Full LaunchLook pass on {APP_NAME} before launch — plain English + fix prompts for {PLATFORM}. launchlook.app
+
+**Referral:** Code **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you.
+
+Optional: one-sentence quote for the LaunchLook site — email hello@launchlook.app.
 
 ---
 

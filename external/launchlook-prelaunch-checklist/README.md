@@ -1,8 +1,8 @@
 # The Pre-Launch Checkup for Vibe-Coded Apps
 
-A free, comprehensive checklist for anyone about to share their Lovable / Bolt / Base44 / Replit app with real users.
+**Start here:** [Essential checklist (~20 min, plain English)](https://launchlook.app/checklist) on LaunchLook — best for most founders.
 
-Go through this list before you launch. Fix what you can. The stuff you can't fix yourself, hire help for — but don't ship without checking.
+This repo is the **extended** version: extra items, optional technical checks, and room to contribute. Same spirit: what users notice before strangers show up.
 
 Maintained by [LaunchLook](https://launchlook.app). Free to copy, fork, share.
 
@@ -10,140 +10,119 @@ Maintained by [LaunchLook](https://launchlook.app). Free to copy, fork, share.
 
 ## How to use this checklist
 
-1. Open your app in a normal browser (not the platform's preview).
-2. Work through each section in order.
-3. For each item: mark ✅ Pass, ⚠️ Issue, or ❓ Unsure.
-4. The "Issue" items are your fix list. The "Unsure" items need a second opinion.
+1. Do the **[essential checklist](https://launchlook.app/checklist)** first if you haven’t already.
+2. Open your app in a normal browser (not the platform preview).
+3. For each item below: mark pass, issue, or unsure.
+4. Issues become your fix list. Unsure items are worth a paid second opinion.
 
-This list focuses on what your *users* will notice, not deep security. For deep security scans, tools like [VAS](https://vibeappscanner.com) and [VibeEval](https://vibe-eval.com) are good complements to this.
+This list focuses on what your *users* will notice, not deep security. For security scanning, [VAS](https://vibeappscanner.com) and [VibeEval](https://vibe-eval.com) are good complements.
 
 ---
 
-## Section 1: First impressions (5 minutes)
+## Extended: First impressions
 
 - [ ] Homepage loads in under 3 seconds on a normal connection
-- [ ] The page title in the browser tab is meaningful (not "My App" or platform default)
-- [ ] The favicon is custom, not the platform default
-- [ ] The hero headline tells a visitor what the app actually does within 5 seconds of reading
-- [ ] There are no `Lorem ipsum`, `[insert text here]`, or `TODO` comments visible
-- [ ] There's no "Your Company Name" or "Acme Inc" placeholder text anywhere
-- [ ] Your actual product name appears in the header/logo, not the platform's default
-- [ ] Any default Lovable / Bolt / Base44 copy has been replaced with your own
-- [ ] The first call-to-action button is clear about what happens when clicked
+- [ ] The small icon in the browser tab is custom (not the platform default)
+- [ ] The hero headline tells a visitor what the app does within 5 seconds
+- [ ] No lorem ipsum, bracket placeholders, or visible TODO notes
+- [ ] No "Your Company Name" or "Acme Inc" placeholder text
+- [ ] Your product name appears in the header/logo, not the platform default
+- [ ] Default Lovable / Bolt / Base44 starter copy has been replaced
+- [ ] The first call-to-action is clear about what happens when clicked
 
-## Section 2: Trust pages (3 minutes)
+## Extended: Trust pages
 
 - [ ] `/privacy` returns a real privacy policy page
 - [ ] `/terms` returns Terms of Service
-- [ ] There's a visible way to contact you (email, form, or `/contact` page)
-- [ ] Your support email is a real address you check (not `support@example.com`)
-- [ ] If you process payments, you have a refund policy somewhere
-- [ ] If you collect emails, you have a clear unsubscribe path
-- [ ] Footer links to privacy/terms work and don't 404
+- [ ] A visible way to contact you (email, form, or contact page)
+- [ ] Support email is real (not `support@example.com`)
+- [ ] If you process payments, refund policy is stated somewhere
+- [ ] If you collect emails, unsubscribe path exists
+- [ ] Footer links to privacy/terms work (no 404)
 
-## Section 3: Functionality (15 minutes)
+## Extended: Functionality
 
-- [ ] Every visible button does what its label suggests when clicked
-- [ ] Every internal link goes somewhere that exists (no 404s)
-- [ ] The signup form actually creates an account
-- [ ] The signup confirmation email actually arrives (check spam too)
-- [ ] Email links in the confirmation actually work
-- [ ] You can log in successfully after signing up
-- [ ] You can log out and the session actually ends
-- [ ] You can reset your password if you forget it
-- [ ] The main user workflow (the thing your app is for) actually works end-to-end
-- [ ] Any payment flow you have completes successfully with a test card
-- [ ] Stripe / payment provider success page actually loads after payment
-- [ ] Stripe / payment provider cancel page actually loads if you cancel
+- [ ] Every visible button does what its label suggests
+- [ ] Internal links go somewhere that exists
+- [ ] Signup creates an account; confirmation email arrives
+- [ ] Login, logout, and password reset work
+- [ ] Main workflow works end-to-end
+- [ ] Test payment completes; success and cancel pages load sensibly
 
-## Section 4: Empty and error states (10 minutes)
+## Extended: Empty and error states
 
-- [ ] When a brand-new user signs up, the dashboard shows clear guidance about what to do
-- [ ] When a user has zero items / posts / tasks / whatever, there's a helpful empty state with a clear CTA
-- [ ] When you submit a form, you get clear feedback about success or failure
-- [ ] When the network fails (try airplane mode), the app shows a clear error message instead of silently breaking
-- [ ] Invalid inputs (wrong email format, weak password) show clear validation messages
-- [ ] You can't accidentally submit the same form twice with a double-click
-- [ ] Trying to access a URL that doesn't exist shows a custom 404, not a broken page
+- [ ] New users see guidance on first visit (not a blank void)
+- [ ] Empty lists show a helpful message and next step
+- [ ] Form submit shows clear success or failure
+- [ ] Offline or bad connection shows a message (try airplane mode briefly)
+- [ ] Bad email/password inputs show helpful errors
+- [ ] Custom "page not found" instead of a generic error
 
-## Section 5: Mobile (10 minutes)
+## Extended: Mobile
 
-- [ ] The site looks acceptable on a 375px wide viewport (iPhone SE)
-- [ ] There's no horizontal scrolling on mobile
-- [ ] Body text is at least 16px and readable without zooming
-- [ ] Buttons are at least 44×44 pixels (easy to tap)
-- [ ] Forms are usable on mobile — fields don't get cut off, keyboard doesn't cover the submit button
-- [ ] Images aren't oversized (causing slow loads)
-- [ ] The main user workflow can be completed on mobile, not just desktop
+- [ ] Acceptable on a phone-sized screen (~375px wide)
+- [ ] No horizontal scrolling
+- [ ] Body text readable without zooming (roughly 16px or larger)
+- [ ] Tap targets feel comfortable (not tiny buttons)
+- [ ] Main workflow works on mobile, not only desktop
 
-## Section 6: Sharing and discovery (5 minutes)
+## Extended: Sharing and discovery
 
-- [ ] When you paste your URL into Twitter/X, LinkedIn, or Slack, the preview card looks intentional (right title, description, image)
-- [ ] Open Graph meta tags are set (`og:title`, `og:description`, `og:image`)
-- [ ] Each page has a meaningful `<title>` tag with your app name
-- [ ] The meta description describes your actual app, not the platform default
+- [ ] Link preview in Slack/Twitter/LinkedIn looks intentional (title, description, image)
+- [ ] Browser tab titles include your app name on key pages
 
-## Section 7: Permissions (10 minutes, requires two test accounts)
+## Extended: Permissions (two test accounts)
 
-- [ ] Sign up two test accounts. Sign in as User A. Note what you can see.
-- [ ] Sign in as User B. Verify you CAN'T see any of User A's data.
-- [ ] Specifically: User A's email, name, content, or any other identifiers should never appear on User B's screen
-- [ ] If you have admin features, verify a non-admin account can't access `/admin` routes
-- [ ] Log out completely. Try to visit `/dashboard`, `/settings`, `/admin` directly. You should be redirected to login, not see data.
-- [ ] If you have API endpoints, verify they require authentication
-- [ ] If you store sensitive data (medical, financial, personal), have an expert verify your row-level security policies
+- [ ] User A cannot see User B's private data
+- [ ] Signed-out visitors cannot open dashboard/settings and see real content
+- [ ] Non-admin accounts cannot access admin-only areas
 
-## Section 8: Performance (5 minutes)
+## Optional: Technical checks (developers or LaunchLook Full Package)
 
-- [ ] Open Chrome DevTools → Lighthouse → run a Performance audit. Aim for a Performance score above 70.
-- [ ] No single image is over 1MB
-- [ ] The page has no console errors when loaded
-- [ ] The Network tab shows no failed requests (4xx or 5xx status codes)
-- [ ] First Contentful Paint is under 1.8 seconds
+Skip this block if you're not technical — or hire help.
 
-## Section 9: Brand consistency (5 minutes)
+- [ ] Link preview tags configured (Open Graph / social image)
+- [ ] No obvious errors in browser developer tools on key pages
+- [ ] Large images aren't slowing the first load
+- [ ] Sensitive apps: expert review of database access rules (not covered by this checklist)
 
-- [ ] You use one term consistently for your users (pick: "customer," "client," "user," "member," etc. — don't mix)
-- [ ] Button capitalization is consistent (all sentence case OR all title case, not mixed)
-- [ ] Your product name is spelled identically everywhere
-- [ ] Your support email is the same address in every place it appears
-- [ ] The visual style (colors, fonts, spacing) feels consistent page to page
+## Extended: Brand consistency
 
-## Section 10: The "would I share this?" gut check (3 minutes)
+- [ ] One consistent word for your audience (customer vs user vs client — pick one)
+- [ ] Button capitalization is consistent
+- [ ] Product name spelled the same everywhere
+- [ ] Support email matches everywhere it appears
+- [ ] Visual style feels consistent page to page
 
-- [ ] If a friend visited your homepage, would you be proud or embarrassed?
-- [ ] If someone screenshotted your dashboard and posted it on Twitter, would you be okay with that?
-- [ ] If a journalist reviewed your app today, what's the worst thing they'd say?
-- [ ] If a competitor saw it, would they think you knew what you were doing?
+## Gut check
 
-If any of those answers are bad, fix the underlying issues before launching.
+- [ ] You'd be proud if a friend visited today
+- [ ] You'd be okay if someone screenshotted the dashboard publicly
+- [ ] You know the worst headline a critic could write — and you're fixing it
 
 ---
 
 ## What to do with the results
 
-- Count your ⚠️ Issues. If you have more than 10, don't launch yet.
-- **Critical** issues (data leaks, broken signup, missing privacy policy) must be fixed before launch.
-- **High-severity** issues (placeholders visible, broken buttons, missing trust pages) should be fixed within 24 hours of launching if not before.
-- **Medium and low** issues can be fixed in the first 2 weeks.
+- **Fix before sharing:** data leaks, broken signup, missing privacy/terms, placeholders, dev tools on the live URL.
+- **Fix soon:** mobile issues, weak previews, confusing empty states.
+- **More than ~10 serious issues?** Slow down promotion until the top items are fixed.
 
 ---
 
 ## Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter Package $9** (includes a Quick Start Guide for your users) or **Full Package $29** for a deeper pass and cross-user checks.
+[LaunchLook](https://launchlook.app) runs the checklist for you and returns a prioritized report with copy-paste fix prompts.
+
+- **Starter Package $9** — up to 7 findings + Quick Start Guide, 24h  
+- **Full Package $29** — deeper pass + two-account check, 12h  
 
 ---
 
 ## Contributing
 
-Found something this checklist missed? Open a PR or an issue. Real-world findings from real launches are exactly what makes this list better.
-
-Especially welcome:
-- Issues you ran into that aren't covered here
-- Platform-specific quirks (Lovable / Bolt / Base44 / Replit / v0)
-- Better wording for any of the existing items
+Found something this checklist missed? Open a PR or issue — especially platform-specific quirks (Lovable, Bolt, v0, Cursor).
 
 ## License
 
-[CC BY 4.0](LICENSE). Free to use, copy, fork, and republish — attribution appreciated but not required.
+[CC BY 4.0](LICENSE). Attribution appreciated but not required.

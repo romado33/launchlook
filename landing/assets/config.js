@@ -4,7 +4,7 @@
  */
 window.LAUNCHLOOK_CONFIG = {
   domain: "launchlook.app",
-  supportEmail: "hello@launchlook.app",
+  supportEmail: "hello@launchlook.app", // Site-wide mailto + thanks fallback; set Tally notifications to same inbox
   intakeFormUrl: "", // Paste Tally publish URL: https://tally.so/r/YOUR_FORM_ID
   stripe: {
     starter: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
@@ -14,5 +14,5 @@ window.LAUNCHLOOK_CONFIG = {
     launchPack: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
   },
   githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
-  linkedinUrl: "", // e.g. https://www.linkedin.com/in/your-handle — shows in footer when set
+  linkedinUrl: "https://www.linkedin.com/in/rob-dods/",
 };

@@ -1,0 +1,28 @@
+# Copy-paste snippets for customers (put in Notion report or delivery email)
+
+## Share LaunchLook (founder → founder)
+
+**Slack / Discord DM**
+> Free pre-launch checklist for vibe-coded apps (~20 min, plain English): https://launchlook.app/checklist
+
+**Twitter / X**
+> Before you share your Lovable/Bolt app link — this checklist caught stuff I'd have missed: https://launchlook.app/checklist
+
+**LinkedIn**
+> LaunchLook — a human pre-launch checkup for vibe-coded web apps. Plain-English report + fix prompts for your builder. Free checklist: https://launchlook.app/checklist · Paid checkup from $9.
+
+---
+
+## After a paid checkup (customer voice — edit {APP}, {N})
+
+**Tweet**
+> Ran @LaunchLook on {APP} before launch — caught {N} things I'd have missed (placeholders, trust pages, mobile). Worth it. launchlook.app
+
+**LinkedIn**
+> Used LaunchLook before sharing {APP} publicly — plain-English findings + copy-paste fix prompts for {BUILDER}. launchlook.app
+
+---
+
+## Referral (include {REFERRAL_CODE})
+
+> Know someone launching this week? They get $5 off Starter with code **{REFERRAL_CODE}** — you get $5 off your next checkup too. launchlook.app

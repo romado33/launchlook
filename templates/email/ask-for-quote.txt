@@ -1,0 +1,20 @@
+Subject: Quick favor — one line about your LaunchLook checkup?
+
+Hi {NAME},
+
+Hope {APP_NAME} is in better shape after the report.
+
+If LaunchLook helped before you shared your link, would you mind replying with **one sentence** we can use on the site? Examples:
+
+- "Caught placeholder text and a broken signup before Product Hunt."
+- "Worth $9 — fix prompts pasted straight into Lovable."
+
+Name and app name optional. Totally fine to say no.
+
+Thanks either way,
+Rob
+
+---
+Variables:
+- {NAME}, {APP_NAME}
+- Send: 48h after delivery if they didn't reply to the quote ask in delivery.txt

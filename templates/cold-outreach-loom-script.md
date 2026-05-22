@@ -18,6 +18,8 @@ Hey [name] — I recorded a 60-sec walkthrough of [app] before you share it wide
 
 I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $9 (Starter Package) with fix prompts you paste into [Lovable/Bolt/etc].
 
+Free checklist (~20 min): launchlook.app/checklist
+
 No pressure — launchlook.app if useful.
 ```
 

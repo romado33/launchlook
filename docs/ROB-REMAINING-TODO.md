@@ -15,6 +15,12 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 - [x] Report templates + plain-language voice guide for customers
 - [x] Findings library (35 entries) in repo
 - [x] Public checklist repo linked from footer
+- [x] Simplified free checklist (`/checklist`) + extended README on GitHub
+- [x] LinkedIn in `config.js` + footer + Who's behind section
+- [x] Site-wide email via `supportEmail` + thanks intake mailto fallback
+- [x] Homepage: free checklist band, share/referral FAQ, honest proof section
+- [x] Delivery email + Notion reports: share lines, quote ask, referral
+- [x] [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) growth playbook
 
 ---
 
@@ -93,7 +99,8 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
 - [ ] Audit pass: [`templates/manual-audit-checklist.md`](../templates/manual-audit-checklist.md) (~15 min)
 - [ ] Fill Notion report; paste fix prompts from `findings_library/findings.json`
 - [ ] Starter: include Quick Start Guide (prompt in `prompts/`, architecture in `05-technical-architecture.md`)
-- [ ] Email customer: [`templates/email/delivery.txt`](../templates/email/delivery.txt)
+- [ ] Email customer: [`templates/email/delivery.txt`](../templates/email/delivery.txt) (includes quote + share asks)
+- [ ] Optional 48h later: [`templates/email/ask-for-quote.txt`](../templates/email/ask-for-quote.txt)
 
 ### 7. Resend (welcome / delivery automation)
 
@@ -112,7 +119,7 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
 
 ## 🟡 Optional — trust & polish
 
-- [ ] **LinkedIn** link on homepage “Who’s behind this” (send URL to add)
+- [x] **LinkedIn** on homepage (Who's behind + footer)
 - [ ] Paste `https://launchlook.app/` in Slack/iMessage — confirm OG image looks right
 - [ ] Rename Stripe **product** display names to Starter Package / Full Package (cosmetic)
 - [ ] Notion API token + share DBs with integration ([`03-build-queue.md`](03-build-queue.md) BL-04) — for scripts later
@@ -125,6 +132,7 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
 
 Goal: **3 strangers pay $9** — then stop polishing the site.
 
+- [ ] Read: [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) (weekly rhythm + what to link)
 - [ ] Script: [`templates/cold-outreach-loom-script.md`](../templates/cold-outreach-loom-script.md)
 - [ ] Free sample playbook: [`templates/week-1-free-sample-playbook.md`](../templates/week-1-free-sample-playbook.md)
 - [ ] Track prospects in Notion **Outreach Tracker**
@@ -165,8 +173,7 @@ When Tally is ready, paste:
 
 > Tally URL: `https://tally.so/r/________` — wire `intakeFormUrl` and push.
 
-Optional: LinkedIn profile URL for homepage.
-
 ---
+
 
 *When this file is mostly checked off, you’re in outreach mode — not “one more site tweak” mode.*

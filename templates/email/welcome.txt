@@ -17,5 +17,5 @@ hello@launchlook.app
 Variables:
 - {NAME} — customer first name
 - {APP_NAME} — app name from intake
-- {TURNAROUND} — "24 hours" (Starter Package) / "12 hours" (Launch)
+- {TURNAROUND} — "24 hours" (Starter Package) / "12 hours" (Full Package)
 - {INTAKE_FORM_LINK} — Tally form URL (https://launchlook.app/thanks if they already paid)

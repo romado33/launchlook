@@ -45,36 +45,24 @@
     <div class="mt-10 text-center">
       <a
         id="intake-cta"
-        href="mailto:hello@launchlook.app?subject=LaunchLook%20intake&body=App%20URL%3A%0A%0AOne-line%20description%3A%0A%0ABuilder%20(Lovable%2C%20Bolt%2C%20v0%2C%20Cursor%2C%20etc.)%3A%0A%0ATier%20purchased%20(Starter%20Package%20%2F%20Full%20Package)%3A%0A"
+        href="#"
         data-launchlook-intake
-        data-launchlook-keep-text
         class="inline-flex items-center justify-center min-h-11 px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition"
       >
         Complete intake form
       </a>
-      <p id="intake-email-hint" class="mt-4 text-sm text-muted max-w-prose mx-auto hidden">
-        Day-one intake: tap the button to send a pre-filled email to <strong class="text-ink">hello@launchlook.app</strong> (same fields as the Tally form). We reply within a few hours if anything is missing.
+      <p data-launchlook-intake-email-hint class="mt-4 text-sm text-muted max-w-prose mx-auto hidden">
+        No form link yet? Tap the button to send a pre-filled email to <strong class="text-ink" data-launchlook-email-display>hello@launchlook.app</strong>. We reply within a few hours if anything is missing.
       </p>
     </div>
 
     <p class="mt-10 text-sm text-muted text-center">
-      Questions? <a href="mailto:hello@launchlook.app" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
+      Questions? <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
       · <a href="/privacy" class="underline hover:text-ink">Privacy</a>
     </p>
   </main>
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
-  <script>
-    (function () {
-      var cfg = window.LAUNCHLOOK_CONFIG || {};
-      var btn = document.getElementById("intake-cta");
-      var hint = document.getElementById("intake-email-hint");
-      if (!cfg.intakeFormUrl && hint) {
-        hint.classList.remove("hidden");
-        if (btn) btn.textContent = "Email your intake details";
-      }
-    })();
-  </script>
 </body>
 </html>

@@ -13,6 +13,21 @@ A few notes:
 - Starter Package and Full Package include a Quick Start Guide in your report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 
+---
+
+Optional — helps us a ton (pick any, no pressure):
+
+1. **One-sentence quote** — If this saved you an embarrassing moment before launch, reply with a line we can use on the site (name + app optional).
+
+2. **Share the checklist** — Forward https://launchlook.app/checklist to a founder friend who's about to share their link.
+
+3. **Copy-paste post** (edit as you like):
+   "Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. Worth the $9. launchlook.app"
+
+Your referral code (in the report): **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you on a follow-up.
+
+---
+
 If anything isn't clear, just reply to this email. I'll respond within a few hours.
 
 Good luck with the launch.
@@ -25,3 +40,4 @@ Variables:
 - {APP_NAME} — app name from intake
 - {NOTION_REPORT_LINK} — Notion page shareable URL
 - {PLATFORM} — Lovable / Bolt / Base44 / Replit / v0 / their builder
+- {REFERRAL_CODE} — from scripts/referral_create.py or "(we'll send your code shortly)"

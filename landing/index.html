@@ -75,12 +75,15 @@
     <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
       Send your app URL. Get a plain-English Notion report with screenshots, prioritized fixes, and prompts you can paste back into <strong class="font-medium text-ink">your AI builder</strong> — Lovable, Bolt, Base44, Replit, v0, Cursor, or similar.
     </p>
-    <div class="mt-8 flex flex-col sm:flex-row gap-3">
+    <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
       <a href="#pricing" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition">
         Get Starter Package — $9
       </a>
       <a href="/sample" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md border border-line text-ink font-medium hover:border-ink transition">
         See a sample report
+      </a>
+      <a href="/checklist" class="inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-md text-muted font-medium hover:text-ink transition sm:ml-0">
+        Free checklist (~20 min)
       </a>
     </div>
     <p class="mt-5 text-sm text-muted">Includes a one-page <strong class="text-ink font-medium">Quick Start Guide</strong> for your users. Delivered in 24 hours.</p>
@@ -176,6 +179,41 @@
       <p class="text-muted leading-relaxed mt-4">
         Built for non-technical founders using vibe-coded tools — including Lovable, Bolt, Base44, Replit, v0, Cursor, and others. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
       </p>
+      <p data-launchlook-linkedin-wrap class="mt-4 text-sm hidden">
+        <a data-launchlook-linkedin href="#" class="text-accent hover:text-ink underline underline-offset-2 transition">Connect on LinkedIn</a>
+      </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Free checklist -->
+  <section class="bg-surface-warm border-y border-line">
+    <div class="max-w-3xl mx-auto px-6 py-10 sm:py-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <p class="section-label">Free</p>
+        <h2 class="font-serif text-xl mt-1">Not ready to pay? Run the checklist yourself.</h2>
+        <p class="text-sm text-muted mt-2 max-w-prose">Plain-English, ~20 minutes — what visitors notice before you share your link. Share <code class="text-xs bg-white/80 px-1 py-0.5 rounded">launchlook.app/checklist</code> with a founder friend.</p>
+      </div>
+      <a href="/checklist" class="inline-flex shrink-0 items-center justify-center min-h-11 px-5 py-2.5 rounded-md border border-line bg-white text-sm font-medium hover:border-ink transition">Open free checklist</a>
+    </div>
+  </section>
+
+  <!-- Social proof (early) -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-10 sm:py-12">
+      <p class="section-label">Proof</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-4">What founders get</h2>
+      <p class="text-sm text-muted mb-6 max-w-prose">We're early — no fake testimonials. Read the <a href="/sample" class="underline hover:text-ink">sample report</a> or try the <a href="/checklist" class="underline hover:text-ink">free checklist</a>. After your checkup, we'll ask (optional) for a one-line quote you can use on LinkedIn.</p>
+      <div class="grid sm:grid-cols-2 gap-4 text-sm">
+        <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
+          <p class="text-ink font-medium">Prioritized, paste-ready fixes</p>
+          <p class="mt-2">Severity labels + copy-paste prompts for your builder — not a wall of jargon.</p>
+        </blockquote>
+        <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
+          <p class="text-ink font-medium">Built for vibe-coded launches</p>
+          <p class="mt-2">Placeholders, trust pages, phone layout, and “would I send this link today?”</p>
+        </blockquote>
       </div>
     </div>
   </section>
@@ -226,7 +264,7 @@
         </div>
       </div>
 
-      <p class="mt-6 text-sm text-muted max-w-prose">Need a re-scan after fixes? Email <a href="mailto:hello@launchlook.app" class="underline hover:text-ink">hello@launchlook.app</a> — we'll quote a one-off follow-up.</p>
+      <p class="mt-6 text-sm text-muted max-w-prose">Need a re-scan after fixes? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> — we'll quote a one-off follow-up.</p>
     </div>
   </section>
 
@@ -267,7 +305,11 @@
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="mailto:hello@launchlook.app" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Refer a founder?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code — <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or share the <a href="/checklist" class="underline hover:text-ink">free checklist</a> link: <strong class="text-ink">launchlook.app/checklist</strong>.</p>
         </details>
       </div>
     </div>
@@ -294,7 +336,7 @@
         </p>
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
-        <li><a href="mailto:hello@launchlook.app" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
         <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
