@@ -544,9 +544,9 @@ def send_email(to, subject, body, from_email="hello@launchlook.app"):
 ### Payment Links (no custom checkout)
 
 Use Stripe's hosted Payment Links. Three per tier, all configured in Stripe dashboard:
-- Quick Checkup: $7 USD one-time
-- Launch Pack: $29 USD one-time
-- Launch Pack + Polish: $59 USD one-time
+- Starter: $7 USD one-time
+- Launch: $29 USD one-time
+- follow-up: $59 USD one-time
 
 Each Payment Link has:
 - Success URL: `https://launchlook.app/intake?tier=quick&session_id={CHECKOUT_SESSION_ID}`
@@ -618,8 +618,8 @@ Never commit `.env`. Add to `.gitignore`.
 
 ## Cost projections
 
-Per 10 customers (Quick Checkup tier):
-- Claude API for QSG (only Launch Pack and Polish, so ~5 of 10): ~$0.50 total
+Per 10 customers (Starter tier):
+- Claude API for QSG (only Launch and Polish, so ~5 of 10): ~$0.50 total
 - Playwright runs (when scanner is live): negligible
 - Notion: free tier sufficient
 - Resend: free tier sufficient

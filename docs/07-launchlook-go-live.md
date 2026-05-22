@@ -17,7 +17,7 @@ Use after `launchlook.app` is purchased. Repo may still live in a folder named `
 
 ## 3. Stripe
 
-- [ ] Products renamed LaunchLook (Quick $7 / Launch $29 / Polish $59)
+- [ ] Two Payment Links: Starter **$9**, Launch **$29** (drop old $7 / $59 links)
 - [ ] Payment Link success URL: `https://launchlook.app/thanks`
 - [ ] `landing/assets/config.local.js` — paste three Stripe URLs
 

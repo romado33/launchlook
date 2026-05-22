@@ -4,7 +4,7 @@ qsg_compose_prompt.py — BL-09 (manual workflow)
 Composes a ready-to-paste Quick Start Guide prompt for the customer.
 You then paste the system prompt + this composed user message into chatgpt.com
 (or the Anthropic Workbench), edit the output, and drop it into the customer's
-Notion Launch Pack report.
+Notion Launch report.
 
 Usage:
     python scripts/qsg_compose_prompt.py \\
@@ -147,7 +147,7 @@ def main() -> int:
     print("# 2. Paste the contents of prompts/quickstart_system.txt as the first message.", file=sys.stderr)
     print("# 3. Paste the composed user message above as the second message.", file=sys.stderr)
     print("# 4. Edit the returned Markdown. Verify no forbidden words remain.", file=sys.stderr)
-    print("# 5. Paste edited Markdown into the customer's Notion Launch Pack report (Part 2).", file=sys.stderr)
+    print("# 5. Paste edited Markdown into the customer's Notion Launch report (Part 2).", file=sys.stderr)
 
     return 0
 

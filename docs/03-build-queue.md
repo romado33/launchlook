@@ -20,7 +20,7 @@ Each item has:
 - **Depends on**: nothing
 
 ### BL-02 — Stripe account and payment links
-- **What**: Stripe account active. Three Payment Links created for Quick Checkup ($7), Launch Pack ($29), Launch Pack + Polish ($59). Webhook setup to forward purchase notifications to Rob's email.
+- **What**: Stripe account active. Three Payment Links created for Starter ($7), Launch ($29), follow-up ($59). Webhook setup to forward purchase notifications to Rob's email.
 - **Acceptance**: Test purchase completes end-to-end with Stripe test card. Webhook fires.
 - **Who**: Rob (Cursor can help with webhook setup if needed)
 - **Effort**: 1 hour
@@ -83,9 +83,9 @@ Each item has:
 
 ### BL-08 — Notion report templates
 - **What**: Three master Notion templates Rob duplicates per customer:
-  - `Template — Quick Checkup` (5-7 findings structure)
-  - `Template — Launch Pack` (full findings + Quick Start Guide section)
-  - `Template — Launch Pack + Polish` (full + follow-up section)
+  - `Template — Starter` (5-7 findings structure)
+  - `Template — Launch` (full findings + Quick Start Guide section)
+  - `Template — follow-up` (full + follow-up section)
 - Each template includes:
   - Cover section (customer name, app, date, summary verdict)
   - Severity legend

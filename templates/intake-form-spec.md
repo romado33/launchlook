@@ -13,7 +13,7 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Single page, 13 questions
 - Mobile-friendly (Tally is by default)
 - Required vs. optional clearly marked
-- Conditional fields (test accounts, support email) only appear for Launch Pack and Polish tiers
+- Conditional fields (test accounts, support email) only appear for Launch and Polish tiers
 - Submit → thank-you screen → optional redirect to `https://launchlook.app/thanks`
 - Tally → Notion integration writes each submission as a new row in the `Customers` database
 
@@ -66,15 +66,15 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Type: Multiple choice (single select)
 - Required: yes
 - Options:
-  - Quick Checkup ($7)
-  - Launch Pack ($29)
-  - Launch Pack + Polish ($59)
+  - Starter ($7)
+  - Launch ($29)
+  - follow-up ($59)
 - Help text: "We know — we'll match against Stripe, but this confirms what you expect."
 
-### 9. Can we use test accounts? *(Launch Pack and Polish only)*
+### 9. Can we use test accounts? *(Launch and Polish only)*
 - Type: Multiple choice (single select)
-- Required: yes (conditional on Q8 being Launch Pack or Polish)
-- Show only if: Q8 = "Launch Pack ($29)" OR Q8 = "Launch Pack + Polish ($59)"
+- Required: yes (conditional on Q8 being Launch)
+- Show only if: Q8 = "Launch ($29)" OR Q8 = "follow-up ($59)"
 - Options:
   - Yes — I'll provide two test accounts
   - I'll create test accounts using my own signup flow — you provision them
@@ -93,10 +93,10 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Required: yes if Q9 = "Yes — I'll provide two test accounts"
 - Show only if: Q9 = "Yes — I'll provide two test accounts"
 
-### 12. Your support email *(Launch Pack and Polish only)*
+### 12. Your support email *(Launch and Polish only)*
 - Type: Email
 - Required: yes (conditional)
-- Show only if: Q8 = "Launch Pack ($29)" OR Q8 = "Launch Pack + Polish ($59)"
+- Show only if: Q8 = "Launch ($29)" OR Q8 = "follow-up ($59)"
 - Help text: "We'll reference this in your Quick Start Guide so users know how to reach you."
 
 ### 13. Anything specific to check?

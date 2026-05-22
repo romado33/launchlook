@@ -17,73 +17,64 @@ A friendly pre-launch checkup for your vibe-coded app.
 **Body**:
 Send us your app's URL. We'll spot what your users will notice, write you a fix list you can paste into Lovable, and draft a one-page guide your users can actually read.
 
+**Eyebrow (builders)**: For Lovable · Bolt · Base44 · Replit
+
+**Headline**:
+About to share your app link? Get a second pair of eyes first.
+
+**Body**:
+We review your live web URL like a first-time visitor — then send a Notion report with fix prompts for your AI builder.
+
 **CTAs**:
-- Primary button: `Get my checkup — $7`
-- Secondary button: `See a sample report`
+- Primary button: `Get Starter — $9`
+- Secondary button: `See sample findings`
 
-### What we check section
+### How it works
 
-**Section heading**: What we check
+1. Pay & send your URL (short intake)
+2. We walk through like a stranger (desktop + phone-width layout)
+3. You get a Notion report with fix prompts (+ Quick Start Guide on Starter)
 
-Four columns:
+### What we catch (bullets)
 
-**Polish problems**
-Broken buttons, broken links, mobile layout breaks, missing trust pages. The stuff your users will notice in the first 30 seconds.
+- Embarrassing polish (dead CTAs, layout breaks, dev leftovers on prod)
+- AI builder fingerprints (placeholders, default copy)
+- Trust gaps (privacy/terms, generic meta)
 
-**Forgotten placeholders**
-"Your Company Name" still in the footer. Lorem ipsum on the About page. The little leftovers from your AI builder that signal "unfinished."
-
-**Sharing risks**
-Can users see each other's data? Are protected pages actually protected? We check with two real test accounts.
-
-**Quick Start Guide** *(Launch Pack and up)*
-A one-page guide your users can actually read. Written in plain language, formatted for your app, ready to embed.
+Cross-user data check: **Launch ($29)** only.
 
 ### Pricing section
 
-**Section heading**: One scan. Three depths.
+**Section heading**: Two options. Same human review.
 
-**Tier 1 — Quick Checkup ($7)**
-- 5-7 findings
-- Mobile + desktop check
-- Plain-language explanations
+**Starter ($9)**
+- Up to 7 findings
+- Desktop + phone layout check (web app responsive — not App Store)
 - Copy-paste fix prompts
-- 24-hour turnaround
-- CTA: `Get my checkup — $7`
+- Quick Start Guide for your users
+- 24-hour delivery
+- CTA: `Get Starter — $9`
 
-**Tier 2 — Launch Pack ($29)** *(most popular)*
-- Everything in Quick Checkup, plus:
-- Full findings (10-15)
-- Cross-user data check (with two test accounts)
-- AI-generated Quick Start Guide for your users
-- 12-hour turnaround
+**Launch ($29)** *(best before launch)*
+- Everything in Starter, plus:
+- Up to 15 findings (deeper pass)
+- Cross-user data check (two test accounts)
 - Shareable report link
-- CTA: `Get the Launch Pack — $29`
+- 12-hour delivery
+- CTA: `Get Launch — $29`
 
-**Tier 3 — Launch Pack + Polish ($59)**
-- Everything in Launch Pack, plus:
-- Follow-up verification scan after you apply fixes
-- 7-day post-launch check-in
-- Quick Start Guide touchups based on your feedback
-- CTA: `Get Polish — $59`
+Follow-up re-scan: email for quote (replaces old $59 tier on site).
 
-### Why us section
+### FAQ section (landing)
 
-**Section heading**: We're not a security scanner.
-
-There are good security scanners out there. We complement them.
-
-LaunchLook focuses on the stuff your users will actually notice — broken UI, leftover placeholders, missing pages, and the small inconsistencies that make an app feel unfinished. We also write you a one-page Quick Start Guide your users can actually read (in the Launch Pack and up).
-
-If you want a deep security audit, we recommend [VAS](https://vibeappscanner.com). We focus on what visitors will see, not what hackers will probe.
-
-### FAQ section
+**Q: Is this only for mobile apps?**
+A: No — web apps only. Phone check = mobile-width browser view.
 
 **Q: How long does the checkup take?**
-A: Quick Checkup is 24 hours. Launch Pack is 12 hours. Launch Pack + Polish runs the same with an additional 48 hours for the follow-up scan after you apply fixes.
+A: Starter is 24 hours. Launch is 12 hours.
 
 **Q: What do you need from me?**
-A: Your app's URL, a one-line description of what it does, and (for Launch Pack and up) two test accounts so we can check if users can see each other's data.
+A: Your URL, one-line description, builder name. Launch tier: two test accounts.
 
 **Q: Is this safe to run on a live app?**
 A: Yes. We only read your app — we never submit forms, click destructive buttons, or modify any data. Think of us as a careful visitor.
@@ -124,10 +115,10 @@ A: Yes, if it's accessible from the internet. Local URLs (localhost) won't work,
 5. **Who's your main user?** (1-2 sentences text, required)
 6. **What's the main thing they do in your app?** (1-2 sentences, required)
 7. **Which platform built it?** (radio: Lovable / Bolt / Base44 / Replit / v0 / Other)
-8. **Can we use test accounts? (Launch Pack and up)** (yes / no — if yes, conditional fields below)
+8. **Can we use test accounts? (Launch and up)** (yes / no — if yes, conditional fields below)
 9. **Test account 1 email + password** (only if "yes" above, conditional)
 10. **Test account 2 email + password** (only if "yes" above, conditional)
-11. **Your support email** (for the Quick Start Guide, Launch Pack and up, conditional on tier)
+11. **Your support email** (for the Quick Start Guide, Launch and up, conditional on tier)
 12. **Anything specific to check?** (textarea, optional)
 13. **How anxious are you about launching, 1-10?** (number 1-10, optional) *Tone-matching signal for the report.*
 
@@ -192,7 +183,7 @@ Your checkup for [app name] is ready. Here's the link:
 A few notes:
 - The findings are ranked by severity. Start at the top.
 - Every finding has a copy-paste fix prompt for [their platform]. Just paste them in and let your builder fix it.
-- If you're at the Launch Pack tier or above, the Quick Start Guide is in the second half of the report.
+- If you're at the Launch tier or above, the Quick Start Guide is in the second half of the report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 
 If anything isn't clear, just reply to this email. I'll respond within a few hours.
@@ -220,7 +211,7 @@ Either way, thanks for trying this out.
 — Rob
 ```
 
-### Day-7 post-launch check-in (Launch Pack + Polish only)
+### Day-7 post-launch check-in (follow-up only)
 
 **Subject**: How did the launch go?
 
@@ -243,7 +234,7 @@ If you got user feedback you want me to look at, or if anything unexpected came 
 | Name | Title | Customer first name |
 | Email | Email | Matches Stripe purchase email |
 | App URL | URL | The app being checked |
-| Tier | Select | Quick Checkup / Launch Pack / Polish |
+| Tier | Select | Starter / Launch / Polish |
 | Payment Date | Date | When Stripe purchase landed |
 | Intake Received | Checkbox | Whether they filled the form |
 | Delivery Due | Date | Payment date + tier turnaround |
@@ -398,7 +389,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ### Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. $7 for a Quick Checkup, $29 for a Launch Pack that includes a Quick Start Guide for your users.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. $7StarterStarterStarter , $29 for a Launch that includes a Quick Start Guide for your users.
 
 ### License
 

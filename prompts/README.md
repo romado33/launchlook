@@ -1,6 +1,6 @@
 # Prompts — Quick Start Guide pipeline
 
-The QSG is the centerpiece of the Launch Pack ($29) and Polish ($59) tiers. The pipeline goes:
+The QSG is the centerpiece of the Launch ($29) and Polish ($59) tiers. The pipeline goes:
 
 ```
 Intake form
@@ -17,7 +17,7 @@ Rob's editing pass (~10 min): tone, accuracy, UI labels, forbidden-words sweep
     ↓
 Run scripts/qsg_render.py to produce styled HTML (BL-10)
     ↓
-Paste Markdown into the Notion Launch Pack report + send HTML link
+Paste Markdown into the Notion Launch report + send HTML link
 ```
 
 ## Files
@@ -64,7 +64,7 @@ Paste Markdown into the Notion Launch Pack report + send HTML link
    - `[REVIEWER: ...]` markers → these are honest gaps. Resolve from the actual app or replace with a generic fallback.
    - UI labels that don't match what's actually in the app → fix.
    - Sentences over 20 words → shorten.
-9. Paste the edited Markdown into the Notion Launch Pack report (Part 2).
+9. Paste the edited Markdown into the Notion Launch report (Part 2).
 10. Render to HTML for embedding:
 
     ```bash

@@ -1,6 +1,6 @@
 # LaunchLook
 
-A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. $7 to start.
+A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. $9 to start.
 
 > **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
 

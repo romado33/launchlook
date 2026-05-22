@@ -17,5 +17,5 @@ hello@launchlook.app
 Variables:
 - {NAME} — customer first name
 - {APP_NAME} — app name from intake
-- {TURNAROUND} — "24 hours" (Quick Checkup) / "12 hours" (Launch Pack) / "12 hours" (Polish)
+- {TURNAROUND} — "24 hours" (Starter) / "12 hours" (Launch) / "12 hours" (Launch)
 - {INTAKE_FORM_LINK} — Tally.so form URL

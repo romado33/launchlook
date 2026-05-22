@@ -1,6 +1,6 @@
-# LaunchLook — Quick Checkup for {APP_NAME}
+# LaunchLook — Starter for {APP_NAME}
 
-> **Tier:** Quick Checkup ($7) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
+> **Tier:** Starter ($7) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
 ---
 
@@ -105,7 +105,7 @@ You have **{N} fixes** to work through. My suggestion:
 2. **Within 24 hours of launch** — knock out the 🟠 High findings.
 3. **First two weeks after launch** — Medium and Low can wait.
 
-After you've applied the fixes, take another pass through your app yourself. If you want me to verify, the **Launch Pack + Polish** tier ($59) includes a follow-up scan — reply to this email and I'll roll the upgrade in.
+After you've applied the fixes, take another pass through your app yourself. If you want me to verify, the **follow-up** tier ($59) includes a follow-up scan — reply to this email and I'll roll the upgrade in.
 
 ---
 

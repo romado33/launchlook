@@ -2,9 +2,8 @@
 window.LAUNCHLOOK_CONFIG = Object.assign(window.LAUNCHLOOK_CONFIG || {}, {
   intakeFormUrl: "https://tally.so/r/YOUR_FORM_ID",
   stripe: {
-    quickCheckup: "https://buy.stripe.com/YOUR_QUICK_LINK",
-    launchPack: "https://buy.stripe.com/YOUR_LAUNCH_LINK",
-    polish: "https://buy.stripe.com/YOUR_POLISH_LINK",
+    starter: "https://buy.stripe.com/YOUR_STARTER_9_LINK",
+    launch: "https://buy.stripe.com/YOUR_LAUNCH_29_LINK",
   },
   githubChecklist: "https://github.com/YOUR_HANDLE/launchlook-prelaunch-checklist",
 });

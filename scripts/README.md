@@ -9,7 +9,7 @@ Operational scripts for LaunchLook. All written for Python 3.11+. None are requi
 | `audit_checklist.py` | — | ready | Start of every manual audit |
 | `findings_lookup.py` | — | ready | During write-up — search library |
 | `email_render.py` | — | ready | Before sending any transactional email |
-| `qsg_compose_prompt.py` | BL-09 | ready | First Launch Pack customer |
+| `qsg_compose_prompt.py` | BL-09 | ready | First Launch customer |
 | `qsg_render.py` | BL-10 | ready | After QSG edited in ChatGPT |
 | `qsg_generate.py` | BL-09 v2 | skeleton — needs API key | When you decide to automate QSG generation |
 | `notion_test.py` | BL-04 | ready | After Notion workspace + token set up |
@@ -24,7 +24,7 @@ Operational scripts for LaunchLook. All written for Python 3.11+. None are requi
 1. Customer pays via Stripe → fills intake form → row lands in Notion Customers DB
 2. Rob audits manually using templates/notion/report-* template
    ↓
-3. (BL-09) For Launch Pack/Polish tier:
+3. (BL-09) For Launch tier:
    python scripts/qsg_compose_prompt.py --app-name ... > qsg_prompt.txt
    → Paste into ChatGPT → edit → paste into Notion report Part 2
    ↓

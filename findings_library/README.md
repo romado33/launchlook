@@ -61,7 +61,7 @@ The most common substitutions:
 | Variable | Source |
 |---|---|
 | `{ACTUAL_NAME}` | Intake form field 4 ("What does your app do?") → product name from URL |
-| `{ACTUAL_EMAIL}` | Intake form field 11 (support email, Launch Pack+) |
+| `{ACTUAL_EMAIL}` | Intake form field 11 (support email, Launch+) |
 | `{ONE_LINE_DESCRIPTION}` | Intake form field 4 |
 | `{PAGE}` | Per-finding — the page where the issue appears |
 

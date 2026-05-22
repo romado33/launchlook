@@ -1,6 +1,6 @@
-# LaunchLook — Quick Checkup for LiLo
+# LaunchLook — Starter for LiLo
 
-> **Tier:** Quick Checkup ($7) · **Practice audit** · **URL:** https://theliloapp.lovable.app/
+> **Tier:** Starter ($7) · **Practice audit** · **URL:** https://theliloapp.lovable.app/
 
 ---
 

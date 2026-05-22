@@ -7,9 +7,11 @@ window.LAUNCHLOOK_CONFIG = {
   supportEmail: "hello@launchlook.app",
   intakeFormUrl: "", // Tally.so URL after BL-07
   stripe: {
-    quickCheckup: "", // https://buy.stripe.com/...
+    starter: "", // https://buy.stripe.com/... ($9)
+    launch: "", // https://buy.stripe.com/... ($29)
+    // Legacy keys (optional): quickCheckup → starter, launchPack → launch
+    quickCheckup: "",
     launchPack: "",
-    polish: "",
   },
   githubChecklist: "", // https://github.com/you/launchlook-prelaunch-checklist
 };

@@ -1,6 +1,6 @@
-# LaunchLook — Launch Pack for {APP_NAME}
+# LaunchLook — Launch for {APP_NAME}
 
-> **Tier:** Launch Pack ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
+> **Tier:** Launch ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
 ---
 
@@ -62,7 +62,7 @@ Severity scale:
 
 ---
 
-## 🟠 Cross-user check (Launch Pack only)
+## 🟠 Cross-user check (Launch only)
 
 You gave me two test accounts. Here's what I found when I logged in as each.
 
@@ -110,7 +110,7 @@ You have **{N} fixes** to work through. My suggestion:
 3. **First two weeks after launch** — Medium and Low can wait.
 4. **Before sharing with users** — paste the Quick Start Guide into your app's help section or share the link.
 
-After you've applied the fixes, take another pass through your app yourself. If you want me to verify everything works, the **Launch Pack + Polish** tier ($59) includes a follow-up scan and a 7-day post-launch check-in — reply to this email and I'll upgrade you.
+After you've applied the fixes, take another pass through your app yourself. If you want me to verify everything works, the **follow-up** tier ($59) includes a follow-up scan and a 7-day post-launch check-in — reply to this email and I'll upgrade you.
 
 ---
 

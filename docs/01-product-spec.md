@@ -7,41 +7,36 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 - A summary verdict (overall ready / needs work / not ready)
 - A prioritized list of 5-10 findings (Critical / High / Medium / Low severity)
 - For each finding: plain-English explanation, screenshot evidence, and a copy-paste fix prompt for their AI builder
-- (At higher tiers) An AI-generated one-page Quick Start Guide for their users
-- (At highest tier) A follow-up verification scan after fixes
+- An AI-generated one-page Quick Start Guide for their users (included on Starter)
+- (Launch tier) Cross-user data isolation check with two test accounts
 
-## Three tiers
+## Two tiers (MVP)
 
-### Quick Checkup — $7
+### Starter — $9
 
-- 5-7 findings
-- Mobile and desktop spot-check
+- Up to 7 prioritized findings
+- Desktop + phone-width layout check (responsive web app — not native iOS/Android)
 - Plain-language explanations
 - Copy-paste fix prompts
+- AI-generated one-page Quick Start Guide for their users
 - Notion page delivery
 - 24-hour turnaround
 
-Used by: founders unsure whether the product is for them. The impulse-purchase entry point.
+Used by: founders about to share a link and want a fast sanity check plus user-facing docs.
 
-### Launch Pack — $29
+### Launch — $29
 
-- Everything in Quick Checkup, plus:
-- Full checkup (10-15 findings instead of 5-7)
+- Everything in Starter, plus:
+- Up to 15 findings (deeper pass — not unlimited)
 - Cross-user data check (with two test accounts the founder provides)
-- AI-generated one-page Quick Start Guide for their users
 - 12-hour turnaround
 - Shareable Notion link they can send to teammates
 
-Used by: founders actively launching and willing to invest in doing it right. This is the centerpiece tier.
+Used by: founders launching publicly this week who need depth and a privacy sanity check.
 
-### Launch Pack + Polish — $59
+### Follow-up re-scan (not a listed tier)
 
-- Everything in Launch Pack, plus:
-- Follow-up verification scan after the founder applies fixes
-- Email check-in 7 days after launch with offer to spot-check customer feedback
-- Custom touchups to the Quick Start Guide based on founder feedback
-
-Used by: founders who want hand-holding. The premium upsell.
+- Offered on request via email after fixes are applied. Quoted case-by-case. Replaces the old $59 "Polish" bundle for MVP simplicity.
 
 ## What's in scope
 
@@ -52,7 +47,7 @@ Used by: founders who want hand-holding. The premium upsell.
 - **UX states**: missing empty states, missing error states, missing loading states
 - **Sharing**: missing meta tags, default favicons, generic page titles
 - **Brand consistency**: inconsistent terminology, mixed capitalization, leftover platform branding
-- **The Quick Start Guide** (at $29+ tiers): one-page user-facing doc generated from crawled content plus founder intake
+- **The Quick Start Guide** (Starter and Launch): one-page user-facing doc generated from crawled content plus founder intake
 
 ## What's out of scope (and why)
 

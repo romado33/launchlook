@@ -171,7 +171,7 @@ def main() -> int:
     output_path.write_text(markdown, encoding="utf-8")
 
     print(f"Wrote {output_path} ({len(markdown.split())} words)", file=sys.stderr)
-    print("Next: open in editor, spot-edit, paste into customer's Notion Launch Pack report.", file=sys.stderr)
+    print("Next: open in editor, spot-edit, paste into customer's Notion Launch report.", file=sys.stderr)
 
     return 0
 

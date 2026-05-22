@@ -5,7 +5,7 @@ The script that goes with every cold outreach Loom video. Adapt per prospect. Ke
 ## The script
 
 ```
-Hey [name], I'm Rob — I run a small thing called LaunchLook that does pre-launch
+Hey [name], I'm Rob — I run a small thing called Onceover that does pre-launch
 checkups for vibe-coded apps.
 
 I saw you launched [app name] on [Lovable / Bolt / Base44 / etc.] — looks
@@ -18,7 +18,7 @@ Specifically point to the actual broken or placeholder thing. Use the
 visible UI label in quotes, not internal names.]
 
 So those are the three things I'd flag. There's probably a few more small
-ones — if you want, I do a full checkup for $7 with a fix list you can
+ones — if you want, I do a Starter checkup for $9 with a fix list you can
 paste into [their platform]. Link in the message I sent.
 
 Either way, good luck with the launch — looks like a solid start.
@@ -28,7 +28,7 @@ Either way, good luck with the launch — looks like a solid start.
 
 - **Always say something genuinely positive about the app.** Find something. Even a small thing. It primes the founder to be receptive.
 - **Never imply the founder is incompetent.** They built something, that's brave. Findings are framed as "your AI builder forgot this," not "you missed this."
-- **Never use the word "security."** That's not LaunchLook's wedge. Polish + placeholders + sharing risks.
+- **Never use the word "security."** That's not Onceover's wedge. Polish + placeholders + sharing risks.
 - **End with "either way, good luck."** Removes pressure. Sale or not, you're a person who wished them well.
 - **Don't pile on findings.** 2–3 in the Loom is the right amount. More feels harsh. The full report is for after they buy.
 - **Reference the actual UI label, in quotes.** Not "your booking system" — say "your 'Book Now' button on the homepage."
@@ -83,7 +83,7 @@ Loom shows you when someone viewed your video. Update the Opened checkbox the da
 
 | Reply type | What to do |
 |------------|------------|
-| "Yes, send the full report" | Drop the Stripe Payment Link for Quick Checkup. After they pay, follow normal intake flow. |
+| "Yes, send the full report" | Drop the Stripe Payment Link for Starter. After they pay, follow normal intake flow. |
 | "Interesting, what's the deal?" | One-paragraph reply: 3 tiers, what each includes, payment link. Don't oversell. |
 | "Thanks but not now" | Reply with "no worries, here's the free checklist if it's useful" + link to /checklist. Move on. |
 | Silence | Don't follow up. One Loom is enough. Move on. |

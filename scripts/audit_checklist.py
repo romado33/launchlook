@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse
 
 STEPS_QUICK = """
-LaunchLook — 20-minute Quick Checkup workflow
+LaunchLook — 20-minute Starter workflow
 ==========================================
 
 0. Prep (2 min)
@@ -59,15 +59,15 @@ Launch Pack additions (+15 min):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tier", choices=["quick", "launch", "polish"], default="quick")
+    parser.add_argument("--tier", choices=["starter", "launch", "quick"], default="starter",
+                        help="'quick' is an alias for starter")
     args = parser.parse_args()
+    tier = "starter" if args.tier == "quick" else args.tier
 
-    if args.tier == "quick":
+    if tier == "starter":
         print(STEPS_QUICK.strip())
     else:
         print(STEPS_LAUNCH.strip())
-        if args.tier == "polish":
-            print("\nPolish tier: schedule day-7 follow-up; leave Part 3 open until customer confirms fixes.")
 
     return 0
 

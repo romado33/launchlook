@@ -5,6 +5,8 @@
 (function () {
   var cfg = window.LAUNCHLOOK_CONFIG || {};
   var stripe = cfg.stripe || {};
+  var starterUrl = stripe.starter || stripe.quickCheckup;
+  var launchUrl = stripe.launch || stripe.launchPack;
 
   function setHref(selector, url) {
     if (!url) return;
@@ -15,9 +17,9 @@
     });
   }
 
-  setHref("[data-launchlook-stripe='quick']", stripe.quickCheckup);
-  setHref("[data-launchlook-stripe='launch']", stripe.launchPack);
-  setHref("[data-launchlook-stripe='polish']", stripe.polish);
+  setHref("[data-launchlook-stripe='starter']", starterUrl);
+  setHref("[data-launchlook-stripe='quick']", starterUrl);
+  setHref("[data-launchlook-stripe='launch']", launchUrl);
 
   if (cfg.githubChecklist) {
     document.querySelectorAll("[data-launchlook-github='checklist']").forEach(function (el) {

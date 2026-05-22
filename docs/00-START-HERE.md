@@ -24,14 +24,14 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 ## Current status (as of project handoff)
 
 - ✅ Product strategy defined (see `02-strategy-and-context.md`)
-- ✅ Pricing locked: $7 / $29 / $59 tiers
+- ✅ Pricing locked: **$9 Starter** / **$29 Launch** (two tiers; follow-up re-scan on request)
 - ✅ Name locked: LaunchLook
 - ✅ Findings library seeded with 35 entries (see `06-findings-library.md`)
 - ✅ Quick Start Guide prompt drafted (see `05-technical-architecture.md`)
 - ✅ Free public checklist drafted (see `04-content-and-copy.md`)
 - ✅ Domain purchased: **launchlook.app**
 - ✅ Landing page built (deploy to Vercel when ready — see `07-launchlook-go-live.md`)
-- ✅ Rebrand complete: Onceover → LaunchLook in repo
+- ✅ Rebrand complete: LaunchLook → LaunchLook in repo
 - ❌ Stripe payment links not yet set up
 - ❌ Notion workspace not yet set up
 - ❌ Zero paying customers yet
