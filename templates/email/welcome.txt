@@ -2,12 +2,12 @@ Subject: Got it — checkup for {APP_NAME} coming in {TURNAROUND}
 
 Hi {NAME},
 
-Thanks for trusting LaunchLook with {APP_NAME}. I'll have your checkup ready in {TURNAROUND} from now.
+Thanks for trusting LaunchLook with {APP_NAME}. I'll have your checkup ready in {TURNAROUND} from when you complete intake.
 
-To get started, please fill out the short intake form here:
+Please fill out the short intake form here (about 3 minutes):
 {INTAKE_FORM_LINK}
 
-It takes about 3 minutes. The more context you give me, the more useful the report will be.
+Include your live app URL, builder (Lovable, Bolt, v0, Cursor, or similar), and what the app does. For Launch ($29), use temporary test accounts only — never send API keys or production admin passwords.
 
 Talk soon,
 Rob
@@ -17,5 +17,5 @@ hello@launchlook.app
 Variables:
 - {NAME} — customer first name
 - {APP_NAME} — app name from intake
-- {TURNAROUND} — "24 hours" (Starter) / "12 hours" (Launch) / "12 hours" (Launch)
-- {INTAKE_FORM_LINK} — Tally.so form URL
+- {TURNAROUND} — "24 hours" (Starter Package) / "12 hours" (Launch)
+- {INTAKE_FORM_LINK} — Tally form URL (https://launchlook.app/thanks if they already paid)

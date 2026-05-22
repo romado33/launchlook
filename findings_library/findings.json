@@ -363,7 +363,7 @@
       "fix_prompts": {
         "lovable": "User A can see User B's {DATA_TYPE} on the {PAGE} page. This means Supabase queries aren't filtering by user. Add row-level security policies on the {TABLE_NAME} table that restrict reads to `auth.uid() = user_id`. Also update the query in the page component to filter by current user."
       },
-      "notes": "Cornerstone Critical finding. Requires two-account intake (Launch Pack+)."
+      "notes": "Cornerstone Critical finding. Requires two-account intake (Launch tier)."
     },
     {
       "id": "FL-022",

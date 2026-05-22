@@ -9,7 +9,7 @@ Your checkup for {APP_NAME} is ready. Here's the link:
 A few notes:
 - The findings are ranked by severity. Start at the top.
 - Every finding has a copy-paste fix prompt for {PLATFORM}. Just paste them in and let your builder fix it.
-- If you're at the Launch tier or above, the Quick Start Guide is in the second half of the report.
+- Starter Package and Launch tiers include a Quick Start Guide in your report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 
 If anything isn't clear, just reply to this email. I'll respond within a few hours.

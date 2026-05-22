@@ -46,7 +46,7 @@ Use `templates/notion/report-quick-checkup.md` as the template. Duplicate it in 
    - Check for horizontal scroll, small text, tiny buttons.
 
 3. **Signup pass** (10 min)
-   - Sign up with `launchlooktest+{app_name}@gmail.com` (Gmail aliases work)
+   - Sign up with `onceovertest+{app_name}@gmail.com` (Gmail aliases work)
    - Wait for confirmation email. Note if it never arrives.
    - Log in. Screenshot dashboard.
    - Click every nav item. Note empty states.
@@ -89,7 +89,7 @@ Buried in the free-sample email, you ask three questions. These are the research
    - This is the more important question. Vibe coders politely skip past trivial findings.
    - If they call out one as obvious, demote it in the Findings Library or remove it entirely.
 
-3. **"Would you have paid $7 for it?"**
+3. **"Would you have paid $9 for it?"**
    - The actual signal. If yes (or even "yeah, probably"), the wedge is real.
    - If no, ask "what would have made it worth paying for?" Their answer is the v0.1 spec.
 

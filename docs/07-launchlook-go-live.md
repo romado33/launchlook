@@ -1,42 +1,56 @@
 # LaunchLook — Go-live checklist
 
-Use after `launchlook.app` is purchased. Repo may still live in a folder named `onceover/` locally until you rename it (close Cursor/terminals first).
+**Current pricing:** Starter Package **$9** · Launch **$29** · Follow-up re-scan quoted by email.
 
-## 1. DNS + Vercel
+## 1. Site (Vercel)
 
-- [ ] Vercel → **Settings → General → Root Directory**: leave **empty** (repo uses root `vercel.json` to copy `landing/` → `dist/`). If you set `landing` here, clear it or the site may 404.
-- [ ] Framework Preset: **Other** (static)
-- [ ] Vercel → Domains → add `launchlook.app` (+ `www` → redirect to apex)
-- [ ] Registrar DNS records match Vercel
-- [ ] Visit https://launchlook.app — landing loads
+- [x] Root `vercel.json` copies `landing/` → `dist/` (do **not** set Root Directory to `landing` unless you remove that build)
+- [x] https://launchlook.app loads
+- [ ] `images/og.png` present (social preview)
+- [ ] Hard-refresh after each deploy
 
-## 2. Email
+## 2. Stripe
 
-- [ ] `hello@launchlook.app` (and optional `rob@launchlook.app`) receiving mail
-- [ ] Resend: verify `launchlook.app` domain
+- [ ] Two Payment Links only: **Starter Package $9**, **Launch $29**
+- [ ] Success URL on both: `https://launchlook.app/thanks`
+- [x] URLs in `landing/assets/config.js` (`stripe.starter`, `stripe.launch`)
+
+## 3. Intake (required before cold outreach)
+
+- [ ] Tally form built from `templates/intake-form-spec.md` (include security notice at top)
+- [ ] Paste publish URL into `landing/assets/config.js` → `intakeFormUrl`
+- [ ] Test: pay (or open `/thanks`) → intake button opens Tally
+- [ ] Until Tally is live: `/thanks` falls back to pre-filled email to hello@launchlook.app
+
+## 4. Email
+
+- [ ] `hello@launchlook.app` receiving (ImprovMX, Google Workspace, or GoDaddy forward)
+- [ ] Resend domain verified (for delivery/welcome emails)
 - [ ] `.env`: `FROM_EMAIL`, `ADMIN_EMAIL`
 
-## 3. Stripe
+## 5. Legal & trust
 
-- [ ] Two Payment Links: Starter **$9**, Launch **$29** (drop old $7 / $59 links)
-- [ ] Payment Link success URL: `https://launchlook.app/thanks`
-- [ ] `landing/assets/config.local.js` — paste three Stripe URLs
+- [x] `privacy.html` / `terms.html` say LaunchLook (not Onceover)
+- [x] Sample report at `/sample`
+- [x] Founder + trust copy on homepage
 
-## 4. Intake
+## 6. Public checklist
 
-- [ ] Tally form live; URL in `config.local.js` → `intakeFormUrl`
-- [ ] Notion workspace **LaunchLook Ops** wired (BL-03)
+- [x] https://github.com/romado33/launchlook-prelaunch-checklist
+- [x] `githubChecklist` in `config.js`
 
-## 5. Public checklist repo (BL-16)
+## 7. Smoke test (do in incognito)
 
-- [ ] Publish `external/launchlook-prelaunch-checklist` as `github.com/YOU/launchlook-prelaunch-checklist`
-- [ ] URL in `config.local.js` → `githubChecklist`
+- [ ] Homepage hero + pricing (Starter Package / Launch)
+- [ ] Stripe $9 test → lands on `/thanks`
+- [ ] Stripe $29 test → lands on `/thanks`
+- [ ] `/checklist`, `/sample`, `/privacy`, `/terms`
+- [ ] Footer GitHub link works
 
-## 6. Smoke test
+## 8. Start selling
 
-- [ ] Pricing buttons enabled (not greyed out)
-- [ ] Test Stripe purchase → `/thanks` → intake link works
-- [ ] Footer mailto: `hello@launchlook.app`
+- [ ] 30 targeted DMs/Looms (see `templates/cold-outreach-loom-script.md`)
+- [ ] Goal: **3 strangers pay $9** before more automation
 
 ## Brand reference
 
@@ -44,5 +58,5 @@ Use after `launchlook.app` is purchased. Repo may still live in a folder named `
 |---|--------|
 | Name | **LaunchLook** |
 | Domain | **launchlook.app** |
-| Config global | `window.LAUNCHLOOK_CONFIG` |
-| HTML hooks | `data-launchlook-stripe`, `data-launchlook-email`, etc. |
+| Tiers | **Starter Package $9**, **Launch $29** |
+| Config | `window.LAUNCHLOOK_CONFIG` |

@@ -1,4 +1,4 @@
-# LaunchLook — Launch for {APP_NAME}
+# LaunchLook — Launch tier checkup for {APP_NAME}
 
 > **Tier:** Launch ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
@@ -62,7 +62,7 @@ Severity scale:
 
 ---
 
-## 🟠 Cross-user check (Launch only)
+## 🟠 Cross-user check (Launch tier only)
 
 You gave me two test accounts. Here's what I found when I logged in as each.
 
@@ -110,7 +110,7 @@ You have **{N} fixes** to work through. My suggestion:
 3. **First two weeks after launch** — Medium and Low can wait.
 4. **Before sharing with users** — paste the Quick Start Guide into your app's help section or share the link.
 
-After you've applied the fixes, take another pass through your app yourself. If you want me to verify everything works, the **follow-up** tier ($59) includes a follow-up scan and a 7-day post-launch check-in — reply to this email and I'll upgrade you.
+After you've applied the fixes, take another pass through your app yourself. If you want me to verify everything works after fixes, email hello@launchlook.app for a quoted follow-up re-scan.
 
 ---
 

@@ -544,9 +544,9 @@ def send_email(to, subject, body, from_email="hello@launchlook.app"):
 ### Payment Links (no custom checkout)
 
 Use Stripe's hosted Payment Links. Three per tier, all configured in Stripe dashboard:
-- Starter: $7 USD one-time
+- Starter Package: $9 USD one-time
 - Launch: $29 USD one-time
-- follow-up: $59 USD one-time
+- Follow-up re-scan: quoted by email (not a listed tier)
 
 Each Payment Link has:
 - Success URL: `https://launchlook.app/intake?tier=quick&session_id={CHECKOUT_SESSION_ID}`
@@ -624,10 +624,10 @@ Per 10 customers (Starter tier):
 - Notion: free tier sufficient
 - Resend: free tier sufficient
 - Vercel: free tier sufficient
-- Stripe fees: ~$0.50 per $7 transaction = $5.00 across 10
+- Stripe fees: ~$0.55 per $9 transaction ≈ $5.50 across 10
 - Domain renewal: $12/year
 
-Total cost per 10 customers: ~$6. Revenue per 10 customers at $7 base: $70 minimum, likely $150+ with tier mix.
+Total cost per 10 customers: ~$6. Revenue per 10 customers at $9 base: $90 minimum, likely $150+ with tier mix.
 
 ## Security and privacy considerations
 

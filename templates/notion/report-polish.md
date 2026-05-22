@@ -1,6 +1,6 @@
-# LaunchLook — follow-up for {APP_NAME}
+# LaunchLook — Follow-up re-scan for {APP_NAME} (legacy template)
 
-> **Tier:** follow-up ($59) · **Initial delivery:** {DATE} · **By:** Rob at LaunchLook
+> **Tier:** Follow-up (quoted by email) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
 ---
 
@@ -16,7 +16,7 @@ You're getting **{N} findings** plus a **Quick Start Guide** your users can read
 
 ## How to read this report
 
-Same structure as Launch:
+Same structure as Launch Pack:
 
 1. **Part 1** — Findings (sorted by severity)
 2. **Part 2** — Quick Start Guide for your users
@@ -36,13 +36,13 @@ Severity scale:
 
 # Part 1 — Findings
 
-(Same structure as Launch template. 10–15 findings, severity-sorted, each with screenshot + why-it-matters + fix prompt.)
+(Same structure as Launch Pack template. 10–15 findings, severity-sorted, each with screenshot + why-it-matters + fix prompt.)
 
 ---
 
 # Part 2 — Quick Start Guide for your users
 
-(Same structure as Launch template. AI-generated, Rob-edited, paste-ready.)
+(Same structure as Launch Pack template. AI-generated, Rob-edited, paste-ready.)
 
 ---
 

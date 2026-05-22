@@ -20,7 +20,7 @@ Each item has:
 - **Depends on**: nothing
 
 ### BL-02 — Stripe account and payment links
-- **What**: Stripe account active. Three Payment Links created for Starter ($7), Launch ($29), follow-up ($59). Webhook setup to forward purchase notifications to Rob's email.
+- **What**: Stripe account active. Two Payment Links: Starter Package ($9), Launch ($29). Success URL → https://launchlook.app/thanks. Optional: webhook to email on purchase.
 - **Acceptance**: Test purchase completes end-to-end with Stripe test card. Webhook fires.
 - **Who**: Rob (Cursor can help with webhook setup if needed)
 - **Effort**: 1 hour
@@ -66,7 +66,7 @@ Each item has:
 - **Depends on**: BL-01, BL-02
 
 ### BL-06 — `/checklist` page with the free public checklist
-- **What**: A second route on the landing site at `/checklist` hosting the free Pre-Launch Checkup checklist. Same styling as main site. Includes a CTA at the bottom: "Want help running this? LaunchLook does it for $7."
+- **What**: A second route on the landing site at `/checklist` hosting the free Pre-Launch Checkup checklist. Same styling as main site. Includes a CTA at the bottom: "Want help running this? LaunchLook Starter Package from $9."
 - **Acceptance**: Page loads, mobile-responsive, full checklist visible, CTA links to home pricing.
 - **Who**: Cursor (Rob reviews copy)
 - **Effort**: 1 hour
@@ -83,9 +83,9 @@ Each item has:
 
 ### BL-08 — Notion report templates
 - **What**: Three master Notion templates Rob duplicates per customer:
-  - `Template — Starter` (5-7 findings structure)
-  - `Template — Launch` (full findings + Quick Start Guide section)
-  - `Template — follow-up` (full + follow-up section)
+  - `Template — Quick Checkup` (5-7 findings structure)
+  - `Template — Launch Pack` (full findings + Quick Start Guide section)
+  - `Template — Launch Pack + Polish` (full + follow-up section)
 - Each template includes:
   - Cover section (customer name, app, date, summary verdict)
   - Severity legend

@@ -17,25 +17,45 @@
       <a href="/" class="font-serif text-xl font-medium">LaunchLook</a>
     </div>
   </header>
-  <main class="max-w-3xl mx-auto px-6 py-16 sm:py-24 text-center">
-    <h1 class="font-serif text-3xl sm:text-4xl">You're in — one more step</h1>
-    <p class="mt-6 text-muted leading-relaxed max-w-prose mx-auto">
-      Thanks for your purchase. Fill out the short intake form so we can start your checkup. It takes about 3 minutes.
+  <main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+    <h1 class="font-serif text-3xl sm:text-4xl text-center">You're in — one more step</h1>
+    <p class="mt-6 text-muted leading-relaxed text-center max-w-prose mx-auto">
+      Thanks for your purchase. Complete the short intake so we can start your checkup (about 3 minutes).
     </p>
-    <a
-      id="intake-cta"
-      href="mailto:hello@launchlook.app?subject=LaunchLook%20intake%20help"
-      data-launchlook-intake
-      data-launchlook-keep-text
-      class="mt-10 inline-flex items-center justify-center px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition"
-    >
-      Complete intake form
-    </a>
-    <p id="intake-fallback" class="mt-4 text-sm text-muted hidden max-w-prose mx-auto">
-      Intake form link coming soon — email us your app URL and we'll start manually.
-    </p>
-    <p class="mt-8 text-sm text-muted">
-      Questions? Email <a href="mailto:hello@launchlook.app" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
+
+    <ol class="mt-8 max-w-md mx-auto space-y-3 text-sm text-muted">
+      <li class="flex gap-3"><span class="font-medium text-ink">1.</span><span>Submit intake (app URL, builder, what it does)</span></li>
+      <li class="flex gap-3"><span class="font-medium text-ink">2.</span><span>We review your live URL like a first-time visitor</span></li>
+      <li class="flex gap-3"><span class="font-medium text-ink">3.</span><span>You get a Notion report with fix prompts (24h Starter Package · 12h Launch)</span></li>
+    </ol>
+
+    <div class="mt-8 max-w-prose mx-auto rounded-lg border border-line bg-white/80 px-4 py-3 text-sm text-muted">
+      <p class="font-medium text-ink text-xs uppercase tracking-wide mb-2">Before you submit</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Do not send personal passwords, API keys, or Stripe/Supabase secrets.</li>
+        <li>Launch ($29) only: use <strong class="text-ink">temporary test accounts</strong>, not real users.</li>
+        <li>Submit credentials through the intake form only — not in a separate email.</li>
+      </ul>
+    </div>
+
+    <div class="mt-10 text-center">
+      <a
+        id="intake-cta"
+        href="mailto:hello@launchlook.app?subject=LaunchLook%20intake&body=App%20URL%3A%0A%0AOne-line%20description%3A%0A%0ABuilder%20(Lovable%2C%20Bolt%2C%20v0%2C%20Cursor%2C%20etc.)%3A%0A%0ATier%20purchased%20(Starter%20Package%20%2F%20Launch)%3A%0A"
+        data-launchlook-intake
+        data-launchlook-keep-text
+        class="inline-flex items-center justify-center px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition"
+      >
+        Complete intake form
+      </a>
+      <p id="intake-email-hint" class="mt-4 text-sm text-muted max-w-prose mx-auto hidden">
+        Prefer email? The button above opens a pre-filled message to <strong class="text-ink">hello@launchlook.app</strong> with what we need.
+      </p>
+    </div>
+
+    <p class="mt-10 text-sm text-muted text-center">
+      Questions? <a href="mailto:hello@launchlook.app" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
+      · <a href="/privacy" class="underline hover:text-ink">Privacy</a>
     </p>
   </main>
   <script src="/assets/config.js"></script>
@@ -45,11 +65,10 @@
     (function () {
       var cfg = window.LAUNCHLOOK_CONFIG || {};
       var btn = document.getElementById("intake-cta");
-      var fallback = document.getElementById("intake-fallback");
-      if (!cfg.intakeFormUrl && btn && fallback) {
-        btn.classList.add("opacity-50", "pointer-events-none");
-        btn.setAttribute("title", "Intake form URL not configured yet");
-        fallback.classList.remove("hidden");
+      var hint = document.getElementById("intake-email-hint");
+      if (!cfg.intakeFormUrl && hint) {
+        hint.classList.remove("hidden");
+        if (btn) btn.textContent = "Email your intake details";
       }
     })();
   </script>

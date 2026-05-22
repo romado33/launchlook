@@ -65,12 +65,12 @@ At day 60, evaluate:
 
 Critical: the quality bar matters more than the quantity. If 8 customers buy but only 2 report it as "useful," the product itself is wrong, not the marketing. Watch this signal carefully.
 
-## Why $7
+## Why Starter Package is $9 (updated from early $7 tests)
 
 - Impulse purchase range. Below conscious deliberation.
 - Lower than every direct competitor's entry tier.
 - Signals "low-stakes check," matching the friendly positioning.
-- Creates room for $29 and $59 upsells without sticker shock.
+- Creates room for Launch ($29) and email-quoted follow-ups without sticker shock.
 - Generates more customers per outreach attempt, accelerating learning.
 
 Counter-arguments and rebuttals:

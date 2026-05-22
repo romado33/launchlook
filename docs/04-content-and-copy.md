@@ -115,10 +115,10 @@ A: Yes, if it's accessible from the internet. Local URLs (localhost) won't work,
 5. **Who's your main user?** (1-2 sentences text, required)
 6. **What's the main thing they do in your app?** (1-2 sentences, required)
 7. **Which platform built it?** (radio: Lovable / Bolt / Base44 / Replit / v0 / Other)
-8. **Can we use test accounts? (Launch and up)** (yes / no — if yes, conditional fields below)
+8. **Can we use test accounts? (Launch Pack and up)** (yes / no — if yes, conditional fields below)
 9. **Test account 1 email + password** (only if "yes" above, conditional)
 10. **Test account 2 email + password** (only if "yes" above, conditional)
-11. **Your support email** (for the Quick Start Guide, Launch and up, conditional on tier)
+11. **Your support email** (for the Quick Start Guide, Launch Pack and up, conditional on tier)
 12. **Anything specific to check?** (textarea, optional)
 13. **How anxious are you about launching, 1-10?** (number 1-10, optional) *Tone-matching signal for the report.*
 
@@ -135,7 +135,7 @@ I saw you launched [app name] on [Lovable / Bolt / etc.] — looks really cool. 
 
 [Walk through 2-3 specific findings, with screen-share. Be friendly. Specifically point to the actual broken/placeholder thing.]
 
-So those are the three things I'd flag. There's probably a few more small ones — if you want, I do a full checkup for $7 with a fix list you can paste into [their platform]. Link in the message I sent.
+So those are the three things I'd flag. There's probably a few more small ones — if you want, I do a full Starter Package checkup for $9 with a fix list you can paste into [their platform]. Link in the message I sent.
 
 Either way, good luck with the launch — looks like a solid start.
 ```
@@ -183,7 +183,7 @@ Your checkup for [app name] is ready. Here's the link:
 A few notes:
 - The findings are ranked by severity. Start at the top.
 - Every finding has a copy-paste fix prompt for [their platform]. Just paste them in and let your builder fix it.
-- If you're at the Launch tier or above, the Quick Start Guide is in the second half of the report.
+- If you're at the Launch Pack tier or above, the Quick Start Guide is in the second half of the report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 
 If anything isn't clear, just reply to this email. I'll respond within a few hours.
@@ -211,7 +211,7 @@ Either way, thanks for trying this out.
 — Rob
 ```
 
-### Day-7 post-launch check-in (follow-up only)
+### Day-7 post-launch check-in (Launch Pack + Polish only)
 
 **Subject**: How did the launch go?
 
@@ -234,7 +234,7 @@ If you got user feedback you want me to look at, or if anything unexpected came 
 | Name | Title | Customer first name |
 | Email | Email | Matches Stripe purchase email |
 | App URL | URL | The app being checked |
-| Tier | Select | Starter / Launch / Polish |
+| Tier | Select | Quick Checkup / Launch Pack / Polish |
 | Payment Date | Date | When Stripe purchase landed |
 | Intake Received | Checkbox | Whether they filled the form |
 | Delivery Due | Date | Payment date + tier turnaround |
@@ -389,7 +389,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ### Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. $7StarterStarterStarter , $29 for a Launch that includes a Quick Start Guide for your users.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. **Starter Package $9** (includes Quick Start Guide) or **Launch $29** for a deeper pass and cross-user checks.
 
 ### License
 
