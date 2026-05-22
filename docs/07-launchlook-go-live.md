@@ -4,7 +4,8 @@ Use after `launchlook.app` is purchased. Repo may still live in a folder named `
 
 ## 1. DNS + Vercel
 
-- [ ] `cd landing && vercel --prod`
+- [ ] Vercel → **Settings → General → Root Directory**: leave **empty** (repo uses root `vercel.json` to copy `landing/` → `dist/`). If you set `landing` here, clear it or the site may 404.
+- [ ] Framework Preset: **Other** (static)
 - [ ] Vercel → Domains → add `launchlook.app` (+ `www` → redirect to apex)
 - [ ] Registrar DNS records match Vercel
 - [ ] Visit https://launchlook.app — landing loads

@@ -30,6 +30,9 @@ landing/assets/config.local.js
 *.key
 secrets/
 
+# Vercel build output (copy of landing/)
+dist/
+
 # Generated output (scans, screenshots, intermediate artifacts)
 output/
 !output/.gitkeep

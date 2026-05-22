@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node scripts/copy-landing-for-vercel.mjs",
+  "outputDirectory": "dist",
+  "framework": null,
+  "installCommand": ""
+}
