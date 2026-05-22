@@ -14,4 +14,5 @@ window.LAUNCHLOOK_CONFIG = {
     launchPack: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
   },
   githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
+  linkedinUrl: "", // e.g. https://www.linkedin.com/in/your-handle — shows in footer when set
 };

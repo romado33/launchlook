@@ -6,4 +6,5 @@ window.LAUNCHLOOK_CONFIG = Object.assign(window.LAUNCHLOOK_CONFIG || {}, {
     launch: "https://buy.stripe.com/YOUR_LAUNCH_29_LINK",
   },
   githubChecklist: "https://github.com/YOUR_HANDLE/launchlook-prelaunch-checklist",
+  linkedinUrl: "https://www.linkedin.com/in/YOUR_HANDLE",
 });

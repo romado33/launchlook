@@ -83,6 +83,18 @@
     });
   }
 
+  var linkedinUrl = safeHttpsUrl(cfg.linkedinUrl);
+  document.querySelectorAll("[data-launchlook-linkedin-wrap]").forEach(function (wrap) {
+    var link = wrap.querySelector("[data-launchlook-linkedin]");
+    if (!linkedinUrl || !link) {
+      wrap.classList.add("hidden");
+      return;
+    }
+    wrap.classList.remove("hidden");
+    link.setAttribute("href", linkedinUrl);
+    link.setAttribute("rel", "noopener noreferrer");
+  });
+
   var intakeUrl = safeIntakeUrl(cfg.intakeFormUrl);
   if (intakeUrl) {
     document.querySelectorAll("[data-launchlook-intake], [data-onceover-intake]").forEach(function (el) {
