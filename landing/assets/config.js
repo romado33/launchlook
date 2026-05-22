@@ -4,15 +4,12 @@
  */
 window.LAUNCHLOOK_CONFIG = {
   domain: "launchlook.app",
-  supportEmail: "hello@launchlook.app", // Site-wide mailto + thanks fallback; set Tally notifications to same inbox
+  supportEmail: "hello@launchlook.app",
   intakeFormUrl: "https://tally.so/r/9qodVE",
-  tallyThanksUrl: "https://tally.so/r/Y5xO5J", // After intake submit (set redirect in Tally form 9qodVE)
+  tallyThanksUrl: "https://tally.so/r/Y5xO5J",
   stripe: {
     starter: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
-    launch: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02", // Full Package tier ($29)
-    // Legacy keys (optional): quickCheckup → starter, launchPack → launch
-    quickCheckup: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
-    launchPack: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
+    launch: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
   },
   githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
   linkedinUrl: "https://www.linkedin.com/in/rob-dods/",

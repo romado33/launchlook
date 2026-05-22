@@ -1,14 +1,17 @@
 /**
- * Applies LAUNCHLOOK_CONFIG to data-launchlook-* (and legacy data-onceover-*) elements.
+ * Applies LAUNCHLOOK_CONFIG to data-launchlook-* elements.
  * Load after config.js and optional config.local.js.
  */
 (function () {
   var cfg = window.LAUNCHLOOK_CONFIG || {};
   var stripe = cfg.stripe || {};
   var starterUrl = stripe.starter || stripe.quickCheckup || "";
-  var launchUrl = stripe.launch || stripe.launchPack || "";
+  var launchUrl = stripe.launch || stripe.launchPack || stripe.full || "";
 
-  /** Block javascript: and other non-http(s) URLs if config is ever tampered with. */
+  function $(selector) {
+    return document.querySelectorAll(selector);
+  }
+
   function safeHttpsUrl(url) {
     if (!url || typeof url !== "string") return "";
     try {
@@ -32,42 +35,28 @@
     return "";
   }
 
-  function setHref(selector, url) {
-    if (!url) return;
-    document.querySelectorAll(selector).forEach(function (el) {
-      el.setAttribute("href", url);
-      el.classList.remove("opacity-50", "pointer-events-none");
-      el.removeAttribute("title");
-      el.removeAttribute("aria-disabled");
-    });
-  }
-
-  function markDisabled(selector, title) {
-    document.querySelectorAll(selector).forEach(function (el) {
+  function setLinkState(selector, url, disabledTitle) {
+    $(selector).forEach(function (el) {
+      if (url) {
+        el.setAttribute("href", url);
+        el.classList.remove("opacity-50", "pointer-events-none");
+        el.removeAttribute("title");
+        el.removeAttribute("aria-disabled");
+        return;
+      }
       el.setAttribute("href", "#");
       el.classList.add("opacity-50", "pointer-events-none");
-      el.setAttribute("title", title);
+      el.setAttribute("title", disabledTitle);
       el.setAttribute("aria-disabled", "true");
     });
   }
 
-  var stripeSelectors = {
-    starter: "[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick'], [data-onceover-stripe='starter'], [data-onceover-stripe='quick']",
-    launch: "[data-launchlook-stripe='launch'], [data-launchlook-stripe='full'], [data-onceover-stripe='launch']",
-  };
-
-  setHref(stripeSelectors.starter, safeHttpsUrl(starterUrl));
-  setHref(stripeSelectors.launch, safeHttpsUrl(launchUrl));
-  if (!starterUrl) {
-    markDisabled(stripeSelectors.starter, "Payment link not configured");
-  }
-  if (!launchUrl) {
-    markDisabled(stripeSelectors.launch, "Payment link not configured");
-  }
+  setLinkState("[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick']", safeHttpsUrl(starterUrl), "Payment link not configured");
+  setLinkState("[data-launchlook-stripe='launch'], [data-launchlook-stripe='full']", safeHttpsUrl(launchUrl), "Payment link not configured");
 
   var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
   if (checklistUrl) {
-    document.querySelectorAll("[data-launchlook-github='checklist'], [data-onceover-github='checklist']").forEach(function (el) {
+    $("[data-launchlook-github='checklist']").forEach(function (el) {
       el.setAttribute("href", checklistUrl);
       el.removeAttribute("aria-disabled");
     });
@@ -83,19 +72,19 @@
 
   if (cfg.supportEmail) {
     var mailto = "mailto:" + cfg.supportEmail;
-    document.querySelectorAll("[data-launchlook-email='support'], [data-onceover-email='support']").forEach(function (el) {
+    $("[data-launchlook-email='support']").forEach(function (el) {
       el.setAttribute("href", mailto);
       if (!el.getAttribute("data-launchlook-keep-text")) {
         el.textContent = cfg.supportEmail;
       }
     });
-    document.querySelectorAll("[data-launchlook-email-display]").forEach(function (el) {
+    $("[data-launchlook-email-display]").forEach(function (el) {
       el.textContent = cfg.supportEmail;
     });
   }
 
   var linkedinUrl = safeHttpsUrl(cfg.linkedinUrl);
-  document.querySelectorAll("[data-launchlook-linkedin-wrap]").forEach(function (wrap) {
+  $("[data-launchlook-linkedin-wrap]").forEach(function (wrap) {
     var link = wrap.querySelector("[data-launchlook-linkedin]");
     if (!linkedinUrl || !link) {
       wrap.classList.add("hidden");
@@ -107,7 +96,7 @@
   });
 
   var intakeUrl = safeIntakeUrl(cfg.intakeFormUrl);
-  var intakeEls = document.querySelectorAll("[data-launchlook-intake], [data-onceover-intake]");
+  var intakeEls = $("[data-launchlook-intake]");
   if (intakeUrl) {
     intakeEls.forEach(function (el) {
       el.setAttribute("href", intakeUrl);
@@ -120,7 +109,7 @@
       el.removeAttribute("title");
       el.removeAttribute("aria-disabled");
     });
-    document.querySelectorAll("[data-launchlook-intake-email-hint]").forEach(function (el) {
+    $("[data-launchlook-intake-email-hint]").forEach(function (el) {
       el.classList.add("hidden");
     });
   } else if (cfg.supportEmail) {
@@ -136,7 +125,7 @@
       el.removeAttribute("title");
       el.removeAttribute("aria-disabled");
     });
-    document.querySelectorAll("[data-launchlook-intake-email-hint]").forEach(function (el) {
+    $("[data-launchlook-intake-email-hint]").forEach(function (el) {
       el.classList.remove("hidden");
     });
   }
