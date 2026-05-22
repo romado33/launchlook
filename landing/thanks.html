@@ -24,22 +24,34 @@
     </p>
     <a
       id="intake-cta"
-      href="#"
+      href="mailto:hello@launchlook.app?subject=LaunchLook%20intake%20help"
       data-launchlook-intake
-      class="mt-10 inline-flex items-center justify-center px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition opacity-50 pointer-events-none"
-      title="Set intakeFormUrl in landing/assets/config.local.js"
+      data-launchlook-keep-text
+      class="mt-10 inline-flex items-center justify-center px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition"
     >
       Complete intake form
     </a>
+    <p id="intake-fallback" class="mt-4 text-sm text-muted hidden max-w-prose mx-auto">
+      Intake form link coming soon — email us your app URL and we'll start manually.
+    </p>
     <p class="mt-8 text-sm text-muted">
       Questions? Email <a href="mailto:hello@launchlook.app" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
-    </p>
-    <p class="mt-4 text-sm text-muted">
-      Set this page as your Stripe Payment Link success URL after you create the Tally form.
     </p>
   </main>
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
+  <script>
+    (function () {
+      var cfg = window.LAUNCHLOOK_CONFIG || {};
+      var btn = document.getElementById("intake-cta");
+      var fallback = document.getElementById("intake-fallback");
+      if (!cfg.intakeFormUrl && btn && fallback) {
+        btn.classList.add("opacity-50", "pointer-events-none");
+        btn.setAttribute("title", "Intake form URL not configured yet");
+        fallback.classList.remove("hidden");
+      }
+    })();
+  </script>
 </body>
 </html>
