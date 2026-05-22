@@ -7,6 +7,7 @@ Your checkup for {APP_NAME} is ready. Here's the link:
 {NOTION_REPORT_LINK}
 
 A few notes:
+- Written in plain English — you don't need to be technical to understand the findings.
 - The findings are ranked by severity. Start at the top.
 - Every finding has a copy-paste fix prompt for {PLATFORM}. Just paste them in and let your builder fix it.
 - Starter Package and Full Package include a Quick Start Guide in your report.
