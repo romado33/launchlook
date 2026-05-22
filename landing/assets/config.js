@@ -13,5 +13,5 @@ window.LAUNCHLOOK_CONFIG = {
     quickCheckup: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
     launchPack: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
   },
-  githubChecklist: "", // https://github.com/you/launchlook-prelaunch-checklist
+  githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
 };
