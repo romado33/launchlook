@@ -1,8 +1,8 @@
-# Onceover — Product Specification
+# LaunchLook — Product Specification
 
 ## The product
 
-Onceover is a paid pre-launch checkup service for vibe-coded web apps. A founder pays, sends their URL plus a short intake form, and receives a Notion page with:
+LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A founder pays, sends their URL plus a short intake form, and receives a Notion page with:
 
 - A summary verdict (overall ready / needs work / not ready)
 - A prioritized list of 5-10 findings (Critical / High / Medium / Low severity)

@@ -1,6 +1,6 @@
-# Onceover
+# LaunchLook
 
-A friendly pre-launch checkup for vibe-coded apps. Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. $7 to start.
+A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. $7 to start.
 
 > **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
 
@@ -15,22 +15,25 @@ If you (human or AI assistant) are about to touch any code in this repo, read th
 5. `docs/04-content-and-copy.md`
 6. `docs/05-technical-architecture.md`
 7. `docs/06-findings-library.md`
+8. `docs/07-launchlook-go-live.md` — DNS, Stripe, email after domain purchase
 
 The biggest risk to this project is over-building. The manual-first strategy is deliberate, not a placeholder for "real" engineering.
 
 ## Repo layout
 
 ```
-onceover/
-├── landing/             # Static landing page + /checklist (BL-05, BL-06)
+launchlook/
+├── landing/             # Static site: home, checklist, privacy, terms, thanks (BL-05, BL-06)
 │   └── images/
-├── scripts/             # Operational scripts (QSG, referral, follow-up, crawler)
+├── scripts/             # audit_checklist, findings_lookup, email_render, QSG, referral, follow-up
 ├── prompts/             # AI prompt files (Quick Start Guide etc.)
 │   └── examples/        # Worked input/output pairs for prompt tuning
 ├── templates/
 │   ├── notion/          # Notion report templates (Quick / Launch / Polish)
-│   └── email/           # Email templates (welcome, delivery, follow-ups)
-├── findings_library/    # The 35-finding seed library + future additions
+│   ├── email/           # Email templates (welcome, delivery, follow-ups)
+│   ├── qsg/             # HTML template for qsg_render.py (BL-10)
+│   └── examples/        # Sample reports (e.g. LiLo practice audit)
+├── findings_library/    # 38-finding seed library (JSON + CSV) + placeholder patterns
 ├── output/              # Generated artifacts — gitignored
 │   └── scans/
 ├── tests/               # Smoke tests
@@ -73,6 +76,19 @@ After installing `crawler`, also run `playwright install chromium`.
 Work is tracked in `docs/03-build-queue.md`. Tickets are referenced as **BL-XX** throughout this repo (in code comments, commit messages, file names).
 
 **Do not start BL-14 (Playwright crawler) or BL-15 (Notion auto-population) until customer 10 is reached.** This is a hard gate, not a guideline.
+
+## Operator quick reference
+
+```bash
+python scripts/audit_checklist.py              # 20-min audit steps
+python scripts/findings_lookup.py placeholder  # search findings library
+python scripts/email_render.py delivery --name X --app-name Y --report-link URL --platform Lovable
+python scripts/qsg_compose_prompt.py ...       # paste output into ChatGPT
+python scripts/qsg_render.py --input ...md --output ...html
+python scripts/notion_test.py --list-customers # after Notion is wired
+```
+
+Landing deploy: `cd landing && vercel --prod`. Stripe/Tally URLs: `landing/assets/config.local.js`.
 
 ## License
 

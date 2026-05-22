@@ -1,8 +1,8 @@
-# Onceover — Start Here
+# LaunchLook — Start Here
 
 ## What this is
 
-Onceover is a manual service (with growing automation) that gives non-technical founders a friendly pre-launch checkup of their vibe-coded apps. The founder pays $7, sends a URL, and gets back:
+LaunchLook is a manual service (with growing automation) that gives non-technical founders a friendly pre-launch checkup of their vibe-coded apps. The founder pays $7, sends a URL, and gets back:
 
 - A Notion report with 5-10 findings (broken stuff, placeholder content, missing trust pages)
 - Copy-paste fix prompts tailored to their AI builder
@@ -25,12 +25,13 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 
 - ✅ Product strategy defined (see `02-strategy-and-context.md`)
 - ✅ Pricing locked: $7 / $29 / $59 tiers
-- ✅ Name locked: Onceover
+- ✅ Name locked: LaunchLook
 - ✅ Findings library seeded with 35 entries (see `06-findings-library.md`)
 - ✅ Quick Start Guide prompt drafted (see `05-technical-architecture.md`)
 - ✅ Free public checklist drafted (see `04-content-and-copy.md`)
-- ❌ Domain not yet purchased (decide between onceover.app, onceover.io, onceover.co — check availability first)
-- ❌ Landing page not yet built
+- ✅ Domain purchased: **launchlook.app**
+- ✅ Landing page built (deploy to Vercel when ready — see `07-launchlook-go-live.md`)
+- ✅ Rebrand complete: Onceover → LaunchLook in repo
 - ❌ Stripe payment links not yet set up
 - ❌ Notion workspace not yet set up
 - ❌ Zero paying customers yet

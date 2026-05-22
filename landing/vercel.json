@@ -14,6 +14,9 @@
     }
   ],
   "redirects": [
-    { "source": "/checklist", "destination": "/checklist.html", "permanent": true }
+    { "source": "/checklist", "destination": "/checklist.html", "permanent": true },
+    { "source": "/privacy", "destination": "/privacy.html", "permanent": true },
+    { "source": "/terms", "destination": "/terms.html", "permanent": true },
+    { "source": "/thanks", "destination": "/thanks.html", "permanent": false }
   ]
 }

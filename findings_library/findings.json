@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "source": "docs/06-findings-library.md",
   "last_updated": "2026-05-20",
   "notes": "Source of truth for the 35 seeded findings. Sync from Notion back to this file as Rob adds/edits entries during real audits. Variables in {ALL_CAPS} are per-customer substitutions.",
@@ -574,6 +574,52 @@
         "lovable": "Remove the 'Built with Lovable' badge from the site. This is in the project settings under branding. (Note: requires a paid Lovable plan.)"
       },
       "notes": "Bolt/Base44 equivalents to be added when first observed."
+    },
+    {
+      "id": "FL-036",
+      "name": "Development tools visible on production URL",
+      "category": "Placeholders & forgotten content",
+      "severity": "Critical",
+      "detection": {
+        "type": "manual",
+        "description": "Visible dev bypass, seed data buttons, 'Developer Tools' sections, or 'for development purposes only' on published URL"
+      },
+      "explanation": "Your live site still shows development-only features — like a login bypass, sample data seeders, or internal admin tools. Anyone who visits will see them.",
+      "fix_prompts": {
+        "lovable": "Remove all development-only UI from the published site: Dev Bypass buttons, 'Seed Sample Data', 'Developer Tools' sections, and any 'for development purposes only' text. Wrap these components in a check so they only render when import.meta.env.DEV is true (local dev only), never on the lovable.app published URL.",
+        "generic": "Hide or remove all development and testing UI from the production deployment. Use environment-based conditionals so dev tools never render on the public URL."
+      },
+      "notes": "First observed on LiLo audit 2026-05-20."
+    },
+    {
+      "id": "FL-037",
+      "name": "Ratings displayed with zero reviews",
+      "category": "User experience",
+      "severity": "Medium",
+      "detection": {
+        "type": "manual",
+        "description": "Star rating shown alongside (0) reviews or zero review count"
+      },
+      "explanation": "Listings show a star rating (e.g. 4.5) but zero reviews. That combination reads as fake social proof.",
+      "fix_prompts": {
+        "generic": "When review count is 0, do not show a numeric star rating. Show 'New' or 'No reviews yet' instead. Only display average rating when at least 1 review exists. Apply on all cards and detail pages."
+      },
+      "notes": "Common on marketplace/demo listings with seeded data."
+    },
+    {
+      "id": "FL-038",
+      "name": "Primary CTA opens flow that cannot complete",
+      "category": "Broken functionality",
+      "severity": "High",
+      "detection": {
+        "type": "manual",
+        "description": "Main CTA (Book, Quick Book, Get Started) opens modal/page that dead-ends — disabled submit, empty slots, no explanation"
+      },
+      "explanation": "Your main action button (\"{BUTTON_NAME}\") opens a flow that cannot be completed — for example, no time slots, a disabled submit button, or no message explaining why.",
+      "fix_prompts": {
+        "generic": "The {BUTTON_NAME} flow on {PAGE} dead-ends: {SPECIFIC_BEHAVIOR_NEEDED}. Either wire up the missing backend/availability so users can complete the action, or hide/disable the CTA on items that are not bookable yet and show a clear message like 'No dates available — check back soon'."
+      },
+      "notes": "First observed: LiLo Quick Book with 'No available slots found'."
     }
   ]
 }

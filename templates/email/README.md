@@ -17,7 +17,7 @@ All transactional email copy lives here. One template per scenario. Variables in
 - Plain language. No marketing words (leverage, seamless, robust, etc.).
 - Second person, active voice. Short sentences.
 - Friendly, never condescending. Vibe coders are smart people, not beginners to talk down to.
-- Sign as "Rob" — not "the Onceover team."
+- Sign as "Rob" — not "the LaunchLook team."
 - One specific concrete ask per email. Don't bury the action.
 
 ## Forbidden words
@@ -32,8 +32,8 @@ For MVP, Rob substitutes manually before sending. Once BL-13 lands, the cron scr
 ## Sender setup (Resend)
 
 When ready:
-1. Add `onceover.app` as a verified domain in Resend
+1. Add `launchlook.app` as a verified domain in Resend
 2. Add SPF, DKIM, DMARC DNS records as Resend instructs
-3. Use sender: `Rob at Onceover <hello@onceover.app>`
-4. Set Reply-To: `hello@onceover.app`
+3. Use sender: `Rob at LaunchLook <hello@launchlook.app>`
+4. Set Reply-To: `hello@launchlook.app`
 5. Test deliverability to Gmail, Outlook, Apple Mail, ProtonMail before going live

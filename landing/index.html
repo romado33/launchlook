@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onceover — A friendly pre-launch checkup for your vibe-coded app</title>
+  <title>LaunchLook — One last look before you launch</title>
   <meta name="description" content="Send us your app's URL. We'll spot what your users will notice, write you a fix list you can paste into Lovable, and draft a one-page guide your users can actually read. From $7." />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Onceover — A friendly pre-launch checkup for your vibe-coded app" />
+  <meta property="og:title" content="LaunchLook — One last look before you launch" />
   <meta property="og:description" content="Send us your app's URL. We'll spot what your users will notice, write you a fix list you can paste into Lovable, and draft a one-page guide your users can actually read." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://onceover.app/" />
-  <meta property="og:image" content="https://onceover.app/images/og.png" />
+  <meta property="og:url" content="https://launchlook.app/" />
+  <meta property="og:image" content="https://launchlook.app/images/og.png" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Onceover — A friendly pre-launch checkup for your vibe-coded app" />
+  <meta name="twitter:title" content="LaunchLook — One last look before you launch" />
   <meta name="twitter:description" content="A friendly pre-launch checkup for vibe-coded apps. From $7." />
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%93%3C/text%3E%3C/svg%3E" />
@@ -65,7 +65,7 @@
   <!-- Header -->
   <header class="border-b border-line">
     <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
-      <a href="/" class="font-serif text-xl font-medium">Onceover</a>
+      <a href="/" class="font-serif text-xl font-medium">LaunchLook</a>
       <nav class="flex items-center gap-6 text-sm text-muted">
         <a href="#pricing" class="hover:text-ink">Pricing</a>
         <a href="#faq" class="hover:text-ink">FAQ</a>
@@ -76,9 +76,11 @@
 
   <!-- Hero -->
   <section class="max-w-3xl mx-auto px-6 pt-16 pb-12 sm:pt-24 sm:pb-20">
-    <h1 class="font-serif text-4xl sm:text-5xl leading-tight tracking-tight">
-      A friendly pre-launch checkup for your vibe-coded app.
+    <p class="text-sm font-medium text-accent uppercase tracking-wider">LaunchLook</p>
+    <h1 class="font-serif text-4xl sm:text-5xl leading-tight tracking-tight mt-2">
+      One last look before you launch.
     </h1>
+    <p class="mt-3 text-lg text-muted">A friendly pre-launch checkup for your vibe-coded app.</p>
     <p class="mt-6 text-lg text-muted leading-relaxed max-w-prose">
       Send us your app's URL. We'll spot what your users will notice, write you a fix list you can paste into Lovable, and draft a one-page guide your users can actually read.
     </p>
@@ -129,7 +131,7 @@
       <p class="text-muted mb-8 max-w-prose">Findings sorted by severity. Plain-English explanation of each. Copy-paste fix prompts that work in your builder. No jargon. No fear-mongering.</p>
       <div class="rounded-lg border border-line bg-white p-6 sm:p-10">
         <!-- Placeholder content until a real sample is screenshotted -->
-        <p class="font-serif text-lg mb-2">Onceover — Quick Checkup for <span class="text-muted">[Sample App]</span></p>
+        <p class="font-serif text-lg mb-2">LaunchLook — Quick Checkup for <span class="text-muted">[Sample App]</span></p>
         <p class="text-sm text-muted mb-6">🟡 Mostly ready to share, with 3 fixes first.</p>
 
         <div class="space-y-5 text-sm">
@@ -179,8 +181,7 @@
             <li>Copy-paste fix prompts</li>
             <li>24-hour turnaround</li>
           </ul>
-          <!-- TODO: replace with real Stripe Payment Link after BL-02 -->
-          <a href="https://buy.stripe.com/REPLACE_ME_QUICK_CHECKUP" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition">
+          <a href="#" data-launchlook-stripe="quick" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition opacity-50 pointer-events-none" title="Add Stripe link in landing/assets/config.local.js">
             Get my checkup — $7
           </a>
         </div>
@@ -199,7 +200,7 @@
             <li>12-hour turnaround</li>
             <li>Shareable report link</li>
           </ul>
-          <a href="https://buy.stripe.com/REPLACE_ME_LAUNCH_PACK" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-accent text-paper text-sm font-medium hover:bg-ink transition">
+          <a href="#" data-launchlook-stripe="launch" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-accent text-paper text-sm font-medium hover:bg-ink transition opacity-50 pointer-events-none" title="Add Stripe link in landing/assets/config.local.js">
             Get the Launch Pack — $29
           </a>
         </div>
@@ -215,7 +216,7 @@
             <li>7-day post-launch check-in</li>
             <li>Quick Start Guide touchups based on your feedback</li>
           </ul>
-          <a href="https://buy.stripe.com/REPLACE_ME_POLISH" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition">
+          <a href="#" data-launchlook-stripe="polish" class="mt-6 inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-ink text-paper text-sm font-medium hover:bg-accent transition opacity-50 pointer-events-none" title="Add Stripe link in landing/assets/config.local.js">
             Get Polish — $59
           </a>
         </div>
@@ -228,7 +229,7 @@
     <div class="max-w-3xl mx-auto px-6 py-16 sm:py-20">
       <h2 class="font-serif text-2xl sm:text-3xl mb-6">We're not a security scanner.</h2>
       <p class="text-muted leading-relaxed max-w-prose">There are good security scanners out there. We complement them.</p>
-      <p class="text-muted leading-relaxed max-w-prose mt-4">Onceover focuses on the stuff your users will actually notice — broken UI, leftover placeholders, missing pages, and the small inconsistencies that make an app feel unfinished. We also write you a one-page Quick Start Guide your users can actually read (in the Launch Pack and up).</p>
+      <p class="text-muted leading-relaxed max-w-prose mt-4">LaunchLook focuses on the stuff your users will actually notice — broken UI, leftover placeholders, missing pages, and the small inconsistencies that make an app feel unfinished. We also write you a one-page Quick Start Guide your users can actually read (in the Launch Pack and up).</p>
       <p class="text-muted leading-relaxed max-w-prose mt-4">If you want a deep security audit, we recommend <a class="underline hover:text-ink" href="https://vibeappscanner.com">VAS</a>. We focus on what visitors will see, not what hackers will probe.</p>
     </div>
   </section>
@@ -270,6 +271,10 @@
           <summary class="flex justify-between items-center font-medium">Can I run this on a private/staging URL?<span class="text-muted text-xl leading-none">+</span></summary>
           <p class="mt-3 text-muted leading-relaxed">Yes, if it's accessible from the internet. Local URLs (localhost) won't work, but staging URLs on services like Vercel, Netlify, or Lovable's preview URLs do.</p>
         </details>
+        <details class="py-5">
+          <summary class="flex justify-between items-center font-medium">How is this different from Lovable's SEO review?<span class="text-muted text-xl leading-none">+</span></summary>
+          <p class="mt-3 text-muted leading-relaxed">Lovable's built-in SEO scan helps search engines find you — metadata, sitemaps, Lighthouse scores. LaunchLook checks what a real person experiences: broken buttons, leftover dev tools on your live URL, placeholder host names, dead-end booking flows, missing privacy pages, and cross-user data leaks. Use both. They solve different problems.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -289,18 +294,21 @@
   <footer class="border-t border-line">
     <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
-        <p class="font-serif text-ink">Onceover</p>
+        <p class="font-serif text-ink">LaunchLook</p>
         <p class="mt-1">A friendly pre-launch checkup for vibe-coded apps.</p>
       </div>
       <ul class="flex flex-wrap gap-x-6 gap-y-2">
-        <li><a href="mailto:hello@onceover.app" class="hover:text-ink">hello@onceover.app</a></li>
+        <li><a href="mailto:hello@launchlook.app" class="hover:text-ink">hello@launchlook.app</a></li>
         <li><a href="/checklist.html" class="hover:text-ink">Free checklist</a></li>
         <li><a href="/privacy.html" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms.html" class="hover:text-ink">Terms</a></li>
-        <li><a href="https://github.com/REPLACE_ME/onceover-prelaunch-checklist" class="hover:text-ink">GitHub</a></li>
+        <li><a href="#" data-launchlook-github="checklist" class="hover:text-ink">GitHub</a></li>
       </ul>
     </div>
   </footer>
 
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
 </body>
 </html>

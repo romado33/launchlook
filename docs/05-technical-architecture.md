@@ -1,4 +1,4 @@
-# Onceover — Technical Architecture
+# LaunchLook — Technical Architecture
 
 ## Overall philosophy
 
@@ -43,7 +43,7 @@ Each `[Manual today, automated later]` step is a future build item, not a day-1 
 ## Repo structure (recommended)
 
 ```
-onceover/
+LaunchLook/
 ├── README.md
 ├── pyproject.toml
 ├── .env.example
@@ -89,7 +89,7 @@ The crawler is described in detail in `03-build-queue.md` (BL-14). Key principle
 - **Two-pass**: desktop (1920×1080) and mobile (375×812 viewports).
 - **Captures, doesn't judges**: outputs raw JSON for human curation.
 - **No persistence beyond scan**: deletes any captured credentials after each run.
-- **Polite**: respects robots.txt, rate-limits requests, identifies itself in User-Agent (`Onceover-Crawler/0.1`).
+- **Polite**: respects robots.txt, rate-limits requests, identifies itself in User-Agent (`LaunchLook-Crawler/0.1`).
 
 ### Crawler output schema
 
@@ -160,7 +160,7 @@ If none match, mark as `unknown`. Don't fail the scan.
 
 ```python
 """
-Onceover crawler — collects raw observations for manual curation.
+LaunchLook crawler — collects raw observations for manual curation.
 Does NOT make judgments. Output JSON gets reviewed in Notion.
 """
 
@@ -530,9 +530,9 @@ import resend
 
 resend.api_key = os.getenv("RESEND_API_KEY")
 
-def send_email(to, subject, body, from_email="hello@onceover.app"):
+def send_email(to, subject, body, from_email="hello@launchlook.app"):
     return resend.Emails.send({
-        "from": f"Rob at Onceover <{from_email}>",
+        "from": f"Rob at LaunchLook <{from_email}>",
         "to": to,
         "subject": subject,
         "text": body
@@ -549,12 +549,12 @@ Use Stripe's hosted Payment Links. Three per tier, all configured in Stripe dash
 - Launch Pack + Polish: $59 USD one-time
 
 Each Payment Link has:
-- Success URL: `https://onceover.app/intake?tier=quick&session_id={CHECKOUT_SESSION_ID}`
-- Cancel URL: `https://onceover.app`
+- Success URL: `https://launchlook.app/intake?tier=quick&session_id={CHECKOUT_SESSION_ID}`
+- Cancel URL: `https://launchlook.app`
 
 ### Webhooks
 
-Configure a webhook endpoint at `https://onceover.app/webhook/stripe`. Listen for:
+Configure a webhook endpoint at `https://launchlook.app/webhook/stripe`. Listen for:
 - `checkout.session.completed` — write to Notion Customers DB, send welcome email
 
 For MVP, can also poll Stripe API on a cron schedule instead of webhooks. Simpler.
@@ -607,8 +607,8 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 
 # Email
 RESEND_API_KEY=re_...
-FROM_EMAIL=hello@onceover.app
-ADMIN_EMAIL=rob@onceover.app
+FROM_EMAIL=hello@launchlook.app
+ADMIN_EMAIL=rob@launchlook.app
 
 # Playwright
 HEADLESS=true

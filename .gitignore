@@ -24,6 +24,7 @@ build/
 # Env and secrets — never commit
 .env
 .env.local
+landing/assets/config.local.js
 .env.*.local
 *.pem
 *.key

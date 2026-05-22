@@ -14,7 +14,7 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 - Mobile-friendly (Tally is by default)
 - Required vs. optional clearly marked
 - Conditional fields (test accounts, support email) only appear for Launch Pack and Polish tiers
-- Submit → thank-you screen → optional redirect to `https://onceover.app/thanks`
+- Submit → thank-you screen → optional redirect to `https://launchlook.app/thanks`
 - Tally → Notion integration writes each submission as a new row in the `Customers` database
 
 ## Fields (paste this into Tally's question editor)
@@ -116,7 +116,7 @@ Tally.so configuration for the post-purchase intake form. Tally is free, no-code
 After form is built:
 
 1. In Tally form settings → **Integrations** → **Notion**
-2. Connect Tally's Notion integration to the `Onceover Ops` workspace
+2. Connect Tally's Notion integration to the `LaunchLook Ops` workspace
 3. Map each Tally field to the matching column in the `Customers` database
 4. Test by submitting the form yourself — verify a row appears in Notion
 
@@ -124,14 +124,14 @@ After form is built:
 
 In Tally form settings → **Notifications**:
 
-- Email **rob@onceover.app** on every submission
+- Email **rob@launchlook.app** on every submission
 - Include all answers in the email body so Rob can start auditing without opening the form
 
 ## Privacy / data retention
 
 Add this line to the thank-you screen:
 
-> Your responses are stored privately in Onceover's internal workspace. Test account credentials are deleted within 24 hours of the audit. See [our privacy policy](https://onceover.app/privacy) for details.
+> Your responses are stored privately in LaunchLook's internal workspace. Test account credentials are deleted within 24 hours of the audit. See [our privacy policy](https://launchlook.app/privacy) for details.
 
 ## Future automation (not MVP)
 

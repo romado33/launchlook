@@ -4,7 +4,7 @@ referral_create.py — BL-12
 Create a Stripe coupon code per customer and write it back to the Notion
 Customers database. Pattern: {FIRST_NAME}5 (random suffix if name collides).
 
-Coupon: $5 off, one-time use, applies to any of the three Onceover products.
+Coupon: $5 off, one-time use, applies to any of the three LaunchLook products.
 
 Usage:
     python scripts/referral_create.py --customer-id <notion_page_id>
@@ -72,7 +72,7 @@ def create_stripe_coupon(code: str, first_name: str, email: str | None) -> str:
         amount_off=COUPON_AMOUNT_OFF_CENTS,
         currency="usd",
         duration=COUPON_DURATION,
-        name=f"Onceover referral — {first_name}",
+        name=f"LaunchLook referral — {first_name}",
         max_redemptions=10,
         metadata={
             "referrer_first_name": first_name,

@@ -4,7 +4,7 @@ A free, comprehensive checklist for anyone about to share their Lovable / Bolt /
 
 Go through this list before you launch. Fix what you can. The stuff you can't fix yourself, hire help for — but don't ship without checking.
 
-Maintained by [Onceover](https://onceover.app). Free to copy, fork, share.
+Maintained by [LaunchLook](https://launchlook.app). Free to copy, fork, share.
 
 ---
 
@@ -131,7 +131,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ## Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [Onceover](https://onceover.app) does. $7 for a Quick Checkup, $29 for a Launch Pack that includes a Quick Start Guide for your users.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. $7 for a Quick Checkup, $29 for a Launch Pack that includes a Quick Start Guide for your users.
 
 ---
 

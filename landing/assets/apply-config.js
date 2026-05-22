@@ -1,0 +1,43 @@
+/**
+ * Applies LAUNCHLOOK_CONFIG to data-launchlook-* elements on the page.
+ * Load after config.js (and optional config.local.js).
+ */
+(function () {
+  var cfg = window.LAUNCHLOOK_CONFIG || {};
+  var stripe = cfg.stripe || {};
+
+  function setHref(selector, url) {
+    if (!url) return;
+    document.querySelectorAll(selector).forEach(function (el) {
+      el.setAttribute("href", url);
+      el.classList.remove("opacity-50", "pointer-events-none");
+      el.removeAttribute("title");
+    });
+  }
+
+  setHref("[data-launchlook-stripe='quick']", stripe.quickCheckup);
+  setHref("[data-launchlook-stripe='launch']", stripe.launchPack);
+  setHref("[data-launchlook-stripe='polish']", stripe.polish);
+
+  if (cfg.githubChecklist) {
+    document.querySelectorAll("[data-launchlook-github='checklist']").forEach(function (el) {
+      el.setAttribute("href", cfg.githubChecklist);
+    });
+  }
+
+  if (cfg.supportEmail) {
+    document.querySelectorAll("[data-launchlook-email='support']").forEach(function (el) {
+      var mailto = "mailto:" + cfg.supportEmail;
+      el.setAttribute("href", mailto);
+      if (el.textContent.indexOf("@") === -1 && !el.getAttribute("data-launchlook-keep-text")) {
+        el.textContent = cfg.supportEmail;
+      }
+    });
+  }
+
+  if (cfg.intakeFormUrl) {
+    document.querySelectorAll("[data-launchlook-intake]").forEach(function (el) {
+      el.setAttribute("href", cfg.intakeFormUrl);
+    });
+  }
+})();

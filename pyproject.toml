@@ -1,5 +1,5 @@
 [project]
-name = "onceover"
+name = "launchlook"
 version = "0.1.0"
 description = "A friendly pre-launch checkup for vibe-coded apps."
 readme = "README.md"

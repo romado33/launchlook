@@ -1,13 +1,18 @@
 # Scripts
 
-Operational scripts for Onceover. All written for Python 3.11+. None are required for the first audits — manual workflow first.
+Operational scripts for LaunchLook. All written for Python 3.11+. None are required for the first audits — manual workflow first.
 
 ## When to use each
 
 | Script | BL ID | Status | When to first run |
 |--------|-------|--------|-------------------|
+| `audit_checklist.py` | — | ready | Start of every manual audit |
+| `findings_lookup.py` | — | ready | During write-up — search library |
+| `email_render.py` | — | ready | Before sending any transactional email |
 | `qsg_compose_prompt.py` | BL-09 | ready | First Launch Pack customer |
+| `qsg_render.py` | BL-10 | ready | After QSG edited in ChatGPT |
 | `qsg_generate.py` | BL-09 v2 | skeleton — needs API key | When you decide to automate QSG generation |
+| `notion_test.py` | BL-04 | ready | After Notion workspace + token set up |
 | `referral_create.py` | BL-12 | skeleton — needs Stripe + Notion keys | First customer to deliver |
 | `followup_send.py` | BL-13 | skeleton — needs Notion + Resend keys | First customer to deliver + 3 days |
 | `crawler.py` (TODO) | BL-14 | NOT BUILT | After customer 10 — hard gate |

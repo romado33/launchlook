@@ -46,7 +46,7 @@ Use `templates/notion/report-quick-checkup.md` as the template. Duplicate it in 
    - Check for horizontal scroll, small text, tiny buttons.
 
 3. **Signup pass** (10 min)
-   - Sign up with `onceovertest+{app_name}@gmail.com` (Gmail aliases work)
+   - Sign up with `launchlooktest+{app_name}@gmail.com` (Gmail aliases work)
    - Wait for confirmation email. Note if it never arrives.
    - Log in. Screenshot dashboard.
    - Click every nav item. Note empty states.

@@ -65,7 +65,12 @@ Paste Markdown into the Notion Launch Pack report + send HTML link
    - UI labels that don't match what's actually in the app → fix.
    - Sentences over 20 words → shorten.
 9. Paste the edited Markdown into the Notion Launch Pack report (Part 2).
-10. (BL-10, future) Render to HTML for embedding.
+10. Render to HTML for embedding:
+
+    ```bash
+    python scripts/qsg_render.py --input output/scans/{customer}/quickstart.md \\
+        --output output/scans/{customer}/quickstart.html --app-name "TaskRoom"
+    ```
 
 ## How to use (API-automated workflow — future)
 

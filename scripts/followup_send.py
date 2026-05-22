@@ -23,8 +23,8 @@ Requires in .env:
     NOTION_TOKEN
     NOTION_CUSTOMERS_DB_ID
     RESEND_API_KEY
-    FROM_EMAIL (default: hello@onceover.app)
-    ADMIN_EMAIL (default: rob@onceover.app, BCC for visibility)
+    FROM_EMAIL (default: hello@launchlook.app)
+    ADMIN_EMAIL (default: rob@launchlook.app, BCC for visibility)
 """
 
 from __future__ import annotations
@@ -154,11 +154,11 @@ def send_email(to: str, subject: str, body: str, dry_run: bool = False) -> None:
         sys.exit("ERROR: resend package not installed. Run: pip install -e \".\"")
 
     resend.api_key = require_env("RESEND_API_KEY")
-    from_email = os.getenv("FROM_EMAIL", "hello@onceover.app")
+    from_email = os.getenv("FROM_EMAIL", "hello@launchlook.app")
     admin_email = os.getenv("ADMIN_EMAIL")
 
     payload = {
-        "from": f"Rob at Onceover <{from_email}>",
+        "from": f"Rob at LaunchLook <{from_email}>",
         "to": [to],
         "subject": subject,
         "text": body,

@@ -1,6 +1,6 @@
-# Onceover — Findings Library
+# LaunchLook — Findings Library
 
-This is the master reference of every issue type Onceover checks for. Used by Rob during manual audits and by the eventual scanner to look up detection patterns and fix prompts.
+This is the master reference of every issue type LaunchLook checks for. Used by Rob during manual audits and by the eventual scanner to look up detection patterns and fix prompts.
 
 Stored as: Notion database `Findings Library` with one entry per finding. This document is the source of truth; sync from here to Notion (or vice versa) — but Notion is what Rob uses day-to-day.
 

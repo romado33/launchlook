@@ -1,4 +1,4 @@
-Subject: Your Onceover checkup is ready
+Subject: Your LaunchLook checkup is ready
 
 Hi {NAME},
 

@@ -2,7 +2,7 @@ Subject: Got it — checkup for {APP_NAME} coming in {TURNAROUND}
 
 Hi {NAME},
 
-Thanks for trusting Onceover with {APP_NAME}. I'll have your checkup ready in {TURNAROUND} from now.
+Thanks for trusting LaunchLook with {APP_NAME}. I'll have your checkup ready in {TURNAROUND} from now.
 
 To get started, please fill out the short intake form here:
 {INTAKE_FORM_LINK}
@@ -11,7 +11,7 @@ It takes about 3 minutes. The more context you give me, the more useful the repo
 
 Talk soon,
 Rob
-hello@onceover.app
+hello@launchlook.app
 
 ---
 Variables:

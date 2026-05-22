@@ -1,4 +1,4 @@
-# Onceover — Strategy and Context
+# LaunchLook — Strategy and Context
 
 ## Why this product exists
 
@@ -31,7 +31,7 @@ These competitors share three weaknesses:
 
 3. **They have no documentation generation.** Nobody is generating user-facing Quick Start Guides for vibe-coded apps. CodeGuide targets developer-facing docs, which is a different problem.
 
-Onceover wedges into all three gaps simultaneously, while staying out of the security competitors' direct path. We complement them.
+LaunchLook wedges into all three gaps simultaneously, while staying out of the security competitors' direct path. We complement them.
 
 ## Why manual-first
 
@@ -53,7 +53,7 @@ Manual-first also matches the constraint: 5 hours/week is enough to deliver 3-4 
 
 **Superhuman** did 1:1 onboarding calls for years. Founders personally got customers up and running.
 
-The pattern: do unscalable things first, learn what's actually valuable, then automate. Onceover follows this pattern deliberately.
+The pattern: do unscalable things first, learn what's actually valuable, then automate. LaunchLook follows this pattern deliberately.
 
 ## The 60-day decision point
 

@@ -1,10 +1,10 @@
 # Notion templates
 
-Files Rob imports into Notion to set up the `Onceover Ops` workspace (BL-03).
+Files Rob imports into Notion to set up the `LaunchLook Ops` workspace (BL-03).
 
 ## Order of setup
 
-1. Create a new Notion workspace called **Onceover Ops** (free tier is fine).
+1. Create a new Notion workspace called **LaunchLook Ops** (free tier is fine).
 2. Inside it, create these as **full-page databases**:
    - `Customers` — import `customers-db.csv`
    - `Outreach Tracker` — import `outreach-db.csv`

@@ -1,4 +1,4 @@
-# Onceover — Build Queue
+# LaunchLook — Build Queue
 
 This is the prioritized list of things to build. Items are ordered by dependency and impact. Do not skip ahead.
 
@@ -13,8 +13,8 @@ Each item has:
 ## Phase 0 — Setup (days 1-3)
 
 ### BL-01 — Domain and infrastructure setup
-- **What**: Buy `onceover.app` (or fallback to `.io` or `.co` if taken). Set up DNS pointing to landing page host.
-- **Acceptance**: Domain resolves, points to landing page placeholder.
+- **What**: ~~Buy `launchlook.app`~~ ✅ Purchased. Set up DNS pointing to Vercel (landing host).
+- **Acceptance**: Domain resolves to production landing (`launchlook.app`, optional `www` redirect).
 - **Who**: Rob
 - **Effort**: 30 minutes
 - **Depends on**: nothing
@@ -27,7 +27,7 @@ Each item has:
 - **Depends on**: nothing
 
 ### BL-03 — Notion workspace setup
-- **What**: Create Notion workspace `Onceover Ops`. Inside it:
+- **What**: Create Notion workspace `LaunchLook Ops`. Inside it:
   - `Customers` database (name, email, app URL, tier, payment date, delivery date, status, follow-up status, referral code, notes)
   - `Findings Library` database (seeded from `06-findings-library.md`)
   - `Report Templates` page (one for each tier — Cursor builds these in BL-08)
@@ -66,7 +66,7 @@ Each item has:
 - **Depends on**: BL-01, BL-02
 
 ### BL-06 — `/checklist` page with the free public checklist
-- **What**: A second route on the landing site at `/checklist` hosting the free Pre-Launch Checkup checklist. Same styling as main site. Includes a CTA at the bottom: "Want help running this? Onceover does it for $7."
+- **What**: A second route on the landing site at `/checklist` hosting the free Pre-Launch Checkup checklist. Same styling as main site. Includes a CTA at the bottom: "Want help running this? LaunchLook does it for $7."
 - **Acceptance**: Page loads, mobile-responsive, full checklist visible, CTA links to home pricing.
 - **Who**: Cursor (Rob reviews copy)
 - **Effort**: 1 hour
@@ -170,8 +170,8 @@ Each item has:
 ## Phase 5 — Open-source checklist publishing (day 7)
 
 ### BL-16 — GitHub repo for free checklist
-- **What**: Create public GitHub repo `onceover-prelaunch-checklist`. README is the full checklist (from `04-content-and-copy.md`). License: CC-BY or similar permissive. Link from Onceover footer.
-- **Acceptance**: Repo public, README renders correctly, license file present, link from Onceover landing footer.
+- **What**: Create public GitHub repo `launchlook-prelaunch-checklist`. README is the full checklist (from `04-content-and-copy.md`). License: CC-BY or similar permissive. Link from LaunchLook footer.
+- **Acceptance**: Repo public, README renders correctly, license file present, link from LaunchLook landing footer.
 - **Who**: Cursor (Rob reviews)
 - **Effort**: 30 minutes
 - **Depends on**: BL-05

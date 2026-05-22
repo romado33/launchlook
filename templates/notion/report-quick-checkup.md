@@ -1,6 +1,6 @@
-# Onceover — Quick Checkup for {APP_NAME}
+# LaunchLook — Quick Checkup for {APP_NAME}
 
-> **Tier:** Quick Checkup ($7) · **Delivered:** {DATE} · **By:** Rob at Onceover
+> **Tier:** Quick Checkup ($7) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
 ---
 
@@ -119,4 +119,4 @@ Your code: **{REFERRAL_CODE}**
 
 ---
 
-*Onceover · A friendly pre-launch checkup for vibe-coded apps · hello@onceover.app*
+*LaunchLook · A friendly pre-launch checkup for vibe-coded apps · hello@launchlook.app*

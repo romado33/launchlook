@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title }} — Quick Start Guide</title>
+  <style>
+    :root {
+      --ink: #1F1B16;
+      --muted: #6B6359;
+      --paper: #FAF7F2;
+      --line: #E7E0D6;
+      --accent: {{ primary_color | default('#B45309') }};
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.65;
+      margin: 0;
+      padding: 2rem 1.25rem 3rem;
+    }
+    .wrap { max-width: 40rem; margin: 0 auto; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.5rem; line-height: 1.2; }
+    h2 {
+      font-size: 1.15rem;
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--line);
+    }
+    p, li { font-family: system-ui, -apple-system, sans-serif; color: var(--muted); font-size: 1rem; }
+    li { margin: 0.35rem 0; }
+    ol, ul { padding-left: 1.25rem; }
+    strong { color: var(--ink); }
+    a { color: var(--accent); }
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      font-family: system-ui, sans-serif;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .reviewer {
+      background: #FEF3C7;
+      border-left: 3px solid var(--accent);
+      padding: 0.5rem 0.75rem;
+      margin: 0.75rem 0;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {{ body_html | safe }}
+    <p class="footer">Quick Start Guide prepared by LaunchLook · {{ generated_date }}</p>
+  </div>
+</body>
+</html>

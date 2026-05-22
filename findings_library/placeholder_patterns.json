@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "description": "Regex patterns for BL-14 crawler and manual audit grep. Maps pattern id to findings_library id where applicable.",
+  "patterns": [
+    { "id": "generic_company_name", "regex": "your\\s+(company|business|brand|app|product)\\s+name", "flags": "i", "finding_id": "FL-001" },
+    { "id": "lorem_ipsum", "regex": "lorem\\s+ipsum|consectetur\\s+adipiscing", "flags": "i", "finding_id": "FL-002" },
+    { "id": "bracket_placeholder", "regex": "\\[insert\\s+\\w+|\\[your\\s+\\w+|\\[add\\s+\\w+", "flags": "i", "finding_id": "FL-004" },
+    { "id": "todo_comment", "regex": "\\bTODO\\b|\\bFIXME\\b", "flags": "", "finding_id": "FL-005" },
+    { "id": "placeholder_email", "regex": "(support|hello|info|contact)@(example|yourdomain|domain|test)\\.com", "flags": "i", "finding_id": "FL-006" },
+    { "id": "acme_placeholder", "regex": "\\bacme\\b|example\\s+(corp|inc|company|llc)", "flags": "i", "finding_id": "FL-007" },
+    { "id": "coming_soon", "regex": "coming\\s+soon", "flags": "i", "finding_id": null },
+    { "id": "literal_placeholder", "regex": "\\bplaceholder\\b", "flags": "i", "finding_id": null },
+    { "id": "local_host", "regex": "hosted by local host|local host", "flags": "i", "finding_id": null },
+    { "id": "dev_bypass", "regex": "dev bypass|skip login|for development purposes only", "flags": "i", "finding_id": "FL-036" },
+    { "id": "seed_sample_data", "regex": "seed sample data|development data seeder|developer tools", "flags": "i", "finding_id": "FL-036" }
+  ],
+  "trust_pages": ["/privacy", "/privacy-policy", "/terms", "/terms-of-service", "/contact", "/about"],
+  "protected_routes": ["/dashboard", "/admin", "/settings", "/profile", "/account"]
+}

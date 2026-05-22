@@ -1,4 +1,4 @@
-# Onceover — Content and Copy
+# LaunchLook — Content and Copy
 
 All writing artifacts. Use this verbatim unless explicitly approved to change by Rob.
 
@@ -6,10 +6,15 @@ All writing artifacts. Use this verbatim unless explicitly approved to change by
 
 ### Hero section
 
+**Eyebrow**: LaunchLook
+
 **Headline**:
+One last look before you launch.
+
+**Subheadline (supporting)**:
 A friendly pre-launch checkup for your vibe-coded app.
 
-**Subheadline**:
+**Body**:
 Send us your app's URL. We'll spot what your users will notice, write you a fix list you can paste into Lovable, and draft a one-page guide your users can actually read.
 
 **CTAs**:
@@ -68,7 +73,7 @@ A one-page guide your users can actually read. Written in plain language, format
 
 There are good security scanners out there. We complement them.
 
-Onceover focuses on the stuff your users will actually notice — broken UI, leftover placeholders, missing pages, and the small inconsistencies that make an app feel unfinished. We also write you a one-page Quick Start Guide your users can actually read (in the Launch Pack and up).
+LaunchLook focuses on the stuff your users will actually notice — broken UI, leftover placeholders, missing pages, and the small inconsistencies that make an app feel unfinished. We also write you a one-page Quick Start Guide your users can actually read (in the Launch Pack and up).
 
 If you want a deep security audit, we recommend [VAS](https://vibeappscanner.com). We focus on what visitors will see, not what hackers will probe.
 
@@ -100,11 +105,11 @@ A: Yes, if it's accessible from the internet. Local URLs (localhost) won't work,
 
 ### Footer
 
-- Email: hello@onceover.app
+- Email: hello@launchlook.app
 - Free checklist: /checklist
 - Privacy: /privacy
 - Terms: /terms
-- GitHub: link to onceover-prelaunch-checklist repo
+- GitHub: link to launchlook-prelaunch-checklist repo
 
 ---
 
@@ -133,7 +138,7 @@ A: Yes, if it's accessible from the internet. Local URLs (localhost) won't work,
 This is a template. Adapt to each prospect. Keep under 90 seconds.
 
 ```
-Hey [name], I'm Rob — I run a small thing called Onceover that does pre-launch checkups for vibe-coded apps.
+Hey [name], I'm Rob — I run a small thing called LaunchLook that does pre-launch checkups for vibe-coded apps.
 
 I saw you launched [app name] on [Lovable / Bolt / etc.] — looks really cool. I poked at it for about 10 minutes and wanted to send you a couple of things I noticed that you might want to fix before sharing it more widely.
 
@@ -161,7 +166,7 @@ Notes:
 ```
 Hi [name],
 
-Thanks for trusting Onceover with [app name]. I'll have your checkup ready in [24 hours / 12 hours / 12 hours] from now.
+Thanks for trusting LaunchLook with [app name]. I'll have your checkup ready in [24 hours / 12 hours / 12 hours] from now.
 
 To get started, please fill out the short intake form here:
 [INTAKE FORM LINK]
@@ -170,12 +175,12 @@ It takes about 3 minutes. The more context you give me, the more useful the repo
 
 Talk soon,
 Rob
-hello@onceover.app
+hello@launchlook.app
 ```
 
 ### Delivery email
 
-**Subject**: Your Onceover checkup is ready
+**Subject**: Your LaunchLook checkup is ready
 
 ```
 Hi [name],
@@ -274,7 +279,7 @@ If you got user feedback you want me to look at, or if anything unexpected came 
 >
 > Go through this list before you launch. Fix what you can. The stuff you can't fix yourself, hire help for — but don't ship without checking.
 >
-> *Maintained by [Onceover](https://onceover.app). Free to copy, fork, share.*
+> *Maintained by [LaunchLook](https://launchlook.app). Free to copy, fork, share.*
 
 ### How to use this checklist
 
@@ -393,7 +398,7 @@ If any of those answers are bad, fix the underlying issues before launching.
 
 ### Want help running this?
 
-This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [Onceover](https://onceover.app) does. $7 for a Quick Checkup, $29 for a Launch Pack that includes a Quick Start Guide for your users.
+This checklist is free to use yourself. If you'd rather have someone else run it for you and hand you back a fix list with copy-paste prompts for your AI builder, that's what [LaunchLook](https://launchlook.app) does. $7 for a Quick Checkup, $29 for a Launch Pack that includes a Quick Start Guide for your users.
 
 ### License
 
@@ -403,7 +408,7 @@ This checklist is free to use, copy, fork, and republish. Attribution appreciate
 
 ## Voice and tone reminders
 
-When writing anything for Onceover, ask:
+When writing anything for LaunchLook, ask:
 
 - Would a non-technical founder understand this immediately?
 - Did I use any marketing words? (leverage, seamless, robust, cutting-edge, innovative, streamline — strike them)

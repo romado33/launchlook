@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thanks for your purchase — LaunchLook</title>
+  <meta name="robots" content="noindex" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','system-ui'], serif: ['Fraunces','Georgia'] }, colors: { paper: '#FAF7F2', ink: '#1F1B16', muted: '#6B6359', accent: '#B45309', line: '#E7E0D6' } } } };
+  </script>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+  <header class="border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-5">
+      <a href="/" class="font-serif text-xl font-medium">LaunchLook</a>
+    </div>
+  </header>
+  <main class="max-w-3xl mx-auto px-6 py-16 sm:py-24 text-center">
+    <h1 class="font-serif text-3xl sm:text-4xl">You're in — one more step</h1>
+    <p class="mt-6 text-muted leading-relaxed max-w-prose mx-auto">
+      Thanks for your purchase. Fill out the short intake form so we can start your checkup. It takes about 3 minutes.
+    </p>
+    <a
+      id="intake-cta"
+      href="#"
+      data-launchlook-intake
+      class="mt-10 inline-flex items-center justify-center px-6 py-3 rounded-md bg-ink text-paper font-medium hover:bg-accent transition opacity-50 pointer-events-none"
+      title="Set intakeFormUrl in landing/assets/config.local.js"
+    >
+      Complete intake form
+    </a>
+    <p class="mt-8 text-sm text-muted">
+      Questions? Email <a href="mailto:hello@launchlook.app" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
+    </p>
+    <p class="mt-4 text-sm text-muted">
+      Set this page as your Stripe Payment Link success URL after you create the Tally form.
+    </p>
+  </main>
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
+</body>
+</html>

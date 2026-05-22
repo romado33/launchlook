@@ -1,6 +1,6 @@
-# Onceover — Launch Pack + Polish for {APP_NAME}
+# LaunchLook — Launch Pack + Polish for {APP_NAME}
 
-> **Tier:** Launch Pack + Polish ($59) · **Initial delivery:** {DATE} · **By:** Rob at Onceover
+> **Tier:** Launch Pack + Polish ($59) · **Initial delivery:** {DATE} · **By:** Rob at LaunchLook
 
 ---
 
@@ -76,4 +76,4 @@ Your code: **{REFERRAL_CODE}**
 
 ---
 
-*Onceover · A friendly pre-launch checkup for vibe-coded apps · hello@onceover.app*
+*LaunchLook · A friendly pre-launch checkup for vibe-coded apps · hello@launchlook.app*
