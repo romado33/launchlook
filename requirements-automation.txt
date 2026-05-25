@@ -1,0 +1,26 @@
+# LaunchLook - Tier 1 automation dependencies.
+#
+# Kept separate from requirements.txt (which is owned by the PDF delivery
+# pipeline) so the two work streams do not collide. Consolidate later.
+#
+# Install with:
+#     pip install -r requirements-automation.txt
+#     playwright install chromium
+#
+# Vercel installs these automatically when api/*.py is detected,
+# but the entrypoint also relies on requirements.txt being present.
+
+# Notion writes (webhooks + script customer loader)
+notion-client>=2.2,<3.0
+
+# Stripe signature verification for the webhook
+stripe>=10.0,<13.0
+
+# Loads .env locally; harmless on Vercel where envs come from the platform
+python-dotenv>=1.0,<2.0
+
+# Pre-review tools (screenshots + html crawl for findings prescreener)
+playwright>=1.40,<2.0
+
+# Used by the screenshot index page; the PDF worker also pulls this in
+jinja2>=3.1,<4.0
