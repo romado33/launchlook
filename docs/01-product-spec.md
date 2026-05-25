@@ -27,7 +27,7 @@ Used by: founders about to share a link and want a fast sanity check plus user-f
 ### Full Package — $29
 
 - Everything in Starter Package, plus:
-- Up to 15 findings (deeper pass — not unlimited)
+- Up to 20 findings (deeper pass — not unlimited)
 - Cross-user data check (with two test accounts the founder provides)
 - 12-hour turnaround
 - Shareable Notion link they can send to teammates

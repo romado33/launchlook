@@ -34,7 +34,7 @@ You get **{N} findings**, a **Quick Start Guide** for your users, and a **follow
 
 # Part 1 — Findings
 
-(Same structure as Launch Pack template. 10–15 findings, severity-sorted, each with screenshot + why-it-matters + fix prompt.)
+(Same structure as Launch Pack template. 10–20 findings, severity-sorted, each with screenshot + why-it-matters + fix prompt.)
 
 ---
 

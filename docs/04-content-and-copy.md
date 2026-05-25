@@ -59,7 +59,7 @@ Cross-user data check: **Full Package ($29)** only.
 
 **Full Package ($29)** *(deeper pass)*
 - Everything in Starter, plus:
-- Up to 15 findings (deeper pass)
+- Up to 20 findings (deeper pass)
 - Cross-user data check (two test accounts)
 - Shareable report link
 - 12-hour delivery

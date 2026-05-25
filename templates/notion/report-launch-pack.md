@@ -58,7 +58,7 @@ This report has **{N} findings** (most important first) and a **Quick Start Guid
 
 ---
 
-(repeat for each finding: Critical → High → Medium → Low; up to 15 total)
+(repeat for each finding: Critical → High → Medium → Low; up to 20 total)
 
 ---
 
