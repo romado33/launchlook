@@ -59,7 +59,7 @@ That's the only number that matters right now. Three paying strangers proves the
 ### Reality check: what proven from research
 
 - **Demand is real and self-initiated.** The Lovable Discord already builds free peer tools (Testers Helping Testers) and reaches for Claude + MCP. Nobody in those communities is currently selling a paid, structured, plain-English pre-launch pass. The wedge is open.
-- **Competing positioning to avoid:** "AI scanner," "security audit," "QA platform," "peer testing." You are **the curated, human, 24-hour, fix-prompt-included once-over**.
+- **Competing positioning to avoid:** "AI scanner," "security audit," "QA platform," "peer testing." You are **the curated, human, fast-turnaround, fix-prompt-included once-over** (Starter within 48h, Full within 24h — usually faster).
 - **Best wedge sentence:** *"A 10-minute pre-launch pass — what a stranger would notice in the first 30 seconds, in plain English, with copy-paste fix prompts for your builder."*
 
 ---
@@ -240,7 +240,7 @@ Send by DM, never in the public thread. Wait until the founder has actually read
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version — that's what LaunchLook does. $9 Starter is priority triage: the top 5 things you need to fix, ranked by impact, with copy-paste prompts you drop into {BUILDER}. $29 Full is a comprehensive audit: up to 20 findings across every category, plus a cross-user data check with two test accounts, plus a Quick Start Guide PDF for your users. One human, no scanner, no GitHub access. 24-hour turnaround.
+If you want the full version — that's what LaunchLook does. $9 Starter is priority triage: the top 5 things you need to fix, ranked by impact, with copy-paste prompts you drop into {BUILDER}. $29 Full is a comprehensive audit: up to 20 findings across every category, plus a cross-user data check with two test accounts, plus a Quick Start Guide PDF for your users. One human, no scanner, no GitHub access. Delivered within 48h on Starter (usually within 24), within 24h on Full (usually within 12).
 
 launchlook.app — and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
 ```

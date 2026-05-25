@@ -41,7 +41,7 @@ Notion natively supports Markdown import on page creation:
 | Tier | Select | Starter Package / Full Package (legacy: Quick Checkup, Launch Pack, Polish) |
 | Payment Date | Date | |
 | Intake Received | Checkbox | |
-| Delivery Due | Date | Formula: Payment Date + tier turnaround (Starter 24h, Full 12h) |
+| Delivery Due | Date | Formula: Intake Submission Date + tier SLA (Starter 48h, Full 24h — internal target 24h/12h) |
 | Delivered | Checkbox | |
 | Follow-up Sent | Checkbox | Day-3 automation flips this |
 | Feedback Received | Text | |

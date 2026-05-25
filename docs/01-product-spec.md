@@ -18,7 +18,7 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 - Desktop + phone-width layout check (responsive web app — not native iOS/Android)
 - Plain-language explanations
 - Copy-paste fix prompts
-- 24-hour turnaround
+- Delivered within 48 hours of intake submission (typically within 24)
 
 Used by: founders who want the top 5 critical fixes before launch. Different product from Full — this is a triage, not a smaller audit.
 
@@ -27,7 +27,7 @@ Used by: founders who want the top 5 critical fixes before launch. Different pro
 - Up to 20 findings across every category (not unlimited)
 - Cross-user data check (with two test accounts the founder provides)
 - AI-generated one-page Quick Start Guide PDF for their users
-- 12-hour turnaround
+- Delivered within 24 hours of intake submission (typically within 12)
 - Shareable report link they can send to teammates
 
 Used by: founders launching publicly this week who need a thorough audit plus the cross-user privacy sanity check.

@@ -53,7 +53,7 @@ Cross-user data check: **Full Package ($29)** only.
 - Top 5 findings — the most important things to fix
 - Desktop + phone layout check (web app responsive — not App Store)
 - Copy-paste fix prompts
-- 24-hour delivery
+- Delivered within 48 hours of intake (typically within 24)
 - CTA: `Get Starter — $9`
 
 **Full Package ($29)** *(comprehensive audit)*
@@ -61,7 +61,7 @@ Cross-user data check: **Full Package ($29)** only.
 - Cross-user data check (two test accounts)
 - Quick Start Guide PDF for your users
 - Shareable report link
-- 12-hour delivery
+- Delivered within 24 hours of intake (typically within 12)
 - CTA: `Get Full Package — $29`
 
 Follow-up re-scan: email for quote (replaces old $59 tier on site).
@@ -72,7 +72,7 @@ Follow-up re-scan: email for quote (replaces old $59 tier on site).
 A: No — web apps only. Phone check = mobile-width browser view.
 
 **Q: How long does the checkup take?**
-A: Starter Package is 24 hours. Full Package is 12 hours.
+A: Starter Package reports are delivered within 48 hours of intake submission (usually within 24). Full Package reports are delivered within 24 hours (usually within 12). The clock starts when you submit the intake form, not when you pay.
 
 **Q: What do you need from me?**
 A: Your URL, one-line description, builder name. Full Package: two temporary test accounts.
@@ -146,7 +146,7 @@ Notes:
 ```
 Hi [name],
 
-Thanks for trusting LaunchLook with [app name]. I'll have your checkup ready in [24 hours / 12 hours / 12 hours] from now.
+Thanks for trusting LaunchLook with [app name]. I'll have your checkup ready within [48 hours, usually within 24 / 24 hours, usually within 12] from now.
 
 To get started, please fill out the short intake form here:
 [INTAKE FORM LINK]

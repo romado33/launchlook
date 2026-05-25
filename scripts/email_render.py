@@ -2,7 +2,7 @@
 email_render.py — render email templates with variables for manual send.
 
 Usage:
-    python scripts/email_render.py welcome --name Rob --app-name LiLo --turnaround "24 hours" --intake-link https://tally.so/r/xxx
+    python scripts/email_render.py welcome --name Rob --app-name LiLo --turnaround "48 hours, usually within 24" --intake-link https://tally.so/r/xxx
     python scripts/email_render.py delivery --name Rob --app-name LiLo --report-link https://notion.so/... --platform Lovable
     python scripts/email_render.py followup-d3 --name Rob --referral-code ROB5
 """
