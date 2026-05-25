@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ customer.app_name }} · LaunchLook {{ customer.tier }} Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #FAF7F2;
+      --ink: #1F1B16;
+      --muted: #6B6359;
+      --accent: #B45309;
+      --line: #E7E0D6;
+      --surface: #FFFFFF;
+      --surface-tint: #F4EFE7;
+      --critical: #B91C1C;
+      --high: #C2410C;
+      --medium: #B45309;
+      --low: #15803D;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 25mm 20mm 22mm 20mm;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      padding: 0;
+    }
+
+    /* ---------- Header rule + small caps eyebrow ---------- */
+    .doc-header {
+      border-top: 3px solid var(--accent);
+      padding-top: 10pt;
+      margin-bottom: 14pt;
+    }
+
+    .eyebrow {
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    h1 {
+      font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+      font-weight: 500;
+      font-size: 26pt;
+      line-height: 1.15;
+      margin: 6pt 0 4pt;
+      color: var(--ink);
+      letter-spacing: -0.005em;
+    }
+
+    .subtitle {
+      font-size: 10pt;
+      color: var(--muted);
+      margin: 0 0 6pt;
+    }
+
+    .subtitle code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 9pt;
+      background: var(--surface-tint);
+      padding: 1pt 4pt;
+      border-radius: 3pt;
+      color: var(--ink);
+    }
+
+    /* ---------- Verdict block ---------- */
+    .verdict {
+      margin: 14pt 0 18pt;
+      padding: 14pt 16pt;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .verdict-label {
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin: 0 0 4pt;
+    }
+
+    .verdict-summary {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 14pt;
+      line-height: 1.3;
+      margin: 0 0 8pt;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .verdict-narrative {
+      font-size: 10pt;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .verdict-meta {
+      margin-top: 10pt;
+      font-size: 9pt;
+      color: var(--muted);
+    }
+
+    .verdict-meta strong { color: var(--ink); font-weight: 500; }
+
+    /* ---------- Severity section headers ---------- */
+    h2.severity {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 16pt;
+      margin: 18pt 0 8pt;
+      padding-bottom: 4pt;
+      border-bottom: 1px solid var(--line);
+      page-break-after: avoid;
+    }
+
+    h2.severity .count {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: 6pt;
+    }
+
+    /* ---------- Finding card ---------- */
+    .finding {
+      margin: 10pt 0;
+      padding: 12pt 14pt 14pt;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .finding-head {
+      display: flex;
+      align-items: baseline;
+      gap: 8pt;
+      margin-bottom: 6pt;
+    }
+
+    .finding-num {
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .finding-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+      color: var(--ink);
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .finding-section {
+      margin-top: 8pt;
+      font-size: 10pt;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .finding-section .label {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .finding-section p { margin: 0; }
+    .finding-section p + p { margin-top: 4pt; }
+
+    /* ---------- Screenshot placeholder ---------- */
+    .screenshot {
+      margin-top: 10pt;
+      border: 1px solid var(--line);
+      border-radius: 4pt;
+      background: var(--surface-tint);
+      page-break-inside: avoid;
+    }
+
+    .screenshot-body {
+      padding: 18pt 14pt;
+      min-height: 70pt;
+      text-align: center;
+      color: var(--muted);
+      font-size: 9pt;
+      font-style: italic;
+    }
+
+    .screenshot-caption {
+      padding: 6pt 10pt;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+      font-size: 8.5pt;
+      color: var(--muted);
+    }
+
+    /* ---------- Fix prompt block ---------- */
+    .fix-prompt {
+      margin-top: 10pt;
+      padding: 10pt 12pt;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .fix-prompt-label {
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 0 0 4pt;
+    }
+
+    .fix-prompt-body {
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 9pt;
+      line-height: 1.55;
+      color: var(--ink);
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ---------- Closing block ---------- */
+    .closing {
+      margin-top: 22pt;
+      padding-top: 12pt;
+      border-top: 1px solid var(--line);
+      font-size: 9.5pt;
+      color: var(--muted);
+      line-height: 1.6;
+      page-break-inside: avoid;
+    }
+
+    .closing strong { color: var(--ink); font-weight: 500; }
+
+    .closing a { color: var(--accent); text-decoration: none; }
+
+    /* ---------- Severity dot accents ---------- */
+    .sev-dot {
+      display: inline-block;
+      width: 8pt;
+      height: 8pt;
+      border-radius: 50%;
+      margin-right: 5pt;
+      vertical-align: middle;
+    }
+    .sev-dot.critical { background: var(--critical); }
+    .sev-dot.high     { background: var(--high); }
+    .sev-dot.medium   { background: var(--medium); }
+    .sev-dot.low      { background: var(--low); }
+
+    .finding.critical { border-left: 3px solid var(--critical); }
+    .finding.high     { border-left: 3px solid var(--high); }
+    .finding.medium   { border-left: 3px solid var(--medium); }
+    .finding.low      { border-left: 3px solid var(--low); }
+
+    /* ---------- Page footer (rendered by Playwright via pdf options) ---------- */
+    /* We rely on Playwright's headerTemplate / footerTemplate to print the
+       running footer. The template here just provides the visible content. */
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="doc-header">
+      <p class="eyebrow">LaunchLook · {{ customer.tier }} report</p>
+      <h1>{{ customer.app_name }}</h1>
+      <p class="subtitle">
+        Pre-launch checkup for {{ customer.first_name }}
+        {%- if customer.url_redacted_or_shown %} · <code>{{ customer.url_redacted_or_shown }}</code>{% endif %}
+        · prepared {{ delivered_at }}
+      </p>
+    </header>
+
+    <section class="verdict">
+      <p class="verdict-label">Overall verdict</p>
+      <p class="verdict-summary">{{ verdict.emoji }} {{ verdict.summary }}</p>
+      {% if verdict.narrative %}
+      <p class="verdict-narrative">{{ verdict.narrative }}</p>
+      {% endif %}
+      <p class="verdict-meta">
+        <strong>{{ findings|length }} finding{{ '' if findings|length == 1 else 's' }}</strong>
+        below, sorted by severity. Each one includes what we saw, why it matters,
+        and a paste-ready fix prompt for {{ customer.builder }}.
+      </p>
+    </section>
+
+    {% set severity_order = [
+      ('critical', '🔴 Critical'),
+      ('high',     '🟠 High'),
+      ('medium',   '🟡 Medium'),
+      ('low',      '🟢 Low'),
+    ] %}
+
+    {% set ns = namespace(idx=0) %}
+    {% for sev_key, sev_label in severity_order %}
+      {% set sev_findings = findings | selectattr('severity', 'equalto', sev_key) | list %}
+      {% if sev_findings %}
+        <h2 class="severity">
+          <span class="sev-dot {{ sev_key }}"></span>{{ sev_label }}
+          <span class="count">({{ sev_findings|length }})</span>
+        </h2>
+
+        {% for f in sev_findings %}
+          {% set ns.idx = ns.idx + 1 %}
+          <article class="finding {{ sev_key }}">
+            <div class="finding-head">
+              <span class="finding-num">FINDING {{ "%02d"|format(ns.idx) }}</span>
+              <h3 class="finding-title">{{ f.title }}</h3>
+            </div>
+
+            {% if f.what_we_saw %}
+            <div class="finding-section">
+              <p><span class="label">What we saw.</span> {{ f.what_we_saw }}</p>
+            </div>
+            {% endif %}
+
+            {% if f.why_it_matters %}
+            <div class="finding-section">
+              <p><span class="label">Why it matters.</span> {{ f.why_it_matters }}</p>
+            </div>
+            {% endif %}
+
+            {% if f.screenshot_caption %}
+            <figure class="screenshot">
+              <div class="screenshot-body">[ screenshot attached separately ]</div>
+              <figcaption class="screenshot-caption">{{ f.screenshot_caption }}</figcaption>
+            </figure>
+            {% endif %}
+
+            {% if f.fix_prompt %}
+            <div class="fix-prompt">
+              <p class="fix-prompt-label">Copy-paste fix prompt for {{ customer.builder }}</p>
+              <p class="fix-prompt-body">{{ f.fix_prompt }}</p>
+            </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+
+    <section class="closing">
+      <p>
+        <strong>What to do next.</strong>
+        Start at the top. Paste each fix prompt into {{ customer.builder }} and verify the
+        change on your live URL before moving to the next finding.
+      </p>
+      {% if qsg_link %}
+      <p>
+        Your <strong>Quick Start Guide</strong> for first-time users is attached
+        as a separate PDF, or available here: <a href="{{ qsg_link }}">{{ qsg_link }}</a>
+      </p>
+      {% else %}
+      <p>
+        Your <strong>Quick Start Guide</strong> for first-time users is attached
+        as a separate PDF.
+      </p>
+      {% endif %}
+      <p>
+        Questions, or want a re-scan after fixes? Just reply to the delivery email.
+        Refunds within 7 days if the report wasn't useful.
+      </p>
+    </section>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+# Example customer file for scripts/deliver_report.py.
+# Copy to customers/{slug}.yaml (gitignored) and fill in real findings.
+#
+# Render and preview:
+#   python scripts/deliver_report.py --customer customers/example-jane-sparkle.yaml
+#
+# Send via Resend (after RESEND_API_KEY is set in .env):
+#   python scripts/deliver_report.py --customer customers/example-jane-sparkle.yaml --send
+
+customer:
+  first_name: Jane
+  last_name: Smith
+  email: jane@example.com
+  app_name: Sparkle Marketplace
+  app_url: https://sparkle.lovable.app
+  url_redacted: false        # true to print "URL redacted" in the report
+  tier: Starter Package      # "Starter Package" or "Full Package"
+  builder: Lovable           # used in the fix-prompt headers
+
+verdict:
+  emoji: "🟡"
+  summary: Needs a few fixes before sharing publicly.
+  narrative: |
+    Polished at first glance: custom branding, booking flow, search, and auth.
+    Two dev-only features are still visible on the live URL, and the headline
+    booking CTA dead-ends. Fix the critical items before sharing outside your
+    test circle. Everything else is polish you can pace through this week.
+
+findings:
+  - severity: critical
+    title: Dev login bypass visible to everyone
+    what_we_saw: |
+      On /auth, a "Dev Bypass (Skip Login)" button opens a role picker and
+      signs visitors in without credentials. Helper copy reads "For development
+      purposes only."
+    why_it_matters: |
+      Anyone with your URL can skip authentication on a marketplace app.
+    screenshot_caption: /auth page with the Dev Bypass button visible.
+    fix_prompt: |
+      Remove the "Dev Bypass (Skip Login)" button, the "Choose Your Dev Role"
+      modal, and all "For development purposes only" copy from /auth. Only
+      show these when import.meta.env.DEV is true. Never on the published
+      lovable.app URL.
+
+  - severity: critical
+    title: Developer Tools panel on the homepage
+    what_we_saw: |
+      After sign-in the homepage shows a "Developer Tools" card with
+      "Seed Sample Data" and "Clear My Data" buttons.
+    why_it_matters: |
+      First-time visitors will think the product is unfinished and bounce.
+    fix_prompt: |
+      Remove the "Developer Tools" / "Development Data Seeder" section from
+      the published homepage. Gate the Seed and Clear data buttons behind
+      import.meta.env.DEV only.
+
+  - severity: high
+    title: Missing /privacy and /terms (404)
+    what_we_saw: |
+      Both /privacy and /terms return the custom 404 page. The footer links
+      to them but nothing loads.
+    why_it_matters: |
+      Sparkle collects booking and account data. Visitors and payment tools
+      both expect legal pages.
+    screenshot_caption: Footer with broken Privacy and Terms links circled.
+    fix_prompt: |
+      Add /privacy and /terms routes with basic policy content. Link both
+      from the footer on every page. Use jane@sparklemarket.com (or your
+      real support email) in the contact section. Match the rest of the
+      site's typography and spacing.
+
+  - severity: high
+    title: Quick Book modal dead-ends with no slots
+    what_we_saw: |
+      The headline "Quick Book" CTA opens a modal whose time-slot picker
+      shows "No available slots found" and the "Book Now" button stays
+      disabled.
+    why_it_matters: |
+      The single most prominent CTA on the marketplace bounces every
+      visitor who tries to book.
+    fix_prompt: |
+      Fix Quick Book so available slots appear, OR hide Quick Book when
+      no slots exist and show "No dates available yet, check back soon."
+
+  - severity: medium
+    title: Listing cards show 4.5 stars with (0) reviews
+    what_we_saw: |
+      Cards display "4.5 (0)", a numeric rating with zero reviews.
+    why_it_matters: |
+      Reads like seeded test data, which kills trust on a marketplace.
+    fix_prompt: |
+      When the review count is 0, show "New" or "No reviews yet" instead of
+      a numeric rating. Only show the star number once at least one real
+      review exists.
+
+  - severity: medium
+    title: Every listing says "Hosted by Local Host"
+    what_we_saw: |
+      Every experience card shows "Hosted by Local Host" instead of a real
+      host name.
+    why_it_matters: |
+      Reads as test data on a public marketplace.
+    fix_prompt: |
+      Replace "Hosted by Local Host" with each experience's actual host
+      display name from the database. If missing, show first name + last
+      initial or hide the line.
+
+  - severity: low
+    title: Generic OG image, no preview when shared
+    what_we_saw: |
+      og:image is unset, so Slack and iMessage previews show a blank card.
+    why_it_matters: |
+      First impression when someone shares your link is blank, not branded.
+    fix_prompt: |
+      Add a 1200x630 og.png to /public, set og:image and twitter:image meta
+      tags in index.html to /og.png. Verify with opengraph.xyz after deploy.
+
+quick_start_guide:
+  title: Sparkle Marketplace, Getting Started
+  intro: |
+    Sparkle is a marketplace for booking local experiences. This one-pager
+    walks you through what to do in the first five minutes, so you can book
+    your first slot or list your first experience without fumbling.
+  steps:
+    - title: Create your account
+      body: |
+        Tap "Sign up" in the top right, enter your email, and confirm with
+        the link we send. You stay signed in on the device you used.
+    - title: Pick a city or use your current location
+      body: |
+        From the home page, tap the city selector or "Use my location" to
+        see experiences near you. Results sort by distance.
+    - title: Open an experience and check the calendar
+      body: |
+        Each listing shows host name, photos, price, and an availability
+        calendar. Green dots mean open slots.
+    - title: Book a time slot
+      body: |
+        Tap a green slot, review the time and price, and tap "Book Now."
+        Payment is handled by Stripe. You'll get a confirmation email
+        within a minute.
+    - title: Manage or cancel from "My Bookings"
+      body: |
+        Tap your avatar in the top right, then "My Bookings." Cancel up
+        to 24 hours ahead for a full refund.
+  footer_note: |
+    Questions or stuck on a step? Reply to your booking email or write to
+    hello@sparklemarket.com. We answer within a few hours.

@@ -2,59 +2,247 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ title }} — Quick Start Guide</title>
+  <title>{{ qsg.title if qsg else title }} · Quick Start Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
+      --paper: #FAF7F2;
       --ink: #1F1B16;
       --muted: #6B6359;
-      --paper: #FAF7F2;
-      --line: #E7E0D6;
       --accent: {{ primary_color | default('#B45309') }};
+      --line: #E7E0D6;
+      --surface: #FFFFFF;
+      --surface-tint: #F4EFE7;
     }
+
+    @page {
+      size: A4 portrait;
+      margin: 25mm 20mm 22mm 20mm;
+    }
+
     * { box-sizing: border-box; }
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
+
+    html, body {
+      margin: 0;
+      padding: 0;
       background: var(--paper);
       color: var(--ink);
-      line-height: 1.65;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .doc-header {
+      border-top: 3px solid var(--accent);
+      padding-top: 10pt;
+      margin-bottom: 14pt;
+    }
+
+    .eyebrow {
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
       margin: 0;
-      padding: 2rem 1.25rem 3rem;
     }
-    .wrap { max-width: 40rem; margin: 0 auto; }
-    h1 { font-size: 1.75rem; margin: 0 0 0.5rem; line-height: 1.2; }
+
+    h1 {
+      font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+      font-weight: 500;
+      font-size: 24pt;
+      line-height: 1.15;
+      margin: 6pt 0 4pt;
+      color: var(--ink);
+      letter-spacing: -0.005em;
+    }
+
+    .subtitle {
+      font-size: 10pt;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .intro {
+      margin: 14pt 0 18pt;
+      padding: 14pt 16pt;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: 10.5pt;
+      color: var(--ink);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
     h2 {
-      font-size: 1.15rem;
-      margin: 2rem 0 0.75rem;
-      padding-bottom: 0.35rem;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 14pt;
+      margin: 18pt 0 8pt;
+      padding-bottom: 4pt;
       border-bottom: 1px solid var(--line);
+      page-break-after: avoid;
     }
-    p, li { font-family: system-ui, -apple-system, sans-serif; color: var(--muted); font-size: 1rem; }
-    li { margin: 0.35rem 0; }
-    ol, ul { padding-left: 1.25rem; }
-    strong { color: var(--ink); }
-    a { color: var(--accent); }
-    .footer {
-      margin-top: 3rem;
-      padding-top: 1rem;
+
+    .steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: stepcount;
+    }
+
+    .step {
+      counter-increment: stepcount;
+      margin: 8pt 0;
+      padding: 11pt 14pt 12pt 42pt;
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .step::before {
+      content: counter(stepcount);
+      position: absolute;
+      top: 11pt;
+      left: 12pt;
+      width: 22pt;
+      height: 22pt;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--paper);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 10pt;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-title {
+      margin: 0 0 4pt;
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .step-body {
+      margin: 0;
+      font-size: 10pt;
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .footer-note {
+      margin-top: 18pt;
+      padding: 10pt 12pt;
+      border: 1px dashed var(--line);
+      border-radius: 4pt;
+      background: var(--surface-tint);
+      font-size: 9.5pt;
+      color: var(--muted);
+      page-break-inside: avoid;
+      white-space: pre-wrap;
+    }
+
+    .closing {
+      margin-top: 22pt;
+      padding-top: 10pt;
       border-top: 1px solid var(--line);
-      font-family: system-ui, sans-serif;
-      font-size: 0.8rem;
+      font-size: 9pt;
       color: var(--muted);
     }
+
+    /* Legacy body_html rendering (kept for back-compat with qsg_render.py) */
+    .legacy-body p, .legacy-body li {
+      color: var(--muted);
+      font-size: 10pt;
+      line-height: 1.6;
+    }
+    .legacy-body strong { color: var(--ink); }
+    .legacy-body h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 14pt;
+    }
+    .legacy-body ol, .legacy-body ul { padding-left: 1.25rem; }
+    .legacy-body a { color: var(--accent); }
     .reviewer {
       background: #FEF3C7;
       border-left: 3px solid var(--accent);
-      padding: 0.5rem 0.75rem;
-      margin: 0.75rem 0;
-      font-size: 0.9rem;
+      padding: 6pt 10pt;
+      margin: 8pt 0;
+      font-size: 9.5pt;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    {{ body_html | safe }}
-    <p class="footer">Quick Start Guide prepared by LaunchLook · {{ generated_date }}</p>
-  </div>
+
+  {% if qsg %}
+    <header class="doc-header">
+      <p class="eyebrow">
+        LaunchLook · Quick Start Guide
+        {%- if customer and customer.tier %} · {{ customer.tier }}{% endif %}
+      </p>
+      <h1>{{ qsg.title }}</h1>
+      <p class="subtitle">
+        For first-time users of
+        {%- if customer %} {{ customer.app_name }}{% else %} the app{% endif %}
+        · prepared {{ delivered_at | default(generated_date) }}
+      </p>
+    </header>
+
+    {% if qsg.intro %}
+    <section class="intro">
+      <p>{{ qsg.intro }}</p>
+    </section>
+    {% endif %}
+
+    {% if qsg.steps %}
+    <h2>Get started</h2>
+    <ol class="steps">
+      {% for step in qsg.steps %}
+      <li class="step">
+        <p class="step-title">{{ step.title }}</p>
+        <p class="step-body">{{ step.body }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+
+    {% if qsg.footer_note %}
+    <p class="footer-note">{{ qsg.footer_note }}</p>
+    {% endif %}
+
+    <p class="closing">
+      Quick Start Guide prepared by LaunchLook
+      {%- if delivered_at %} · {{ delivered_at }}{% elif generated_date %} · {{ generated_date }}{% endif %}
+    </p>
+
+  {% else %}
+    {# Legacy mode: qsg_render.py passes body_html derived from Markdown. #}
+    <header class="doc-header">
+      <p class="eyebrow">LaunchLook · Quick Start Guide</p>
+      <h1>{{ title }}</h1>
+    </header>
+    <div class="legacy-body">
+      {{ body_html | safe }}
+    </div>
+    <p class="closing">Quick Start Guide prepared by LaunchLook · {{ generated_date }}</p>
+  {% endif %}
+
 </body>
 </html>

@@ -1,0 +1,22 @@
+# LaunchLook: pip dependencies for the delivery pipeline.
+# Pyproject.toml has the full project deps; this file pins the runtime
+# dependencies needed to render and send the PDF reports.
+#
+# Install with:
+#     pip install -r requirements.txt
+#     playwright install chromium
+
+# PDF rendering
+playwright>=1.58,<2.0
+
+# HTML templating
+jinja2>=3.1,<4.0
+
+# Customer YAML input for scripts/deliver_report.py
+pyyaml>=6.0,<7.0
+
+# Transactional email (Main Report + QSG attachments)
+resend>=2.30,<3.0
+
+# Loads RESEND_API_KEY etc. from .env
+python-dotenv>=1.0,<2.0

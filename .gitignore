@@ -37,6 +37,11 @@ dist/
 data/customers.json
 data/customers-export.csv
 
+# Customer YAML inputs for deliver_report.py — never commit real customer data.
+# Example templates (customers/example-*.yaml) are explicitly allowed.
+customers/*.yaml
+!customers/example-*.yaml
+
 # Tally API responses (form IDs are not secret, but keep local)
 data/tally_*.json
 output/tally/
