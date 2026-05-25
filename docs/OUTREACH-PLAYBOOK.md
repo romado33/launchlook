@@ -240,7 +240,7 @@ Send by DM, never in the public thread. Wait until the founder has actually read
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version — 5–7 ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER} — that's what LaunchLook does ($9 Starter, $29 Full). One human, no scanner, no GitHub access. 24-hour turnaround.
+If you want the full version — that's what LaunchLook does. $9 Starter is priority triage: the top 5 things you need to fix, ranked by impact, with copy-paste prompts you drop into {BUILDER}. $29 Full is a comprehensive audit: up to 20 findings across every category, plus a cross-user data check with two test accounts, plus a Quick Start Guide PDF for your users. One human, no scanner, no GitHub access. 24-hour turnaround.
 
 launchlook.app — and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
 ```
@@ -413,7 +413,7 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 | *"Why should I trust you?"* | "Two ways: read the [free checklist](https://launchlook.app/checklist) — that's the DIY version of what I do. Or read the [sample report](https://launchlook.app/sample) and decide if the output is worth $9. And there's a 7-day full refund if it isn't." |
 | *"Do I need to give you my GitHub / repo access?"* | "Never. Just the live URL. If your Full Package run needs to check cross-user data, you give me two temporary test accounts via the intake form. No code, no repo, no admin." |
 | *"My app is built with v0 / Cursor / Base44, not Lovable. Do you do those?"* | "Yes. The fix prompts are tailored per builder — Lovable, Bolt, v0, Cursor, Base44, Replit, and a generic one for everything else. The findings are the same; the prompt syntax differs." |
-| *"Will the report tell me anything I can't get for free?"* | "Free checklist gets you the DIY pass. What you can't get for free: a curated 5–7 item list ranked by severity, written in plain English with paste-ready prompts, plus (Starter+) a one-page Quick Start Guide you can hand to your users. No competitor includes that last one." |
+| *"Will the report tell me anything I can't get for free?"* | "Free checklist gets you the DIY pass. What you can't get for free: a curated, ranked list written in plain English with paste-ready fix prompts — top 5 things on Starter ($9, priority triage), up to 20 on Full ($29, comprehensive audit). Full also adds a cross-user data check and a one-page Quick Start Guide PDF you can hand to your users. No competitor includes that last one." |
 | Silence / no reply after 5 days | Don't follow up. Log the no-response. That's data. |
 
 ---

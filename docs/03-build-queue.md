@@ -85,7 +85,7 @@ Each item has:
 
 ### BL-08 — Notion report templates
 - **What**: Three master Notion templates Rob duplicates per customer:
-  - `Template — Quick Checkup` (5-7 findings structure)
+  - `Template — Quick Checkup` (5-finding priority-triage structure)
   - `Template — Launch Pack` (full findings + Quick Start Guide section)
   - `Template — Launch Pack + Polish` (full + follow-up section)
 - Each template includes:

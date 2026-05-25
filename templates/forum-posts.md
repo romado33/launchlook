@@ -96,7 +96,7 @@ Send by DM (never in the public thread). Wait until the founder has actually rea
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version — 5–7 ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER} — that's what LaunchLook does ($9 Starter, $29 Full). One human, no scanner, no GitHub access. 24-hour turnaround.
+If you want the full version — that's what LaunchLook does. $9 Starter is priority triage: the top 5 things you need to fix, ranked by impact, with copy-paste prompts you drop into {BUILDER}. $29 Full is a comprehensive audit: up to 20 findings across every category, plus a cross-user data check with two test accounts, plus a Quick Start Guide PDF for your users. One human, no scanner, no GitHub access. 24-hour turnaround.
 
 launchlook.app — and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
 ```

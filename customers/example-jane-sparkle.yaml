@@ -83,17 +83,6 @@ findings:
       no slots exist and show "No dates available yet, check back soon."
 
   - severity: medium
-    title: Listing cards show 4.5 stars with (0) reviews
-    what_we_saw: |
-      Cards display "4.5 (0)", a numeric rating with zero reviews.
-    why_it_matters: |
-      Reads like seeded test data, which kills trust on a marketplace.
-    fix_prompt: |
-      When the review count is 0, show "New" or "No reviews yet" instead of
-      a numeric rating. Only show the star number once at least one real
-      review exists.
-
-  - severity: medium
     title: Every listing says "Hosted by Local Host"
     what_we_saw: |
       Every experience card shows "Hosted by Local Host" instead of a real
@@ -104,16 +93,6 @@ findings:
       Replace "Hosted by Local Host" with each experience's actual host
       display name from the database. If missing, show first name + last
       initial or hide the line.
-
-  - severity: low
-    title: Generic OG image, no preview when shared
-    what_we_saw: |
-      og:image is unset, so Slack and iMessage previews show a blank card.
-    why_it_matters: |
-      First impression when someone shares your link is blank, not branded.
-    fix_prompt: |
-      Add a 1200x630 og.png to /public, set og:image and twitter:image meta
-      tags in index.html to /og.png. Verify with opengraph.xyz after deploy.
 
 quick_start_guide:
   title: Sparkle Marketplace, Getting Started

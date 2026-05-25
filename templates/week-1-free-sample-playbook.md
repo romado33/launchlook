@@ -57,7 +57,7 @@ Use `templates/notion/report-quick-checkup.md` as the template. Duplicate it in 
    - Note any that loaded data instead of redirecting to login
 
 5. **Write up** (7 min)
-   - 5–7 findings in the report
+   - 5 findings in the Starter report (priority triage)
    - Each has: severity, visible label in quotes, plain-English why, fix prompt copy-pasted from `findings.json`
    - Substitute `{ACTUAL_NAME}`, `{ACTUAL_EMAIL}`, `{PAGE}` per finding
    - Add 1–2 new findings to the Findings Library if you spot something the seed 35 don't cover

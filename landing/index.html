@@ -65,7 +65,7 @@
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>A real person reads your live app, not a scanner</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No GitHub or code access, just your URL</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Plain English. No <code class="text-xs bg-white/80 px-1 py-0.5 rounded">SEC-001</code> codes to Google.</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span><strong class="text-ink font-medium">Quick Start Guide</strong> for your first users (included)</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span><strong class="text-ink font-medium">Quick Start Guide PDF</strong> for your first users (Full Package)</span></li>
     </ul>
     <p class="mt-5 text-sm text-muted">Delivered in 24 hours · 7-day full refund if it's not useful.</p>
     </div>
@@ -136,7 +136,7 @@
       <p class="text-muted text-sm mb-6 max-w-prose">Real reports include screenshots, severity labels, and copy-paste fix prompts. No jargon, no fear-mongering.</p>
       <div class="rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
         <p class="font-serif text-lg mb-1">LaunchLook: Starter Package report (anonymized)</p>
-        <p class="text-sm text-muted mb-5">🟡 Needs a few fixes before sharing publicly · 7 findings</p>
+        <p class="text-sm text-muted mb-5">🟡 Needs a few fixes before sharing publicly · 5 findings (priority triage)</p>
         <ul class="space-y-2 text-sm text-muted">
           <li>🔴 Dev login bypass still visible on /auth</li>
           <li>🔴 "Developer Tools" on the live homepage</li>
@@ -225,7 +225,7 @@
               <td class="px-4 py-3 align-top text-muted">An auto-scanner runs 100+ checks and shows you everything it found</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 align-top text-ink">The 5–7 things that actually matter, ranked, in plain English</td>
+              <td class="px-4 py-3 align-top text-ink">The few things that actually matter, ranked, in plain English</td>
               <td class="px-4 py-3 align-top text-muted">Pages of severity codes (<code class="text-xs bg-surface-tint px-1 py-0.5 rounded">SEC-001</code>, <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">QUA-014</code>) you have to Google one by one</td>
             </tr>
             <tr>
@@ -252,7 +252,7 @@
         </div>
         <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
           <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook</p>
-          <p class="text-sm text-ink">The 5–7 things that actually matter, ranked, in plain English</p>
+          <p class="text-sm text-ink">The few things that actually matter, ranked, in plain English</p>
           <p class="mt-2 text-xs text-muted">Elsewhere: pages of severity codes (<code class="text-xs bg-surface-tint px-1 py-0.5 rounded">SEC-001</code>) you have to Google</p>
         </div>
         <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
@@ -286,12 +286,12 @@
         <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Starter Package</h3>
           <p class="font-serif text-4xl mt-2">$9</p>
-          <p class="text-sm text-muted mt-1">Cover the basics with confidence</p>
-          <ul class="mt-5 space-y-2.5 text-sm flex-1">
-            <li>Up to <strong>7</strong> prioritized findings</li>
-            <li>Desktop + phone layout check</li>
-            <li>Copy-paste fix prompts</li>
-            <li><strong>Quick Start Guide</strong> for your users</li>
+          <p class="text-sm text-accent mt-1 font-medium uppercase tracking-widest">Priority triage</p>
+          <p class="mt-4 text-sm text-muted leading-relaxed">We find the top 5 things you need to fix before strangers see your app — ranked by impact. Plain-English review with paste-ready fix prompts for each.</p>
+          <ul class="mt-4 space-y-2.5 text-sm flex-1">
+            <li>The <strong>5 most important</strong> findings, ranked by impact</li>
+            <li>Plain-English review, no jargon</li>
+            <li>Copy-paste fix prompts for your builder</li>
             <li>24-hour delivery</li>
           </ul>
           <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6">
@@ -303,17 +303,79 @@
           <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Most popular</div>
           <h3 class="font-serif text-xl">Full Package</h3>
           <p class="font-serif text-4xl mt-2">$29</p>
-          <p class="text-sm text-muted mt-1">Going public this week</p>
-          <ul class="mt-5 space-y-2.5 text-sm flex-1">
-            <li>Everything in Starter Package, plus:</li>
-            <li>Up to <strong>20</strong> findings (deeper pass)</li>
+          <p class="text-sm text-accent mt-1 font-medium uppercase tracking-widest">Comprehensive audit</p>
+          <p class="mt-4 text-sm text-muted leading-relaxed">Up to 20 findings across every category, plus a cross-user data check with 2 test accounts to verify users can't see each other's data. Quick Start Guide PDF for your users.</p>
+          <ul class="mt-4 space-y-2.5 text-sm flex-1">
+            <li>Up to <strong>20</strong> findings across every category</li>
             <li>Cross-user data check (2 test accounts)</li>
-            <li>Shareable report link</li>
+            <li><strong>Quick Start Guide PDF</strong> for your users</li>
             <li>12-hour delivery</li>
           </ul>
           <a href="#" data-launchlook-stripe="launch" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6">
             Get Full Package ($29)
           </a>
+        </div>
+      </div>
+
+      <div class="mt-12 hidden sm:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-surface-tint text-left">
+              <th class="px-4 py-3 font-medium text-muted"></th>
+              <th class="px-4 py-3 font-medium text-ink">Starter ($9)</th>
+              <th class="px-4 py-3 font-medium text-ink">Full ($29)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Approach</td>
+              <td class="px-4 py-3 align-top text-ink font-medium">Priority triage</td>
+              <td class="px-4 py-3 align-top text-ink font-medium">Comprehensive audit</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Findings</td>
+              <td class="px-4 py-3 align-top text-ink">The 5 most important</td>
+              <td class="px-4 py-3 align-top text-ink">Up to 20 across all categories</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Cross-user data check</td>
+              <td class="px-4 py-3 align-top text-muted">—</td>
+              <td class="px-4 py-3 align-top text-ink">✓ (2 test accounts)</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Quick Start Guide PDF</td>
+              <td class="px-4 py-3 align-top text-muted">—</td>
+              <td class="px-4 py-3 align-top text-ink">✓</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Delivery</td>
+              <td class="px-4 py-3 align-top text-ink">Within 24h</td>
+              <td class="px-4 py-3 align-top text-ink">Within 12h</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 sm:hidden space-y-4">
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Starter ($9)</p>
+          <p class="text-sm text-ink font-medium">Priority triage</p>
+          <ul class="mt-2 space-y-1 text-xs text-muted">
+            <li>Findings: the 5 most important</li>
+            <li>Cross-user data check: —</li>
+            <li>Quick Start Guide PDF: —</li>
+            <li>Delivery: within 24h</li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Full ($29)</p>
+          <p class="text-sm text-ink font-medium">Comprehensive audit</p>
+          <ul class="mt-2 space-y-1 text-xs text-muted">
+            <li>Findings: up to 20 across all categories</li>
+            <li>Cross-user data check: ✓ (2 test accounts)</li>
+            <li>Quick Start Guide PDF: ✓</li>
+            <li>Delivery: within 12h</li>
+          </ul>
         </div>
       </div>
 
@@ -327,6 +389,10 @@
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-6">FAQ</h2>
       <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What's the difference between Starter and Full?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Starter ($9) is <strong class="text-ink">priority triage</strong> — we identify the top 5 issues a first-time visitor would notice and need fixed before launch. Full ($29) is a <strong class="text-ink">comprehensive audit</strong> — up to 20 findings across every category, plus a cross-user data check using 2 test accounts to verify users can't see each other's data, plus a Quick Start Guide PDF you can give your users.</p>
+        </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps. Also v0, Cursor-built apps, and others. If your builder outputs a shareable link, we can usually review it.</p>

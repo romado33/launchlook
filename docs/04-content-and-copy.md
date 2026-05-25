@@ -49,18 +49,17 @@ Cross-user data check: **Full Package ($29)** only.
 
 **Section heading**: Two options. Same human review.
 
-**Starter ($9)**
-- Up to 7 findings
+**Starter ($9)** *(priority triage)*
+- Top 5 findings — the most important things to fix
 - Desktop + phone layout check (web app responsive — not App Store)
 - Copy-paste fix prompts
-- Quick Start Guide for your users
 - 24-hour delivery
 - CTA: `Get Starter — $9`
 
-**Full Package ($29)** *(deeper pass)*
-- Everything in Starter, plus:
-- Up to 20 findings (deeper pass)
+**Full Package ($29)** *(comprehensive audit)*
+- Up to 20 findings across every category
 - Cross-user data check (two test accounts)
+- Quick Start Guide PDF for your users
 - Shareable report link
 - 12-hour delivery
 - CTA: `Get Full Package — $29`

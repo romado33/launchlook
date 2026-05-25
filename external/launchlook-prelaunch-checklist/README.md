@@ -114,8 +114,8 @@ Skip this block if you're not technical — or hire help.
 
 [LaunchLook](https://launchlook.app) runs the checklist for you and returns a prioritized report with copy-paste fix prompts.
 
-- **Starter Package $9** — up to 7 findings + Quick Start Guide, 24h  
-- **Full Package $29** — deeper pass + two-account check, 12h  
+- **Starter Package $9** — priority triage: the 5 most important findings to fix, 24h  
+- **Full Package $29** — comprehensive audit: up to 20 findings + cross-user data check + Quick Start Guide PDF, 12h  
 
 ---
 

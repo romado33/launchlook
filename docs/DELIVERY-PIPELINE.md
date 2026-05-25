@@ -49,8 +49,9 @@ The YAML has four top-level sections:
 - `quick_start_guide` – `title`, `intro`, an ordered list of `steps`
   (`title` + `body`), and an optional `footer_note`.
 
-Findings cap: 7 for Starter Package, 20 for Full Package. The script warns
-if you exceed the cap but still renders.
+Findings cap: 5 for Starter Package (priority triage — the 5 most important
+findings), 20 for Full Package (comprehensive audit). The script warns if
+you exceed the cap but still renders.
 
 ## 2. Render and preview (dry-run)
 
