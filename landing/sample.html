@@ -34,24 +34,45 @@
       <p class="font-medium">Overall verdict</p>
       <p class="mt-2 text-muted">🟡 Needs a few fixes before sharing publicly</p>
       <p class="mt-4 text-sm text-muted leading-relaxed">Polished at first glance — custom branding, booking, search, auth. Dev-only features still visible on the live URL, and the main booking flow dead-ends. Fix critical items before sharing outside your test circle.</p>
-      <p class="mt-4 text-sm"><strong class="text-ink">7 findings</strong> below, sorted by severity. Written in plain English — technical wording only in the fix prompts you paste into your builder. Real reports include screenshots.</p>
+      <p class="mt-4 text-sm"><strong class="text-ink">6 findings shown</strong> below, sorted by severity (Starter Package goes up to 7; Full Package up to 15). Written in plain English — technical wording only in the fix prompts you paste into your builder. Real reports include actual screenshots.</p>
     </div>
 
     <h2 class="font-serif text-xl mt-10 mb-4">🔴 Critical</h2>
     <div class="space-y-6">
       <section class="rounded-lg border border-line bg-white p-5">
         <h3 class="font-medium">Dev login bypass visible to everyone</h3>
-        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> On /auth, a "Dev Bypass (Skip Login)" button lets anyone pick a role and sign in without credentials.</p>
-        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Anyone with your link can skip authentication.</p>
-        <p class="text-xs text-muted mt-3 italic">+ Full Lovable fix prompt in delivered report</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> On <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">/auth</code>, a "Dev Bypass (Skip Login)" button opens a role picker and signs visitors in without credentials. Helper text reads "For development purposes only."</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Anyone with your URL can skip authentication on a marketplace app.</p>
+
+        <figure class="mt-4 rounded-md border border-line bg-surface-tint/60 overflow-hidden" aria-label="Screenshot evidence">
+          <div class="flex items-center gap-1.5 px-3 py-2 bg-white border-b border-line">
+            <span class="w-2.5 h-2.5 rounded-full bg-line" aria-hidden="true"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-line" aria-hidden="true"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-line" aria-hidden="true"></span>
+            <span class="ml-2 text-xs text-muted font-mono truncate">app.example.com/auth</span>
+          </div>
+          <div class="px-4 py-5 text-sm">
+            <p class="text-ink font-medium">Sign in</p>
+            <p class="mt-2 text-muted text-xs">[email + password fields shown]</p>
+            <div class="mt-4 inline-block rounded border-2 border-dashed border-accent px-3 py-1.5 text-xs font-medium text-accent">⚠️ Dev Bypass (Skip Login) →</div>
+            <p class="mt-2 text-xs text-muted italic">For development purposes only.</p>
+          </div>
+          <figcaption class="px-3 py-2 text-xs text-muted border-t border-line bg-white">Real reports include the actual screenshot here, with the dev bypass button circled in red.</figcaption>
+        </figure>
+
+        <div class="mt-4 rounded-md border border-line bg-paper/80 p-4">
+          <p class="text-xs font-medium text-ink uppercase tracking-wide">Copy-paste fix prompt for Lovable</p>
+          <p class="text-sm text-ink mt-2 leading-relaxed font-mono">Remove the "Dev Bypass (Skip Login)" button, the "Choose Your Dev Role" modal, and all "For development purposes only" copy from /auth. Only show these when import.meta.env.DEV is true — never on the published lovable.app URL.</p>
+        </div>
       </section>
+
       <section class="rounded-lg border border-line bg-white p-5">
         <h3 class="font-medium">Developer Tools on the homepage</h3>
-        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> "Seed Sample Data" and "Clear My Data" visible after sign-in.</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> After sign-in, the homepage shows "Developer Tools" with "Seed Sample Data" and "Clear My Data" buttons.</p>
         <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Real users will think the product is unfinished.</p>
         <div class="mt-4 rounded-md border border-line bg-paper/80 p-4">
-          <p class="text-xs font-medium text-ink uppercase tracking-wide">Copy-paste fix prompt (example from a real report)</p>
-          <p class="text-sm text-muted mt-2 leading-relaxed font-mono">Remove all developer-only buttons from the production homepage. Hide "Seed Sample Data" and "Clear My Data" unless the environment is development. Add a production-safe check so these controls never appear on the live public URL.</p>
+          <p class="text-xs font-medium text-ink uppercase tracking-wide">Copy-paste fix prompt for Lovable</p>
+          <p class="text-sm text-ink mt-2 leading-relaxed font-mono">Remove the "Developer Tools" / "Development Data Seeder" section from the published homepage. Gate the Seed and Clear data buttons behind import.meta.env.DEV only.</p>
         </div>
       </section>
     </div>
@@ -60,15 +81,37 @@
     <div class="space-y-6">
       <section class="rounded-lg border border-line bg-white p-5">
         <h3 class="font-medium">Missing /privacy and /terms (404)</h3>
-        <p class="text-sm text-muted mt-2">Trust gap for an app that collects bookings and accounts.</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> Both <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">/privacy</code> and <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">/terms</code> return the custom 404 page.</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> The app collects booking and account data. Visitors and payment tools expect legal pages.</p>
+        <div class="mt-4 rounded-md border border-line bg-paper/80 p-4">
+          <p class="text-xs font-medium text-ink uppercase tracking-wide">Copy-paste fix prompt for Lovable</p>
+          <p class="text-sm text-ink mt-2 leading-relaxed font-mono">Add /privacy and /terms routes with basic policy content. Link both from the footer on every page. Use my real support email in the contact section. Match the rest of the site's typography and spacing.</p>
+        </div>
       </section>
+
       <section class="rounded-lg border border-line bg-white p-5">
-        <h3 class="font-medium">Placeholder host name on every listing</h3>
-        <p class="text-sm text-muted mt-2">All cards show "Hosted by Local Host" instead of real host names.</p>
+        <h3 class="font-medium">Every listing says "Hosted by Local Host"</h3>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> Every experience card shows "Hosted by Local Host" instead of a real host name.</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Reads as test data on a public marketplace — first-time visitors will not trust the listings.</p>
+      </section>
+
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Quick Book dead-ends with no slots</h3>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> "Quick Book" opens a modal, but the time-slot picker shows "No available slots found" and the "Book Now" button stays disabled.</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> The single most prominent CTA on the marketplace dead-ends. Visitors who try to book bounce.</p>
       </section>
     </div>
 
-    <p class="mt-10 text-sm text-muted">Starter Package reports also include a one-page <strong class="text-ink">Quick Start Guide</strong> for your users. Full Package ($29) adds more findings plus a cross-user data check with two test accounts.</p>
+    <h2 class="font-serif text-xl mt-10 mb-4">🟡 Medium</h2>
+    <div class="space-y-6">
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Cards show 4.5 stars with (0) reviews</h3>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> Listing cards display "<strong class="text-ink">4.5 (0)</strong>" — a numeric rating with zero reviews.</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Looks like fake or seeded data, which kills trust on a marketplace.</p>
+      </section>
+    </div>
+
+    <p class="mt-10 text-sm text-muted">Starter Package reports also include a one-page <strong class="text-ink">Quick Start Guide</strong> for your users — plain-English instructions you can hand to your first visitors. Full Package ($29) adds up to 15 findings plus a cross-user data check with two test accounts (we sign in as user A, then user B, and confirm A can't see B's data).</p>
 
     <a href="/#pricing" class="launchlook-btn launchlook-btn-primary mt-8">Get Starter Package — $9</a>
   </article>
