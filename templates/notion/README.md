@@ -11,10 +11,10 @@ Files Rob imports into Notion to set up the **LaunchLook Ops** workspace (BL-03)
    - `Customers` — import `customers-db.csv`
    - `Outreach Tracker` — import `outreach-db.csv`
    - `Findings Library` — import `../../findings_library/findings.csv`
-3. Create a top-level page called **Report Templates**. Inside it, create three sub-pages from the templates in this folder:
-   - `Template — Quick Checkup` (from `report-quick-checkup.md`)
-   - `Template — Launch Pack` (from `report-launch-pack.md`)
-   - `Template — Launch Pack + Polish` (from `report-polish.md`)
+3. Create a top-level page called **Report Templates**. Inside it, create two sub-pages from the templates in this folder:
+   - `Template — Starter Package` (from `report-quick-checkup.md`)
+   - `Template — Full Package` (from `report-launch-pack.md`)
+   - *(Optional, advanced)* `Template — Polish add-on` (from `report-polish.md`) — only if you start offering a paid follow-up tier; not part of the current MVP.
 4. Create a page called **Crawler Wishlist** (from `crawler-wishlist.md`).
 5. Mark each report template page as a **Notion Template** so duplicating is one click per customer.
 
@@ -38,10 +38,10 @@ Notion natively supports Markdown import on page creation:
 | Name | Title | The row title |
 | Email | Email | |
 | App URL | URL | |
-| Tier | Select | Quick Checkup / Launch Pack / Polish |
+| Tier | Select | Starter Package / Full Package (legacy: Quick Checkup, Launch Pack, Polish) |
 | Payment Date | Date | |
 | Intake Received | Checkbox | |
-| Delivery Due | Date | Formula: Payment Date + tier turnaround (24h / 12h / 12h) |
+| Delivery Due | Date | Formula: Payment Date + tier turnaround (Starter 24h, Full 12h) |
 | Delivered | Checkbox | |
 | Follow-up Sent | Checkbox | Day-3 automation flips this |
 | Feedback Received | Text | |
