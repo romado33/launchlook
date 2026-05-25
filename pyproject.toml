@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A friendly pre-launch checkup for vibe-coded apps."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "Proprietary" }
+license = "LicenseRef-Proprietary"
 authors = [{ name = "Rob Dods" }]
 keywords = ["vibe-coding", "lovable", "bolt", "audit", "quick-start-guide"]
 
