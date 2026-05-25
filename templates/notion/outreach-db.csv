@@ -1,1 +1,2 @@
 Prospect,App URL,Channel,Date Sent,Loom URL,Opened,Replied,Paid,Notes
+EXAMPLE — delete me,https://example.com,Twitter,2026-01-01,,No,No,No,Placeholder row so the CSV imports into Notion. Delete after import.

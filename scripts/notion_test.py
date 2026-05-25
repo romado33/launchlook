@@ -62,7 +62,12 @@ def main() -> int:
     print(f"OK — database: {title} ({db_id[:8]}...)")
 
     if args.list_customers:
-        results = notion.databases.query(database_id=db_id, page_size=5)
+        data_sources = db.get("data_sources", [])
+        if not data_sources:
+            print("ERROR: database has no data_sources (newer Notion API). Re-share the DB with the integration.", file=sys.stderr)
+            return 1
+        ds_id = data_sources[0]["id"]
+        results = notion.data_sources.query(data_source_id=ds_id, page_size=5)
         rows = results.get("results", [])
         print(f"Rows returned: {len(rows)}")
         for row in rows:

@@ -1,1 +1,2 @@
 Name,Email,App URL,App Name,Platform,Tier,Status,Payment Date,Intake Received,Intake Received At,Delivery Due,Delivered At,Notion Report URL,Notion Page ID,Stripe Payment ID,Follow-up D3 Sent,Follow-up D7 Sent,Feedback Received,Useful Rating,Referral Code,Referrals,Notes
+EXAMPLE — delete me,test@example.com,https://example.com,Example App,Lovable,Starter Package,Paid,2026-01-01,No,,2026-01-02,,,,,No,No,,,EXAMPLE,0,Placeholder row so the CSV imports into Notion. Delete after import.
