@@ -5,7 +5,7 @@
 window.LAUNCHLOOK_CONFIG = {
   domain: "launchlook.app",
   supportEmail: "hello@launchlook.app",
-  intakeFormUrl: "https://tally.so/r/9qodVE",
+  intakeFormUrl: "https://tally.so/r/QKOX1A",
   tallyThanksUrl: "https://tally.so/r/Y5xO5J",
   stripe: {
     starter: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
