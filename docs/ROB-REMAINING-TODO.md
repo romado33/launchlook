@@ -1,13 +1,16 @@
 # Everything left for Rob — LaunchLook
 
-**Last updated:** May 22, 2026  
+**Last updated:** May 25, 2026  
 **Site:** https://launchlook.app · **Repo:** `romado33/launchlook`
 
 Use this as your single owner checklist. Code/deploy items below marked ✅ are already in GitHub unless noted.
 
 ### Your next 3 actions (in order)
 
-1. **Tally** — Submit a test intake from `/thanks` → confirm email at `hello@launchlook.app` and redirect to `Y5xO5J`.
+1. **Tally** — Pick a form to use, then finish setup in Tally UI:
+   - New API-built form `GxQkOL` (DRAFT) — review at https://tally.so/forms/GxQkOL/edit, **OR**
+   - Existing form `9qodVE` (already wired into `config.js`)
+   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package only / "Yes" to test accounts).
 2. **Tracker** — `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
 3. **Notion ops** — LaunchLook Ops workspace so you can deliver the first real checkup.
 
@@ -41,17 +44,25 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 
 Do these in order. Nothing else on the site matters until the pay → intake → you-get-notified loop works.
 
-### 1. Tally intake form (~30–45 min)
+### 1. Tally intake form (~15–30 min)
 
-**Paste only (no extra lines):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) · **Setup steps:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
+**Two options now:**
+- **(A) New API-built form `GxQkOL`** (DRAFT, built automatically May 25). Edit: https://tally.so/forms/GxQkOL/edit · Preview: https://tally.so/r/GxQkOL
+- **(B) Existing manual form `9qodVE`** (already wired into `config.js`)
+
+**Paste references (only needed for option B):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) · **Setup steps:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
+
+**To re-create the form via API any time:** `python scripts/tally_create_intake.py` (uses `TALLY_API_KEY` from `.env`).
 
 - [x] `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (live on site)
 - [x] `tallyThanksUrl` = `https://tally.so/r/Y5xO5J` in `config.js` (reference for redirect)
-- [ ] Open form **9qodVE** in Tally — paste fields from **TALLY-PASTE-ONLY.txt** if not already done
-- [ ] Set conditionals (Q9–Q12 Full only; Q10–Q11 when “Yes — I'll provide two test accounts”)
+- [x] **API-built draft form `GxQkOL` created** (May 25) — all 15 questions, intro text, consent checkbox
+- [ ] **Pick one form** to keep; if switching to `GxQkOL`, update `intakeFormUrl` in `landing/assets/config.js`
+- [ ] In Tally UI on the chosen form: set conditionals (Q9–Q11 Full only; Q10–Q11 when "Yes — I'll provide two test accounts")
 - [ ] Thank-you message (paste from file) + **after submit redirect** → `https://tally.so/r/Y5xO5J`
 - [ ] Notifications → **hello@launchlook.app** (all answers)
-- [ ] Test Starter path (Q9–Q12 hidden) and Full path (Q9–Q12 visible)
+- [ ] Test Starter path (Q9–Q11 hidden) and Full path (Q9–Q11 visible)
+- [ ] If keeping `GxQkOL`: **Publish** it (currently DRAFT)
 - [ ] (Optional) Tally → Notion **Customers**
 
 ### 2. Stripe Payment Links (~15 min)

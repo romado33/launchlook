@@ -37,6 +37,10 @@ dist/
 data/customers.json
 data/customers-export.csv
 
+# Tally API responses (form IDs are not secret, but keep local)
+data/tally_*.json
+output/tally/
+
 # Generated output (scans, screenshots, intermediate artifacts)
 output/
 !output/.gitkeep
