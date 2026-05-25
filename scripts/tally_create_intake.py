@@ -6,15 +6,23 @@ declared in INTAKE_FORM below and POSTs it to Tally. Returns the new form's
 public URL.
 
 Usage:
-    python scripts/tally_create_intake.py                # creates as DRAFT (safe, must publish in Tally UI)
-    python scripts/tally_create_intake.py --publish      # creates as PUBLISHED immediately
-    python scripts/tally_create_intake.py --dry-run      # prints the JSON payload without calling the API
+    python scripts/tally_create_intake.py                       # creates as DRAFT (safe, must publish in Tally UI)
+    python scripts/tally_create_intake.py --publish             # creates as PUBLISHED immediately
+    python scripts/tally_create_intake.py --dry-run             # prints the JSON payload without calling the API
+    python scripts/tally_create_intake.py --replace <FORM_ID>   # DELETE the given form, then create a fresh one (DRAFT by default)
+
+Question structure:
+    Each question is rendered as ONE title block plus the input (or option) blocks.
+    The optional ``description`` is inlined into the TITLE HTML as a smaller
+    second line — Tally's logic dropdown surfaces the TITLE text as the
+    question identifier, so this keeps logic readable instead of showing
+    a separate LABEL block's helper text.
 
 Notes:
     * The Tally API does not currently expose conditional logic via API.
-      You will need to set Q9 ("test accounts"), Q10 / Q11 (test account
-      credentials), and the Full-Package-only visibility manually in the
-      Tally editor after creation.
+      Set the three visibility rules (Q9 only when Q8 = Full Package; Q10/Q11
+      only when Q9 = "Yes — I'll provide two test accounts") manually in
+      the Tally editor after creation.
     * Notification email (hello@launchlook.app) and the "after submit"
       redirect to https://tally.so/r/Y5xO5J also need to be set in the
       Tally UI (Settings → Notifications and Settings → After submit).
@@ -277,8 +285,27 @@ def question_title_block(group_uuid: str, html: str) -> dict:
     )
 
 
-def question_label_block(group_uuid: str, text: str) -> dict:
-    """Smaller helper-text block under a TITLE block."""
+def build_title_html(title: str, description: str | None) -> str:
+    """Inline the description as a smaller second line of the title.
+
+    Tally's conditional-logic dropdown surfaces TITLE text as the question
+    identifier. Keeping description inside the TITLE block (instead of a
+    separate LABEL block) makes the logic editor list real question names,
+    not helper text.
+    """
+    if not description:
+        return title
+    return (
+        f"{title}<br>"
+        f'<span style="font-weight:400;opacity:0.7;font-size:0.9em">'
+        f"{description}</span>"
+    )
+
+
+# Kept for reference (unused). Tally's logic editor lists LABEL text as the
+# question identifier in dropdowns, which is confusing. We now inline the
+# description into the TITLE block via ``build_title_html`` instead.
+def question_label_block(group_uuid: str, text: str) -> dict:  # pragma: no cover
     return block(
         block_type="LABEL",
         group_type="LABEL",
@@ -361,18 +388,20 @@ def build_question_blocks(q: dict) -> list[dict]:
     """Convert one declarative question into the matching Tally blocks.
 
     Grouping rules (from Tally API docs):
-      * INPUT_TEXT / INPUT_EMAIL / INPUT_LINK / TEXTAREA: TITLE + (LABEL) + INPUT
-        all share the same groupUuid (groupType=QUESTION).
-      * MULTIPLE_CHOICE / CHECKBOXES / DROPDOWN: TITLE + (LABEL) share one
-        groupUuid (QUESTION); OPTION blocks share a separate groupUuid keyed
-        to that choice type.
+      * INPUT_TEXT / INPUT_EMAIL / INPUT_LINK / TEXTAREA: a single TITLE block
+        plus the INPUT block, both sharing one groupUuid (groupType=QUESTION
+        on TITLE, matching input type on the INPUT block).
+      * MULTIPLE_CHOICE / CHECKBOXES / DROPDOWN: TITLE on its own groupUuid
+        (QUESTION); OPTION blocks share a separate groupUuid keyed to that
+        choice type.
+      * Description text is inlined into the TITLE HTML — no separate LABEL
+        block, so Tally's logic dropdown shows the real question title.
     """
     qtype = q["type"]
     title_group = new_uuid()
 
-    blocks: list[dict] = [question_title_block(title_group, q["title"])]
-    if q.get("description"):
-        blocks.append(question_label_block(title_group, q["description"]))
+    title_html = build_title_html(q["title"], q.get("description"))
+    blocks: list[dict] = [question_title_block(title_group, title_html)]
 
     if qtype in ("INPUT_TEXT", "INPUT_EMAIL", "INPUT_LINK", "INPUT_NUMBER", "TEXTAREA"):
         blocks.append(
@@ -418,12 +447,17 @@ def build_form_payload(form_def: dict, status: str) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def create_form(payload: dict, api_key: str) -> dict:
-    headers = {
+def _auth_headers(api_key: str) -> dict:
+    return {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
-    resp = requests.post(TALLY_API_URL, headers=headers, json=payload, timeout=30)
+
+
+def create_form(payload: dict, api_key: str) -> dict:
+    resp = requests.post(
+        TALLY_API_URL, headers=_auth_headers(api_key), json=payload, timeout=30
+    )
     if resp.status_code >= 400:
         body = resp.text[:2000]
         sys.exit(
@@ -433,12 +467,54 @@ def create_form(payload: dict, api_key: str) -> dict:
     return resp.json()
 
 
+def delete_form(form_id: str, api_key: str) -> None:
+    url = f"{TALLY_API_URL}/{form_id}"
+    resp = requests.delete(url, headers=_auth_headers(api_key), timeout=30)
+    if resp.status_code in (200, 202, 204):
+        print(f"Deleted Tally form {form_id} (HTTP {resp.status_code}).", file=sys.stderr)
+        return
+    if resp.status_code == 404:
+        print(
+            f"WARN: form {form_id} not found (HTTP 404). Proceeding to create.",
+            file=sys.stderr,
+        )
+        return
+    body = resp.text[:2000]
+    sys.exit(
+        f"ERROR: DELETE {url} returned {resp.status_code}\n"
+        f"Response body (first 2 KB):\n{body}"
+    )
+
+
+def get_form(form_id: str, api_key: str) -> dict:
+    url = f"{TALLY_API_URL}/{form_id}"
+    resp = requests.get(url, headers=_auth_headers(api_key), timeout=30)
+    if resp.status_code >= 400:
+        body = resp.text[:2000]
+        sys.exit(
+            f"ERROR: GET {url} returned {resp.status_code}\n"
+            f"Response body (first 2 KB):\n{body}"
+        )
+    return resp.json()
+
+
+def summarize_local_payload(payload: dict) -> dict:
+    """Count blocks by groupType from the locally built payload (sanity check)."""
+    counts: dict[str, int] = {}
+    for b in payload["blocks"]:
+        counts[b["groupType"]] = counts.get(b["groupType"], 0) + 1
+    question_groups = sum(
+        1 for b in payload["blocks"] if b["type"] == "TITLE" and b["groupType"] == "QUESTION"
+    )
+    return {"counts": counts, "question_groups": question_groups}
+
+
 def save_response(data: dict) -> None:
     RESPONSE_DIR.mkdir(parents=True, exist_ok=True)
     RESPONSE_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
-def print_next_steps(form: dict) -> None:
+def print_next_steps(form: dict, summary: dict) -> None:
     form_id = form.get("id", "?")
     public_url = f"https://tally.so/r/{form_id}"
     lines = [
@@ -450,12 +526,17 @@ def print_next_steps(form: dict) -> None:
         f"  Edit in app:  https://tally.so/forms/{form_id}/edit",
         f"  Response:     {RESPONSE_PATH}",
         "",
+        f"  Local payload sanity check:",
+        f"    Question groups (TITLE/QUESTION blocks): {summary['question_groups']}",
+        f"    Block counts by groupType: {summary['counts']}",
+        "",
         "  Still TODO in the Tally UI (API doesn't cover these):",
         "    1. Settings -> Notifications -> email submissions to hello@launchlook.app",
         "    2. Settings -> After submit -> Redirect to https://tally.so/r/Y5xO5J",
-        "    3. Logic -> show Q9-Q11 only when Q8 = 'Full Package ($29)'",
-        "    4. Logic -> show Q10-Q11 only when Q9 = 'Yes - I will provide two test accounts'",
-        f"    5. If happy, Publish -> update intakeFormUrl in landing/assets/config.js to '{public_url}'",
+        "    3. On Q10 + Q11: click block menu (the 6-dot handle) -> Hide  (makes them hidden by default)",
+        "    4. Add /logic block: IF Q8 = 'Full Package ($29)' THEN Show blocks: Q9",
+        "    5. Add /logic block: IF Q9 = 'Yes - I will provide two test accounts' THEN Show blocks: Q10, Q11",
+        f"    6. If happy, Publish -> update intakeFormUrl in landing/assets/config.js to '{public_url}'",
     ]
     sys.stdout.buffer.write(("\n".join(lines) + "\n").encode("utf-8", errors="replace"))
 
@@ -465,14 +546,25 @@ def main() -> int:
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--publish", action="store_true", help="Create as PUBLISHED (default: DRAFT)")
     group.add_argument("--dry-run", action="store_true", help="Print JSON payload only, don't call API")
+    parser.add_argument(
+        "--replace",
+        metavar="FORM_ID",
+        default=None,
+        help="DELETE the given Tally form, then create a new one. Use with care.",
+    )
     args = parser.parse_args()
 
     status = "PUBLISHED" if args.publish else "DRAFT"
     payload = build_form_payload(INTAKE_FORM, status)
+    summary = summarize_local_payload(payload)
 
     if args.dry_run:
         print(json.dumps(payload, indent=2))
-        print(f"\n[dry-run] {len(payload['blocks'])} blocks generated. Status would be {status}.", file=sys.stderr)
+        print(
+            f"\n[dry-run] {len(payload['blocks'])} blocks, "
+            f"{summary['question_groups']} question groups. Status would be {status}.",
+            file=sys.stderr,
+        )
         return 0
 
     api_key = os.getenv("TALLY_API_KEY")
@@ -483,10 +575,28 @@ def main() -> int:
             "  TALLY_API_KEY=tly-xxxx..."
         )
 
-    print(f"Creating Tally form ({len(payload['blocks'])} blocks, status={status})…", file=sys.stderr)
+    if args.replace:
+        print(f"Deleting Tally form {args.replace}…", file=sys.stderr)
+        delete_form(args.replace, api_key)
+
+    print(
+        f"Creating Tally form ({len(payload['blocks'])} blocks, "
+        f"{summary['question_groups']} question groups, status={status})…",
+        file=sys.stderr,
+    )
     form = create_form(payload, api_key)
     save_response(form)
-    print_next_steps(form)
+
+    new_id = form.get("id")
+    if new_id:
+        verified = get_form(new_id, api_key)
+        print(
+            f"GET /forms/{new_id} -> status={verified.get('status')}, "
+            f"name={verified.get('name')!r}",
+            file=sys.stderr,
+        )
+
+    print_next_steps(form, summary)
     return 0
 
 

@@ -8,9 +8,9 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 ### Your next 3 actions (in order)
 
 1. **Tally** — Pick a form to use, then finish setup in Tally UI:
-   - New API-built form `GxQkOL` (DRAFT) — review at https://tally.so/forms/GxQkOL/edit, **OR**
+   - New rebuilt API form `QKOX1A` (DRAFT, May 25) — edit at https://tally.so/forms/QKOX1A/edit, **OR**
    - Existing form `9qodVE` (already wired into `config.js`)
-   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package only / "Yes" to test accounts).
+   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package only / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in §1 below.
 2. **Tracker** — `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
 3. **Notion ops** — LaunchLook Ops workspace so you can deliver the first real checkup.
 
@@ -47,22 +47,65 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 ### 1. Tally intake form (~15–30 min)
 
 **Two options now:**
-- **(A) New API-built form `GxQkOL`** (DRAFT, built automatically May 25). Edit: https://tally.so/forms/GxQkOL/edit · Preview: https://tally.so/r/GxQkOL
+- **(A) New API-built form `QKOX1A`** (DRAFT, rebuilt May 25). Edit: https://tally.so/forms/QKOX1A/edit · Preview: https://tally.so/r/QKOX1A
 - **(B) Existing manual form `9qodVE`** (already wired into `config.js`)
+
+The old API form `GxQkOL` has been **deleted and replaced by `QKOX1A`**. The rebuild fixes the previous problem where Tally's logic dropdown showed each question's help text instead of its title — each question is now a single TITLE block with the description inlined as a smaller second line, so the logic editor lists real question names.
 
 **Paste references (only needed for option B):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) · **Setup steps:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
 
-**To re-create the form via API any time:** `python scripts/tally_create_intake.py` (uses `TALLY_API_KEY` from `.env`).
+**To re-create or replace the form via API:**
+- Fresh form: `python scripts/tally_create_intake.py`
+- Replace an existing form (DELETE then POST): `python scripts/tally_create_intake.py --replace <FORM_ID>`
+
+Both read `TALLY_API_KEY` from `.env`.
+
+#### Conditional logic — how Tally actually works
+
+Per Tally's docs, conditional show/hide is **not** a per-block menu item. The right-click on a question only has Delete / Duplicate / Hide / Turn into — that's why Q10 and Q11 didn't expose a "Logic" option. The flow is always:
+
+1. **Hide the target question(s) by default.** Click the 6-dot drag handle (`⋮⋮`) at the left of the block → **Hide**. Shortcut: `Ctrl+Shift+H`. Clicking the question's TITLE selects every block inside that group (input + options), so one Hide call hides the whole question.
+2. **Add a `/logic` block upstream.** Place your cursor on a blank line above where the form should branch, type `/logic`, and pick **Conditional logic**.
+3. **Configure the IF / THEN.** `IF <upstream question> = <option value>` → action **Show blocks** → pick the hidden question(s).
+
+This pattern works for any block type, including TEXTAREA (so Q10 and Q11 don't need any special treatment).
+
+#### Three rules to add in `QKOX1A`
+
+In the editor (https://tally.so/forms/QKOX1A/edit), do these in order. The dropdown will now show each question by its TITLE (e.g. "Can we use test accounts?") instead of the old help text.
+
+1. **Hide Q9, Q10, Q11 by default**
+   - On Q9 (`Can we use test accounts?`): `⋮⋮` → **Hide**
+   - On Q10 (`Test account 1 — email and password`): `⋮⋮` → **Hide**
+   - On Q11 (`Test account 2 — email and password`): `⋮⋮` → **Hide**
+
+2. **Rule 1 — show Q9 only for Full Package buyers** (place this `/logic` block right after Q8)
+   - Type `/logic` → Conditional logic
+   - IF `Which tier did you purchase?` **is** `Full Package ($29)`
+   - THEN **Show blocks** → select `Can we use test accounts?`
+
+3. **Rule 2 — show Q10 when Q9 = Yes** (place this `/logic` block right after Q9)
+   - Type `/logic` → Conditional logic
+   - IF `Can we use test accounts?` **is** `Yes — I'll provide two test accounts`
+   - THEN **Show blocks** → select `Test account 1 — email and password`
+
+4. **Rule 3 — show Q11 when Q9 = Yes** (same `/logic` block as Rule 2, OR a second one right after Rule 2)
+   - IF `Can we use test accounts?` **is** `Yes — I'll provide two test accounts`
+   - THEN **Show blocks** → select `Test account 2 — email and password`
+
+Three rules total. There is no need to re-gate Q10/Q11 by Q8 — Q9 is already hidden unless Q8 = Full Package, so Q10/Q11 inherit that gate transitively (if Q9 is hidden, no one can answer "Yes" on it, so Q10/Q11 stay hidden).
+
+#### Checklist
 
 - [x] `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (live on site)
 - [x] `tallyThanksUrl` = `https://tally.so/r/Y5xO5J` in `config.js` (reference for redirect)
-- [x] **API-built draft form `GxQkOL` created** (May 25) — all 15 questions, intro text, consent checkbox
-- [ ] **Pick one form** to keep; if switching to `GxQkOL`, update `intakeFormUrl` in `landing/assets/config.js`
-- [ ] In Tally UI on the chosen form: set conditionals (Q9–Q11 Full only; Q10–Q11 when "Yes — I'll provide two test accounts")
+- [x] **Rebuilt API form `QKOX1A` created** (May 25, replaces `GxQkOL`) — 15 questions, no separate LABEL blocks, descriptions inlined into TITLEs
+- [ ] **Pick one form** to keep; if switching to `QKOX1A`, update `intakeFormUrl` in `landing/assets/config.js`
+- [ ] In Tally UI on the chosen form: hide Q9/Q10/Q11 + add the 3 `/logic` blocks above
 - [ ] Thank-you message (paste from file) + **after submit redirect** → `https://tally.so/r/Y5xO5J`
 - [ ] Notifications → **hello@launchlook.app** (all answers)
-- [ ] Test Starter path (Q9–Q11 hidden) and Full path (Q9–Q11 visible)
-- [ ] If keeping `GxQkOL`: **Publish** it (currently DRAFT)
+- [ ] Test Starter path (Q9–Q11 hidden) and Full path (Q9 visible; Q10/Q11 visible only after picking "Yes")
+- [ ] If keeping `QKOX1A`: **Publish** it (currently DRAFT)
 - [ ] (Optional) Tally → Notion **Customers**
 
 ### 2. Stripe Payment Links (~15 min)
