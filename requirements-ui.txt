@@ -1,0 +1,12 @@
+# LaunchLook audit UI: dependencies for scripts/audit_ui.py.
+#
+# Self-contained so the audit web form can be installed without pulling in
+# the full delivery pipeline (which depends on Playwright). Install with:
+#
+#     pip install -r requirements-ui.txt
+#
+# To also deliver PDFs from the UI ("Save + send PDFs"), the main
+# requirements.txt must also be installed in the same environment.
+
+flask>=3.0.0
+pyyaml>=6.0

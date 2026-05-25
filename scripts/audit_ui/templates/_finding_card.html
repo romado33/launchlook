@@ -1,0 +1,78 @@
+<div class="finding-card" data-finding>
+  <div class="finding-card__header">
+    <span class="finding-card__index" data-finding-index>1</span>
+    <select class="finding-card__severity" data-field="severity" aria-label="Severity">
+      <option value="">Severity…</option>
+      <option value="critical">Critical</option>
+      <option value="high">High</option>
+      <option value="medium">Medium</option>
+      <option value="low">Low</option>
+    </select>
+    <input
+      type="text"
+      class="finding-card__title"
+      data-field="title"
+      placeholder="Finding title (e.g. Dev login bypass visible to everyone)"
+      autocomplete="off"
+    />
+    <button type="button" class="btn-icon" data-action="remove-finding" aria-label="Remove finding" title="Remove finding">×</button>
+  </div>
+
+  <div class="finding-card__body">
+    <label class="field">
+      <span class="field__label">What we saw</span>
+      <textarea
+        class="field__input field__input--textarea"
+        data-field="what_we_saw"
+        rows="3"
+        placeholder="Concrete description of what's on the page. Include the route, button label, copy."
+      ></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Why it matters</span>
+      <textarea
+        class="field__input field__input--textarea"
+        data-field="why_it_matters"
+        rows="2"
+        placeholder="One or two sentences on impact: trust, security, conversion, etc."
+      ></textarea>
+    </label>
+
+    <div class="field">
+      <span class="field__label">Screenshot (optional)</span>
+      <div class="screenshot-drop" data-screenshot-drop>
+        <input type="file" accept="image/*" class="screenshot-drop__input" data-field="screenshot_file" />
+        <div class="screenshot-drop__hint">
+          Drag &amp; drop a PNG here, or click to choose. Saved to <code>screenshots/&lt;slug&gt;/finding-N.png</code>.
+        </div>
+        <div class="screenshot-drop__preview" data-screenshot-preview hidden>
+          <img alt="Screenshot preview" data-screenshot-img />
+          <div class="screenshot-drop__file" data-screenshot-filename></div>
+          <button type="button" class="btn-link" data-action="remove-screenshot">Remove screenshot</button>
+        </div>
+      </div>
+    </div>
+
+    <label class="field">
+      <span class="field__label">Screenshot caption <span class="field__hint">(optional)</span></span>
+      <input
+        type="text"
+        class="field__input"
+        data-field="screenshot_caption"
+        placeholder="e.g. /auth page with the Dev Bypass button visible."
+        autocomplete="off"
+      />
+    </label>
+
+    <label class="field">
+      <span class="field__label">Fix prompt <span class="field__hint">(paste-ready for the customer's builder)</span></span>
+      <textarea
+        class="field__input field__input--textarea field__input--mono"
+        data-field="fix_prompt"
+        rows="6"
+        placeholder="Imperative, concrete instructions the customer can paste into Lovable / Bolt / v0 / etc."
+      ></textarea>
+    </label>
+  </div>
+</div>

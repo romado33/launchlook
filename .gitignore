@@ -50,7 +50,12 @@ output/tally/
 output/
 !output/.gitkeep
 scans/
-screenshots/
+screenshots/*
+!screenshots/.gitkeep
+
+# Audit UI runtime (drafts/<slug>.json, gitignored — local only)
+drafts/*
+!drafts/.gitkeep
 
 # Playwright
 test-results/

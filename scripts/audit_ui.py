@@ -1,0 +1,166 @@
+"""
+audit_ui.py — local web form for entering LaunchLook audit findings.
+
+Replaces the friction-heavy step of hand-writing ``customers/{slug}.yaml``
+during a manual app review. Spins up a tiny Flask app on
+``http://localhost:8000`` (or the port you pass), pre-populates a form
+with command-line args, and writes a syntactically valid customer YAML
+when you click "Generate YAML". Optionally chains directly into
+``scripts/deliver_report.py --send`` to deliver the PDFs in one click.
+
+Usage:
+
+    python scripts/audit_ui.py \
+        --slug jane-smith \
+        --url https://jane.lovable.app \
+        --tier "Full Package" \
+        --name "Jane Smith" \
+        --email jane@example.com \
+        --app-name Sparkle \
+        --builder Lovable
+
+All arguments are optional. With none, the form opens with empty fields
+so you can fill in everything by hand.
+
+The browser opens automatically once the server is ready. Press Ctrl+C
+to stop the server.
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+import threading
+import time
+import webbrowser
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+# Force UTF-8 console output on Windows so unicode emoji print safely.
+for _stream_name in ("stdout", "stderr"):
+    _stream = getattr(sys, _stream_name, None)
+    if _stream is not None and hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Local web form for entering LaunchLook audit findings.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("--slug", default="", help="Customer slug (filename for customers/<slug>.yaml).")
+    parser.add_argument("--url", default="", help="Customer's app URL (https://...).")
+    parser.add_argument("--tier", default="", choices=["", "Starter Package", "Full Package"], help="Tier.")
+    parser.add_argument("--name", default="", help='Customer name, e.g. "Jane Smith". Split into first/last by the first space.')
+    parser.add_argument("--first-name", default="", help="Customer first name (overrides --name).")
+    parser.add_argument("--last-name", default="", help="Customer last name (overrides --name).")
+    parser.add_argument("--email", default="", help="Customer email.")
+    parser.add_argument("--app-name", default="", help="Customer app/product name.")
+    parser.add_argument(
+        "--builder",
+        default="",
+        choices=["", "Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Other"],
+        help="Builder used by the customer's app.",
+    )
+    parser.add_argument("--port", type=int, default=8000, help="Port to bind (default: 8000).")
+    parser.add_argument("--host", default="127.0.0.1", help="Host to bind (default: 127.0.0.1).")
+    parser.add_argument("--no-browser", action="store_true", help="Do not auto-open the browser.")
+    parser.add_argument("--debug", action="store_true", help="Run Flask in debug mode (auto-reload).")
+    return parser.parse_args(argv)
+
+
+def build_prefill(args: argparse.Namespace) -> dict[str, object]:
+    first = (args.first_name or "").strip()
+    last = (args.last_name or "").strip()
+
+    if (not first and not last) and args.name:
+        parts = args.name.strip().split(None, 1)
+        first = parts[0] if parts else ""
+        last = parts[1] if len(parts) > 1 else ""
+
+    prefill: dict[str, object] = {
+        "slug": (args.slug or "").strip(),
+        "first_name": first,
+        "last_name": last,
+        "email": (args.email or "").strip(),
+        "app_name": (args.app_name or "").strip(),
+        "app_url": (args.url or "").strip(),
+        "tier": (args.tier or "").strip(),
+        "builder": (args.builder or "").strip(),
+        "url_redacted": False,
+    }
+    return {k: v for k, v in prefill.items() if v not in ("", None, False) or k == "slug"}
+
+
+def schedule_browser_open(host: str, port: int, delay_seconds: float = 1.0) -> None:
+    """Open the default browser to the server URL after a short delay."""
+    target = f"http://{host}:{port}/"
+
+    def _open() -> None:
+        time.sleep(delay_seconds)
+        try:
+            opened = webbrowser.open(target)
+            if not opened:
+                print(f"\n  → open this URL in your browser: {target}\n", flush=True)
+        except Exception as exc:
+            print(f"\n  → could not auto-open browser ({exc}). Visit: {target}\n", flush=True)
+
+    thread = threading.Thread(target=_open, daemon=True)
+    thread.start()
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+
+    try:
+        from scripts.audit_ui.app import create_app  # noqa: WPS433
+    except ImportError as exc:
+        sys.stderr.write(
+            "ERROR: failed to import the audit UI package.\n"
+            f"  {exc}\n\n"
+            "Install dependencies first:\n"
+            "    pip install -r requirements-ui.txt\n"
+        )
+        return 1
+
+    prefill = build_prefill(args)
+
+    app = create_app(repo_root=REPO_ROOT, prefill=prefill, auto_open=not args.no_browser)
+
+    host = "127.0.0.1" if args.host in ("0.0.0.0", "") else args.host
+    port = int(args.port)
+
+    print()
+    print("LaunchLook audit UI")
+    print(f"  Repo root:    {REPO_ROOT}")
+    print(f"  Listening on: http://{host}:{port}/")
+    if prefill.get("slug"):
+        print(f"  Slug:         {prefill['slug']} → customers/{prefill['slug']}.yaml")
+    print(f"  Tier caps:    {app.config['TIER_CAPS']}")
+    print()
+    print("Press Ctrl+C to stop the server.")
+    print()
+
+    if not args.no_browser:
+        schedule_browser_open(host, port)
+
+    try:
+        app.run(host=host, port=port, debug=args.debug, use_reloader=False)
+    except OSError as exc:
+        sys.stderr.write(
+            f"\nERROR: could not bind to {host}:{port} ({exc}).\n"
+            "Try a different port: python scripts/audit_ui.py --port 8001\n"
+        )
+        return 2
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
