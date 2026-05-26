@@ -19,6 +19,9 @@
   var proUrl = stripe.pro || "";
   // Confidence Check / Saboteur re-scan add-on (q6).
   var saboteurUrl = stripe.saboteur || "";
+  // Handoff Report add-on (q18). landing/index.html attaches
+  // data-launchlook-stripe="handoff_report" to the add-on CTA.
+  var handoffUrl = stripe.handoff || stripe.handoffReport || "";
 
   function $(selector) {
     return document.querySelectorAll(selector);
@@ -82,6 +85,11 @@
     "[data-launchlook-stripe='saboteur']",
     safeHttpsUrl(saboteurUrl),
     "Payment link not configured (Confidence Check $19 - see docs/CONFIDENCE-CHECK-WORKFLOW.md)",
+  );
+  setLinkState(
+    "[data-launchlook-stripe='handoff_report'], [data-launchlook-stripe='handoff']",
+    safeHttpsUrl(handoffUrl),
+    "Payment link not configured (Handoff Report - see docs/MANUAL-APPROVAL-2026-05-26.md)",
   );
 
   var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
