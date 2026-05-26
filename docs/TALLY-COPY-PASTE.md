@@ -12,6 +12,6 @@ Optional duplicate: [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)
 **Checklist:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)  
 **Owner todo:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md)
 
-**Live URLs (already in `config.js`):** intake `https://tally.so/r/9qodVE` · after submit redirect → `https://tally.so/r/Y5xO5J`
+**Live URLs (already in `config.js`):** intake `https://tally.so/r/QKOX1A` · after submit redirect → `https://launchlook.app/thanks` (static page)
 
 *(Skip `TALLY-AI-ONE-SHOT.txt` unless your Tally plan includes Create with AI.)*

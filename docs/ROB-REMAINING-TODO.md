@@ -18,8 +18,8 @@ left to do.
 
 1. **Tally** — Pick a form to use, then finish setup in Tally UI:
    - New rebuilt API form `QKOX1A` (DRAFT, May 25) — edit at https://tally.so/forms/QKOX1A/edit, **OR**
-   - Existing form `9qodVE` (already wired into `config.js`)
-   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package only / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in §1 below.
+   - Existing form `QKOX1A` (already wired into `config.js`)
+   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://launchlook.app/thanks` (static page), and conditional logic for Q9–Q11 (Full Package only / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in §1 below.
 2. **Tracker** — `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
 3. **Notion ops** — LaunchLook Ops workspace so you can deliver the first real checkup.
 
@@ -55,7 +55,7 @@ left to do.
 - [x] [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) growth playbook
 - [x] Paying-customer tracker: `scripts/customers_track.py` + [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md). Initialized May 26, 2026 (autonomous Group A run).
 - [x] Customer 10 prep: [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) + `data/milestones.json`
-- [x] Tally URLs in `config.js`: intake `9qodVE`, post-intake thanks `Y5xO5J` (deployed)
+- [x] Tally URLs in `config.js`: intake `QKOX1A`, post-intake thanks `/thanks` (static page) (deployed)
 - [x] Homepage CTAs use shared button styles (all primary actions look clickable)
 - [x] Stripe checkout tested at OLD prices: **Starter $9** and **Full $29** both completed successfully (May 2026). New $19/$49/$99 checkout still needs an end-to-end test once Payment Links are created.
 
@@ -69,7 +69,7 @@ Do these in order. Nothing else on the site matters until the pay → intake →
 
 **Two options now:**
 - **(A) New API-built form `QKOX1A`** (DRAFT, rebuilt May 25). Edit: https://tally.so/forms/QKOX1A/edit · Preview: https://tally.so/r/QKOX1A
-- **(B) Existing manual form `9qodVE`** (already wired into `config.js`)
+- **(B) Existing manual form `QKOX1A`** (already wired into `config.js`)
 
 The old API form `GxQkOL` has been **deleted and replaced by `QKOX1A`**. The rebuild fixes the previous problem where Tally's logic dropdown showed each question's help text instead of its title — each question is now a single TITLE block with the description inlined as a smaller second line, so the logic editor lists real question names.
 
@@ -118,12 +118,12 @@ Three rules total. There is no need to re-gate Q10/Q11 by Q8 — Q9 is already h
 
 #### Checklist
 
-- [x] `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (live on site)
-- [x] `tallyThanksUrl` = `https://tally.so/r/Y5xO5J` in `config.js` (reference for redirect)
+- [x] `intakeFormUrl` = `https://tally.so/r/QKOX1A` in `config.js` (live on site)
+- [x] `tallyThanksUrl` = `https://launchlook.app/thanks` in `config.js` (static page)
 - [x] **Rebuilt API form `QKOX1A` created** (May 25, replaces `GxQkOL`) — 15 questions, no separate LABEL blocks, descriptions inlined into TITLEs
 - [ ] **Pick one form** to keep; if switching to `QKOX1A`, update `intakeFormUrl` in `landing/assets/config.js`
 - [ ] In Tally UI on the chosen form: hide Q9/Q10/Q11 + add the 3 `/logic` blocks above
-- [ ] Thank-you message (paste from file) + **after submit redirect** → `https://tally.so/r/Y5xO5J`
+- [ ] Thank-you message (paste from file) + **after submit redirect** → `https://launchlook.app/thanks` (static page)
 - [ ] Notifications → **hello@launchlook.app** (all answers)
 - [ ] Test Starter path (Q9–Q11 hidden) and Full path (Q9 visible; Q10/Q11 visible only after picking "Yes")
 - [ ] If keeping `QKOX1A`: **Publish** it (currently DRAFT)
@@ -307,9 +307,9 @@ If using a different analytics tool, replace the script tag in every `landing/*.
 | Tally paste (text only) | [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) |
 | Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) · `python scripts/customers_track.py stats` |
 | At 10 paying | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) |
-| Intake form (Tally) | `https://tally.so/r/9qodVE` → wired in `config.js` |
-| After intake (Tally thanks) | `https://tally.so/r/Y5xO5J` → set as redirect on form 9qodVE in Tally |
-| Site after Stripe | `https://launchlook.app/thanks` → button opens intake 9qodVE |
+| Intake form (Tally) | `https://tally.so/r/QKOX1A` → wired in `config.js` |
+| After intake (Tally thanks) | `https://launchlook.app/thanks` (static page) → set as redirect on form QKOX1A in Tally |
+| Site after Stripe | `https://launchlook.app/thanks` → button opens intake QKOX1A |
 
 ---
 

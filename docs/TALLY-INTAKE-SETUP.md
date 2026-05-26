@@ -18,8 +18,8 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 
 | Prerequisite | Value |
 |--------------|--------|
-| Intake form (edit in Tally) | `https://tally.so/r/9qodVE` — already in `config.js` |
-| After-submit redirect (set in Tally) | `https://tally.so/r/Y5xO5J` |
+| Intake form (edit in Tally) | `https://tally.so/r/QKOX1A` — already in `config.js` |
+| After-submit redirect (set in Tally) | `https://launchlook.app/thanks` (static page) |
 | Stripe success URL (dashboard) | `https://launchlook.app/thanks` |
 | Notification email | `hello@launchlook.app` |
 
@@ -36,10 +36,10 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 - [ ] Logic on Q9, Q10, Q11, Q12 (see bottom of paste file)
 - [ ] Q15 checkbox required, above Submit
 - [ ] Thank you page — paste from file
-- [ ] **After submit** → redirect to `https://tally.so/r/Y5xO5J` (thanks form; URL also in `config.js` as `tallyThanksUrl`)
+- [ ] **After submit** → redirect to `https://launchlook.app/thanks` (static page; URL also in `config.js` as `tallyThanksUrl`)
 - [ ] Notifications → `hello@launchlook.app`, all answers
 - [ ] Test Starter path (Q9–12 hidden) and Full path (Q9–12 visible)
-- [x] `intakeFormUrl` in `config.js` → `9qodVE` (already deployed — skip unless you publish a new form)
+- [x] `intakeFormUrl` in `config.js` → `QKOX1A` (already deployed — skip unless you publish a new form)
 
 ### Webflow option for Q7 (5-min add)
 
@@ -72,4 +72,4 @@ When the Tally webhook fires into the AI pipeline, the platform value `Webflow` 
 
 ---
 
-Site already points at **9qodVE**. Only update `config.js` if you publish a new Tally URL.
+Site already points at **QKOX1A**. Only update `config.js` if you publish a new Tally URL.

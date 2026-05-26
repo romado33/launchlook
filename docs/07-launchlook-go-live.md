@@ -19,9 +19,9 @@
 
 ## 3. Intake (required before cold outreach)
 
-- [x] `intakeFormUrl` in `config.js` → `https://tally.so/r/9qodVE` (deployed)
-- [x] `tallyThanksUrl` in `config.js` → `https://tally.so/r/Y5xO5J` (set as **redirect after submit** on form 9qodVE in Tally)
-- [ ] Tally form **9qodVE** — paste fields from [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) (guide: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
+- [x] `intakeFormUrl` in `config.js` → `https://tally.so/r/QKOX1A` (deployed)
+- [x] `tallyThanksUrl` in `config.js` → `https://launchlook.app/thanks` (static page; set as **redirect after submit** on form QKOX1A in Tally)
+- [ ] Tally form **QKOX1A** — paste fields from [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) (guide: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md))
 - [ ] Notifications → `hello@launchlook.app` · test Starter + Full paths
 - [ ] Test: pay (or open `/thanks`) → intake button opens Tally (not mailto-only)
 - [x] `/thanks` mailto fallback if `intakeFormUrl` is ever empty

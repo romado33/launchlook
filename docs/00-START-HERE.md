@@ -35,16 +35,16 @@ Non-technical founders who built an app with Lovable, Bolt, Base44, or Replit an
 - ✅ Free checklist: `/checklist` + GitHub mirror
 - ✅ Stripe Payment Link URLs in `landing/assets/config.js`
 - ✅ LinkedIn, site-wide `hello@launchlook.app`, growth email/report templates
-- ✅ **Tally URLs in config:** intake `9qodVE`, post-intake thanks `Y5xO5J` ([`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) for editor paste)
+- ✅ **Tally URLs in config:** intake `QKOX1A`, post-intake thanks `/thanks` (static page) ([`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) for editor paste)
 - ✅ Landing CTAs: consistent button styling on homepage
 - ✅ **Customer tracker CLI:** `scripts/customers_track.py` ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md))
 - ✅ **Customer 10 runbook:** [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) (BL-14/15 gate)
 
 ### Still blocking launch / outreach
 
-- ❌ Tally form **content** in dashboard (paste, conditionals, notifications, redirect to `Y5xO5J`) — URLs already on site
+- ❌ Tally form **content** in dashboard (paste, conditionals, notifications, redirect to `/thanks` static page) — URLs already on site
 - ✅ Stripe checkout: $9 and $29 tested successfully → `/thanks`
-- ❌ E2E: intake submit → Tally thanks `Y5xO5J` → email in inbox
+- ❌ E2E: intake submit → thanks `/thanks` (static page) → email in inbox
 - ❌ `hello@launchlook.app` confirmed receiving mail
 - ❌ Notion **LaunchLook Ops** workspace (Customers, reports)
 - ❌ `python scripts/customers_track.py init` run locally
@@ -78,7 +78,7 @@ Read all docs in order. Then:
 
 ## What Rob should do (in order)
 
-1. **Blocking:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1–4 — finish Tally in dashboard (paste + redirect `Y5xO5J`), Stripe success URLs, confirm email, E2E test.
+1. **Blocking:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) §1–4 — finish Tally in dashboard (paste + redirect to `/thanks` static page), Stripe success URLs, confirm email, E2E test.
 2. **Delivery:** Notion workspace + first customer report (`templates/notion/`, `manual-audit-checklist.md`).
 3. **Outreach:** [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) + 5 Looms (`templates/cold-outreach-loom-script.md`) — lead with `launchlook.app/checklist`.
 4. Track each payment: `python scripts/customers_track.py add ...` and mirror in Notion **Customers** ([`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)).

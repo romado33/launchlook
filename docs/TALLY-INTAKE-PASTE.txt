@@ -26,12 +26,12 @@ HOW TO BUILD IN TALLY (manual editor)
   4. After all questions: Settings → Thank you page → paste THANK YOU section
   5. Settings → Notifications → email hello@launchlook.app
   6. Set conditional logic on Q9–Q12 (see CONDITIONAL LOGIC at bottom)
-  7. After submit redirect → https://tally.so/r/Y5xO5J (thanks page; already in config.js as tallyThanksUrl)
-  8. Site already wired: intakeFormUrl = https://tally.so/r/9qodVE — edit form 9qodVE in Tally; only change config.js if you publish a new URL
+  7. After submit redirect → https://launchlook.app/thanks (static page; already in config.js as tallyThanksUrl)
+  8. Site already wired: intakeFormUrl = https://tally.so/r/QKOX1A — edit form QKOX1A in Tally; only change config.js if you publish a new URL
 
 Tally slash shortcuts (if your editor has them): /text /short /long /email /link /choice /checkbox /scale
 
-LIVE (May 2026): intake 9qodVE · post-submit thanks Y5xO5J · see ROB-REMAINING-TODO.md §1
+LIVE (May 2026): intake QKOX1A · post-submit thanks /thanks (static page) · see ROB-REMAINING-TODO.md §1
 
 
 ================================================================================

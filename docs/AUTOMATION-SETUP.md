@@ -79,7 +79,7 @@ Tally's free plan does not sign webhooks, so we use a shared secret in the URL.
 2. Save it twice:
    - `.env` -> `TALLY_WEBHOOK_TOKEN=<paste>`
    - Vercel -> `TALLY_WEBHOOK_TOKEN=<same value>`
-3. In Tally, open the intake form `9qodVE` -> **Integrations** -> **Webhooks** -> Add webhook.
+3. In Tally, open the intake form `QKOX1A` -> **Integrations** -> **Webhooks** -> Add webhook.
 4. URL: `https://launchlook.app/api/tally-webhook?t=<TALLY_WEBHOOK_TOKEN>` (paste the literal token where shown)
 5. Send the test event from Tally's UI. Success: `{"status": "created", "page_id": "..."}`. Bad token: 401.
 

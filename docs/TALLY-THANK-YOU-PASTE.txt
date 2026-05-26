@@ -20,5 +20,5 @@ Questions: hello@launchlook.app
 Back to LaunchLook: https://launchlook.app/
 <<< PASTE END
 
-Optional redirect URL (separate field in Tally intake form 9qodVE):
-https://tally.so/r/Y5xO5J
+Optional redirect URL (separate field in Tally intake form QKOX1A):
+https://launchlook.app/thanks

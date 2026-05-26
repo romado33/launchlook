@@ -18,7 +18,7 @@ LaunchLook now sells two parallel SKUs at the same $19 / $49 / $99 pricing:
 | Public URL | `launchlook.app/` | `launchlook.app/webflow` |
 | Audience | Lovable / Bolt / v0 / Cursor / Replit / Base44 founders | Webflow freelancers, agencies, in-house teams |
 | Stripe Payment Links | `stripe.starter` / `stripe.launch` (existing) | Same — reused, no new products |
-| Tally intake | `tally.so/r/9qodVE` (existing) | Same form, Webflow customer picks `Webflow` in Q7 |
+| Tally intake | `tally.so/r/QKOX1A` (existing) | Same form, Webflow customer picks `Webflow` in Q7 |
 | AI pipeline | `scripts/ai_audit.py` (default `--platform vibe-coder`) | `scripts/ai_audit.py --platform webflow` |
 | Fix-prompt voice | "Tell Lovable to..." / "In v0, update..." | "In Webflow Designer, open Pages → ... → Publish" |
 | Report header | "LaunchLook · Starter Package report" | "LaunchLook for Webflow · Starter Package report" |
