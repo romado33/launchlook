@@ -347,9 +347,9 @@ The `q-final-audit` worker ran a full consistency scan against the canonical doc
 
 Remaining deltas (deferred, low priority — not shipping blockers):
 
-- [ ] **landing/index.html line 124:** "Trust gaps" leaks the internal taxonomy. Reword to the buyer-facing "trust signals & legal pages" per `finding_categories.yaml`. (Deferred — internal taxonomy is the q-final-audit "needs human review" bucket; consistency_check.py still flags 22 review items; none block ship.)
-- [ ] **landing/index.html lines 312, 377, 417, 430, 443; landing/vs-pagelens.html lines 147, 208, 282:** "Cross-user data check" and "Mobile audit" and "Broken CTAs" are internal taxonomy names. Use buyer-facing names ("user data isolation", "mobile layout issues", "broken buttons & dead links"). (Same bucket as above.)
-- [ ] **Customer YAML caps (cap 7 / cap 25):** `customers/example-jane-sparkle.yaml` line 19/20 and `customers/example-pro-package.yaml` line 26 still mention cap 7 / cap 25 in YAML comments. Operator-facing only (the renderer uses the canonical caps), but worth aligning so example files reflect canonical truth on next pass. (Comment-only; renderer ignores it.)
+- [x] **landing/index.html line 124:** "Trust gaps" rewritten to "Trust signals and legal pages" per `finding_categories.yaml` (q-deferred-cleanup, 2026-05-26).
+- [x] **landing/index.html (5 instances of Cross-user data check + 2 prose mentions) and landing/vs-pagelens.html (2 Mobile audit + 1 Broken CTAs):** swapped to buyer-facing display names from `finding_categories.yaml` ("user data isolation", "mobile layout issues", "broken buttons and dead links"). See `docs/CONSISTENCY-AUDIT-REPORT.md` Cleanup-pass section for the full before/after table.
+- [x] **Customer YAML caps (cap 7 / cap 25):** verified clean. `customers/example-jane-sparkle.yaml` already says "Starter caps at 10; this YAML deliberately ships 7 to show well-under-cap output"; `customers/example-pro-package.yaml` already says "Cap raised to 40 findings (this example uses 14 to show depth, not volume)". Canonical caps (10/30/40) already in place; the original flag was stale.
 
 Re-run `python scripts/consistency_check.py --report-only` after any of these are applied to verify the count drops. Exit code is 0 unless a `critical` issue appears; the script is wireable as a pre-commit hook later.
 
@@ -358,7 +358,7 @@ Re-run `python scripts/consistency_check.py --report-only` after any of these ar
 The `q-final-lint` worker linted Python (`ruff` + `black` + `mypy`) + frontend (`prettier` JS only — HTML left alone to avoid `prettier` default churn), refactored for clarity, fixed the q18 Handoff Report CLI regression, swept forbidden vocab + em-dashes, and ran a full smoke-test pass (124/124 tests passing, all 12 smoke commands green). No new blocking items surfaced. Full notes in `docs/REFACTOR-NOTES.md`. Open follow-ups:
 
 - [ ] **HTML prettier opt-in.** `landing/*.html` was not auto-formatted because `prettier`'s default reflow would noisily diverge from the existing hand-tuned 2-space style. If we want HTML formatted consistently later, add `.prettierrc.json` with `printWidth: 120` + `htmlWhitespaceSensitivity: ignore` and run it as one-shot pass (review the diff carefully — Jinja2 `{{ ... }}` placeholders inside `<script>` blocks need to be verified).
-- [ ] **`scripts/share_report.py` automatic git commits.** When `--public` / `--private` is invoked, the script writes to `landing/data/reports/<slug>.json` and immediately commits + pushes. That's correct behavior in production but is awkward during smoke tests (it produces transient commits that need `git reset --mixed`). Consider adding a `--no-commit` flag for testing if the smoke test surface keeps growing.
+- [x] **`scripts/share_report.py --no-commit` flag.** Shipped by q-deferred-cleanup (2026-05-26). When passed, the script applies the JSON state change to disk but skips `git add` + `git commit`. Default behavior unchanged (still auto-commits). Documented in `docs/SHAREABLE-REPORT-WORKFLOW.md` 3 and covered by `tests/test_share_report.py::test_no_commit_flag_suppresses_git_commit` + `test_default_behavior_still_commits`.
 
 ---
 

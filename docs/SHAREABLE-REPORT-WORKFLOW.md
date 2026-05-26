@@ -72,6 +72,13 @@ in by:
    `share_history`, and (when run inside the git repo) auto-commits the
    change so the deployed `launchlook.app` rebuilds on the next push.
 
+   Pass `--no-commit` to skip the auto-commit. The JSON write still
+   happens; the working tree is left dirty so an operator can review the
+   diff before committing manually. Use this when smoke-testing the
+   pipeline, piloting from a notebook, or batching several flips into a
+   single commit. Default behavior (no flag) is unchanged from
+   production: every flip auto-commits.
+
 This is **explicit opt-in**, not opt-out, per
 `docs/SIMPLICITY-GUARDRAILS.md` section 3 and section 5. We never
 share a customer's URL or audit without their permission.

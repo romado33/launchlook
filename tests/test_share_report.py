@@ -301,3 +301,54 @@ def test_redelivery_preserves_public_state(tmp_reports_dir, jane_yaml):
 def test_share_report_unknown_slug_exits_cleanly(tmp_reports_dir):
     with pytest.raises(SystemExit):
         share_report.main(["--slug", "ghost-slug", "--public", "--no-commit"])
+
+
+# ---------------------------------------------------------------------------
+# --no-commit flag suppresses the auto-commit, default still commits
+# ---------------------------------------------------------------------------
+
+
+def test_no_commit_flag_suppresses_git_commit(tmp_reports_dir, jane_yaml, monkeypatch):
+    """--no-commit must skip the git_commit() call entirely.
+
+    The default behavior auto-commits after writing the JSON (production
+    use case). For smoke-tests and notebook piloting we need an opt-out
+    that leaves the working tree dirty without touching git.
+    """
+    _gen_shareable(jane_yaml)
+    calls: list[tuple] = []
+
+    def _spy_git_commit(paths, message):
+        calls.append((tuple(paths), message))
+
+    monkeypatch.setattr(share_report, "git_commit", _spy_git_commit)
+
+    rc = share_report.main(
+        ["--slug", "jane-sparkle-marketplace", "--public", "--no-commit"]
+    )
+    assert rc == 0
+    assert calls == [], (
+        f"--no-commit must skip git_commit(), but it was called: {calls!r}"
+    )
+
+
+def test_default_behavior_still_commits(tmp_reports_dir, jane_yaml, monkeypatch):
+    """Without --no-commit, the script must still call git_commit().
+
+    Default behavior is unchanged from production (auto-commit on toggle).
+    """
+    _gen_shareable(jane_yaml)
+    calls: list[tuple] = []
+
+    def _spy_git_commit(paths, message):
+        calls.append((tuple(paths), message))
+
+    monkeypatch.setattr(share_report, "git_commit", _spy_git_commit)
+
+    rc = share_report.main(["--slug", "jane-sparkle-marketplace", "--public"])
+    assert rc == 0
+    assert len(calls) == 1, (
+        f"default behavior must call git_commit() once, got: {calls!r}"
+    )
+    _, message = calls[0]
+    assert "public" in message.lower()
