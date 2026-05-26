@@ -101,7 +101,7 @@ PRICING: dict[str, dict[str, float]] = {
 # tier price is the "this audit is eating margin" line.
 TIER_PRICE_USD: dict[str, float] = {
     "Starter Package": 19.00,
-    "Full Package": 49.00,  # internal name for the Scale Up tier
+    "Scale Up Package": 49.00,
     "Pro Package": 99.00,
 }
 PER_CUSTOMER_COST_ALERT_RATIO = 0.20  # alert when cost > 20% of tier price

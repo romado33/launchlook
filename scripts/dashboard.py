@@ -57,9 +57,6 @@ TIER_PRICE = {
     "Starter Package": 19,
     "Scale Up Package": 49,
     "Pro Package": 99,
-    # Retain legacy keys so a stale Notion record (pre-q3 rename) still
-    # contributes to dashboard totals at its original price point.
-    "Full Package": 29,
 }
 
 # Status values used in the Customers DB Status column

@@ -60,15 +60,13 @@ drafts/*
 # AI audit feedback data (per-customer)
 data/ai_feedback/
 
-# AI cost log (per-customer slug + token counts; internal-only per
-# docs/SIMPLICITY-GUARDRAILS.md §6 and docs/AI-COST-MONITORING.md)
-data/ai_costs/*.jsonl
+# AI cost-tracker log files (per-day JSONL). The `.gitkeep` is tracked
+# so the directory exists in a fresh checkout, but per-day logs are
+# local-only runtime data.
+data/ai_costs/*
+!data/ai_costs/.gitkeep
 
-# PageSpeed Insights cache (q14: performance & speed). 24h TTL by default;
-# keeps re-runs from burning the 25K daily quota. Internal-only.
-data/psi_cache/
-
-# axe-core run cache (q16: accessibility checks). 24h TTL by default.
+# Accessibility (axe) per-URL response cache; pure runtime, regenerated.
 data/axe_cache/
 
 # Playwright
@@ -90,3 +88,16 @@ desktop.ini
 # Cursor / Claude internals
 .cursor/
 .claude/
+
+# Local-only research and intermediate audit reports
+# `bestpractices/` is a scratch folder of saved external articles + asset
+# dumps used as research input for prompt + glossary work. Many MB of HTML
+# + assets; not part of the shipped product.
+bestpractices/
+# Worker subagents occasionally drop intermediate verification/shipment
+# reports at the repo root or under docs/. They are valuable for the
+# author but not for shipping; keep them local-only.
+docs/SHIPMENT-VERIFICATION-PARTIAL-2026-05-26.md
+# `verify-tmp/` is a re-runnable scratch directory where the verification
+# scripts cache live-site HTML snapshots for diffing. Always regenerated.
+verify-tmp/

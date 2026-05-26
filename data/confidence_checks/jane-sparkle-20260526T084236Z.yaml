@@ -1,0 +1,53 @@
+confidence_check:
+  customer_id: jane-sparkle
+  customer_email: jane@example.com
+  customer_first_name: Jane
+  app_name: Sparkle Marketplace
+  original_audit_id: example-jane-sparkle
+  original_audit_path: customers\example-jane-sparkle.yaml
+  url: https://sparkle.lovable.app
+  scanned_at: '2026-05-26T08:42:36.674206+00:00'
+  provider: stub
+  tier: Starter Package
+  builder: Lovable
+  notes: 'Stub re-scan: no live capture or LLM call was made. The compare_findings
+    step decides ''still present'' / ''fixed'' purely from the original audit. Run
+    with --provider anthropic or --provider openai to invoke the real pipeline.'
+verdict:
+  label: Needs fixes before launch
+  emoji: 🔴
+  summary: There's still high-severity stuff in the way of a clean launch.
+  narrative: 7 are still showing up.
+fixed: []
+still_present:
+- original_title: Dev login bypass visible to everyone
+  severity: critical
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Dev login
+    bypass visible to everyone: the fix didn''t take.'
+- original_title: Developer Tools panel on the homepage
+  severity: critical
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Developer
+    Tools panel on the homepage: the fix didn''t take.'
+- original_title: Missing /privacy and /terms (404)
+  severity: high
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Missing
+    /privacy and /terms (404): the fix didn''t take.'
+- original_title: Quick Book modal dead-ends with no slots
+  severity: high
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Quick
+    Book modal dead-ends with no slots: the fix didn''t take.'
+- original_title: Listing cards show 4.5 stars with (0) reviews
+  severity: medium
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Listing
+    cards show 4.5 stars with (0) reviews: the fix didn''t take.'
+- original_title: Every listing says "Hosted by Local Host"
+  severity: medium
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Every
+    listing says "Hosted by Local Host": the fix didn''t take.'
+- original_title: Generic OG image, no preview when shared
+  severity: low
+  saboteur_note: 'I tried the same broken bit you had before. Still broken. Generic
+    OG image, no preview when shared: the fix didn''t take.'
+new: []
+footer_note: Need another look once you've shipped the next round of fixes? Send in
+  The Saboteur again.

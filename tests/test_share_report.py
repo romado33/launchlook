@@ -327,9 +327,9 @@ def test_no_commit_flag_suppresses_git_commit(tmp_reports_dir, jane_yaml, monkey
         ["--slug", "jane-sparkle-marketplace", "--public", "--no-commit"]
     )
     assert rc == 0
-    assert calls == [], (
-        f"--no-commit must skip git_commit(), but it was called: {calls!r}"
-    )
+    assert (
+        calls == []
+    ), f"--no-commit must skip git_commit(), but it was called: {calls!r}"
 
 
 def test_default_behavior_still_commits(tmp_reports_dir, jane_yaml, monkeypatch):
@@ -347,8 +347,8 @@ def test_default_behavior_still_commits(tmp_reports_dir, jane_yaml, monkeypatch)
 
     rc = share_report.main(["--slug", "jane-sparkle-marketplace", "--public"])
     assert rc == 0
-    assert len(calls) == 1, (
-        f"default behavior must call git_commit() once, got: {calls!r}"
-    )
+    assert (
+        len(calls) == 1
+    ), f"default behavior must call git_commit() once, got: {calls!r}"
     _, message = calls[0]
     assert "public" in message.lower()

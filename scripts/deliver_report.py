@@ -82,17 +82,21 @@ HANDOFF_OVERRIDE_SUFFIX = "Handoff"
 TIER_ALIAS_TO_CANONICAL = {
     "starter": "Starter Package",
     "starter package": "Starter Package",
-    "full": "Full Package",
-    "full package": "Full Package",
-    "scaleup": "Full Package",
-    "scale up": "Full Package",
-    "scale up package": "Full Package",
+    # Back-compat: "Full Package" was the pre-rename name for the middle
+    # tier. Old customer YAMLs and Stripe events written before the rename
+    # still pass these strings, so we normalise them to the canonical
+    # "Scale Up Package" rather than treating them as a distinct tier.
+    "full": "Scale Up Package",
+    "full package": "Scale Up Package",
+    "scaleup": "Scale Up Package",
+    "scale up": "Scale Up Package",
+    "scale up package": "Scale Up Package",
     "pro": "Pro Package",
     "pro package": "Pro Package",
 }
 
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
-VALID_TIERS = {"Starter Package", "Full Package", "Pro Package"}
+VALID_TIERS = {"Starter Package", "Scale Up Package", "Pro Package"}
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +149,9 @@ def validate(data: dict[str, Any]) -> None:
         if not f.get("title"):
             sys.exit(f"ERROR: findings[{i}].title is required")
 
-    cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
+    cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(
+        tier, 30
+    )
     if len(findings) > cap:
         print(
             f"WARN: {tier} caps at {cap} findings, this YAML has {len(findings)}.",
