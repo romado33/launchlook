@@ -48,39 +48,29 @@
   </header>
 
   <!-- Hero -->
-  <section id="hero" class="relative overflow-hidden border-b border-line">
+  <section class="relative overflow-hidden border-b border-line">
     <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
     <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
     <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
-    <p class="text-xs font-medium text-accent uppercase tracking-widest">For Webflow founders</p>
+    <p class="text-xs font-medium text-accent uppercase tracking-widest">Webflow · Designer-to-live checkup</p>
     <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
-      What would your first Webflow visitor notice &mdash; before they notice it?
+      Built your Webflow site in Designer? Get the pre-launch checkup before your forms silently break, your noindex blocks Google, or your client finds the typo.
     </h1>
     <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
-      Get 3 free findings on what to fix before you go live: CMS gaps, broken forms, trust pages, mobile layout. A real person walks your live site and emails you the top 3 in 24 hours. No credit card.
+      Send your live URL. A real person walks every page on desktop and the three Webflow mobile breakpoints, then sends back a shareable PDF: form submissions, noindex tags, schema, Designer-to-live mismatches, mobile breakage. Every finding is reviewed by a founder before it ships, with paste-ready fixes in Webflow Designer language.
     </p>
-
-    <form data-free-audit-form action="/api/free-audit" method="POST" class="mt-7 max-w-xl rounded-2xl border border-line bg-white px-5 py-5 sm:px-6 sm:py-6 shadow-sm shadow-ink/5">
-      <input type="hidden" name="platform" value="webflow" />
-      <div class="grid sm:grid-cols-2 gap-3">
-        <label class="block">
-          <span class="text-xs font-medium text-muted">Your Webflow URL</span>
-          <input type="url" name="url" placeholder="https://your-site.webflow.io" required autocomplete="url" inputmode="url" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
-        </label>
-        <label class="block">
-          <span class="text-xs font-medium text-muted">Where do we send your findings?</span>
-          <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
-        </label>
-      </div>
-      <button type="submit" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-4 plausible-event-name=FreeAuditSignup">Get my free 3 findings</button>
-      <p data-free-audit-status class="mt-3 text-sm text-muted hidden" role="status" aria-live="polite"></p>
-      <p class="mt-3 text-xs text-muted">Works for any Webflow site &mdash; staging or production. We'll send your top 3 launch issues within 24 hours.</p>
-    </form>
-
-    <div class="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
-      <a href="#pricing" class="launchlook-btn launchlook-btn-secondary">Want the full 10? See Starter ($19)</a>
+    <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-primary">See Webflow pricing</a>
       <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
+      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist (~20 min)</a>
     </div>
+    <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>URL-only. <strong class="text-ink font-medium">No access to your Webflow account</strong> required</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Catches the silent form failure most agencies don't notice for months</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Fix prompts in <strong class="text-ink font-medium">Webflow Designer language</strong>, not generic dev jargon</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Sits in the price gap below the $899 human-audit floor</span></li>
+    </ul>
+    <p class="mt-5 text-sm text-muted">Delivered within 48 hours (usually 24) · 7-day full refund if the report isn't useful.</p>
     </div>
   </section>
 
@@ -318,14 +308,13 @@
         *<a href="/verify-scope" class="underline hover:text-ink">What does Verified mean?</a>
         Reviewed for visible launch issues. Not a security certification.
       </p>
+
     </div>
   </section>
 
-  <!-- Add-ons (q6: Confidence Check / Saboteur re-scan). Lives BELOW the
-       main pricing grid per SIMPLICITY-GUARDRAILS.md §2.6 - it complements
-       the tiers, it does not compete with them. -->
+  <!-- Add-ons (lives BELOW the main pricing grid per SIMPLICITY-GUARDRAILS §2.6 — complement, not competing offer) -->
   <section class="add-ons bg-paper border-b border-line">
-    <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+    <div class="max-w-3xl mx-auto px-6 section-inner-tight">
       <p class="section-label">One-off add-ons</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h3 class="font-serif text-2xl mb-4">One-off add-ons</h3>
@@ -340,29 +329,15 @@
         <a href="#" data-launchlook-stripe="saboteur" class="launchlook-btn launchlook-btn-secondary plausible-event-name=RescanAddOn">
           Send in The Saboteur
         </a>
-        <p class="text-xs text-muted mt-3">Available to any paid tier customer.</p>
-      </div>
-      <div class="addon-card rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5 max-w-prose mt-4">
-        <h4 class="font-serif text-xl mb-2">Handoff Report</h4>
-        <p class="addon-tagline text-muted text-sm leading-relaxed mb-3">
-          A separate report formatted for the developer you hire to fix things. Plain English, copy-paste fix prompts, recommended order. Saves them an hour and saves you a price quote.
-        </p>
-        <p class="addon-price text-sm text-ink mb-4">
-          <strong>$99</strong> add-on for Starter or Scale Up &middot; free with Pro
-        </p>
-        <a href="#" data-launchlook-stripe="handoff_report" class="launchlook-btn launchlook-btn-secondary plausible-event-name=HandoffReportAddOn">
-          Add the Handoff Report
-        </a>
-        <p class="text-xs text-muted mt-3">Already on Pro? It's included in your delivery -- no purchase needed.</p>
       </div>
     </div>
   </section>
 
   <!--
-    Made by Rob (q5+q13): a small mid-page founder section. Per
-    SIMPLICITY-GUARDRAILS section 2.9 (founder bio is 2 to 3 sentences
-    with a photo, not a hero) and section 6 (plain English, no
-    corporate vocab, no em-dashes).
+    Made by Rob (q5+q13): a small mid-page founder section. Same copy as
+    the main SKU's landing per single-source-of-truth. Per
+    SIMPLICITY-GUARDRAILS section 2.5 (small, not a hero) and section 3
+    (plain English, no corporate vocabulary).
     TODO: swap placeholder photo at landing/images/rob.jpg with a real
     headshot (tracked in docs/ROB-REMAINING-TODO.md).
   -->
@@ -379,7 +354,7 @@
         <div class="founder-text max-w-prose">
           <h3 class="font-serif text-xl mb-2">Made by Rob</h3>
           <p class="text-muted leading-relaxed text-sm">
-            Built by a single founder who got tired of "AI scanner" tools that dump 100 findings. Every audit gets a 5-minute human review before it reaches you.
+            Built by a single founder who's tired of "AI scanner" tools that dump 100 findings. Every audit gets a 5-minute human review before it reaches you.
           </p>
           <p class="text-muted leading-relaxed text-sm mt-3">
             Based in Canada. Reply to any email and that's me on the other end.
@@ -433,6 +408,10 @@
           <p class="mt-2 text-muted text-sm leading-relaxed">On the <strong>Pro ($99)</strong> tier, yes. We deliver a white-label-friendly PDF with no LaunchLook branding in the body, plus the Webflow Designer walkthrough Loom you can pass to your client or in-house team.</p>
         </details>
         <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Can I share my report publicly?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
+        </details>
+        <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
         </details>
@@ -467,28 +446,40 @@
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="/" class="hover:text-ink">For vibe-coders</a></li>
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
+        <li><a href="#testers-cast" class="hover:text-ink">Meet the cast</a></li>
       </ul>
     </div>
-    <details class="testers-cast max-w-3xl mx-auto px-6 py-4 text-xs text-muted">
-    <summary class="cursor-pointer">Curious about our 7 testers? Meet the cast →</summary>
-    <ul class="mt-3 space-y-2 leading-relaxed">
-      <li><strong class="text-ink">The Tourist.</strong> First-time visitor. Notices placeholders, broken nav, AI-sounding copy.</li>
-      <li><strong class="text-ink">The Skeptic.</strong> Checks trust pages, terms, privacy, refund policy. Hates vague claims.</li>
-      <li><strong class="text-ink">The Klutz.</strong> Mis-clicks, double-clicks, hits buttons that should not exist. Finds the dead CTAs.</li>
-      <li><strong class="text-ink">The Snoop.</strong> Opens DevTools, peeks at network requests, looks for exposed keys and leaky endpoints.</li>
-      <li><strong class="text-ink">The Phone-First Friend.</strong> Lives on a 360px screen. Finds the cramped layouts and tiny tap targets.</li>
-      <li><strong class="text-ink">The Saboteur.</strong> Runs the same checks after every AI change. Asks: "what broke since last time?"</li>
-      <li><strong class="text-ink">The Stranger Who Tried to Sign Up.</strong> Walks the full signup, billing, and onboarding flow. Finds the cliff edges.</li>
-    </ul>
-  </details>
-</footer>
+    <!--
+      Meet the cast: a subtle footer disclosure for buyers curious about
+      the Testers personas. Plain English, no marketing copy. Per
+      SIMPLICITY-GUARDRAILS section 2.6 (footer tooltip only, never a
+      hero section) and TESTERS-CAST.md (descriptions taken verbatim).
+    -->
+    <div class="max-w-3xl mx-auto px-6 pb-8 -mt-2 text-sm text-muted">
+      <details id="testers-cast" class="group">
+        <summary class="cursor-pointer hover:text-ink list-none inline-flex items-center gap-1.5 select-none">
+          <span>Curious about our 7 testers? Meet the cast</span>
+          <span aria-hidden="true">&rarr;</span>
+        </summary>
+        <div class="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-xs leading-relaxed max-w-prose">
+          <p><strong class="text-ink">The Tourist.</strong> First-time visitor. Notices confusion, dead ends, and boring moments along the main path.</p>
+          <p><strong class="text-ink">The Skeptic.</strong> Looks for trust gaps before handing over an email or a credit card.</p>
+          <p><strong class="text-ink">The Klutz.</strong> Clicks the wrong button, double-submits, hits back mid-flow, refreshes during checkout.</p>
+          <p><strong class="text-ink">The Snoop.</strong> Pokes around for things you didn't mean to leave open.</p>
+          <p><strong class="text-ink">The Phone-First Friend.</strong> Only ever opens the site on mobile.</p>
+          <p><strong class="text-ink">The Saboteur.</strong> Runs the same checks after every AI change. Asks: "what broke that used to work?"</p>
+          <p><strong class="text-ink">The Stranger Who Tried to Sign Up.</strong> Fills the actual forms with safe synthetic values, end to end.</p>
+        </div>
+      </details>
+    </div>
+  </footer>
 
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
-  <script src="/assets/free-audit.js" defer></script>
 </body>
 </html>

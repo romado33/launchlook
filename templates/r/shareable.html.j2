@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+{# ------------------------------------------------------------------------
+   Per-customer shareable report page (q22). One file per customer at
+   landing/r/{slug}.html. Open Graph + Twitter Card meta tags are baked in
+   at delivery time so Reddit/Twitter/LinkedIn scrapers preview correctly
+   without waiting for client-side fetch. The body content itself is
+   populated by /assets/r.js from /data/reports/{slug}.json so privacy
+   (is_public flag) gates the actual finding text.
+
+   Same header / footer chrome as the catch-all r.html so the page always
+   feels like LaunchLook marketing surface, not a customer-customized site.
+   Per docs/SIMPLICITY-GUARDRAILS.md sections 3 and 5: never let customers
+   customize the page (no custom CSS, no branding swaps).
+------------------------------------------------------------------------ #}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ share_metadata.title }}</title>
+  <meta name="description" content="{{ share_metadata.description }}" />
+
+  <meta property="og:title" content="{{ share_metadata.title }}" />
+  <meta property="og:description" content="{{ share_metadata.description }}" />
+  <meta property="og:image" content="{{ share_metadata.og_image }}" />
+  <meta property="og:url" content="https://launchlook.app/r/{{ customer_slug }}" />
+  <meta property="og:type" content="article" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ share_metadata.title }}" />
+  <meta name="twitter:description" content="{{ share_metadata.description }}" />
+  <meta name="twitter:image" content="{{ share_metadata.og_image }}" />
+
+  <link rel="canonical" href="https://launchlook.app/r/{{ customer_slug }}" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script src="/assets/tailwind-brand.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS section 2). -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased" data-slug="{{ customer_slug }}">
+
+  <header class="border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
+      <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
+        <img src="/images/logo-icon.svg" alt="" width="22" height="22" class="shrink-0" aria-hidden="true" />
+        <span>LaunchLook</span>
+      </a>
+      <a href="/#pricing" class="text-sm text-muted hover:text-ink">Get your own audit</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-12 sm:py-16" data-report-root>
+
+    <section data-r-state="loading" class="rounded-xl border border-line bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+      <p class="text-sm text-muted">Loading the audit...</p>
+    </section>
+
+    <section data-r-state="private" class="hidden">
+      <p class="section-label">Private</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h1 class="font-serif text-3xl sm:text-4xl mb-4">This report is private</h1>
+      <p class="text-muted leading-relaxed max-w-prose">
+        Only the customer can see it. If you got this link expecting an audit
+        you can read, ask the person who sent it to flip the report to public
+        (they just reply 'share' to their delivery email and we make it
+        visible).
+      </p>
+      <p class="mt-6 text-sm text-muted">
+        Want your own audit? <a href="/#pricing" class="underline hover:text-ink">See pricing</a>.
+      </p>
+    </section>
+
+    <section data-r-state="missing" class="hidden">
+      <p class="section-label">Not found</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h1 class="font-serif text-3xl sm:text-4xl mb-4">We don't have a report at that link</h1>
+      <p class="text-muted leading-relaxed max-w-prose">
+        The slug isn't on file. If you got this link from a customer they may
+        have set the report back to private, or the link may be mistyped.
+      </p>
+      <p class="mt-6 text-sm text-muted">
+        <a href="/" class="underline hover:text-ink">Back to launchlook.app</a>.
+      </p>
+    </section>
+
+    <section data-r-state="public" class="hidden">
+      <div data-r-verified class="rounded-xl border border-line border-l-4 border-l-accent bg-white p-4 sm:p-5 shadow-sm shadow-ink/5 mb-6 hidden">
+        <p class="text-xs font-medium text-accent uppercase tracking-widest">LaunchLook Verified</p>
+        <p class="mt-1 text-sm text-ink" data-r-verified-line></p>
+        <p class="mt-1 text-xs text-muted">
+          <a href="/verify-scope" class="underline hover:text-ink">What Verified means</a>.
+        </p>
+      </div>
+
+      <p class="section-label" data-r-eyebrow>LaunchLook audit</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h1 class="font-serif text-3xl sm:text-4xl mb-3" data-r-app-name>{{ app_name }}</h1>
+      <p class="text-sm text-muted" data-r-audit-line>Pre-launch audit prepared {{ audit_date_human }}.</p>
+
+      <div class="mt-8 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+        <p class="text-xs font-medium text-accent uppercase tracking-widest">Overall verdict</p>
+        <p class="mt-2 font-serif text-xl sm:text-2xl" data-r-verdict-label>—</p>
+        <p class="mt-2 text-muted leading-relaxed" data-r-verdict-summary></p>
+        <p class="mt-3 text-muted leading-relaxed whitespace-pre-line" data-r-verdict-narrative></p>
+      </div>
+
+      <section data-r-passed-wrap class="mt-10 hidden">
+        <h2 class="font-serif text-2xl mb-3">What's working</h2>
+        <ul class="space-y-1.5 text-sm" data-r-passed></ul>
+      </section>
+
+      <section data-r-findings-wrap class="mt-10 hidden">
+        <h2 class="font-serif text-2xl mb-4">What needs fixing</h2>
+        <div class="space-y-5" data-r-findings></div>
+      </section>
+
+      <section data-r-handoff class="mt-10 hidden rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
+        <h2 class="font-serif text-xl mb-2">Handoff Report</h2>
+        <p class="text-sm text-muted leading-relaxed">
+          The customer also published the Handoff Report, formatted for the
+          developer they hire next. Plain English, persona-tagged, honest
+          scope statements.
+        </p>
+        <a href="#" data-r-handoff-link class="launchlook-btn launchlook-btn-secondary mt-4 plausible-event-name=ShareableHandoffDownload">
+          Download the Handoff Report (PDF)
+        </a>
+      </section>
+
+      <section class="mt-12 rounded-xl border border-line bg-surface-tint p-6 sm:p-8">
+        <h2 class="font-serif text-2xl mb-2">Get your own LaunchLook audit</h2>
+        <p class="text-muted leading-relaxed text-sm max-w-prose">
+          A human pre-launch checkup for vibe-coded apps. Findings, fix
+          prompts, and a Quick Start Guide PDF. From $19.
+        </p>
+        <div class="mt-5 flex flex-col sm:flex-row gap-3">
+          <a href="/#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=ShareableCTAPricing">
+            See pricing
+          </a>
+          <a href="/sample" class="launchlook-btn launchlook-btn-secondary">
+            See a sample report
+          </a>
+        </div>
+      </section>
+    </section>
+
+    <section data-r-state="error" class="hidden mt-10 rounded-xl border border-line bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+      <h2 class="font-serif text-2xl mb-3">Something went sideways</h2>
+      <p class="text-muted leading-relaxed">
+        We couldn't load the audit. Refresh the page, or email
+        <a href="mailto:hello@launchlook.app" class="underline hover:text-ink">hello@launchlook.app</a>
+        if it keeps failing.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-line mt-12">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/" class="hover:text-ink">Home</a></li>
+        <li><a href="/#pricing" class="hover:text-ink">Pricing</a></li>
+        <li><a href="/verify-scope" class="hover:text-ink">What Verified means</a></li>
+        <li><a href="mailto:hello@launchlook.app" class="hover:text-ink">hello@launchlook.app</a></li>
+      </ul>
+    </div>
+    <details class="testers-cast max-w-3xl mx-auto px-6 pb-6 text-xs text-muted">
+      <summary class="cursor-pointer hover:text-ink">Meet the cast (the 7 Testers who reviewed the site)</summary>
+      <p class="mt-2 leading-relaxed">
+        Every finding on a LaunchLook report gets attached to the imaginary
+        first-time visitor who caught it: The Tourist, The Skeptic, The Klutz,
+        The Snoop, The Phone-First Friend, The Saboteur, and The Stranger Who
+        Tried to Sign Up. It's a tag, not a sales pitch.
+      </p>
+    </details>
+  </footer>
+
+  <script src="/assets/r.js"></script>
+</body>
+</html>

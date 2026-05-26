@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import json
 import os
 import re
 import sys
@@ -57,17 +58,37 @@ TEMPLATE_ROOT = REPO_ROOT / "templates"
 REPORT_TEMPLATE_DIR = TEMPLATE_ROOT / "report"
 QSG_TEMPLATE_DIR = TEMPLATE_ROOT / "qsg"
 EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
-# q6: Confidence Check / Saboteur re-scan add-on.
 CONFIDENCE_CHECK_TEMPLATE_DIR = TEMPLATE_ROOT / "confidence_check"
-HANDOFF_TEMPLATE_DIR = TEMPLATE_ROOT / "handoff"  # q18: Handoff Report
+HANDOFF_TEMPLATE_DIR = TEMPLATE_ROOT / "handoff"
+SHAREABLE_TEMPLATE_DIR = TEMPLATE_ROOT / "r"
 CONFIDENCE_CHECKS_DATA_DIR = REPO_ROOT / "data" / "confidence_checks"
 OUTPUT_ROOT = REPO_ROOT / "output" / "reports"
 CONFIDENCE_CHECK_OUTPUT_ROOT = REPO_ROOT / "output" / "confidence_checks"
 
+# q22: shareable hosted report pages. JSON data goes here, per-customer
+# HTML pages go to landing/r/{slug}.html. See docs/SHAREABLE-REPORT-WORKFLOW.md.
+SHAREABLE_REPORTS_DATA_DIR = REPO_ROOT / "landing" / "data" / "reports"
+SHAREABLE_PAGES_DIR = REPO_ROOT / "landing" / "r"
+
+# Handoff Report (q18). Pro Package gets it bundled; Starter / Scale Up
+# can buy it as a $99 add-on, which is signalled by --tier-override
+# Starter+Handoff / "Full+Handoff". See docs/HANDOFF-REPORT-WORKFLOW.md.
+HANDOFF_OVERRIDE_SEPARATOR = "+"
+HANDOFF_OVERRIDE_SUFFIX = "Handoff"
+TIER_ALIAS_TO_CANONICAL = {
+    "starter": "Starter Package",
+    "starter package": "Starter Package",
+    "full": "Full Package",
+    "full package": "Full Package",
+    "scaleup": "Full Package",
+    "scale up": "Full Package",
+    "scale up package": "Full Package",
+    "pro": "Pro Package",
+    "pro package": "Pro Package",
+}
+
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
-VALID_TIERS = {"Starter Package", "Scale Up Package", "Pro Package"}
-VALID_PLATFORMS = {"vibe-coder", "webflow"}
-DEFAULT_PLATFORM = "vibe-coder"
+VALID_TIERS = {"Starter Package", "Full Package", "Pro Package"}
 
 
 # ---------------------------------------------------------------------------
@@ -103,15 +124,6 @@ def validate(data: dict[str, Any]) -> None:
     if tier not in VALID_TIERS:
         sys.exit(f"ERROR: customer.tier must be one of {sorted(VALID_TIERS)}, got: {tier!r}")
 
-    # ``platform`` is optional. Legacy YAMLs without it default to vibe-coder
-    # so existing customers keep rendering identically.
-    platform = (customer.get("platform") or DEFAULT_PLATFORM).strip().lower()
-    if platform not in VALID_PLATFORMS:
-        sys.exit(
-            f"ERROR: customer.platform must be one of {sorted(VALID_PLATFORMS)}, got: {platform!r}"
-        )
-    customer["platform"] = platform
-
     findings = data.get("findings") or []
     if not isinstance(findings, list) or not findings:
         sys.exit("ERROR: at least one finding is required")
@@ -127,7 +139,7 @@ def validate(data: dict[str, Any]) -> None:
         if not f.get("title"):
             sys.exit(f"ERROR: findings[{i}].title is required")
 
-    cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
+    cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
     if len(findings) > cap:
         print(
             f"WARN: {tier} caps at {cap} findings, this YAML has {len(findings)}.",
@@ -178,6 +190,7 @@ def build_jinja_env():
             str(EMAIL_TEMPLATE_DIR),
             str(CONFIDENCE_CHECK_TEMPLATE_DIR),
             str(HANDOFF_TEMPLATE_DIR),
+            str(SHAREABLE_TEMPLATE_DIR),
         ]),
         autoescape=select_autoescape(["html", "xml", "j2"]),
         trim_blocks=False,
@@ -186,54 +199,160 @@ def build_jinja_env():
 
 
 # ---------------------------------------------------------------------------
-# Verified badge context (q17)
+# Handoff Report helpers (q18)
 # ---------------------------------------------------------------------------
 
-# Validity windows mirrored from scripts/generate_verified_badge.py so that
-# the embed snippet in delivered emails / report PDFs surfaces the same
-# expiry the badge JSON does. Keep these two maps in sync.
-VERIFIED_BADGE_TIER_DAYS = {
-    "Starter Package": 30,
-    "Full Package": 90,
-    "Scale Up Package": 90,
-    "Pro Package": 180,
-}
-VERIFIED_BADGE_DOMAIN = "launchlook.app"
 
+def parse_tier_override(raw: str | None) -> tuple[str | None, bool]:
+    """Resolve a ``--tier-override`` argument.
 
-def _verified_badge_context(customer: dict[str, Any]) -> dict[str, Any] | None:
-    """Build the `verified_badge` context dict for delivery templates.
+    Accepts values like ``"Starter"``, ``"Starter Package"``,
+    ``"Starter+Handoff"``, ``"Pro Package"``. Returns
+    ``(canonical_tier, has_handoff_addon)``. ``canonical_tier`` is
+    ``None`` when the caller didn't pass an override (use the YAML).
 
-    Mirrors the slug + validity window logic in
-    `scripts/generate_verified_badge.py` so that the embed snippet baked
-    into the delivery email / report PDF references the same URLs the
-    actual badge generator will write under `landing/images/badges/{slug}/`.
-    Returns `None` for tiers without a badge (defensive; we currently
-    issue one for every paid tier).
+    The ``+Handoff`` suffix is a signal that this customer paid the
+    $99 add-on. It's used so the Handoff Report still renders for
+    Starter / Scale Up buyers without flipping their canonical tier
+    (which would change finding caps + dedup rules upstream).
     """
-    tier = (customer.get("tier") or "").strip()
-    validity_days = VERIFIED_BADGE_TIER_DAYS.get(tier)
-    if not validity_days:
-        return None
+    if not raw:
+        return None, False
+    parts = [p.strip() for p in raw.split(HANDOFF_OVERRIDE_SEPARATOR)]
+    base_alias = parts[0].lower()
+    has_addon = any(p.lower() == HANDOFF_OVERRIDE_SUFFIX.lower() for p in parts[1:])
+    canonical = TIER_ALIAS_TO_CANONICAL.get(base_alias)
+    if not canonical:
+        sys.exit(
+            f"ERROR: --tier-override {raw!r} is not recognised. "
+            f"Use one of: Starter, Full, Pro, Starter+Handoff, Full+Handoff, Pro+Handoff."
+        )
+    return canonical, has_addon
 
-    raw_slug = customer.get("slug") or customer.get("customer_slug") or ""
-    if not raw_slug:
-        raw_slug = slugify(customer.get("first_name", ""), customer.get("app_name", ""))
-    slug = slugify(raw_slug)
 
-    builder = (customer.get("builder") or "").strip().lower()
-    is_webflow = builder.startswith("webflow")
-
-    base = f"https://{VERIFIED_BADGE_DOMAIN}"
+def severity_buckets_for_handoff(findings: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    """Group findings into the 3 Handoff Report sections."""
+    high: list[dict[str, Any]] = []
+    medium: list[dict[str, Any]] = []
+    low: list[dict[str, Any]] = []
+    for f in findings or []:
+        sev = (f.get("severity") or "").strip().lower()
+        if sev in ("critical", "high"):
+            high.append(f)
+        elif sev == "medium":
+            medium.append(f)
+        elif sev == "low":
+            low.append(f)
     return {
-        "customer_slug": slug,
-        "tier": tier,
-        "validity_days": validity_days,
-        "verify_url": f"{base}/verify?slug={slug}",
-        "badge_url_light": f"{base}/images/badges/{slug}/light.svg",
-        "badge_url_dark": f"{base}/images/badges/{slug}/dark.svg",
-        "is_webflow": is_webflow,
+        "findings_high": high,
+        "findings_medium": medium,
+        "findings_low": low,
     }
+
+
+def render_handoff_markdown(
+    env, data: dict[str, Any], narrative: dict[str, Any], audit_date: str
+) -> str:
+    """Render templates/handoff/handoff.md.j2 with audit + narrative data."""
+    customer = dict(data["customer"])
+    buckets = severity_buckets_for_handoff(data.get("findings") or [])
+    template = env.get_template("handoff.md.j2")
+    return template.render(
+        customer=customer,
+        verdict=data.get("verdict") or {},
+        audit_date=audit_date,
+        passed_checks=data.get("passed_checks") or [],
+        context_paragraph=narrative.get("context_paragraph", "").strip(),
+        recommended_order=narrative.get("recommended_order", "").strip(),
+        code_review_notes=(narrative.get("code_review_notes") or "").strip() or None,
+        tier=narrative.get("effective_tier") or customer.get("tier"),
+        **buckets,
+    )
+
+
+def render_handoff_html(
+    env, data: dict[str, Any], narrative: dict[str, Any], audit_date: str
+) -> str:
+    """Render templates/handoff/handoff.html.j2 for PDF generation."""
+    customer = dict(data["customer"])
+    buckets = severity_buckets_for_handoff(data.get("findings") or [])
+    template = env.get_template("handoff.html.j2")
+    return template.render(
+        customer=customer,
+        verdict=data.get("verdict") or {},
+        audit_date=audit_date,
+        passed_checks=data.get("passed_checks") or [],
+        context_paragraph=narrative.get("context_paragraph", "").strip(),
+        recommended_order=narrative.get("recommended_order", "").strip(),
+        code_review_notes=(narrative.get("code_review_notes") or "").strip() or None,
+        tier=narrative.get("effective_tier") or customer.get("tier"),
+        groups=buckets,
+    )
+
+
+def deliver_handoff_report(
+    data: dict[str, Any],
+    *,
+    out_dir: Path,
+    delivered_at: str,
+    effective_tier: str,
+    has_handoff_addon: bool,
+    provider: str = "auto",
+    no_open: bool = False,
+) -> tuple[Path | None, Path | None]:
+    """Render the Handoff Report (Markdown + PDF) for this customer.
+
+    Returns ``(md_path, pdf_path)``. Either may be ``None`` if rendering
+    fails or is skipped.
+
+    Eligibility:
+      - Customer is Pro Package (bundled), OR
+      - Customer is Starter / Scale Up + ``has_handoff_addon=True``
+        (the $99 add-on has been paid).
+    """
+    customer_tier = (data.get("customer", {}) or {}).get("tier", "")
+    canonical_tier = effective_tier or customer_tier
+    is_pro = canonical_tier == "Pro Package"
+    eligible = is_pro or has_handoff_addon
+    if not eligible:
+        print(
+            "  ! Handoff Report not generated: customer is not Pro Package and the "
+            "$99 add-on was not signalled (use --tier-override Starter+Handoff).",
+            file=sys.stderr,
+        )
+        return None, None
+
+    # Delayed import so the pipeline / ai_audit deps are only loaded when
+    # the Handoff Report is actually requested.
+    from scripts.ai_audit import pipeline as ai_pipeline  # noqa: WPS433
+
+    narrative = ai_pipeline.run_handoff_report(
+        data,
+        effective_tier=canonical_tier,
+        audit_date=delivered_at,
+        provider=provider,
+    )
+
+    env = build_jinja_env()
+
+    md_text = render_handoff_markdown(env, data, narrative, delivered_at)
+    md_path = out_dir / "handoff-report.md"
+    md_path.write_text(md_text, encoding="utf-8")
+    print(f"  ✓ wrote {md_path.name} ({md_path.stat().st_size / 1024:.1f} KB)")
+
+    html = render_handoff_html(env, data, narrative, delivered_at)
+    pdf_path = out_dir / "handoff-report.pdf"
+    try:
+        html_to_pdf(html, pdf_path, data.get("customer", {}).get("first_name", "customer"))
+        print(f"  ✓ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
+    except SystemExit as exc:
+        print(f"  ! Handoff PDF skipped: {exc}", file=sys.stderr)
+        pdf_path = None
+
+    if not no_open and pdf_path and pdf_path.exists():
+        open_in_viewer(pdf_path)
+
+    return md_path, pdf_path
 
 
 def render_main_report_html(env, data: dict[str, Any], delivered_at: str, qsg_link: str | None) -> str:
@@ -247,10 +366,9 @@ def render_main_report_html(env, data: dict[str, Any], delivered_at: str, qsg_li
         customer=customer,
         verdict=data["verdict"],
         findings=data["findings"],
-        passed_checks=data.get("passed_checks", []) or [],
         delivered_at=delivered_at,
         qsg_link=qsg_link,
-        verified_badge=_verified_badge_context(customer),
+        verified_badge=_verified_badge_context(data["customer"]),
     )
 
 
@@ -315,6 +433,38 @@ def html_to_pdf(html: str, out_path: Path, customer_name: str) -> None:
 # ---------------------------------------------------------------------------
 # Email send (Resend)
 # ---------------------------------------------------------------------------
+
+
+def _verified_badge_context(customer: dict[str, Any]) -> dict[str, Any]:
+    """Build the LaunchLook Verified badge embed snippet variables.
+
+    Mirrors the slug + validity-window logic in
+    ``scripts/generate_verified_badge.py`` so the email and report PDF point
+    customers at the same asset paths the badge generator wrote.
+    """
+    slug = slugify(customer.get("first_name", ""), customer.get("app_name", ""))
+    tier_alias = (customer.get("tier") or "").strip().lower()
+    validity_days = {
+        "starter": 30,
+        "starter package": 30,
+        "scale up": 90,
+        "scale up package": 90,
+        "full": 90,
+        "full package": 90,
+        "pro": 180,
+        "pro package": 180,
+    }.get(tier_alias, 30)
+    domain = os.getenv("LAUNCHLOOK_DOMAIN", "launchlook.app").strip() or "launchlook.app"
+    platform = (customer.get("platform") or "").strip().lower()
+    return {
+        "slug": slug,
+        "validity_days": validity_days,
+        "verify_url": f"https://{domain}/verify?slug={slug}",
+        "badge_url_light": f"https://{domain}/images/badges/{slug}/light.svg",
+        "badge_url_dark": f"https://{domain}/images/badges/{slug}/dark.svg",
+        "domain": domain,
+        "is_webflow": platform == "webflow" or (customer.get("builder") or "").strip().lower() == "webflow",
+    }
 
 
 def render_email_bodies(env, data: dict[str, Any], delivered_at: str) -> tuple[str, str, str]:
@@ -404,18 +554,10 @@ def open_in_viewer(path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
-
-
-# ---------------------------------------------------------------------------
-# q6: Confidence Check / Saboteur re-scan delivery
-# ---------------------------------------------------------------------------
-
-
 def latest_confidence_check_for(customer_id: str) -> Path:
     """Return the most recent ``data/confidence_checks/<customer_id>-*.yaml``.
 
-    ``customer_id`` can also be a full path to a YAML file (for callers that
-    want to pin a specific re-scan).
+    Customer ID may be a slug (e.g. ``jane-sparkle``) or a full file path.
     """
     candidate = Path(customer_id)
     if candidate.suffix == ".yaml" and candidate.exists():
@@ -428,347 +570,322 @@ def latest_confidence_check_for(customer_id: str) -> Path:
     matches = sorted(CONFIDENCE_CHECKS_DATA_DIR.glob(f"{customer_id}-*.yaml"))
     if not matches:
         sys.exit(
-            f"ERROR: no confidence_checks YAML found for customer {customer_id!r}. "
-            "Run scripts/confidence_check.py first."
+            f"ERROR: no Confidence Check YAML found for customer {customer_id!r} in "
+            f"{CONFIDENCE_CHECKS_DATA_DIR.relative_to(REPO_ROOT)}.\n"
+            f"Run: python scripts/confidence_check.py --customer {customer_id} "
+            f"--original <original_audit_id>"
         )
-    return matches[-1].resolve()
+    return matches[-1]
 
 
 def render_confidence_check_html(env, data: dict[str, Any], delivered_at: str) -> str:
     template = env.get_template("confidence_check_report.html.j2")
-    cc = data.get("confidence_check") or {}
-    customer = {
-        "first_name": cc.get("customer_first_name", "there"),
-        "email": cc.get("customer_email", ""),
-        "app_name": cc.get("app_name", ""),
-        "app_url": cc.get("url", ""),
-        "tier": cc.get("tier", ""),
-        "builder": cc.get("builder", ""),
-    }
     return template.render(
-        confidence_check=cc,
-        customer=customer,
-        verdict=data.get("verdict", {}) or {},
-        fixed=data.get("fixed", []) or [],
-        still_present=data.get("still_present", []) or [],
-        new=data.get("new", []) or [],
+        confidence_check=data["confidence_check"],
+        verdict=data["verdict"],
+        fixed=data.get("fixed") or [],
+        still_present=data.get("still_present") or [],
+        new=data.get("new") or [],
         footer_note=data.get("footer_note", ""),
         delivered_at=delivered_at,
-        original_audit_id=cc.get("original_audit_id"),
     )
 
 
-def render_confidence_check_email(env, data: dict[str, Any], delivered_at: str) -> tuple[str, str, str]:
-    """Return ``(subject, text_body, html_body)`` for the Confidence Check email."""
-    cc = data.get("confidence_check") or {}
-    first_name = cc.get("customer_first_name", "there")
-    customer = {
-        "first_name": first_name,
-        "email": cc.get("customer_email", ""),
-        "app_name": cc.get("app_name", ""),
-        "app_url": cc.get("url", ""),
-    }
-    subject = f"Your Confidence Check is in - {first_name}, here's what The Saboteur found"
+def render_confidence_check_email(
+    env, data: dict[str, Any], delivered_at: str
+) -> tuple[str, str, str]:
+    cc = data["confidence_check"]
+    first_name = cc.get("customer_first_name") or "there"
+    subject = f"The Saboteur's back with your re-scan, {first_name}"
+
+    fixed_count = len(data.get("fixed") or [])
+    still_count = len(data.get("still_present") or [])
+    new_count = len(data.get("new") or [])
+
     ctx = {
-        "customer": customer,
-        "confidence_check": cc,
         "first_name": first_name,
-        "app_name": customer.get("app_name") or "your app",
-        "verdict": data.get("verdict", {}) or {},
-        "fixed_count": len(data.get("fixed", []) or []),
-        "still_count": len(data.get("still_present", []) or []),
-        "still_present_count": len(data.get("still_present", []) or []),
-        "new_count": len(data.get("new", []) or []),
+        "app_name": cc.get("app_name", ""),
+        "verdict": data["verdict"],
+        "fixed_count": fixed_count,
+        "still_count": still_count,
+        "new_count": new_count,
         "delivered_at": delivered_at,
     }
-    text_body = env.get_template("confidence_check_email.txt.j2").render(**ctx)
-    html_body = env.get_template("confidence_check_email.html.j2").render(**ctx)
-    return subject, text_body, html_body
+
+    html_tpl = env.get_template("confidence_check_email.html.j2")
+    text_tpl = env.get_template("confidence_check_email.txt.j2")
+    return subject, html_tpl.render(**ctx), text_tpl.render(**ctx)
 
 
 def deliver_confidence_check(args) -> int:
-    """Render + (optionally) send the short-form Confidence Check report.
-
-    Skips Quick Start Guide generation per q6 spec - Confidence Check ships
-    only the short report.
-    """
-    try:
-        import yaml
-    except ImportError:
-        sys.exit("ERROR: pyyaml not installed. Run: pip install -r requirements.txt")
-
+    """Render + (optionally) send the Confidence Check short-form report."""
     yaml_path = latest_confidence_check_for(args.customer)
-    with yaml_path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
+    print(f"→ Confidence Check YAML: {yaml_path.relative_to(REPO_ROOT)}")
 
-    if not isinstance(data, dict):
-        sys.exit(f"ERROR: {yaml_path} did not parse as a YAML mapping")
+    try:
+        import yaml as _yaml
+    except ImportError:
+        sys.exit("ERROR: pyyaml not installed.")
+    with yaml_path.open("r", encoding="utf-8") as f:
+        data = _yaml.safe_load(f) or {}
 
     cc = data.get("confidence_check") or {}
-    customer = {
-        "first_name": cc.get("customer_first_name", "customer"),
-        "email": cc.get("customer_email", ""),
-        "app_name": cc.get("app_name", ""),
-    }
-    slug = slugify(customer.get("first_name", "customer"), customer.get("app_name", ""))
+    if not cc:
+        sys.exit(
+            f"ERROR: {yaml_path} is missing the top-level 'confidence_check' block. "
+            "Re-run scripts/confidence_check.py to regenerate it."
+        )
+
+    customer_id = cc.get("customer_id") or args.customer
     delivered_at = date.today().isoformat()
 
-    env = build_jinja_env()
-    html = render_confidence_check_html(env, data, delivered_at)
-
-    out_dir = CONFIDENCE_CHECK_OUTPUT_ROOT / slug
+    out_dir = CONFIDENCE_CHECK_OUTPUT_ROOT / customer_id
     out_dir.mkdir(parents=True, exist_ok=True)
-    html_path = out_dir / "confidence-check.html"
-    html_path.write_text(html, encoding="utf-8")
-    print(f"OK: HTML written to {html_path.relative_to(REPO_ROOT)}")
-
     pdf_path = out_dir / "confidence-check.pdf"
-    try:
-        html_to_pdf(html, pdf_path, customer.get("first_name", "customer"))
-        print(f"OK: PDF written to {pdf_path.relative_to(REPO_ROOT)}")
-    except SystemExit as exc:
-        print(f"WARN: PDF skipped ({exc}). HTML preview at {html_path}.", file=sys.stderr)
-        pdf_path = None
 
-    subject, text_body, html_body = render_confidence_check_email(env, data, delivered_at)
-    text_out = out_dir / "email.txt"
-    html_out = out_dir / "email.html"
-    text_out.write_text(text_body, encoding="utf-8")
-    html_out.write_text(html_body, encoding="utf-8")
-    print(f"OK: Email preview at {text_out.relative_to(REPO_ROOT)} / {html_out.relative_to(REPO_ROOT)}")
-    print(f"   Subject: {subject}")
+    env = build_jinja_env()
 
-    if args.send:
-        if not pdf_path or not pdf_path.exists():
-            sys.exit("ERROR: cannot --send without a rendered PDF.")
-        send_via_resend(
-            to_email=customer.get("email", ""),
-            subject=subject,
-            text=text_body,
-            html=html_body,
-            attachments=[pdf_path],
-            confirm=not args.yes,
+    print(f"→ Customer:   {cc.get('customer_first_name', customer_id)} ({cc.get('customer_email', '?')})")
+    print(f"→ App:        {cc.get('app_name', '?')}")
+    print(f"→ Original:   {cc.get('original_audit_id', '?')}")
+    print(
+        f"→ Buckets:    ✓ {len(data.get('fixed') or [])}"
+        f" / ✗ {len(data.get('still_present') or [])}"
+        f" / ⚠ {len(data.get('new') or [])}"
+    )
+    print(f"→ Output:     {out_dir.relative_to(REPO_ROOT)}")
+
+    html = render_confidence_check_html(env, data, delivered_at)
+    html_to_pdf(html, pdf_path, cc.get("customer_first_name") or customer_id)
+    print(f"  ✓ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
+
+    # Confidence Check intentionally has NO QSG (per the spec — it's a
+    # short focused report, not a full audit).
+
+    if not args.send:
+        if not args.no_open:
+            open_in_viewer(pdf_path)
+        subject, html_body, text_body = render_confidence_check_email(
+            env, data, delivered_at
         )
-    elif not args.no_open and pdf_path and pdf_path.exists():
-        open_in_viewer(pdf_path)
+        preview_path = out_dir / "email-preview.txt"
+        preview_path.write_text(
+            f"Subject: {subject}\n\n--- TEXT ---\n{text_body}\n\n--- HTML ---\n{html_body}\n",
+            encoding="utf-8",
+        )
+        print(f"  ✓ wrote {preview_path.name} (email preview)")
+        print(
+            "\nDry-run complete. Review the PDF + email preview, then re-run with "
+            "--send to email it.\n"
+            f"  python scripts/deliver_report.py --confidence-check "
+            f"--customer {customer_id} --send"
+        )
+        return 0
 
+    subject, html_body, text_body = render_confidence_check_email(
+        env, data, delivered_at
+    )
+
+    to_email = cc.get("customer_email", "")
+    if not to_email:
+        sys.exit(
+            "ERROR: confidence_check.customer_email is empty in the YAML. "
+            "Fill it in manually before --send."
+        )
+
+    print("\n--- Send preview ---")
+    print(f"  To:       {to_email}")
+    print(f"  Subject:  {subject}")
+    print(f"  Files:    {pdf_path.name}")
+    if not args.yes:
+        confirm = input("\nSend now? Type 'send' to confirm: ").strip().lower()
+        if confirm != "send":
+            print("Aborted. No email was sent.")
+            return 1
+
+    result = send_via_resend(
+        to_email=to_email,
+        subject=subject,
+        html_body=html_body,
+        text_body=text_body,
+        attachments=[pdf_path],
+    )
+    msg_id = result.get("id") if isinstance(result, dict) else None
+    print(f"\n✓ Sent. Resend message id: {msg_id or '(none returned)'}")
     return 0
 
 
 # ---------------------------------------------------------------------------
-# Handoff Report (q18)
+# Shareable hosted report page (q22)
 # ---------------------------------------------------------------------------
 
 
-# Tier aliases the CLI accepts on --tier-override. We canonicalize before
-# routing through the Handoff Report code so that the template only ever
-# sees "Starter Package" / "Scale Up Package" / "Pro Package".
-TIER_ALIAS_TO_CANONICAL = {
-    "starter": "Starter Package",
-    "starter package": "Starter Package",
-    "scale up": "Scale Up Package",
-    "scaleup": "Scale Up Package",
-    "scale up package": "Scale Up Package",
-    "full": "Scale Up Package",  # legacy alias before q3 rename
-    "full package": "Scale Up Package",
-    "pro": "Pro Package",
-    "pro package": "Pro Package",
-}
-
-HANDOFF_OVERRIDE_SEPARATOR = "+"
-HANDOFF_OVERRIDE_SUFFIX = "handoff"
+def _format_audit_date_human(iso: str) -> str:
+    try:
+        parts = iso.split("-")
+        months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December",
+        ]
+        return f"{months[int(parts[1]) - 1]} {int(parts[2])}, {parts[0]}"
+    except (ValueError, IndexError):
+        return iso
 
 
-def parse_tier_override(raw: str | None) -> tuple[str | None, bool]:
-    """Parse ``--tier-override`` into ``(canonical_tier, handoff_addon)``.
-
-    Accepted shapes:
-      ``"Pro"``               -> ("Pro Package", False)
-      ``"Starter+Handoff"``   -> ("Starter Package", True)
-      ``"Scale Up + Handoff"``-> ("Scale Up Package", True)
-      ``None`` / ``""``       -> (None, False)
-    """
-    if not raw:
-        return None, False
-    parts = [p.strip().lower() for p in raw.split(HANDOFF_OVERRIDE_SEPARATOR) if p.strip()]
-    if not parts:
-        return None, False
-    tier_alias = parts[0]
-    tier = TIER_ALIAS_TO_CANONICAL.get(tier_alias)
-    if tier is None:
-        sys.exit(
-            f"ERROR: --tier-override {raw!r} did not match a known tier. "
-            f"Try: Starter, Scale Up, Pro, or any of these with +Handoff."
-        )
-    handoff_addon = any(p == HANDOFF_OVERRIDE_SUFFIX for p in parts[1:])
-    return tier, handoff_addon
-
-
-def severity_buckets_for_handoff(
-    findings: list[dict[str, Any]],
-) -> dict[str, list[dict[str, Any]]]:
-    """Group findings into the three buckets the handoff template renders.
-
-    ``critical`` rolls up into ``high`` because the handoff report uses
-    three buckets (must / should / polish) per the q18 spec.
-    """
-    buckets: dict[str, list[dict[str, Any]]] = {"high": [], "medium": [], "low": []}
-    for f in findings or []:
-        sev = (f.get("severity") or "").strip().lower()
-        if sev in {"critical", "high"}:
-            buckets["high"].append(f)
-        elif sev == "medium":
-            buckets["medium"].append(f)
-        else:
-            buckets["low"].append(f)
-    return buckets
-
-
-def render_handoff_markdown(
-    env,
-    *,
+def _build_share_metadata(
     customer: dict[str, Any],
     verdict: dict[str, Any],
-    passed_checks: list[dict[str, Any]],
-    groups: dict[str, list[dict[str, Any]]],
-    context_paragraph: str,
-    recommended_order: str,
-    code_review_notes: str,
-    effective_tier: str,
+    n_findings: int,
     audit_date: str,
-) -> str:
-    tmpl = env.get_template("handoff.md.j2")
-    return tmpl.render(
-        customer=customer,
-        verdict=verdict,
-        passed_checks=passed_checks,
-        findings_high=groups["high"],
-        findings_medium=groups["medium"],
-        findings_low=groups["low"],
-        context_paragraph=context_paragraph,
-        recommended_order=recommended_order,
-        code_review_notes=code_review_notes,
-        tier=effective_tier,
-        audit_date=audit_date,
+) -> dict[str, str]:
+    """Build the OG / Twitter Card meta-tag values for the shareable page.
+
+    Phrasing rules (per docs/SIMPLICITY-GUARDRAILS.md sections 3 + 6):
+      * No "comprehensive", "AI-powered", or other corporate vocabulary.
+      * Plain English. Verdict label up front so a Reddit / Twitter scroller
+        can decide whether to click.
+    """
+    app_name = customer.get("app_name", "this app")
+    label = (verdict.get("label") or "Pre-launch audit").strip()
+    description = (
+        f"Pre-launch audit. Verdict: {label}. "
+        f"{n_findings} finding{'s' if n_findings != 1 else ''} "
+        f"across trust, broken CTAs, mobile layout, and more."
     )
+    return {
+        "title": f"LaunchLook audit for {app_name}",
+        "description": description,
+        "og_image": "https://launchlook.app/images/og.png",
+    }
 
 
-def render_handoff_html(
-    env,
-    *,
-    customer: dict[str, Any],
-    verdict: dict[str, Any],
-    passed_checks: list[dict[str, Any]],
-    groups: dict[str, list[dict[str, Any]]],
-    context_paragraph: str,
-    recommended_order: str,
-    code_review_notes: str,
-    effective_tier: str,
-    audit_date: str,
-) -> str:
-    tmpl = env.get_template("handoff.html.j2")
-    return tmpl.render(
-        customer=customer,
-        verdict=verdict,
-        passed_checks=passed_checks,
-        groups=groups,
-        context_paragraph=context_paragraph,
-        recommended_order=recommended_order,
-        code_review_notes=code_review_notes,
-        tier=effective_tier,
-        audit_date=audit_date,
-    )
-
-
-def deliver_handoff_report(
-    env,
-    *,
+def _build_public_report_dict(
     data: dict[str, Any],
-    paid_tier: str,
-    handoff_addon: bool,
+    *,
+    slug: str,
     delivered_at: str,
-    out_dir: Path,
-    customer_name: str,
-    provider: str = "auto",
-) -> tuple[Path, Path] | None:
-    """Generate the Markdown + PDF Handoff Report when the customer is eligible.
+    is_pro_handoff: bool,
+) -> dict[str, Any]:
+    """Assemble the public-safe report dict before sanitization.
 
-    Eligibility per PRODUCT-DECISIONS.md section 8:
-      * Pro Package -> Handoff Report is included for free.
-      * Starter / Scale Up -> Handoff Report only ships when the customer
-        bought the $99 add-on (``handoff_addon=True``).
-
-    Returns ``(md_path, pdf_path)`` when files are written, or ``None`` when
-    the customer is ineligible (caller can log and skip).
+    The output of this function is the *unsanitized* shape -- with raw
+    customer URL etc. still attached -- because ``sanitize_report_json``
+    expects to do the stripping itself given the customer block. Always
+    pipe this through ``sanitize_report_json`` before writing JSON.
     """
-    pro = paid_tier == "Pro Package"
-    eligible = pro or handoff_addon
-    if not eligible:
-        return None
+    customer = data["customer"]
+    verdict = data.get("verdict") or {}
+    findings = data.get("findings") or []
 
-    # Lazy import to keep CLI startup snappy. deliver_report.py runs as
-    # a script so the repo root is not yet on sys.path; add it before
-    # importing the ai_audit package.
-    if str(REPO_ROOT) not in sys.path:
-        sys.path.insert(0, str(REPO_ROOT))
-    from scripts.ai_audit import pipeline as ai_pipeline
-
-    narrative = ai_pipeline.run_handoff_report(
-        audit_payload=data,
-        effective_tier=paid_tier,
-        audit_date=delivered_at,
-        provider=provider,
+    share_metadata = _build_share_metadata(
+        customer, verdict, len(findings), delivered_at
     )
 
-    customer = (data or {}).get("customer") or {}
-    verdict = (data or {}).get("verdict") or {}
-    findings = (data or {}).get("findings") or []
-    passed_checks = (data or {}).get("passed_checks") or []
+    return {
+        "customer_slug": slug,
+        "is_public": False,
+        "tier": customer.get("tier", ""),
+        "audit_date": delivered_at,
+        "app_name": customer.get("app_name", ""),
+        "customer_url": customer.get("app_url", ""),
+        "verdict": dict(verdict),
+        "passed_checks": list(data.get("passed_checks") or []),
+        "findings": [dict(f) for f in findings if isinstance(f, dict)],
+        "verified_badge_slug": slug,
+        "share_metadata": share_metadata,
+        "handoff_report": {
+            "available": bool(is_pro_handoff),
+            "shared": False,
+        },
+    }
 
-    groups = severity_buckets_for_handoff(findings)
 
-    md_text = render_handoff_markdown(
-        env,
-        customer=customer,
-        verdict=verdict,
-        passed_checks=passed_checks,
-        groups=groups,
-        context_paragraph=narrative["context_paragraph"],
-        recommended_order=narrative["recommended_order"],
-        code_review_notes=narrative["code_review_notes"],
-        effective_tier=paid_tier,
-        audit_date=delivered_at,
+def _generate_shareable_page(
+    data: dict[str, Any],
+    *,
+    slug: str,
+    delivered_at: str,
+    has_handoff: bool,
+) -> tuple[Path, Path]:
+    """Generate the shareable hosted report page assets for this customer.
+
+    Writes two files:
+
+    * ``landing/data/reports/{slug}.json`` -- sanitized data, default
+      ``is_public: false``. The customer flips this with
+      ``scripts/share_report.py --slug ... --public``.
+    * ``landing/r/{slug}.html`` -- a per-customer HTML page with the
+      OG / Twitter meta tags baked in (so Reddit / Twitter / LinkedIn
+      preview correctly) and a ``<body data-slug="...">`` that the
+      client-side ``r.js`` reads to fetch the JSON above.
+
+    Per docs/SIMPLICITY-GUARDRAILS.md sections 3 and 5: default private,
+    never publish without an explicit Rob-typed CLI flip, and never
+    customize the page for the customer (it's the LaunchLook marketing
+    surface, not a customer-owned site).
+    """
+    from scripts.sanitize_for_public import sanitize_report_json  # noqa: WPS433
+
+    raw_report = _build_public_report_dict(
+        data,
+        slug=slug,
+        delivered_at=delivered_at,
+        is_pro_handoff=has_handoff,
     )
 
-    html_text = render_handoff_html(
-        env,
-        customer=customer,
-        verdict=verdict,
-        passed_checks=passed_checks,
-        groups=groups,
-        context_paragraph=narrative["context_paragraph"],
-        recommended_order=narrative["recommended_order"],
-        code_review_notes=narrative["code_review_notes"],
-        effective_tier=paid_tier,
-        audit_date=delivered_at,
+    # Preserve existing public/shared state if a JSON already exists, so
+    # re-running deliver_report.py doesn't quietly flip a live audit back
+    # to private. The audit content itself is re-sanitized either way.
+    json_path = SHAREABLE_REPORTS_DATA_DIR / f"{slug}.json"
+    if json_path.exists():
+        try:
+            existing = json.loads(json_path.read_text(encoding="utf-8"))
+            raw_report["is_public"] = bool(existing.get("is_public", False))
+            prior_handoff = existing.get("handoff_report") or {}
+            raw_report["handoff_report"]["shared"] = bool(
+                raw_report["handoff_report"]["available"]
+                and prior_handoff.get("shared", False)
+            )
+            if existing.get("share_history"):
+                raw_report["share_history"] = existing["share_history"]
+        except (ValueError, OSError):
+            pass
+
+    public_data = sanitize_report_json(raw_report, data["customer"])
+    if raw_report.get("share_history"):
+        public_data["share_history"] = raw_report["share_history"]
+
+    SHAREABLE_REPORTS_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with json_path.open("w", encoding="utf-8") as f:
+        json.dump(public_data, f, indent=2, ensure_ascii=False, sort_keys=True)
+        f.write("\n")
+
+    env = build_jinja_env()
+    template = env.get_template("shareable.html.j2")
+    html = template.render(
+        customer_slug=slug,
+        app_name=public_data.get("app_name", ""),
+        audit_date_human=_format_audit_date_human(delivered_at),
+        share_metadata=public_data.get("share_metadata", {}),
     )
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    md_path = out_dir / "handoff_report.md"
-    pdf_path = out_dir / "handoff_report.pdf"
-    md_path.write_text(md_text, encoding="utf-8")
-    html_to_pdf(html_text, pdf_path, customer_name)
-    return md_path, pdf_path
+    SHAREABLE_PAGES_DIR.mkdir(parents=True, exist_ok=True)
+    html_path = SHAREABLE_PAGES_DIR / f"{slug}.html"
+    html_path.write_text(html, encoding="utf-8")
 
+    return json_path, html_path
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--customer", required=True, help="Path to customer YAML (or, with --confidence-check, customer slug)")
     parser.add_argument(
-        "--confidence-check",
-        action="store_true",
-        help="q6: render the short-form Confidence Check report (skips QSG).",
+        "--customer",
+        required=True,
+        help=(
+            "Path to customer YAML for the regular delivery, OR the customer "
+            "slug for --confidence-check (matched against "
+            "data/confidence_checks/<slug>-*.yaml)."
+        ),
     )
     parser.add_argument("--send", action="store_true", help="Send via Resend (default is dry-run preview)")
     parser.add_argument("--dry-run", action="store_true", help="Force dry-run (default behavior)")
@@ -776,81 +893,53 @@ def main() -> int:
     parser.add_argument("--qsg-link", default=None, help="Optional public URL of the QSG PDF (for the report cross-link)")
     parser.add_argument("--yes", action="store_true", help="Skip the send confirmation prompt")
     parser.add_argument(
+        "--confidence-check",
+        action="store_true",
+        help=(
+            "Render the Confidence Check / Saboteur re-scan short-form report "
+            "instead of the full audit (skips QSG; loads from "
+            "data/confidence_checks/<customer>-*.yaml)."
+        ),
+    )
+    parser.add_argument(
         "--handoff-report",
         action="store_true",
-        help="Also generate the Handoff Report (Markdown + PDF) for this customer.",
+        help=(
+            "Also render the Handoff Report (Markdown + PDF) for this customer. "
+            "Pro Package customers get it bundled; Starter / Scale Up customers "
+            "need --tier-override Starter+Handoff or Full+Handoff to signal that "
+            "the $99 add-on has been paid. See docs/HANDOFF-REPORT-WORKFLOW.md."
+        ),
     )
     parser.add_argument(
         "--tier-override",
         default=None,
         help=(
-            "Override the tier declared in the customer YAML. Useful for the "
-            "Starter+Handoff add-on flow. Accepts e.g. \"Starter+Handoff\", "
-            "\"Scale Up+Handoff\", or just \"Pro\"."
+            "Override the YAML's customer.tier for delivery-side decisions "
+            "(e.g. Handoff Report gating). Accepts: Starter, Full, Pro, "
+            "Starter+Handoff, Full+Handoff, Pro+Handoff. The +Handoff suffix "
+            "signals that the customer paid the $99 Handoff Report add-on."
         ),
     )
     parser.add_argument(
         "--provider",
         default="auto",
-        choices=["auto", "claude", "gpt", "stub"],
-        help="LLM provider for Handoff Report narrative pieces. Default: auto.",
+        help=(
+            "LLM provider for the Handoff Report narrative pieces. One of "
+            "auto, claude, gpt, stub. Defaults to auto (Claude > GPT > stub)."
+        ),
     )
     args = parser.parse_args()
-
-    if args.confidence_check:
-        return deliver_confidence_check(args)
-
 
     if args.send and args.dry_run:
         sys.exit("ERROR: --send and --dry-run are mutually exclusive")
 
+    if args.confidence_check:
+        return deliver_confidence_check(args)
+
     customer_path = Path(args.customer).resolve()
     data = load_customer_yaml(customer_path)
     validate(data)
-
-    # q18: Handoff Report (separate Markdown + PDF deliverable).
-    if getattr(args, "handoff_report", False):
-        tier_override, handoff_addon = parse_tier_override(
-            getattr(args, "tier_override", None)
-        )
-        effective_tier = tier_override or (data.get("customer") or {}).get("tier") or ""
-        if not handoff_addon and effective_tier != "Pro Package":
-            # CLI requested --handoff-report explicitly so treat it as the
-            # add-on being applied. Webhook callers set --tier-override
-            # Starter+Handoff or pass --handoff-report for Pro.
-            handoff_addon = effective_tier != "Pro Package"
-        env = build_jinja_env()
-        out_dir = REPO_ROOT / "out" / (
-            slugify((data.get("customer") or {}).get("slug") or "handoff")
-        )
-        delivered_at = (
-            (data.get("customer") or {}).get("audit_date")
-            or date.today().isoformat()
-        )
-        customer_name = (
-            (data.get("customer") or {}).get("first_name", "")
-            + " "
-            + (data.get("customer") or {}).get("last_name", "")
-        ).strip() or "customer"
-        result = deliver_handoff_report(
-            env,
-            data=data,
-            paid_tier=effective_tier,
-            handoff_addon=handoff_addon,
-            delivered_at=delivered_at,
-            out_dir=out_dir,
-            customer_name=customer_name,
-            provider=getattr(args, "provider", "auto"),
-        )
-        if result is None:
-            print(
-                "[handoff] customer not eligible for Handoff Report (free Pro "
-                "or paid Starter/Scale Up add-on). Skipping."
-            )
-        else:
-            md_path, pdf_path = result
-            print(f"[handoff] wrote {md_path}")
-            print(f"[handoff] wrote {pdf_path}")
 
     customer = data["customer"]
     slug = slugify(customer.get("first_name", ""), customer.get("app_name", ""))
@@ -892,6 +981,56 @@ def main() -> int:
     attachments = [main_pdf]
     if qsg_html:
         attachments.append(qsg_pdf)
+
+    # q22: shareable hosted report page. Default is private (no
+    # surprises). Customer opts in by replying 'share' to the delivery
+    # email; Rob then runs scripts/share_report.py to flip.
+    is_pro_for_handoff = customer["tier"] == "Pro Package"
+    if args.tier_override:
+        override_tier, has_addon = parse_tier_override(args.tier_override)
+        if (override_tier and override_tier == "Pro Package") or has_addon:
+            is_pro_for_handoff = True
+    shareable_json, shareable_html = _generate_shareable_page(
+        data,
+        slug=slug,
+        delivered_at=delivered_at,
+        has_handoff=is_pro_for_handoff,
+    )
+    print(
+        f"  ✓ wrote {shareable_json.relative_to(REPO_ROOT)}"
+        f" + {shareable_html.relative_to(REPO_ROOT)}"
+        " (private by default)"
+    )
+
+    # Handoff Report (q18). Bundled for Pro Package; opt-in $99 add-on
+    # for Starter / Scale Up signalled via --tier-override <Tier>+Handoff.
+    handoff_md_path: Path | None = None
+    handoff_pdf_path: Path | None = None
+    if args.handoff_report:
+        override_tier, has_handoff_addon = parse_tier_override(args.tier_override)
+        effective_tier = override_tier or customer["tier"]
+        is_pro = effective_tier == "Pro Package"
+        if is_pro or has_handoff_addon:
+            print(
+                f"→ Handoff Report:  generating (tier={effective_tier!r}, "
+                f"addon={has_handoff_addon})"
+            )
+            handoff_md_path, handoff_pdf_path = deliver_handoff_report(
+                data,
+                out_dir=out_dir,
+                delivered_at=delivered_at,
+                effective_tier=effective_tier,
+                has_handoff_addon=has_handoff_addon,
+                provider=args.provider,
+                no_open=args.no_open or args.send,
+            )
+            if handoff_pdf_path:
+                attachments.append(handoff_pdf_path)
+        else:
+            print(
+                "→ Handoff Report:  SKIPPED — customer is not Pro Package and "
+                "no --tier-override <Tier>+Handoff was passed."
+            )
 
     if not args.send:
         if not args.no_open:

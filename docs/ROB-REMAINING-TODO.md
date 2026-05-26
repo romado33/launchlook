@@ -390,3 +390,12 @@ If using a different analytics tool, replace the script tag in every `landing/*.
 
 - [ ] Create Stripe Payment Link for the $99 Handoff Report add-on. Attach metadata `product=handoff_report` so the webhook routes via `handle_handoff_report_purchase` instead of the Pro Package SKU. Paste the resulting price ID into the Vercel env (`STRIPE_HANDOFF_REPORT`) and into `landing/index.html` + `landing/webflow.html`.
 - [ ] Add the Plausible goal `HandoffReportAddOn` in the Plausible dashboard so the existing `plausible-event-name` attribute fires.
+
+
+### Shareable hosted report pages (q22)
+
+- [ ] **Daily flow.** When a customer replies 'share' to their delivery email, run `python scripts/share_report.py --slug X --public` and confirm the report renders at `launchlook.app/r/X`. When they reply 'unshare', run `--private`. See `docs/SHAREABLE-REPORT-WORKFLOW.md`.
+- [ ] **Delivery email copy.** Make sure the delivery email body includes the private URL line: `Your report URL (private): https://launchlook.app/r/{slug}. This page is private until you switch it on. Want to share publicly? Reply with 'share' and we'll make it public.`
+- [ ] **Pro tier Handoff Report sharing.** When a Pro customer asks to expose the Handoff Report on the public page, run `python scripts/share_report.py --slug X --share-handoff` and copy the generated `output/reports/X/handoff-report.pdf` to `landing/data/handoff/X.pdf` so the download link works. Commit + push.
+- [ ] **Add Plausible goals** for `ReportView` (custom event already fires from `landing/assets/r.js`), `ShareableCTAPricing`, and `ShareableHandoffDownload`. Not blocking - they are tagged events that surface in Plausible automatically; the goal definition is just so they appear in the conversions chart.
+- [ ] **Optional analytics check.** Once the first three example customers are public, hit each `launchlook.app/r/{slug}` URL and confirm OG preview renders in opengraph.xyz, Twitter Card Validator, and LinkedIn Post Inspector.

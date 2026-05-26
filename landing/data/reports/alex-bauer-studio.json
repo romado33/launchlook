@@ -1,0 +1,83 @@
+{
+  "app_name": "Bauer Studio",
+  "audit_date": "2026-05-26",
+  "customer": {
+    "app_name": "Bauer Studio",
+    "builder": "Webflow",
+    "first_name": "Alex",
+    "platform": "webflow",
+    "tier": "Starter Package"
+  },
+  "customer_slug": "alex-bauer-studio",
+  "findings": [
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In Webflow Designer, open Project Settings (top right) → Forms tab →\nForm Notifications section. Click \"Add a recipient\" and add\n[email redacted] (or whichever inbox you actually check). Save.\nThen go back to the live URL, submit the contact form once with a\ntest email, and confirm it arrives in your inbox within a minute.\nOnce verified, click Publish to lock the configuration in.\n",
+      "severity": "critical",
+      "tag": "Caught by The Skeptic",
+      "title": "Contact form silently drops every submission (no Form Notification set)",
+      "what_we_saw": "On /contact, the form submits successfully (shows the green\n\"Thanks! We'll be in touch\" success block), but no email is\ndelivered to any inbox. The form's action attribute points at\nWebflow's standard endpoint; the failure is that Project Settings\n→ Forms → Form Notifications has no recipient configured, so\nWebflow records the submission internally but never notifies you.\nThis is the failure mode introduced by the November 2024 Webflow\nupdate and is the single most common issue we see on live Webflow\nsites.\n",
+      "why_it_matters": "Every lead is being lost in silence. The visitor sees a success\nmessage and assumes you got it. You see nothing. Most agencies\ncatch this only after a prospect emails them asking \"why didn't\nyou reply to my form?\"\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In Webflow Designer, open Pages (left sidebar) → click /about →\nopen the SEO tab on the right panel. Find \"Search engine indexing\"\nand toggle it from \"Disable\" to \"Allow.\" Save. Then click Publish\nin the top right. After publish, reload your site\nand view source to confirm the meta robots tag no longer contains\n\"noindex.\" Then submit the URL to Google Search Console for a\nfresh crawl.\n",
+      "severity": "critical",
+      "tag": "Caught by The Skeptic",
+      "title": "/about page set to noindex, blocking Google from indexing it",
+      "what_we_saw": "The /about page contains <meta name=\"robots\" content=\"noindex\">\nin the head. This means Google and other search engines will never\nindex this page, even though it's part of the live site. The\nhomepage and other pages are correctly indexable. This pattern\nusually means the page was set to noindex while staging and the\ntoggle was forgotten when you cut over to the custom domain.\n",
+      "why_it_matters": "/about is one of the most-searched pages for any agency or studio\nsite (prospects Google \"[your name] about\" to vet you). Blocking\nit from indexing means you're invisible to that search. It's a\nsilent SEO killer with a 10-second fix.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In Webflow Designer, open CMS Collections → Blog Posts. Find\n\"Welcome to our process\" and \"Studio philosophy, 2026\" in the\nlist. For each, either (a) replace the body content with real\ncopy and Publish, or (b) toggle \"Draft\" so the post does not\nrender on the live site until the copy is ready. If you have a\nlarge queue of posts to draft in bulk, you can multi-select in\nthe Collections panel and Publish/Unpublish all at once.\n",
+      "severity": "high",
+      "tag": "Caught by The Skeptic",
+      "title": "Two CMS blog posts contain literal \"Lorem ipsum\" placeholder copy",
+      "what_we_saw": "In the /blog CMS collection, two posts (\"Welcome to our process\"\nand \"Studio philosophy, 2026\") have their body field still set to\nthe default \"Lorem ipsum dolor sit amet...\" placeholder text. Both\nposts are published, so the Lorem ipsum is visible on the live\ncollection page and on the individual post detail pages.\n",
+      "why_it_matters": "A first-time visitor browsing the blog will see \"Lorem ipsum\"\nplaceholder copy on the studio's own writing, which reads as\nunfinished. The blog is the highest-trust signal on a studio site;\nLorem ipsum on it undermines everything around it.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In Webflow Designer, open Pages → Home → SEO tab → scroll to\n\"Custom Code\" → \"Inside <head> tag.\" Paste this Organization\nschema (replace the values with your real data):\n\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Organization\",\n  \"name\": \"Bauer Studio\",\n  \"url\": \"your site\",\n  \"logo\": \"your site\",\n  \"sameAs\": [\n    \"https://www.linkedin.com/company/bauer-studio\",\n    \"https://twitter.com/bauerstudio\"\n  ]\n}\n</script>\n\nSave, then click Publish. Verify by pasting the live URL into\nhttps://search.google.com/test/rich-results — Google should\nreport a valid Organization object.\n",
+      "severity": "high",
+      "tag": "Caught by The Skeptic",
+      "title": "Homepage has no JSON-LD schema; Organization markup missing",
+      "what_we_saw": "The homepage <head> contains standard Open Graph and Twitter card\ntags, but no <script type=\"application/ld+json\"> block. For a\nstudio / agency site, Google specifically looks for Organization\nschema (logo, name, sameAs links to your social profiles) to\nrender rich results and to populate the right-hand Knowledge\nPanel. Without it, your business shows up as a plain blue link.\n",
+      "why_it_matters": "Rich results (logo in search, social links, established business\nindicator) measurably increase click-through rates. Webflow does\nnot generate JSON-LD by default; you have to add it manually\nvia the Custom Code section on each page.\n"
+    },
+    {
+      "category": "mobile_layout",
+      "fix_prompt": "In Webflow Designer, switch to the 478px (Mobile portrait)\nbreakpoint using the toolbar at the top. Select the services\ngrid container (Body → Section.services → Container.services-grid)\nand either (a) change the layout from a four-column grid to a\nsingle-column stack at 478px and below, or (b) reduce the\ncontainer's horizontal padding from 60px to 16px at the 478\nbreakpoint. Option (a) is the standard Webflow pattern and reads\nbest on phone-portrait. After the change, Publish and reload the\nlive URL on a real phone (or Chrome DevTools at 390px wide) to\nconfirm no horizontal scrollbar appears.\n",
+      "severity": "medium",
+      "tag": "Caught by The Phone-First Friend",
+      "title": "Services grid overflows the viewport at the 478px (mobile portrait) breakpoint",
+      "what_we_saw": "At 478px wide (Webflow's Mobile portrait breakpoint), the four-up\nservices grid on the homepage forces a horizontal scrollbar. Two\nservice cards extend past the right edge of the viewport because\ntheir fixed width (240px) plus the container's horizontal padding\n(60px each side) totals more than 478px. The 991px and 767px\nbreakpoints render correctly; this is a 478-only break.\n",
+      "why_it_matters": "Mobile-portrait users (the majority of phone traffic) will see a\npartial layout with horizontal scroll, which reads as broken even\nthough the content is fine. Webflow's three breakpoints are well\nknown for this: a layout that's clean at Desktop / 991 / 767 can\nstill break at 478 if anyone has forgotten to override.\n"
+    }
+  ],
+  "handoff_report": {
+    "available": false,
+    "shared": false
+  },
+  "is_public": false,
+  "passed_checks": [
+    "broken buttons & dead links",
+    "dev tools and test data on the live site",
+    "obvious visible risks",
+    "trust signals & legal pages"
+  ],
+  "share_metadata": {
+    "description": "Pre-launch audit. Verdict: Needs fixes before launch. 5 findings across trust, broken CTAs, mobile layout, and more.",
+    "og_image": "https://launchlook.app/images/og.png",
+    "title": "LaunchLook audit for Bauer Studio"
+  },
+  "tier": "Starter Package",
+  "verdict": {
+    "emoji": "🔴",
+    "label": "Needs fixes before launch",
+    "narrative": "Bauer Studio looks polished in Designer and at first glance on the live\nURL: the brand work is strong, the Symbols are reused cleanly, the CMS\nblog is populated. The Webflow-specific checks turned up the things\nDesigner does not warn about. The contact form silently drops every\nsubmission because no Form Notification recipient is set. The /about\npage is still flagged noindex from when staging was live, so Google\ncan never index it. Two CMS items contain literal \"Lorem ipsum\"\nplaceholder copy. Fix the form first (it costs leads every day), the\nnoindex next (it costs SEO every day), then the visible polish.\n",
+    "summary": "Three quiet failures to clear before any client handoff."
+  },
+  "verified_badge_slug": "alex-bauer-studio"
+}

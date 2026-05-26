@@ -1,0 +1,161 @@
+{
+  "app_name": "Tessera Boards",
+  "audit_date": "2026-05-26",
+  "customer": {
+    "app_name": "Tessera Boards",
+    "builder": "Lovable",
+    "first_name": "Mira",
+    "tier": "Pro Package"
+  },
+  "customer_slug": "mira-tessera-boards",
+  "findings": [
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In the Stripe Dashboard, go to Developers → Webhooks. Replace the\nendpoint URL https://tessera-staging.up.railway.app/webhook with\nhttps://tesseraboards.com/api/stripe/webhook. Keep the same event list\n(checkout.session.completed, invoice.paid, customer.subscription.deleted).\nAfter saving, copy the new signing secret and update STRIPE_WEBHOOK_SECRET\nin your Lovable secrets panel. Re-run the test purchase and confirm the\n\"subscription_status\" column flips to \"active\" in the production\nSupabase table within a few seconds.\n",
+      "severity": "critical",
+      "tag": "Caught by The Skeptic",
+      "title": "Integrations: Stripe webhook still points at the staging URL",
+      "what_we_saw": "The Stripe Dashboard webhook endpoint registered for this account is\nhttps://tessera-staging.up.railway.app/webhook, not your production\ndomain. The \"Sign up\" → checkout flow on the live site completes\nsuccessfully, but the webhook event fires into the staging environment.\nThat's why the production database has no record of the test purchase\nMira ran on May 18.\n",
+      "why_it_matters": "Every Stripe-driven side effect (account upgrade, plan flag, welcome\nemail, license key issuance) lives behind that webhook. Right now no\npaid customer is being marked as paid in the production database. They\nare charged successfully but stuck on the free plan.\n"
+    },
+    {
+      "category": "security_lite",
+      "fix_prompt": "Verify your sending domain in Resend (Domains → Add → tesseraboards.com).\nWait for DNS to propagate (usually a few minutes). Then update the\nfrom-address in your /api/reset route from \"[email redacted]\"\nto \"[email redacted]\" so it matches the verified domain.\nAdd a try/catch around the Resend call so failures bubble up as a 500\nwith a clear error toast instead of a misleading 200 + success message.\nTest by clicking \"Forgot password?\" and confirming the email lands.\n",
+      "severity": "critical",
+      "tag": "Caught by The Snoop",
+      "title": "Integrations: password reset email never sends (silently)",
+      "what_we_saw": "On the sign-in page, \"Forgot password?\" shows a confirmation toast (\"Check your\nemail\") immediately after submit, but no email arrives at the test\naddress (verified across two providers, 10 minutes elapsed, spam\nchecked). Network tab shows the form POSTs to /api/reset, which returns\n200 OK. Resend's logs (visible from your dashboard if you check)\nindicate the API call fails with \"from address not verified.\"\n",
+      "why_it_matters": "Users who forget their password have no path to recovery. They will\neither give up or email support — both outcomes are worse than\nnecessary, and the silent failure mode means you don't know it's\nhappening unless someone complains.\n"
+    },
+    {
+      "category": "broken_ctas",
+      "fix_prompt": "Wrap the Skip-login button, the role picker modal, and all \"for dev\"\ncopy in `if (import.meta.env.DEV) { ... }`. Verify it disappears on\nthe published Lovable URL by reloading the sign-in page in an incognito tab.\nNever gate this by URL, environment variable in the client bundle, or\na feature flag — those can leak.\n",
+      "severity": "critical",
+      "tag": "Caught by The Klutz",
+      "title": "Dev role bypass still visible on the sign-in page in production",
+      "what_we_saw": "On the sign-in page, below the standard email/password fields, there's a \"Skip\nlogin (dev)\" button that opens a role picker (Admin / Member / Viewer)\nand signs visitors in without credentials. Helper text reads \"For\ndevelopment purposes only.\"\n",
+      "why_it_matters": "Anyone with your URL can pick \"Admin\" and skip authentication entirely\non a paid SaaS. This is the single most dangerous thing on the site\nright now — fix before any other work.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "Pick one initialization site and remove the other. Recommended: keep\nthe Lovable-managed PostHog provider (set the project key in Lovable\n→ Integrations → PostHog), and remove the manual posthog.init call\nfrom _app.tsx. Confirm only one PostHog snippet renders in the page\nsource. Then go to PostHog → Project settings → Events and delete the\nduplicate `signup_completed` events from the last 7 days, or note the\ncutover date and treat all pre-cutover numbers as 2x.\n",
+      "severity": "high",
+      "tag": "Caught by The Skeptic",
+      "title": "Integrations: PostHog double-counts every signup event",
+      "what_we_saw": "PostHog shows two `signup_completed` events for every user we\nregistered (timestamps ~150 ms apart, identical distinct_id). The page\nsource includes the PostHog snippet twice: once in <head> via the\nLovable-managed analytics provider, and once in /pages/_app.tsx via a\n`posthog.init(...)` call you appear to have added manually.\n",
+      "why_it_matters": "Every analytics number on your dashboard is currently 2x reality.\nConversion rates and funnel charts will be wrong, and A/B tests will\nreach false significance. The kind of thing that bites quietly for\nmonths.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "Replace `G-XXXXXXXX` in the gtag snippet with your real GA4\nmeasurement ID (Admin → Data streams → Web → \"Measurement ID\",\nstarts with G-). After deploying, open the live site, then check\nGA4 → Reports → Realtime — you should appear within a minute. If you\ndon't have a GA4 property yet, create one in\nanalytics.google.com first.\n",
+      "severity": "high",
+      "tag": "Caught by The Skeptic",
+      "title": "Integrations: GA4 measurement ID is the placeholder G-XXXXXXXX",
+      "what_we_saw": "View source on / shows the Google Analytics gtag snippet with\n`gtag('config', 'G-XXXXXXXX')`. No data has been received in your\nGA4 property (verified via the realtime view).\n",
+      "why_it_matters": "You think you have GA4 data; you don't. If anyone is judging the\nlaunch by GA4 numbers, they'll see zero traffic and panic. Easy fix\nand high impact on whoever's reading the dashboards.\n"
+    },
+    {
+      "category": "security_lite",
+      "fix_prompt": "Add a server-side membership check at the top of the boards lookup\nroute. In Supabase, the simplest approach is a row-level security\npolicy on the `boards` table: only return rows where\n`auth.uid() in (select user_id from board_members where board_id =\nboards.id)`. Then update the page to show a \"You don't have access to\nthis board\" empty state when the lookup returns 0 rows, instead of\ncrashing or showing partial data. Re-run the cross-user test from the\naudit before marking this fixed.\n",
+      "severity": "high",
+      "tag": "Caught by The Snoop",
+      "title": "Cross-user data leak on /board/:id when account A views account B's URL",
+      "what_we_saw": "Logged in as test-user-A, we directly visited a board URL we obtained\nfrom test-user-B's account (your site).\nThe page rendered B's full board (cards, comments, attachment names)\nwithout any 403 or empty state. The API call to /api/boards/87a1c4\nreturns the row regardless of which user makes the request.\n",
+      "why_it_matters": "Anyone who guesses or shares a board ID can read another customer's\nprivate boards. The IDs aren't easily guessable, but a former\ncollaborator who leaves a team would still have the URLs in their\nhistory. This is the cross-user leak Scale Up and Pro tiers\nspecifically test for.\n"
+    },
+    {
+      "category": "broken_ctas",
+      "fix_prompt": "Add the privacy page and the terms page routes with basic policy content (you can\nadapt LaunchLook's own at launchlook.app/privacy, launchlook.app/terms\nas a starting template — replace the company name and support\naddress). Link both from the footer. Use [email redacted] (or\nyour real support email) in the contact section.\n",
+      "severity": "high",
+      "tag": "Caught by The Klutz",
+      "title": "Missing the privacy page and the terms page (404)",
+      "what_we_saw": "Both the privacy page and the terms page return the custom 404 page. The footer links\nto them but they don't load. Pricing page checkout requests them\nindirectly (Stripe surfaces \"Terms\" links it expects to be valid).\n",
+      "why_it_matters": "Tessera collects board content, account data, and runs subscriptions.\nVisitors and Stripe both expect legal pages. Missing them also makes\nthe site look unfinished.\n"
+    },
+    {
+      "category": "broken_ctas",
+      "fix_prompt": "Wire each CTA to the correct Stripe price ID. In your /api/checkout\nroute, switch on the `plan` query parameter (starter | pro | team)\nand use the matching `price_xxx` from your .env. Test all three\nbuttons with the Stripe test card 4242 4242 4242 4242 and confirm\nthe Stripe checkout shows the right amount before paying.\n",
+      "severity": "high",
+      "tag": "Caught by The Klutz",
+      "title": "Pricing page CTAs all open the same Stripe checkout (Pro plan)",
+      "what_we_saw": "The pricing page shows three plans (Starter / Pro / Team), but\nclicking \"Start free trial\" on Starter, Pro, and Team all open the\nsame Stripe checkout page, which charges $19/month for the Pro plan.\nNetwork tab confirms all three buttons hit /api/checkout?plan=pro.\n",
+      "why_it_matters": "Customers who pick Starter or Team are charged Pro pricing. This is\na refund-and-trust-killer, and the kind of bug that goes undetected\nuntil someone complains.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In Resend, add `tesseraboards.app` as a verified domain (or switch\neverything to the canonical `tesseraboards.com` and verify that).\nAdd the SPF, DKIM, and DMARC DNS records Resend prompts for. Wait\nfor the dashboard to flip to \"Verified\" (usually a few minutes), then\nchange your sender from `[email redacted]` to a verified\naddress. Re-test with a fresh Gmail address.\n",
+      "severity": "high",
+      "tag": "Caught by The Skeptic",
+      "title": "Sign-up emails land in Gmail spam folder",
+      "what_we_saw": "Test sign-ups using a freshly created Gmail address consistently land\nthe welcome email in spam (verified across three test addresses).\nThe email body is fine; the headers show no SPF / DKIM alignment with\nthe sender domain (`From: [email redacted]`, but DKIM is\nsigned by `resend.dev`).\n",
+      "why_it_matters": "Activation rate is bottlenecked by users finding their welcome email.\nIf most signups are on Gmail (likely), most users will think the\nemail never arrived and bounce.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "Search for \"Your Company Name\" in your codebase and replace with\n\"Tessera Boards\" (or your final brand name). Update the year to\n2026 while you're there. Re-check the page <title> on the pricing page,\nthe privacy page, the terms page — those are usually the forgotten three.\n",
+      "severity": "medium",
+      "tag": "Caught by The Skeptic",
+      "title": "Footer still says \"© 2024 Your Company Name\"",
+      "what_we_saw": "The footer copyright reads \"© 2024 Your Company Name\". Same line\nappears on every page. The page <title> on the pricing page also reads\n\"Your Company Name | Pricing\".\n",
+      "why_it_matters": "Reads as unfinished to anyone deciding whether to trust the\ncheckout. Two-second visual cue that the team didn't proof the\npublished version.\n"
+    },
+    {
+      "category": "broken_ctas",
+      "fix_prompt": "Bump card icon-button hit area to 44 × 44 px on screens below 768 px.\nEasiest is `min-h-[44px] min-w-[44px] p-2` on the icon button\nwrapper, leaving the visual icon size unchanged. Add 8 px gap\nbetween icons so adjacent buttons don't share an edge.\n",
+      "severity": "medium",
+      "tag": "Caught by The Klutz",
+      "title": "Mobile board view: card edit buttons are ~28 px tall (below tap target)",
+      "what_we_saw": "On a 375 px wide viewport, the per-card \"Edit\" and \"Move\" icons\nmeasure 28 × 28 px and sit 4 px apart. Mistaps on the wrong card are\neasy and the modal opens for the wrong item.\n",
+      "why_it_matters": "iOS Human Interface Guidelines and Material Design both recommend\n44 × 44 px minimum tap targets. Below that, mistaps are common,\nespecially on long boards. Mobile usage of Kanban boards skews high\n(people review on phones in line at coffee shops).\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "Add an empty-state component to /boards that shows a one-line\nheading (\"No boards yet\"), a short description (\"Create your first\nboard to start organizing your team's work\"), and a primary CTA\n(\"Create your first board\") that opens the new-board modal. Match\nthe visual style of the rest of the app (border-line, bg-paper).\n",
+      "severity": "medium",
+      "tag": "Caught by The Skeptic",
+      "title": "Empty board state shows nothing — no hint what to do",
+      "what_we_saw": "A brand-new account, after sign-up, lands on /boards with a literal\nblank screen (no header, no CTA, no copy). The user has no idea\nwhether the page is loading, broken, or empty.\n",
+      "why_it_matters": "Day-one drop-off is highest right after sign-up. A blank screen\nreads as \"this product is broken\" even when the underlying state\n(no boards yet) is correct.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "In your /index page <head>, add OG meta tags pointing at a custom\nOG image you upload to /public/og.png (1200 × 630 px is standard).\nThe image should show the Tessera logo, a one-line tagline, and\na screenshot or illustration of a board. Re-paste the URL into\nSlack to confirm the new preview renders.\n",
+      "severity": "low",
+      "tag": "Caught by The Skeptic",
+      "title": "OG image for / is the Lovable default (gradient with \"Lovable\")",
+      "what_we_saw": "Pasting your site into Slack shows a generic\nLovable gradient with the word \"Lovable\" instead of a Tessera-\nbranded preview. Same on iMessage and LinkedIn.\n",
+      "why_it_matters": "Every share is a free marketing impression. With the default OG\nimage, those impressions look like Lovable's, not yours.\n"
+    },
+    {
+      "category": "trust_gaps",
+      "fix_prompt": "Filter the activity feed to exclude users with email domains\nmatching @tesseraboards-internal.test or names matching common\ntest patterns. Easier and more durable: add an `is_internal`\nboolean to the users table, set it for all team members, and\nfilter on it in the activity query.\n",
+      "severity": "low",
+      "tag": "Caught by The Skeptic",
+      "title": "Settings page reveals two test accounts in the \"Recent activity\" feed",
+      "what_we_saw": "On /settings → Activity, the feed shows entries from accounts named\n\"QA Bot 1\" and \"Internal Tester\" creating boards yesterday. These\nare visible to any signed-in user.\n",
+      "why_it_matters": "Real users will wonder who those accounts are. It signals that the\nproduct is still in test mode.\n"
+    }
+  ],
+  "handoff_report": {
+    "available": true,
+    "shared": false
+  },
+  "is_public": false,
+  "passed_checks": [
+    "confusing or placeholder text",
+    "obvious visible risks"
+  ],
+  "share_metadata": {
+    "description": "Pre-launch audit. Verdict: Do not invite real users yet. 14 findings across trust, broken CTAs, mobile layout, and more.",
+    "og_image": "https://launchlook.app/images/og.png",
+    "title": "LaunchLook audit for Tessera Boards"
+  },
+  "tier": "Pro Package",
+  "verdict": {
+    "emoji": "🔴",
+    "label": "Do not invite real users yet",
+    "narrative": "Tessera Boards looks ready at a glance: clean Kanban layout, working sign-up,\nStripe checkout that actually completes, and mobile screens that don't break.\nThe depth review surfaced four operational integration gaps that aren't\nvisible from the app itself but will bite the moment you turn on paid\ntraffic: a Stripe webhook pointing at a sandbox URL, an analytics tag that\ndouble-counts every signup, an email sender that lands in spam on Gmail,\nand a password reset flow that appears to work but never actually sends\nthe email. Plus the usual polish layer (placeholder copy, missing trust\npages, mobile tap targets). Fix the integrations before the launch push;\nthe rest can pace through this week.\n",
+    "summary": "Dev login bypass and a cross-user data leak need to clear before any real traffic."
+  },
+  "verified_badge_slug": "mira-tessera-boards"
+}

@@ -130,3 +130,33 @@ details > summary::-webkit-details-marker {
     width: auto;
   }
 }
+
+/* ---------- Persona tags (shareable report page /r/{slug}) ----------
+   Mirrors the print palette used in templates/report/report.html.j2.
+   Subtle pill, never bold, never colored loudly, per
+   docs/SIMPLICITY-GUARDRAILS.md section 3.4 and docs/TESTERS-CAST.md. */
+.persona-tag {
+  display: inline-block;
+  padding: 1px 7px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #1f1b16;
+  background: #f4efe7;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.persona-tag.persona-skeptic { color: #b45309; background: #fbefe0; }
+.persona-tag.persona-klutz { color: #c2410c; background: #fce4d6; }
+.persona-tag.persona-tourist { color: #1f5d7a; background: #e2eef4; }
+.persona-tag.persona-snoop { color: #b91c1c; background: #f7ddda; }
+.persona-tag.persona-phone-first-friend { color: #15803d; background: #ddead9; }
+.persona-tag.persona-saboteur { color: #5b3a8c; background: #e7ddf1; }
+.persona-tag.persona-stranger { color: #1f1b16; background: #ece8de; }
+
+/* Severity side-bar on shareable findings. */
+.finding-card { border-left-width: 4px; }
+.finding-card.finding-critical { border-left-color: #b91c1c; }
+.finding-card.finding-high { border-left-color: #c2410c; }
+.finding-card.finding-medium { border-left-color: #b45309; }
+.finding-card.finding-low { border-left-color: #15803d; }
