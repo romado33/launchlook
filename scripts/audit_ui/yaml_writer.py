@@ -145,9 +145,11 @@ _FINDING_KEYS = (
     "screenshot_path",
     "screenshot_caption",
     "fix_prompt",
-    # Optional persona tag (e.g. "Caught by The Snoop") — stays in YAML so
-    # the report template can render the badge. Internal-only fields like
-    # ``category`` / ``check_id`` are intentionally dropped by the cleaner.
+    # q5/q13: persist the finding ``category`` (taxonomy id from
+    # finding_categories.yaml) and ``tag`` (the "Caught by The {Persona}"
+    # string). Both are read by the report template, the audit_ui review
+    # form, and the persona-tag fallback in pipeline.py.
+    "category",
     "tag",
 )
 
@@ -415,6 +417,7 @@ def yaml_to_form(text: str) -> dict[str, Any]:
                 "screenshot_path": f.get("screenshot_path", "") or "",
                 "screenshot_caption": f.get("screenshot_caption", "") or "",
                 "fix_prompt": f.get("fix_prompt", "") or "",
+                "category": f.get("category", "") or "",
                 "tag": f.get("tag", "") or "",
             }
             for f in findings

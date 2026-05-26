@@ -413,6 +413,37 @@
     </div>
   </section>
 
+  <!--
+    Made by Rob (q5+q13): a small mid-page founder section. Per
+    SIMPLICITY-GUARDRAILS section 2.9 (founder bio is 2 to 3 sentences
+    with a photo, not a hero) and section 6 (plain English, no
+    corporate vocab, no em-dashes).
+    TODO: swap placeholder photo at landing/images/rob.jpg with a real
+    headshot (tracked in docs/ROB-REMAINING-TODO.md).
+  -->
+  <section class="made-by-rob bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-10 sm:py-12">
+      <div class="flex flex-col sm:flex-row items-start gap-5">
+        <img
+          src="/images/rob.jpg"
+          alt="Rob"
+          width="96"
+          height="96"
+          class="founder-photo w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border border-line bg-surface-tint shrink-0"
+        />
+        <div class="founder-text max-w-prose">
+          <h3 class="font-serif text-xl mb-2">Made by Rob</h3>
+          <p class="text-muted leading-relaxed text-sm">
+            Built by a single founder who got tired of "AI scanner" tools that dump 100 findings. Every audit gets a 5-minute human review before it reaches you.
+          </p>
+          <p class="text-muted leading-relaxed text-sm mt-3">
+            Based in Canada. Reply to any email and that's me on the other end.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section id="faq" class="bg-paper">
     <div class="max-w-3xl mx-auto px-6 section-inner">
@@ -500,7 +531,19 @@
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>
     </div>
-  </footer>
+    <details class="testers-cast max-w-3xl mx-auto px-6 py-4 text-xs text-muted">
+    <summary class="cursor-pointer">Curious about our 7 testers? Meet the cast →</summary>
+    <ul class="mt-3 space-y-2 leading-relaxed">
+      <li><strong class="text-ink">The Tourist.</strong> First-time visitor. Notices placeholders, broken nav, AI-sounding copy.</li>
+      <li><strong class="text-ink">The Skeptic.</strong> Checks trust pages, terms, privacy, refund policy. Hates vague claims.</li>
+      <li><strong class="text-ink">The Klutz.</strong> Mis-clicks, double-clicks, hits buttons that should not exist. Finds the dead CTAs.</li>
+      <li><strong class="text-ink">The Snoop.</strong> Opens DevTools, peeks at network requests, looks for exposed keys and leaky endpoints.</li>
+      <li><strong class="text-ink">The Phone-First Friend.</strong> Lives on a 360px screen. Finds the cramped layouts and tiny tap targets.</li>
+      <li><strong class="text-ink">The Saboteur.</strong> Runs the same checks after every AI change. Asks: "what broke since last time?"</li>
+      <li><strong class="text-ink">The Stranger Who Tried to Sign Up.</strong> Walks the full signup, billing, and onboarding flow. Finds the cliff edges.</li>
+    </ul>
+  </details>
+</footer>
 
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>

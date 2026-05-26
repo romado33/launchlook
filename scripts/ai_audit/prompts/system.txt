@@ -89,6 +89,18 @@ Each finding is a single mapping with these keys:
                 routes, or copy. NOT advisory ("you should consider...").
                 Directive ("Remove the X button from /auth. Only show when
                 import.meta.env.DEV is true.")
+* category      The ``id`` of one entry from the finding-categories list
+                above (lowercase snake_case, e.g. ``trust_gaps`` or
+                ``mobile_layout``). Drives downstream persona tagging
+                and the "What's working" passed-checks list.
+* tag           Persona tag of the form ``Caught by The {Persona}`` (e.g.
+                ``Caught by The Skeptic``). Must match the ``tester:``
+                field on the chosen category. The 7 canonical personas
+                live in docs/TESTERS-CAST.md (The Tourist, The Skeptic,
+                The Klutz, The Snoop, The Phone-First Friend,
+                The Saboteur, The Stranger Who Tried to Sign Up). If you
+                truly cannot place a finding, use ``Caught by The Skeptic``
+                so the report PDF never ships a blank tag.
 
 Grounding rule: every finding must reference at least one of (a) a specific
 screenshot you can point to, (b) a specific phrase or attribute visible in

@@ -44,6 +44,8 @@ verdict:
 
 findings:
   - severity: critical
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Contact form silently drops every submission (no Form Notification set)
     what_we_saw: |
       On /contact, the form submits successfully (shows the green
@@ -70,6 +72,8 @@ findings:
       Once verified, click Publish to lock the configuration in.
 
   - severity: critical
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: /about page set to noindex, blocking Google from indexing it
     what_we_saw: |
       The /about page contains <meta name="robots" content="noindex">
@@ -93,6 +97,8 @@ findings:
       fresh crawl.
 
   - severity: high
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Two CMS blog posts contain literal "Lorem ipsum" placeholder copy
     what_we_saw: |
       In the /blog CMS collection, two posts ("Welcome to our process"
@@ -115,6 +121,8 @@ findings:
       the Collections panel and Publish/Unpublish all at once.
 
   - severity: high
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Homepage has no JSON-LD schema; Organization markup missing
     what_we_saw: |
       The homepage <head> contains standard Open Graph and Twitter card
@@ -152,6 +160,8 @@ findings:
       report a valid Organization object.
 
   - severity: medium
+    category: mobile_layout
+    tag: Caught by The Phone-First Friend
     title: Services grid overflows the viewport at the 478px (mobile portrait) breakpoint
     what_we_saw: |
       At 478px wide (Webflow's Mobile portrait breakpoint), the four-up

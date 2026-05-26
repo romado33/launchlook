@@ -64,6 +64,8 @@ FINDING_SCHEMA: dict[str, Any] = {
         "what_we_saw",
         "why_it_matters",
         "fix_prompt",
+        "category",
+        "tag",
     ],
     "properties": {
         "severity": {
@@ -98,6 +100,22 @@ FINDING_SCHEMA: dict[str, Any] = {
             "description": (
                 "Paste-ready directive for the customer's builder chat. "
                 "Imperative voice. Names specific routes/copy."
+            ),
+        },
+        "category": {
+            "type": "string",
+            "description": (
+                "The ``id`` of the finding category from the data-driven "
+                "list in scripts/ai_audit/finding_categories.yaml. "
+                "Lowercase snake_case (e.g. 'trust_gaps', 'mobile_layout')."
+            ),
+        },
+        "tag": {
+            "type": "string",
+            "description": (
+                "Persona tag in the form 'Caught by The {Persona}'. Must "
+                "match the ``tester:`` field on the chosen category. See "
+                "docs/TESTERS-CAST.md for the 7 canonical personas."
             ),
         },
     },

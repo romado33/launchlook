@@ -31,6 +31,8 @@ verdict:
 
 findings:
   - severity: critical
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: Dev login bypass visible to everyone
     what_we_saw: |
       On /auth, a "Dev Bypass (Skip Login)" button opens a role picker and
@@ -46,6 +48,8 @@ findings:
       lovable.app URL.
 
   - severity: critical
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: Developer Tools panel on the homepage
     what_we_saw: |
       After sign-in the homepage shows a "Developer Tools" card with
@@ -58,6 +62,8 @@ findings:
       import.meta.env.DEV only.
 
   - severity: high
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: Missing /privacy and /terms (404)
     what_we_saw: |
       Both /privacy and /terms return the custom 404 page. The footer links
@@ -73,6 +79,8 @@ findings:
       site's typography and spacing.
 
   - severity: high
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Quick Book modal dead-ends with no slots
     what_we_saw: |
       The headline "Quick Book" CTA opens a modal whose time-slot picker
@@ -86,6 +94,8 @@ findings:
       no slots exist and show "No dates available yet, check back soon."
 
   - severity: medium
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Listing cards show 4.5 stars with (0) reviews
     what_we_saw: |
       Cards display "4.5 (0)", a numeric rating with zero reviews.
@@ -97,6 +107,8 @@ findings:
       review exists.
 
   - severity: medium
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Every listing says "Hosted by Local Host"
     what_we_saw: |
       Every experience card shows "Hosted by Local Host" instead of a real
@@ -109,6 +121,8 @@ findings:
       initial or hide the line.
 
   - severity: low
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Generic OG image, no preview when shared
     what_we_saw: |
       og:image is unset, so Slack and iMessage previews show a blank card.

@@ -68,3 +68,12 @@ Quality bar before you return:
 * Is every severity placement defensible against the system-prompt definitions?
 
 Return the structured response only. No preamble.
+
+Final quality bar before you emit each finding:
+
+* Pick a ``category`` (one of the ids in the finding-categories list).
+* Emit a matching ``tag`` of the form ``Caught by The {Persona}`` where
+  ``{Persona}`` is the ``tester`` declared on that category in
+  ``scripts/ai_audit/finding_categories.yaml`` (e.g. ``Caught by The
+  Skeptic`` for ``trust_gaps``). The 7 personas are canonical; never
+  invent a new one. See docs/TESTERS-CAST.md.

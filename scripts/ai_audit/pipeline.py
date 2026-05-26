@@ -422,6 +422,90 @@ def collect_screenshots(slug: str, *, max_shots: int = 8) -> list[tuple[str, Pat
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Persona tagging (q5/q13 - extend Snoop's pattern to all 7 personas)
+# ---------------------------------------------------------------------------
+#
+# The 7 canonical personas live in docs/TESTERS-CAST.md. Each finding
+# category in finding_categories.yaml declares which tester ("The Skeptic",
+# "The Klutz", ...) owns it. The LLM is asked to emit a ``tag`` of the form
+# "Caught by The {Persona}" on every finding (see prompts/system.txt). This
+# helper validates / repairs the field so a missing or stale tag never leaks
+# into the report PDF, per SIMPLICITY-GUARDRAILS section 3.4.
+
+PERSONA_TAG_PREFIX = "Caught by "
+FALLBACK_PERSONA = "The Skeptic"
+FALLBACK_TAG = f"{PERSONA_TAG_PREFIX}{FALLBACK_PERSONA}"
+
+
+def _build_category_tester_map(categories: list[dict[str, Any]]) -> dict[str, str]:
+    """Return ``{category_id: 'The Persona'}`` from the loaded categories."""
+    out: dict[str, str] = {}
+    for cat in categories or []:
+        cid = (cat.get("id") or "").strip()
+        tester = (cat.get("tester") or "").strip()
+        if cid and tester:
+            out[cid] = tester
+    return out
+
+
+def apply_persona_tags(
+    findings: list[dict[str, Any]],
+    categories: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Ensure every finding carries a ``tag: 'Caught by The {Persona}'``.
+
+    Pure helper: returns a new list of finding dicts; never mutates the
+    inputs. Falls back to ``FALLBACK_TAG`` (and prints a stderr warning)
+    when a finding has no recognisable category and no LLM-supplied tag.
+    Snoop's externally-generated findings (security_lite.py) already carry
+    a correct tag; this helper is a no-op for them.
+    """
+    cat_map = _build_category_tester_map(categories)
+    out: list[dict[str, Any]] = []
+    for finding in findings or []:
+        if not isinstance(finding, dict):
+            out.append(finding)
+            continue
+        f = dict(finding)
+        cid = (f.get("category") or "").strip()
+        existing_tag = (f.get("tag") or "").strip()
+
+        canonical_tag = ""
+        if cid:
+            tester = cat_map.get(cid)
+            if tester:
+                canonical_tag = f"{PERSONA_TAG_PREFIX}{tester}"
+            else:
+                print(
+                    f"[personas] WARN: category {cid!r} has no tester; "
+                    f"falling back to {FALLBACK_TAG!r} for finding "
+                    f"{f.get('title','?')!r}",
+                    file=sys.stderr,
+                )
+
+        if canonical_tag:
+            if existing_tag and existing_tag != canonical_tag:
+                print(
+                    f"[personas] WARN: LLM tag {existing_tag!r} did not "
+                    f"match category {cid!r} expected {canonical_tag!r}; "
+                    f"overriding for finding {f.get('title','?')!r}",
+                    file=sys.stderr,
+                )
+            f["tag"] = canonical_tag
+        elif existing_tag.startswith(PERSONA_TAG_PREFIX):
+            f["tag"] = existing_tag
+        else:
+            print(
+                f"[personas] WARN: finding {f.get('title','?')!r} has no "
+                f"category and no usable tag; defaulting to {FALLBACK_TAG!r}",
+                file=sys.stderr,
+            )
+            f["tag"] = FALLBACK_TAG
+        out.append(f)
+    return out
+
+
 def _read_prompt(name: str) -> str:
     path = PROMPTS_DIR / name
     return path.read_text(encoding="utf-8")
@@ -975,6 +1059,12 @@ def run(
                     findings = yaml_writer.sort_findings(kept)
                     print(f"[dedup] removed {len(clashes)} colliding finding(s); cap already met")
 
+        # ---- 5c. Persona tags (q5/q13) ----
+        # Validates / repairs the per-finding ``tag`` field so every
+        # finding ships with one of the 7 Testers personas. Cites
+        # docs/SIMPLICITY-GUARDRAILS.md section 3.4.
+        findings = apply_persona_tags(findings, load_finding_categories())
+
         # ---- 6. Verdict ----
         verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
         try:
@@ -1146,7 +1236,10 @@ def regenerate_finding(
             user_prompt=base + regen_hint,
             screenshots=screenshots,
         )
-    return finding
+    # Apply the same persona-tag fallback so a regenerated finding ships
+    # with a valid Tester tag even if the LLM forgets the field.
+    repaired = apply_persona_tags([finding], load_finding_categories())
+    return repaired[0] if repaired else finding
 
 
 # ---------------------------------------------------------------------------

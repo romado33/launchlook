@@ -56,6 +56,8 @@ verdict:
 
 findings:
   - severity: critical
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: 'Integrations: Stripe webhook still points at the staging URL'
     what_we_saw: |
       The Stripe Dashboard webhook endpoint registered for this account is
@@ -80,6 +82,8 @@ findings:
       Supabase table within a few seconds.
 
   - severity: critical
+    category: security_lite
+    tag: Caught by The Snoop
     title: 'Integrations: password reset email never sends (silently)'
     what_we_saw: |
       On /auth, "Forgot password?" shows a confirmation toast ("Check your
@@ -103,6 +107,8 @@ findings:
       Test by clicking "Forgot password?" and confirming the email lands.
 
   - severity: critical
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: Dev role bypass still visible on /auth in production
     what_we_saw: |
       On /auth, below the standard email/password fields, there's a "Skip
@@ -121,6 +127,8 @@ findings:
       a feature flag — those can leak.
 
   - severity: high
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: 'Integrations: PostHog double-counts every signup event'
     what_we_saw: |
       PostHog shows two `signup_completed` events for every user we
@@ -143,6 +151,8 @@ findings:
       cutover date and treat all pre-cutover numbers as 2x.
 
   - severity: high
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: 'Integrations: GA4 measurement ID is the placeholder G-XXXXXXXX'
     what_we_saw: |
       View source on / shows the Google Analytics gtag snippet with
@@ -161,6 +171,8 @@ findings:
       analytics.google.com first.
 
   - severity: high
+    category: security_lite
+    tag: Caught by The Snoop
     title: Cross-user data leak on /board/:id when account A views account B's URL
     what_we_saw: |
       Logged in as test-user-A, we directly visited a board URL we obtained
@@ -185,6 +197,8 @@ findings:
       audit before marking this fixed.
 
   - severity: high
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: Missing /privacy and /terms (404)
     what_we_saw: |
       Both /privacy and /terms return the custom 404 page. The footer links
@@ -202,6 +216,8 @@ findings:
       your real support email) in the contact section.
 
   - severity: high
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: Pricing page CTAs all open the same Stripe checkout (Pro plan)
     what_we_saw: |
       The pricing page shows three plans (Starter / Pro / Team), but
@@ -220,6 +236,8 @@ findings:
       the Stripe checkout shows the right amount before paying.
 
   - severity: high
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Sign-up emails land in Gmail spam folder
     what_we_saw: |
       Test sign-ups using a freshly created Gmail address consistently land
@@ -240,6 +258,8 @@ findings:
       address. Re-test with a fresh Gmail address.
 
   - severity: medium
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Footer still says "© 2024 Your Company Name"
     what_we_saw: |
       The footer copyright reads "© 2024 Your Company Name". Same line
@@ -256,6 +276,8 @@ findings:
       /privacy, /terms — those are usually the forgotten three.
 
   - severity: medium
+    category: broken_ctas
+    tag: Caught by The Klutz
     title: "Mobile board view: card edit buttons are ~28 px tall (below tap target)"
     what_we_saw: |
       On a 375 px wide viewport, the per-card "Edit" and "Move" icons
@@ -273,6 +295,8 @@ findings:
       between icons so adjacent buttons don't share an edge.
 
   - severity: medium
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: "Empty board state shows nothing — no hint what to do"
     what_we_saw: |
       A brand-new account, after sign-up, lands on /boards with a literal
@@ -290,6 +314,8 @@ findings:
       the visual style of the rest of the app (border-line, bg-paper).
 
   - severity: low
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: OG image for / is the Lovable default (gradient with "Lovable")
     what_we_saw: |
       Pasting https://tessera.lovable.app into Slack shows a generic
@@ -306,6 +332,8 @@ findings:
       Slack to confirm the new preview renders.
 
   - severity: low
+    category: trust_gaps
+    tag: Caught by The Skeptic
     title: Settings page reveals two test accounts in the "Recent activity" feed
     what_we_saw: |
       On /settings → Activity, the feed shows entries from accounts named

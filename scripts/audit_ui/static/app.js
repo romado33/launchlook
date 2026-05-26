@@ -68,6 +68,8 @@
       screenshot_path: "",
       screenshot_caption: "",
       fix_prompt: "",
+      category: "",
+      tag: "",
     };
   }
 
