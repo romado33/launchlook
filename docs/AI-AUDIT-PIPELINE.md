@@ -128,6 +128,28 @@ python scripts/ai_audit.py `
     --provider gpt
 ```
 
+### Pro Package, Claude
+
+```powershell
+python scripts/ai_audit.py `
+    --slug mira-tessera `
+    --url https://tessera.lovable.app `
+    --tier "Pro Package" `
+    --builder Lovable `
+    --name "Mira Okafor" `
+    --email mira@example.com `
+    --app-name "Tessera Boards"
+```
+
+The Pro Package prompt extends the Full Package guidance with a
+dedicated integrations review (Stripe / auth / email / analytics).
+Findings are still emitted in the standard `findings` list — there is
+no separate `integrations_review` YAML key. Prefix integrations-flavored
+finding titles with `Integrations:` so they group visibly in the PDF
+(see `customers/example-pro-package.yaml` for the canonical pattern).
+The 30-minute Loom walkthrough is a separate scheduling step, not a
+YAML field.
+
 ### Dry-run + skip stages (smoke testing)
 
 ```powershell
@@ -157,104 +179,6 @@ python scripts/deliver_report.py --customer customers/jane-smith.yaml --no-open
 # 4. Or ship them via Resend:
 python scripts/deliver_report.py --customer customers/jane-smith.yaml --send
 ```
-
----
-
-## Adding a finding category (data-driven taxonomy)
-
-The list of categories the LLM looks for is **data-driven**. Edit
-`scripts/ai_audit/finding_categories.yaml`, do not edit the prompt:
-
-```yaml
-categories:
-  - id: trust_gaps
-    display_name_buyer: "trust signals & legal pages"
-    display_name_internal: "Trust gaps"
-    severity_default: medium
-    description_for_llm: "Missing privacy policy, terms, contact info..."
-    tester: "The Skeptic"
-  # ...
-  - id: cross_user_data
-    display_name_buyer: "user data isolation"
-    display_name_internal: "Cross-user data check"
-    severity_default: high
-    description_for_llm: "Scale Up and Pro tiers only..."
-    tester: "The Snoop"
-    tier_min: "Scale Up Package"   # gates by tier
-```
-
-At runtime, `pipeline.build_system_prompt(...)` loads this YAML, filters
-out tier-restricted categories the customer's tier doesn't reach, and
-substitutes `{{ categories_list }}` in `scripts/ai_audit/prompts/system.txt`.
-The Webflow platform-conditional appendix architecture
-(`PLATFORM_PROMPT_FILES` registry) is unchanged: per-platform
-appendices and per-category prompt content compose **additively**.
-
-To add a category:
-
-1. Append a new `- id: ...` block to `finding_categories.yaml`.
-2. Buyer-facing display name follows
-   `docs/SIMPLICITY-GUARDRAILS.md` §6 (no internal jargon, no taxonomy
-   codes; if a layperson wouldn't say it, don't put it here).
-3. If the category is generated outside the LLM (e.g. by Snoop's
-   `security_lite.py`) set `source: external` so the prompt tells the
-   model not to regenerate it.
-4. If the category should only apply at certain tiers, set `tier_min`
-   to the lowest tier that should include it.
-
-The buyer-facing display name is also what shows up in the report's
-"What's working" / "Passed checks" section
-(`templates/report/report.html.j2`). Categories with no critical / high
-finding emit a passed-check line automatically; the buyer never sees
-the internal taxonomy code.
-
----
-
-## Snoop's security-lite checks
-
-`scripts/ai_audit/security_lite.py` runs five deterministic checks
-*before* the LLM finding-generation pass:
-
-1. HSTS header presence (HTTPS sites only)
-2. Content-Security-Policy header presence
-3. X-Frame-Options (DENY or SAMEORIGIN)
-4. X-Content-Type-Options nosniff
-5. Exposed credentials and admin-route paths in the rendered HTML
-   (AWS / Google / Stripe / Slack / private-key blocks; `/admin`,
-   `/.env`, `/.git`, `/debug`, `/dev-tools` link hrefs)
-
-Each finding is tagged `Caught by The Snoop` (per
-`docs/TESTERS-CAST.md` §7 voice rules) and rendered with the persona
-badge in the report PDF. Snoop's findings are **merged into the
-final findings list before the cap is applied**, so a critical
-exposed-credential finding can't be dropped because the LLM filled the
-cap with lower-severity items.
-
-The `security_lite` category in `finding_categories.yaml` carries
-`source: external` so the LLM is told to merge incoming findings, not
-regenerate them. When all five Snoop checks pass, the security-lite
-category appears in the report's "What's working" section as
-"obvious visible risks".
-
----
-
-## Verdict labels (constrained vocabulary)
-
-`scripts/ai_audit/prompts/verdict_generation.txt` constrains the LLM to
-choose **exactly one** of four labels:
-
-* `Ready to share` (🟢)
-* `Safe for friends/family testing` (🟡)
-* `Needs fixes before launch` (🔴)
-* `Do not invite real users yet` (🔴)
-
-The schema in `scripts/ai_audit/llm_client.py::VERDICT_SCHEMA` enforces
-the four-value enum at the API boundary. `pipeline._normalize_verdict`
-coerces any drift (missing label, wrong casing, an extra trailing
-period) back to one of the four canonical values before the YAML is
-written, so the report template can render deterministically. The label
-becomes the hero phrase under the report title; the `summary` is the
-1-line tagline beneath it.
 
 ---
 
@@ -335,14 +259,14 @@ client does not need extra arguments.
 Read the log with `python scripts/ai_costs_report.py`. The full
 docs are at `docs/AI-COST-MONITORING.md`.
 
-Cost data is internal-only per `SIMPLICITY-GUARDRAILS.md` A6 - it
+Cost data is internal-only per `SIMPLICITY-GUARDRAILS.md` §6 - it
 never crosses into a customer-facing surface.
 
 ---
 
 ## Cost expectations (approximate)
 
-Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):
+Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, ~7 findings):
 
 | Provider | Model | Approx input / output tokens | Approx cost |
 |----------|-------|------------------------------|-------------|
@@ -354,11 +278,14 @@ Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):
 
 Full Package adds a second LLM call (the QSG generator with ~4
 screenshots and a smaller HTML payload), roughly **+50%** on the
-Starter base.
+Starter base. Pro Package adds the same QSG call plus a longer
+finding-generation prompt (40-cap output and the integrations-review
+guidance), roughly **+100%** on the Starter base.
 
-At $9 Starter / $29 Full, AI cost is roughly **1 to 3% of revenue**.
-That leaves the founder's 15-minute review (the real cost) as the
-bottleneck, which is exactly where the strategy wanted it.
+At $19 Starter / $49 Full / $99 Pro, AI cost is roughly **1 to 2% of
+revenue** across all tiers. That leaves the founder's 15-minute review
+(the real cost on Starter / Full) and the 30-minute Loom (Pro only)
+as the bottlenecks, which is exactly where the strategy wanted it.
 
 If the LLM bill creeps up, the levers (in order) are:
 * Reduce the number of screenshots sent (currently 8 max).
@@ -474,11 +401,11 @@ surfaces).
 
 The `tier_min` field gates visibility: a category is excluded from the
 prompt for any tier below its `tier_min`. The tier rank order is
-`Starter Package` (1), `Scale Up Package` (2), `Pro Package` (3).
-Free-tier audits cap at 3 findings total across all categories and
+`Starter Package` (1) → `Scale Up Package` (2) → `Pro Package` (3).
+Free tier audits cap at 3 findings total across all categories and
 are filtered after generation, not at the category-list step.
 
-Active category IDs (as of q3b, May 26 2026):
+Active category IDs (as of q14+q16, May 26 2026):
 
 | ID | Buyer-facing display name | Tester | tier_min | Source |
 |---|---|---|---|---|
@@ -494,6 +421,7 @@ Active category IDs (as of q3b, May 26 2026):
 | `compliance_lite` | common legal must-haves | The Skeptic | — | llm |
 | `performance_speed` | performance & speed | The Phone-First Friend | — | external (PSI) |
 | `accessibility_checks` | accessibility checks | The Phone-First Friend | — | external (axe-core) |
+| `form_submit_smoke` | form & signup flows | The Stranger Who Tried to Sign Up | — | external (form_smoke_test) |
 
 When you add a new category, also list it here (ID + buyer-facing
 display name + tester + `tier_min` if any + source) so the canonical
@@ -501,14 +429,13 @@ list stays a one-stop read.
 
 ---
 
-## Free -> Starter deduplication
+## Free → Starter deduplication
 
 When a buyer used the free 3-finding hook and then upgrades to Starter
 for the same email + URL within 90 days, the paid pipeline MUST surface
 **10 NEW findings**, excluding the prior 3. This is non-negotiable per
-`docs/PRODUCT-DECISIONS.md` section 2: the Free -> Starter conversion
-is the funnel's most fragile moment; re-reading the free preview would
-burn it.
+`docs/PRODUCT-DECISIONS.md` §2: the Free → Starter conversion is the
+funnel's most fragile moment; re-reading the free preview would burn it.
 
 ### How it works in the pipeline
 
@@ -550,7 +477,7 @@ Tests live in `tests/test_dedup.py` (3 main cases + 6 edge cases).
 
 ### Customer-visible boundary
 
-Per `docs/SIMPLICITY-GUARDRAILS.md` section 6 the dedup mechanism never
+Per `docs/SIMPLICITY-GUARDRAILS.md` §6 the dedup mechanism never
 crosses into customer copy. If a customer asks, the answer is "your
 Starter findings build on your free preview." Never "deduplication,"
 "fingerprints," "exclude block," or "collision retry."
@@ -558,14 +485,12 @@ Starter findings build on your free preview." Never "deduplication,"
 ### Why we chose Notion over a separate datastore
 
 The Notion free-audit DB is the same surface Rob already opens to
-clear the queue (per `docs/FREE-AUDIT-WORKFLOW.md` section 3). Storing
-the fingerprints there means: one place to manage abuse, dedup,
-status, and delivery state. A future worker can move this to a real
-datastore once volume justifies the complexity (no fixed trigger yet).
+clear the queue (per `docs/FREE-AUDIT-WORKFLOW.md` §3). Storing the
+fingerprints there means: one place to manage abuse, dedup, status,
+and delivery state. A future worker can move this to a real datastore
+once volume justifies the complexity (no fixed trigger yet).
 
 ---
-
-## Related docs
 
 ## GitHub integration (Pro tier opt-in)
 
@@ -662,6 +587,101 @@ results are cached for 24h per URL in `data/axe_cache/<hash>.json`
 
 ---
 
+## Form-submit smoke test (The Stranger)
+
+`scripts/ai_audit/form_smoke_test.py` is The Stranger Who Tried to
+Sign Up's runner. It re-uses the Playwright capture pattern (same
+shape as q14 and q16) to: detect `<form>` elements, fill each with
+safe synthetic values from `SYNTHETIC_VALUES` (every value labelled
+"LaunchLook smoke test" so the customer can spot the rows in their
+inbox or database), submit, and watch the page for a thank-you
+state, redirect, error toast, validation message, or silent no-op.
+
+The buyer-facing display name for the whole category is
+"form & signup flows". The strings "form-submit smoke test",
+"synthetic values", and "round-trip" never appear on a customer
+surface per `docs/SIMPLICITY-GUARDRAILS.md` section 6; the finding
+voice is The Stranger's (bemused, patient, "I tried to do the thing
+your page asked me to do").
+
+Tier-cap (same shape as performance + accessibility):
+
+| Tier | Findings exposed |
+|---|---|
+| Starter Package | 1 (worst form) |
+| Scale Up Package | up to 3 |
+| Pro Package | full breakdown |
+
+### Safety guardrails
+
+The smoke test submits real forms on the customer's live site. The
+runner is conservative about what it touches:
+
+* **Payment / checkout forms are skipped.** Any form whose selector,
+  id, name, action URL, parent class list, or field names match the
+  payment-token list (`stripe`, `paypal`, `card_number`, `cvv`,
+  `checkout`, `billing`, etc.) gets a finding ("We saw your checkout
+  form but didn't submit it — we don't want to accidentally place a
+  real order") but never a fill / submit.
+* **Destructive-label forms are skipped.** Submit buttons reading
+  `Delete`, `Cancel subscription`, `Unsubscribe me`, `Close my
+  account` (etc.) also short-circuit to a skip finding.
+* **Hard cap of 3 forms per audit.** Even on Pro, the runner never
+  submits more than 3 forms per page. Limits blast radius.
+* **No repeat submits.** A form that's already been submitted in
+  this run won't be re-detected (Playwright reloads between forms).
+* **Synthetic values label themselves.** Every fillable text input
+  carries "LaunchLook smoke test" or its component, so the customer
+  can grep their inbox and database for rows we generated.
+
+### Opt-out + selector blocklist (customer YAML)
+
+A customer can opt out of the runner or block specific selectors
+from ever being submitted by adding a `form_smoke_test:` block to
+their customer YAML alongside the `customer:` block. Both knobs are
+optional and default to safe values:
+
+```yaml
+form_smoke_test:
+  enabled: false              # default true; set false to skip the runner entirely
+  blocked_forms:               # selectors the runner must never submit
+    - "#prod-checkout"
+    - "form[action='/api/real-money']"
+  customer_email: stranger+launchlook@example.com  # Pro-tier round-trip target
+```
+
+`pipeline._form_smoke_config(...)` reads the block lazily so we don't
+drag YAML state through every layer. Missing block = defaults applied
+(runner enabled, no blocked selectors, no customer email override).
+
+### Pro-tier email round-trip
+
+When the customer's tier is `Pro Package`, the runner additionally
+polls a disposable mailbox (`scripts/ai_audit/disposable_mailbox.py`,
+mail.tm by default) for up to 60 seconds after each email-capturing
+form submits. If the confirmation email arrives, the form "passes"
+its check; if not, we surface a "Your signup flow didn't trigger a
+confirmation email within 60 seconds" finding. The mailbox API is
+externally hosted; we fall back gracefully (no finding, no crash,
+just a stderr warning) when the provider is unreachable.
+
+### Falls back when Playwright is missing
+
+When the Playwright dependency isn't installed, the headless run
+can't reach the URL, or the customer opted out, the runner returns
+`{"ran": False, ...}` with empty findings and an empty
+`passed_check_ids`. The pipeline still produces a YAML; we just
+don't get to claim "your forms work" if we never submitted them.
+
+### Builder-specific fix prompts
+
+Fix prompts are pre-generated per `(failure type × platform)` in the
+`_FIX_PROMPT_LIBRARY` inside `form_smoke_test.py`. The supported
+builders mirror q14 + q16: Lovable, Bolt, v0, Cursor, Webflow, plus
+a generic fallback. We never ask the LLM to draft these prompts.
+
+---
+
 ## AI-builder deep links in QSG (Pro Package)
 
 `templates/qsg/qsg.html.j2` renders each Quick Start Guide step with
@@ -699,7 +719,7 @@ inside the PDF after purchase.
 ## Related docs
 
 * `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 3-finding
-  hook -- queue triage, manual pipeline run, dedup write-back, abuse
+  hook — queue triage, manual pipeline run, dedup write-back, abuse
   watch.
 * `docs/MANUAL-REVIEW-WORKFLOW.md`: the previous (pre-AI) workflow,
   kept for reference.
