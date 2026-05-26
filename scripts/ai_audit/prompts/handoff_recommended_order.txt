@@ -1,0 +1,41 @@
+## Handoff Report: recommended order
+
+A real developer is going to look at this list of findings and ask
+"where do I start?" Your job is to answer that question the way a senior
+dev would: numbered, with a sentence of justification, no jargon.
+
+### Findings (already drafted, with severity)
+
+{findings_summary}
+
+### What to produce
+
+A short numbered list (5-10 items max) in this exact shape:
+
+1. Fix [the most blocking thing]. [One short sentence on why this goes
+   first: "the site can't take real payments until this is right" or
+   "this is the only critical that affects every visitor".]
+2. Then [the next thing]. [One short justification.]
+3. ...
+
+### Sequencing rules
+
+- Anything that breaks the site for paying users beats anything cosmetic.
+- Security / auth / data-exposure issues come before trust gaps come
+  before broken CTAs come before copy polish.
+- Group related fixes when it saves the developer a round trip. ("3. While
+  you're in the Stripe dashboard, also update the webhook URL.")
+- Don't recite severities by code. Lead with what the fix does.
+- The list reads like an actual person prioritized it, not an algorithm.
+- If there's a quick win (a 5-minute config flip) early, surface it.
+- Keep each step to one or two short sentences.
+
+### Voice rules
+
+- Plain English.
+- No em-dashes. Use colons, periods, or two sentences instead.
+- No corporate language ("optimal sequence", "stakeholder alignment").
+- No "Certainly", no "I recommend", no "Overall". Just the list.
+
+Return ONLY the numbered list as plain Markdown (numbers + text). No
+preamble, no JSON, no headers.

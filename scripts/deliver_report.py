@@ -59,6 +59,7 @@ QSG_TEMPLATE_DIR = TEMPLATE_ROOT / "qsg"
 EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
 # q6: Confidence Check / Saboteur re-scan add-on.
 CONFIDENCE_CHECK_TEMPLATE_DIR = TEMPLATE_ROOT / "confidence_check"
+HANDOFF_TEMPLATE_DIR = TEMPLATE_ROOT / "handoff"  # q18: Handoff Report
 CONFIDENCE_CHECKS_DATA_DIR = REPO_ROOT / "data" / "confidence_checks"
 OUTPUT_ROOT = REPO_ROOT / "output" / "reports"
 CONFIDENCE_CHECK_OUTPUT_ROOT = REPO_ROOT / "output" / "confidence_checks"
@@ -176,6 +177,7 @@ def build_jinja_env():
             str(QSG_TEMPLATE_DIR),
             str(EMAIL_TEMPLATE_DIR),
             str(CONFIDENCE_CHECK_TEMPLATE_DIR),
+            str(HANDOFF_TEMPLATE_DIR),
         ]),
         autoescape=select_autoescape(["html", "xml", "j2"]),
         trim_blocks=False,
@@ -553,6 +555,213 @@ def deliver_confidence_check(args) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------
+# Handoff Report (q18)
+# ---------------------------------------------------------------------------
+
+
+# Tier aliases the CLI accepts on --tier-override. We canonicalize before
+# routing through the Handoff Report code so that the template only ever
+# sees "Starter Package" / "Scale Up Package" / "Pro Package".
+TIER_ALIAS_TO_CANONICAL = {
+    "starter": "Starter Package",
+    "starter package": "Starter Package",
+    "scale up": "Scale Up Package",
+    "scaleup": "Scale Up Package",
+    "scale up package": "Scale Up Package",
+    "full": "Scale Up Package",  # legacy alias before q3 rename
+    "full package": "Scale Up Package",
+    "pro": "Pro Package",
+    "pro package": "Pro Package",
+}
+
+HANDOFF_OVERRIDE_SEPARATOR = "+"
+HANDOFF_OVERRIDE_SUFFIX = "handoff"
+
+
+def parse_tier_override(raw: str | None) -> tuple[str | None, bool]:
+    """Parse ``--tier-override`` into ``(canonical_tier, handoff_addon)``.
+
+    Accepted shapes:
+      ``"Pro"``               -> ("Pro Package", False)
+      ``"Starter+Handoff"``   -> ("Starter Package", True)
+      ``"Scale Up + Handoff"``-> ("Scale Up Package", True)
+      ``None`` / ``""``       -> (None, False)
+    """
+    if not raw:
+        return None, False
+    parts = [p.strip().lower() for p in raw.split(HANDOFF_OVERRIDE_SEPARATOR) if p.strip()]
+    if not parts:
+        return None, False
+    tier_alias = parts[0]
+    tier = TIER_ALIAS_TO_CANONICAL.get(tier_alias)
+    if tier is None:
+        sys.exit(
+            f"ERROR: --tier-override {raw!r} did not match a known tier. "
+            f"Try: Starter, Scale Up, Pro, or any of these with +Handoff."
+        )
+    handoff_addon = any(p == HANDOFF_OVERRIDE_SUFFIX for p in parts[1:])
+    return tier, handoff_addon
+
+
+def severity_buckets_for_handoff(
+    findings: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
+    """Group findings into the three buckets the handoff template renders.
+
+    ``critical`` rolls up into ``high`` because the handoff report uses
+    three buckets (must / should / polish) per the q18 spec.
+    """
+    buckets: dict[str, list[dict[str, Any]]] = {"high": [], "medium": [], "low": []}
+    for f in findings or []:
+        sev = (f.get("severity") or "").strip().lower()
+        if sev in {"critical", "high"}:
+            buckets["high"].append(f)
+        elif sev == "medium":
+            buckets["medium"].append(f)
+        else:
+            buckets["low"].append(f)
+    return buckets
+
+
+def render_handoff_markdown(
+    env,
+    *,
+    customer: dict[str, Any],
+    verdict: dict[str, Any],
+    passed_checks: list[dict[str, Any]],
+    groups: dict[str, list[dict[str, Any]]],
+    context_paragraph: str,
+    recommended_order: str,
+    code_review_notes: str,
+    effective_tier: str,
+    audit_date: str,
+) -> str:
+    tmpl = env.get_template("handoff.md.j2")
+    return tmpl.render(
+        customer=customer,
+        verdict=verdict,
+        passed_checks=passed_checks,
+        findings_high=groups["high"],
+        findings_medium=groups["medium"],
+        findings_low=groups["low"],
+        context_paragraph=context_paragraph,
+        recommended_order=recommended_order,
+        code_review_notes=code_review_notes,
+        tier=effective_tier,
+        audit_date=audit_date,
+    )
+
+
+def render_handoff_html(
+    env,
+    *,
+    customer: dict[str, Any],
+    verdict: dict[str, Any],
+    passed_checks: list[dict[str, Any]],
+    groups: dict[str, list[dict[str, Any]]],
+    context_paragraph: str,
+    recommended_order: str,
+    code_review_notes: str,
+    effective_tier: str,
+    audit_date: str,
+) -> str:
+    tmpl = env.get_template("handoff.html.j2")
+    return tmpl.render(
+        customer=customer,
+        verdict=verdict,
+        passed_checks=passed_checks,
+        groups=groups,
+        context_paragraph=context_paragraph,
+        recommended_order=recommended_order,
+        code_review_notes=code_review_notes,
+        tier=effective_tier,
+        audit_date=audit_date,
+    )
+
+
+def deliver_handoff_report(
+    env,
+    *,
+    data: dict[str, Any],
+    paid_tier: str,
+    handoff_addon: bool,
+    delivered_at: str,
+    out_dir: Path,
+    customer_name: str,
+    provider: str = "auto",
+) -> tuple[Path, Path] | None:
+    """Generate the Markdown + PDF Handoff Report when the customer is eligible.
+
+    Eligibility per PRODUCT-DECISIONS.md section 8:
+      * Pro Package -> Handoff Report is included for free.
+      * Starter / Scale Up -> Handoff Report only ships when the customer
+        bought the $99 add-on (``handoff_addon=True``).
+
+    Returns ``(md_path, pdf_path)`` when files are written, or ``None`` when
+    the customer is ineligible (caller can log and skip).
+    """
+    pro = paid_tier == "Pro Package"
+    eligible = pro or handoff_addon
+    if not eligible:
+        return None
+
+    # Lazy import to keep CLI startup snappy. deliver_report.py runs as
+    # a script so the repo root is not yet on sys.path; add it before
+    # importing the ai_audit package.
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from scripts.ai_audit import pipeline as ai_pipeline
+
+    narrative = ai_pipeline.run_handoff_report(
+        audit_payload=data,
+        effective_tier=paid_tier,
+        audit_date=delivered_at,
+        provider=provider,
+    )
+
+    customer = (data or {}).get("customer") or {}
+    verdict = (data or {}).get("verdict") or {}
+    findings = (data or {}).get("findings") or []
+    passed_checks = (data or {}).get("passed_checks") or []
+
+    groups = severity_buckets_for_handoff(findings)
+
+    md_text = render_handoff_markdown(
+        env,
+        customer=customer,
+        verdict=verdict,
+        passed_checks=passed_checks,
+        groups=groups,
+        context_paragraph=narrative["context_paragraph"],
+        recommended_order=narrative["recommended_order"],
+        code_review_notes=narrative["code_review_notes"],
+        effective_tier=paid_tier,
+        audit_date=delivered_at,
+    )
+
+    html_text = render_handoff_html(
+        env,
+        customer=customer,
+        verdict=verdict,
+        passed_checks=passed_checks,
+        groups=groups,
+        context_paragraph=narrative["context_paragraph"],
+        recommended_order=narrative["recommended_order"],
+        code_review_notes=narrative["code_review_notes"],
+        effective_tier=paid_tier,
+        audit_date=delivered_at,
+    )
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    md_path = out_dir / "handoff_report.md"
+    pdf_path = out_dir / "handoff_report.pdf"
+    md_path.write_text(md_text, encoding="utf-8")
+    html_to_pdf(html_text, pdf_path, customer_name)
+    return md_path, pdf_path
+
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--customer", required=True, help="Path to customer YAML (or, with --confidence-check, customer slug)")
@@ -566,6 +775,26 @@ def main() -> int:
     parser.add_argument("--no-open", action="store_true", help="Skip auto-opening PDFs in dry-run")
     parser.add_argument("--qsg-link", default=None, help="Optional public URL of the QSG PDF (for the report cross-link)")
     parser.add_argument("--yes", action="store_true", help="Skip the send confirmation prompt")
+    parser.add_argument(
+        "--handoff-report",
+        action="store_true",
+        help="Also generate the Handoff Report (Markdown + PDF) for this customer.",
+    )
+    parser.add_argument(
+        "--tier-override",
+        default=None,
+        help=(
+            "Override the tier declared in the customer YAML. Useful for the "
+            "Starter+Handoff add-on flow. Accepts e.g. \"Starter+Handoff\", "
+            "\"Scale Up+Handoff\", or just \"Pro\"."
+        ),
+    )
+    parser.add_argument(
+        "--provider",
+        default="auto",
+        choices=["auto", "claude", "gpt", "stub"],
+        help="LLM provider for Handoff Report narrative pieces. Default: auto.",
+    )
     args = parser.parse_args()
 
     if args.confidence_check:
@@ -578,6 +807,50 @@ def main() -> int:
     customer_path = Path(args.customer).resolve()
     data = load_customer_yaml(customer_path)
     validate(data)
+
+    # q18: Handoff Report (separate Markdown + PDF deliverable).
+    if getattr(args, "handoff_report", False):
+        tier_override, handoff_addon = parse_tier_override(
+            getattr(args, "tier_override", None)
+        )
+        effective_tier = tier_override or (data.get("customer") or {}).get("tier") or ""
+        if not handoff_addon and effective_tier != "Pro Package":
+            # CLI requested --handoff-report explicitly so treat it as the
+            # add-on being applied. Webhook callers set --tier-override
+            # Starter+Handoff or pass --handoff-report for Pro.
+            handoff_addon = effective_tier != "Pro Package"
+        env = build_jinja_env()
+        out_dir = REPO_ROOT / "out" / (
+            slugify((data.get("customer") or {}).get("slug") or "handoff")
+        )
+        delivered_at = (
+            (data.get("customer") or {}).get("audit_date")
+            or date.today().isoformat()
+        )
+        customer_name = (
+            (data.get("customer") or {}).get("first_name", "")
+            + " "
+            + (data.get("customer") or {}).get("last_name", "")
+        ).strip() or "customer"
+        result = deliver_handoff_report(
+            env,
+            data=data,
+            paid_tier=effective_tier,
+            handoff_addon=handoff_addon,
+            delivered_at=delivered_at,
+            out_dir=out_dir,
+            customer_name=customer_name,
+            provider=getattr(args, "provider", "auto"),
+        )
+        if result is None:
+            print(
+                "[handoff] customer not eligible for Handoff Report (free Pro "
+                "or paid Starter/Scale Up add-on). Skipping."
+            )
+        else:
+            md_path, pdf_path = result
+            print(f"[handoff] wrote {md_path}")
+            print(f"[handoff] wrote {pdf_path}")
 
     customer = data["customer"]
     slug = slugify(customer.get("first_name", ""), customer.get("app_name", ""))

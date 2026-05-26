@@ -1380,3 +1380,157 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         intake_notes=(kwargs.get("intake_notes") or "").strip(),
         platform=platform,
     )
+
+
+# ---------------------------------------------------------------------------
+# Handoff Report (q18)
+# ---------------------------------------------------------------------------
+
+HANDOFF_PRO_TIER = "Pro Package"
+
+
+def _format_findings_for_handoff(findings: list[dict[str, Any]]) -> str:
+    """Compact human-readable summary used as LLM context for handoff prompts.
+
+    Output looks like::
+
+        - [high] Stripe webhook URL points at staging (caught by The Klutz)
+        - [medium] No accessibility statement (caught by The Doubter)
+
+    The LLM gets enough signal to prioritize and group findings without
+    re-reading the full audit YAML.
+    """
+    lines: list[str] = []
+    for f in findings or []:
+        severity = (f.get("severity") or "").strip().lower() or "low"
+        title = (f.get("title") or f.get("name") or "").strip() or "Untitled finding"
+        tag = (f.get("tag") or f.get("persona") or "").strip()
+        suffix = f" (caught by {tag})" if tag else ""
+        lines.append(f"- [{severity}] {title}{suffix}")
+    return "\n".join(lines) if lines else "(no findings)"
+
+
+def _customer_full_name(customer: dict[str, Any]) -> str:
+    first = (customer.get("first_name") or "").strip()
+    last = (customer.get("last_name") or "").strip()
+    name = (first + " " + last).strip()
+    if name:
+        return name
+    email = (customer.get("email") or "").strip()
+    return email.split("@", 1)[0] if email else "the customer"
+
+
+def _build_handoff_context_prompt(
+    *,
+    customer: dict[str, Any],
+    findings: list[dict[str, Any]],
+    audit_date: str,
+    tier: str,
+) -> str:
+    template = _read_prompt("handoff_context_paragraph.txt")
+    return template.format(
+        app_name=(customer.get("app_name") or "").strip() or "the app",
+        builder=(customer.get("builder") or "").strip() or "Lovable",
+        customer_name=_customer_full_name(customer),
+        customer_email=(customer.get("email") or "").strip() or "(no email on file)",
+        audit_date=audit_date,
+        app_url=(customer.get("app_url") or "").strip() or "(no URL on file)",
+        tier=tier,
+        findings_summary=_format_findings_for_handoff(findings),
+    )
+
+
+def _build_handoff_order_prompt(
+    *,
+    findings: list[dict[str, Any]],
+) -> str:
+    template = _read_prompt("handoff_recommended_order.txt")
+    return template.format(
+        findings_summary=_format_findings_for_handoff(findings),
+    )
+
+
+def _build_handoff_code_review_prompt(
+    *,
+    customer: dict[str, Any],
+    findings: list[dict[str, Any]],
+) -> str:
+    template = _read_prompt("handoff_code_review_notes.txt")
+    return template.format(
+        app_name=(customer.get("app_name") or "").strip() or "the app",
+        builder=(customer.get("builder") or "").strip() or "Lovable",
+        app_url=(customer.get("app_url") or "").strip() or "(no URL on file)",
+        findings_summary=_format_findings_for_handoff(findings),
+    )
+
+
+def run_handoff_report(
+    *,
+    audit_payload: dict[str, Any],
+    effective_tier: str,
+    audit_date: str,
+    provider: str = "auto",
+) -> dict[str, str]:
+    """Generate the three Handoff Report narrative sections.
+
+    ``audit_payload`` is the customer YAML dict that has already been
+    produced by ``run(...)`` (so findings, verdict, passed_checks are all
+    populated). ``effective_tier`` is the tier the customer paid for
+    *plus* any add-ons applied (e.g. Starter + Handoff). The code-review
+    section is only generated when the customer is on Pro Package per
+    PRODUCT-DECISIONS.md section 8.
+
+    Returns ``{"context_paragraph", "recommended_order", "code_review_notes"}``.
+    ``code_review_notes`` is the empty string for non-Pro tiers; the
+    template gates that section so the empty string is never rendered.
+    """
+    customer = (audit_payload or {}).get("customer") or {}
+    verdict = (audit_payload or {}).get("verdict") or {}
+    findings = (audit_payload or {}).get("findings") or []
+
+    stub_context = {
+        "app_name": (customer.get("app_name") or "").strip() or "your app",
+        "builder": (customer.get("builder") or "Lovable").strip() or "Lovable",
+    }
+    client = llm_client.build_client(provider=provider, stub_context=stub_context)
+
+    system_prompt = build_system_prompt(
+        (customer.get("platform") or "").strip() or "lovable",
+        tier=effective_tier,
+    )
+
+    context_prompt = _build_handoff_context_prompt(
+        customer=customer,
+        findings=findings,
+        audit_date=audit_date,
+        tier=effective_tier,
+    )
+    order_prompt = _build_handoff_order_prompt(findings=findings)
+
+    context_text = client.generate_handoff_text(
+        system_prompt=system_prompt,
+        user_prompt=context_prompt,
+        section="context_paragraph",
+    )
+    order_text = client.generate_handoff_text(
+        system_prompt=system_prompt,
+        user_prompt=order_prompt,
+        section="recommended_order",
+    )
+
+    code_review_text = ""
+    if effective_tier == HANDOFF_PRO_TIER:
+        code_review_prompt = _build_handoff_code_review_prompt(
+            customer=customer, findings=findings
+        )
+        code_review_text = client.generate_handoff_text(
+            system_prompt=system_prompt,
+            user_prompt=code_review_prompt,
+            section="code_review_notes",
+        )
+
+    return {
+        "context_paragraph": context_text,
+        "recommended_order": order_text,
+        "code_review_notes": code_review_text,
+    }

@@ -178,6 +178,18 @@ QSG_SCHEMA: dict[str, Any] = {
     },
 }
 
+# Handoff Report narrative sections (q18). One free-text field per call so
+# context_paragraph / recommended_order / code_review_notes can iterate
+# their prompts independently. See scripts/ai_audit/prompts/handoff_*.txt.
+HANDOFF_TEXT_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["text"],
+    "properties": {
+        "text": {"type": "string", "minLength": 1},
+    },
+}
+
 
 # ---------------------------------------------------------------------------
 # Base client
@@ -229,6 +241,24 @@ class LLMClient(ABC):
         screenshots: list[tuple[str, Path]],
     ) -> dict[str, Any]:
         """Return ``{title, intro, steps:[{title, body}...], footer_note}``."""
+
+    @abstractmethod
+    def generate_handoff_text(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        section: str,
+    ) -> str:
+        """Return one free-text paragraph for a Handoff Report section.
+
+        ``section`` is a short slug like ``"context_paragraph"``,
+        ``"recommended_order"`` or ``"code_review_notes"``. The pipeline
+        uses it for the cost-tracker call type and for the stub fallback
+        text. Screenshots are intentionally not passed: the handoff
+        narrative is grounded in the already-generated findings, not in
+        re-inspecting the site.
+        """
 
     def regenerate_finding(
         self,
@@ -451,6 +481,27 @@ class ClaudeClient(LLMClient):
         )
         return _normalize_qsg(payload)
 
+    def generate_handoff_text(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        section: str,
+    ) -> str:
+        payload = self._call_with_tool(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            screenshots=[],
+            tool_name="record_handoff_text",
+            call_type=f"handoff_{section}",
+            tool_description=(
+                "Record a single paragraph or short numbered list for the "
+                "Handoff Report. Plain English, no corporate jargon."
+            ),
+            input_schema=HANDOFF_TEXT_SCHEMA,
+        )
+        return (payload.get("text") or "").strip()
+
 
 # ---------------------------------------------------------------------------
 # GPT (OpenAI)
@@ -617,6 +668,23 @@ class GPTClient(LLMClient):
             schema=QSG_SCHEMA,
         )
         return _normalize_qsg(payload)
+
+    def generate_handoff_text(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        section: str,
+    ) -> str:
+        payload = self._call_with_schema(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            screenshots=[],
+            schema_name="handoff_text",
+            call_type=f"handoff_{section}",
+            schema=HANDOFF_TEXT_SCHEMA,
+        )
+        return (payload.get("text") or "").strip()
 
 
 def _normalize_qsg(payload: dict[str, Any]) -> dict[str, Any]:
@@ -788,6 +856,36 @@ class StubClient(LLMClient):
             ],
             "footer_note": "Stub footer. Replace by setting an LLM API key.",
         }
+
+    def generate_handoff_text(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        section: str,
+    ) -> str:
+        with cost_tracker.track_call(f"handoff_{section}") as _t:
+            _t.set_usage(
+                self.model,
+                _stub_token_estimate(system_prompt, user_prompt),
+                _stub_output_estimate(280),
+            )
+        if section == "recommended_order":
+            return (
+                "1. Stub recommended order. Set ANTHROPIC_API_KEY or "
+                "OPENAI_API_KEY to get a real prioritization."
+            )
+        if section == "code_review_notes":
+            return (
+                "Stub code-review notes. A real LLM run lists 3 to 5 "
+                "architecture or integration concerns the developer "
+                "should look at first."
+            )
+        # context_paragraph (default)
+        return (
+            f"Stub context paragraph for {self._app_name}. Set an LLM "
+            "API key to get a real one written from the audit evidence."
+        )
 
 
 # ---------------------------------------------------------------------------

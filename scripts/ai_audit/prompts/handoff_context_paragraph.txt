@@ -1,0 +1,42 @@
+## Handoff Report: one-paragraph context
+
+Write a single short paragraph (3-5 sentences) that sets context for a
+developer who is about to be handed this customer's project. The
+developer has never seen the site before. You are bridging the gap.
+
+### Customer
+
+- App name: {app_name}
+- Built with: {builder}
+- Built by: {customer_name} ({customer_email})
+- Audit date: {audit_date}
+- Live URL: {app_url}
+- Tier: {tier}
+
+### Finding summary (already drafted)
+
+{findings_summary}
+
+### What this paragraph must do
+
+1. Open with what the site is, in plain language ("This is a marketplace
+   for booking local experiences"). One sentence.
+2. Name the builder and the rough age / stage ("Built with Lovable. As of
+   {audit_date} the site is live but pre-launch."). One sentence.
+3. Tee up the audit results in one line ("LaunchLook ran a pre-launch
+   checkup and found X criticals, Y highs, and a polish layer underneath.").
+4. (Optional) one line about the customer's role: "The customer is the
+   solo founder. They're hiring a developer to land the fixes." Skip if
+   the YAML doesn't tell you.
+
+### Voice rules
+
+- Plain English. No corporate language ("comprehensive deliverable",
+  "stakeholder summary").
+- No em-dashes. Use colons, periods, or two sentences instead.
+- Do not name internal tooling (AI pipeline, prescreener, Testers cast).
+- Do not start with "Certainly" or "This document".
+- Write as if Rob is explaining to the developer over coffee, not as if a
+  platform is generating a summary.
+
+Return ONLY the paragraph text. No headers, no JSON, no preamble.

@@ -1,0 +1,55 @@
+## Handoff Report: what we'd flag in a code review (Pro tier only)
+
+This section is the Pro tier addendum. The customer paid extra to give
+the developer something beyond the surface findings: 3 to 5 architecture
+or integration concerns that aren't visible as a single broken thing,
+but that a developer looking at the codebase should know about.
+
+### Customer
+
+- App name: {app_name}
+- Built with: {builder}
+- Live URL: {app_url}
+
+### Findings already drafted (for context, do not repeat)
+
+{findings_summary}
+
+### What to write
+
+Three to five short paragraphs (or bullet items). Each one names ONE
+architectural or integration concern that the surface audit raised
+questions about but didn't fully resolve. Examples of the right shape:
+
+- "Cross-user data isolation: we found two users could see each other's
+  records on /boards. A developer should look at how Lovable wired the
+  auth here. It looks like row-level security is either missing or
+  applied at the wrong layer."
+- "Stripe webhook routing: the live URL accepted a test payment but the
+  production database didn't reflect it. Either the webhook is pointed
+  at staging or the signature verification is rejecting events. Worth
+  checking before turning on paid traffic."
+- "Analytics double-counting: PostHog is being initialized in two places
+  (the Lovable provider and a manual init in _app.tsx). Every dashboard
+  number is currently 2x. Pick one and remove the other."
+- "Mobile responsive layout: it works on the homepage but the dashboard
+  uses fixed widths that overflow below 360px. A developer should
+  decide whether to fix this systemically or per-component."
+- "Email deliverability: from-address doesn't match the verified domain
+  in Resend, which lands signups in spam on Gmail. A 30-minute DNS fix,
+  but the developer should know."
+
+### Rules
+
+- 3 to 5 items total. Not 2, not 6.
+- Each item names the concrete observation and the architectural
+  question the developer should ask. Not just "look at security" — say
+  what made you suspect it.
+- Plain English. No "leverage", no "robust", no "comprehensive".
+- No em-dashes anywhere.
+- Do not restate findings already in the main report. This section
+  exists to point at the layer below surface findings.
+- Write as a senior developer briefing another developer over a 5-minute
+  handoff call.
+
+Return ONLY the prose / bullet list. No JSON, no preamble, no headers.
