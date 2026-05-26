@@ -37,7 +37,7 @@ left to do.
 - [x] Tier-name alignment across scripts/ — commit `ca8ce0f`
 - [x] Confidence Check / Saboteur re-scan add-on shipped (q6)
 - [x] LaunchLook Verified badge + $9 re-verification flow (q17)
-- [x] Handoff Report (q18) — free with Pro, $99 add-on for Starter/Scale Up
+- [x] Handoff Report (q18) — free with Pro, $49 add-on for Starter/Scale Up (bumped down from $99 on 2026-05-26 — see `docs/PRODUCT-DECISIONS.md` for the upsell-ladder math)
 - [x] GitHub integration for Pro tier (q19, opt-in, Rob-triggered CLI)
 - [x] Hosted shareable report pages at /r/{slug} (q22, opt-in)
 - [x] vs-pagelens comparison page (q11)

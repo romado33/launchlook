@@ -982,7 +982,7 @@ def scan_stripe_pricing() -> list[Issue]:
     Also verifies metadata-discriminated routing exists for the q6 Confidence
     Check ($19 + product=confidence_check, $9 + product=confidence_check), the
     q17 badge re-verification ($9 + product=reverify), and the q18 Handoff
-    Report add-on ($99 + product=handoff_report).
+    Report add-on ($49 + product=handoff_report).
     """
     issues: list[Issue] = []
     webhook = ROOT / "api" / "stripe-webhook.py"

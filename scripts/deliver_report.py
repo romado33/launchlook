@@ -75,7 +75,7 @@ SHAREABLE_REPORTS_DATA_DIR = REPO_ROOT / "landing" / "data" / "reports"
 SHAREABLE_PAGES_DIR = REPO_ROOT / "landing" / "r"
 
 # Handoff Report (q18). Pro Package gets it bundled; Starter / Scale Up
-# can buy it as a $99 add-on, which is signalled by --tier-override
+# can buy it as a $49 add-on, which is signalled by --tier-override
 # Starter+Handoff / "Full+Handoff". See docs/HANDOFF-REPORT-WORKFLOW.md.
 HANDOFF_OVERRIDE_SEPARATOR = "+"
 HANDOFF_OVERRIDE_SUFFIX = "Handoff"
@@ -226,7 +226,7 @@ def parse_tier_override(raw: str | None) -> tuple[str | None, bool]:
     ``None`` when the caller didn't pass an override (use the YAML).
 
     The ``+Handoff`` suffix is a signal that this customer paid the
-    $99 add-on. It's used so the Handoff Report still renders for
+    $49 add-on. It's used so the Handoff Report still renders for
     Starter / Scale Up buyers without flipping their canonical tier
     (which would change finding caps + dedup rules upstream).
     """
@@ -324,7 +324,7 @@ def deliver_handoff_report(
     Eligibility:
       - Customer is Pro Package (bundled), OR
       - Customer is Starter / Scale Up + ``has_handoff_addon=True``
-        (the $99 add-on has been paid).
+        (the $49 add-on has been paid).
     """
     customer_tier = (data.get("customer", {}) or {}).get("tier", "")
     canonical_tier = effective_tier or customer_tier
@@ -333,7 +333,7 @@ def deliver_handoff_report(
     if not eligible:
         print(
             "  ! Handoff Report not generated: customer is not Pro Package and the "
-            "$99 add-on was not signalled (use --tier-override Starter+Handoff).",
+            "$49 add-on was not signalled (use --tier-override Starter+Handoff).",
             file=sys.stderr,
         )
         return None, None
@@ -964,7 +964,7 @@ def main() -> int:
             "Also render the Handoff Report (Markdown + PDF) for this customer. "
             "Pro Package customers get it bundled; Starter / Scale Up customers "
             "need --tier-override Starter+Handoff or Full+Handoff to signal that "
-            "the $99 add-on has been paid. See docs/HANDOFF-REPORT-WORKFLOW.md."
+            "the $49 add-on has been paid. See docs/HANDOFF-REPORT-WORKFLOW.md."
         ),
     )
     parser.add_argument(
@@ -974,7 +974,7 @@ def main() -> int:
             "Override the YAML's customer.tier for delivery-side decisions "
             "(e.g. Handoff Report gating). Accepts: Starter, Full, Pro, "
             "Starter+Handoff, Full+Handoff, Pro+Handoff. The +Handoff suffix "
-            "signals that the customer paid the $99 Handoff Report add-on."
+            "signals that the customer paid the $49 Handoff Report add-on."
         ),
     )
     parser.add_argument(
@@ -1062,7 +1062,7 @@ def main() -> int:
         " (private by default)"
     )
 
-    # Handoff Report (q18). Bundled for Pro Package; opt-in $99 add-on
+    # Handoff Report (q18). Bundled for Pro Package; opt-in $49 add-on
     # for Starter / Scale Up signalled via --tier-override <Tier>+Handoff.
     handoff_md_path: Path | None = None
     handoff_pdf_path: Path | None = None

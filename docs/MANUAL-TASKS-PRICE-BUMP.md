@@ -15,14 +15,15 @@ so there's no rush to update Stripe/Tally/Notion first.
 
 | Done | Manual external task | Where | Time |
 |---|---|---|---|
-| ☐ | Create new **Pro Package** product in Stripe ($99) | Stripe Dashboard → Products | ~3 min |
-| ☐ | Add **Pro Package** payment link | Stripe → Payment Links | ~2 min |
-| ☐ | Update **Starter Package** product price ($9 → $19) | Stripe → Products | ~1 min |
-| ☐ | Update **Full Package** product price ($29 → $49) | Stripe → Products | ~1 min |
-| ☐ | Update Tally form to add **Pro Package** tier option | Tally form editor | ~3 min |
-| ☐ | Update Notion DB to allow **Pro Package** as a tier value | Notion DB schema | ~1 min |
+| ☑ | **Pro Package** product in Stripe ($99 USD) — created 2026-05-26 by autonomous worker. `prod_UaYW9iZCtYvqyw`. | Stripe Dashboard → Products | done |
+| ☑ | **Pro Package** payment link — `plink_1TbNP6BxCiPye3m0IsakLVWj`, URL `https://buy.stripe.com/9B600idx36zG3Bha0E3cc03`, wired into `landing/assets/config.js` `stripe.pro`. | Stripe → Payment Links | done |
+| ☑ | **Handoff Report** add-on product + $49 USD price + Payment Link — created 2026-05-26 by autonomous worker. `plink_1TbNP9BxCiPye3m0c5A1DNfq`. Wired into `landing/assets/config.js` `stripe.handoff`. Price decision: $49 (not $99). See `docs/PRODUCT-DECISIONS.md` §9. | Stripe → Payment Links | done |
+| ☐ | **Starter Package** $19 USD product + Payment Link — NOT YET CREATED. The existing CAD link still serves the homepage Buy Starter button. Reason: the autonomous worker flagged this as ambiguous (the $19 Saboteur add-on exists; should Starter be a separate product or reuse the add-on?). See `docs/AGENT-ACTION-LOG-2026-05-26.md` NEEDS YOUR APPROVAL item 1 for the curl commands. | Stripe Dashboard → Products | ~3 min |
+| ☐ | **Scale Up Package** $49 USD product + Payment Link — same situation. | Stripe Dashboard → Products | ~3 min |
+| ☐ | Update Tally form to add **Pro Package** tier option, **Webflow** platform option, and **Scale Up** conditional logic. Tally API does not expose form mutation; UI-only. Paste-ready text in `docs/TALLY-*.txt`. | Tally form editor (`QKOX1A`) | ~5 min |
+| ☐ | Update Notion Customers DB — add **Scale Up Package** to Tier select, **Webflow** to Platform select. | Notion DB schema | ~1 min |
 
-**Total time:** ~11 minutes once you sit down to do them.
+**Total time:** ~12 minutes once you sit down to do them (was ~11; new Starter / Scale Up step adds a minute).
 
 ---
 

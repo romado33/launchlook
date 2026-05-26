@@ -763,7 +763,7 @@ runbook, including the operator guardrail that prevents a misfired
 * `scripts/ai_audit/prompts/system.txt`: the prompt itself. Read it
   before iterating.
 
-## Handoff Report (Pro tier + $99 add-on)
+## Handoff Report (Pro tier + $49 add-on)
 
 After the main audit YAML is generated, an optional pass produces a Handoff Report: a separate Markdown + PDF deliverable formatted for the developer the customer hires next. It reuses the same findings, verdict and passed_checks the main report does -- nothing is re-audited.
 

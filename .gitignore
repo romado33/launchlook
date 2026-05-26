@@ -101,3 +101,10 @@ docs/SHIPMENT-VERIFICATION-PARTIAL-2026-05-26.md
 # `verify-tmp/` is a re-runnable scratch directory where the verification
 # scripts cache live-site HTML snapshots for diffing. Always regenerated.
 verify-tmp/
+# Worker scratch helpers at repo root (Stripe / Resend / Tally / Notion
+# probes and one-shot scripts; loaded from .env, no hardcoded secrets,
+# but they shouldn't be in git history either).
+/_*.py
+/_*.txt
+/_*.out
+/stripe_created.json

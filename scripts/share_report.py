@@ -120,7 +120,7 @@ def set_handoff_shared(slug: str, data: dict[str, Any], shared: bool) -> dict[st
         sys.exit(
             "ERROR: this customer does not have a Handoff Report available "
             "(Pro tier only). Use scripts/deliver_report.py --handoff-report "
-            "for Pro customers, or the $99 add-on for Starter/Scale Up first."
+            "for Pro customers, or the $49 add-on for Starter/Scale Up first."
         )
     if bool(handoff.get("shared")) == shared:
         state = "shared" if shared else "hidden"

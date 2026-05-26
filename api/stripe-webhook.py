@@ -98,13 +98,14 @@ REVERIFY_METADATA_VALUE = "reverify"
 REVERIFY_LABEL = "Badge re-verification ($9)"
 
 
-# q18: Handoff Report add-on ($99 for Starter/Scale Up, free with Pro).
-# Discriminated by metadata.product because $99 collides with the Pro
-# Package SKU. Same metadata-first pattern as Confidence Check (q6) and
+# q18: Handoff Report add-on ($49 for Starter/Scale Up, free with Pro).
+# Discriminated by metadata.product because $49 collides with the Scale Up
+# Package SKU (and historically $99 collided with Pro). Same metadata-first
 # badge re-verification (q17).
 HANDOFF_REPORT_METADATA_VALUE = "handoff_report"
 HANDOFF_REPORT_CENTS_TO_LABEL = {
-    9900: "Handoff Report add-on ($99)",
+    9900: "Handoff Report add-on ($99)",  # legacy receipts; price dropped to $49 on 2026-05-26
+    4900: "Handoff Report add-on ($49)",
 }
 
 
@@ -216,7 +217,7 @@ def is_reverify_session(session: dict[str, Any]) -> bool:
 
 
 def is_handoff_report_session(session: dict[str, Any]) -> bool:
-    """True when the Stripe checkout session is a $99 Handoff Report add-on (q18)."""
+    """True when the Stripe checkout session is a $49 Handoff Report add-on (q18, was $99 pre-2026-05-26)."""
     return _session_product_metadata(session) == HANDOFF_REPORT_METADATA_VALUE
 
 
@@ -419,7 +420,7 @@ def handle_reverify_purchase(session: dict[str, Any]) -> dict[str, Any]:
 
 
 def handle_handoff_report_purchase(session: dict[str, Any]) -> dict[str, Any]:
-    """Process a $99 Handoff Report add-on payment (q18).
+    """Process a $49 Handoff Report add-on payment (q18, was $99 pre-2026-05-26).
 
     The customer has already received their main audit report. This add-on
     pays for the additional Handoff Report deliverable (Markdown + PDF
@@ -453,8 +454,8 @@ def process_event(event: dict[str, Any]) -> dict[str, Any]:
     if event_type != "checkout.session.completed":
         return {"status": "ignored", "event_type": event_type}
     session = (event.get("data") or {}).get("object") or {}
-    # q18: Handoff Report add-on ($99). Metadata-first routing prevents
-    # the $9900 collision with the Pro Package SKU.
+    # q18: Handoff Report add-on ($49 as of 2026-05-26; $9900 legacy receipts
+    # also still labeled). Metadata-first routing prevents the $4900 collision with Scale Up (and the legacy $9900 collision with Pro).
     if is_handoff_report_session(session):
         return handle_handoff_report_purchase(session)
     # q17: badge re-verification ($9). Metadata-first routing prevents

@@ -162,7 +162,7 @@ button linking to `landing/data/handoff/{slug}.pdf`. Rob copies the
 generated `output/reports/{slug}/handoff-report.pdf` into that
 location at the time he flips `--share-handoff` on (one-time copy;
 the file is small and the directory is committed). Starter / Scale Up
-customers don't see this toggle unless they bought the $99 Handoff
+customers don't see this toggle unless they bought the $49 Handoff
 add-on.
 
 ## 7. Daily flow (operator-facing)

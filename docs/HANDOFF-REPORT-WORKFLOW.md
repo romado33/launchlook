@@ -86,15 +86,18 @@ the Handoff Report; we re-use the same YAML payload.
 
 - Pro tier (`$99`): Handoff Report is included free with the main
   delivery.
-- Starter and Scale Up: Handoff Report is available as a `$99` add-on.
-  Customer purchases it via the dedicated Stripe Payment Link (metadata
-  `product=handoff_report`).
+- Starter and Scale Up: Handoff Report is available as a `$49` add-on
+  (dropped from $99 on 2026-05-26 — see `docs/PRODUCT-DECISIONS.md` §9
+  for the upsell-ladder math). Customer purchases it via the dedicated
+  Stripe Payment Link (metadata `product=handoff_report`).
 - Free tier: not eligible.
 
-Discrimination at the webhook layer is metadata-first. The $99 price
-point collides with the Pro Package SKU, so we never route by amount
-alone. See `api/stripe-webhook.py::is_handoff_report_session` and the
-sibling pattern around `is_confidence_check_session` (q6) and
+Discrimination at the webhook layer is metadata-first. The new $49
+price point collides with the Scale Up Package SKU; the older $99
+price collided with the Pro Package SKU. Both collisions are why we
+never route by amount alone. See
+`api/stripe-webhook.py::is_handoff_report_session` and the sibling
+pattern around `is_confidence_check_session` (q6) and
 `is_reverify_session` (q17).
 
 ## Operational flow for Rob
@@ -170,9 +173,12 @@ stay subtle.
 
 ## Punted (q18 scope)
 
-- The Stripe Payment Link for the `$99` Handoff Report add-on has to be
-  created in the Stripe dashboard and pasted into the Vercel env. Rob
-  has the task in `docs/ROB-REMAINING-TODO.md`.
+- ~~The Stripe Payment Link for the Handoff Report add-on has to be
+  created in the Stripe dashboard and pasted into the Vercel env.~~
+  **Done 2026-05-26.** `plink_1TbNP9BxCiPye3m0c5A1DNfq` (URL
+  `https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06`) is wired into
+  `landing/assets/config.js` `stripe.handoff`. $49 USD,
+  `metadata.product=handoff_report`.
 - The Plausible goal `HandoffReportAddOn` has to be added in the
   Plausible dashboard so the existing `plausible-event-name` attribute
   fires.
