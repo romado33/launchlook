@@ -217,6 +217,61 @@ Code that already shipped (verify with `git log --oneline` if you doubt):
 
 ---
 
+## Free-audit operational tasks (new with q4)
+
+The free 3-finding audit hero on the landing page (and on `/webflow`)
+is the primary CTA. Per `docs/FREE-AUDIT-WORKFLOW.md`, the full flow is
+manual until volume justifies automation. Daily ritual:
+
+- [ ] **Create the Notion DB** "Free Audit Requests" with the schema
+  in `docs/FREE-AUDIT-WORKFLOW.md` section 2 and share it with the
+  LaunchLook integration. Set `NOTION_FREE_AUDIT_DB_ID` in `.env` AND
+  in Vercel env. Until this is set, the serverless function logs a
+  warning and skips the Notion write (the submitter still gets a
+  confirmation email).
+- [ ] **Confirm Resend domain + API key.** The free-audit confirmation
+  uses `RESEND_API_KEY` + `EMAIL_FROM` from the existing setup. Send a
+  test submit through the live form to confirm the founder-voice
+  confirmation lands in inbox (not spam).
+- [ ] **Daily (<= 24h SLA):** open Notion -> free-audit DB -> filter
+  `Status = queued` -> triage abuse, run the pipeline, review in the
+  audit UI, deliver, write fingerprints back to the Notion row, mark
+  `Status = delivered`. See `FREE-AUDIT-WORKFLOW.md` section 3 for the
+  exact commands.
+- [ ] **Weekly:** scan for abuse patterns (repeated hostnames,
+  throwaway email domains, IP bursts). Set `Status = abuse` on any
+  rows that look off, and consider tightening the rate limits in
+  `api/free-audit.py` if it's chronic.
+- [ ] **After each Scale Up Package or Pro Package Stripe purchase:**
+  manually grant a checklist token. Open
+  `landing/data/checklist_tokens.json`, append a short opaque string
+  (uuid prefix or stripe charge id), commit, push. Email the customer
+  `https://launchlook.app/checklist?token=<value>`. The token unlocks
+  the full checklist; without it, visitors see truncated previews and
+  an upsell. Trial token `test` is in the file for QA only -- remove
+  it before any aggressive launch.
+- [ ] **Automate the fingerprint write-back** (defer until >= 5 free
+  audits / week). Today, after the deliver step Rob copies the 3
+  fingerprints from the pipeline log into the Notion row's
+  `Finding Fingerprints` column by hand (semicolon-separated). The
+  helper `scripts/ai_audit/free_audit_lookup.persist_free_audit_fingerprints`
+  already does the write -- wire it into `scripts/deliver_report.py
+  --free` when the free-tier deliver path lands.
+- [ ] **Automate the Stripe -> checklist token grant** (defer until
+  >= 3 Scale Up purchases). The Stripe webhook in
+  `api/stripe-webhook.py` could append to
+  `landing/data/checklist_tokens.json` directly (or better, move
+  tokens to Notion and have `checklist.html` fetch via API). For now,
+  manual is fine.
+- [ ] **Watch the LLM bill on the free tier.** Each delivered free
+  audit burns ~one full Starter-cap LLM run that earns $0. If the
+  monthly free-audit count x per-run cost exceeds ~$50, batch process
+  every 2 to 3 days instead of daily, OR drop the cap to 3 (matching
+  the deliverable) and skip the prescreener entirely. Numbers and
+  levers live in `docs/AI-AUDIT-PIPELINE.md`.
+
+---
+
 ## 🟡 Optional — trust & polish
 
 - [x] **LinkedIn** on homepage (Who's behind + footer)

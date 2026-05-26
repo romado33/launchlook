@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free pre-launch checklist for vibe-coded apps | LaunchLook</title>
-  <meta name="description" content="A short, plain-English checklist before you share your Lovable, Bolt, or Replit app. About 20 minutes. No developer jargon." />
+  <title>Pre-launch checklist (Scale Up + Pro deliverable) | LaunchLook</title>
+  <meta name="description" content="The full pre-launch checklist for vibe-coded apps is included with the Scale Up ($49) and Pro ($99) Packages. Paid customers, open with your token link." />
+  <meta name="robots" content="noindex" />
 
-  <meta property="og:title" content="Free pre-launch checklist: LaunchLook" />
-  <meta property="og:description" content="Essential checks before strangers see your vibe-coded app. Plain language, ~20 minutes." />
+  <meta property="og:title" content="Pre-launch checklist (Scale Up + Pro deliverable): LaunchLook" />
+  <meta property="og:description" content="The full pre-launch checklist is included with Scale Up and Pro Packages." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://launchlook.app/checklist" />
 
@@ -20,12 +21,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
 
-  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=ScaleUpCheckout". -->
   <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     .prose-list li { padding: 0.35rem 0; }
     .prose-list input[type=checkbox] { margin-right: 0.5rem; transform: translateY(2px); }
+    /* Token-gated content is hidden by default; the gate-unlock script
+       reveals it when a valid token is present in the URL. Public
+       visitors only see the 2 to 3-bullet preview of each section. */
+    [data-checklist-full] { display: none; }
+    [data-checklist-locked] { display: list-item; }
+    body[data-checklist-unlocked="true"] [data-checklist-full] { display: list-item; }
+    body[data-checklist-unlocked="true"] [data-checklist-locked] { display: none; }
+    body[data-checklist-unlocked="true"] [data-checklist-gate] { display: none; }
+    body[data-checklist-unlocked="true"] [data-checklist-upsell] { display: none; }
   </style>
 </head>
 
@@ -38,130 +48,161 @@
         <span>LaunchLook</span>
       </a>
       <nav class="flex items-center gap-6 text-sm text-muted">
+        <a href="/#hero" class="hover:text-ink">Free audit</a>
         <a href="/#pricing" class="hover:text-ink">Pricing</a>
         <a href="/#faq" class="hover:text-ink">FAQ</a>
-        <a href="/checklist" class="text-ink">Free checklist</a>
       </nav>
     </div>
   </header>
 
   <article class="max-w-3xl mx-auto px-6 py-16 sm:py-20">
-    <p class="text-xs font-medium text-accent uppercase tracking-widest">Free · ~20 minutes</p>
+    <p class="text-xs font-medium text-accent uppercase tracking-widest">Included with Scale Up &amp; Pro</p>
     <h1 class="font-serif text-4xl sm:text-5xl leading-tight mt-2">Pre-launch checklist for vibe-coded apps</h1>
+
+    <!-- Gate banner (hidden for token-holders) -->
+    <aside
+      data-checklist-gate
+      class="mt-8 rounded-xl border border-line border-l-4 border-l-accent bg-white p-5 sm:p-6 shadow-sm shadow-ink/5"
+    >
+      <p class="text-sm font-medium text-ink">This is a paid deliverable.</p>
+      <p class="mt-2 text-sm text-muted leading-relaxed">
+        The full launch checklist is included with the <strong class="text-ink">Scale Up Package ($49)</strong> and <strong class="text-ink">Pro Package ($99)</strong>. Below is a preview: you can see every section heading and the first couple of bullets in each. The rest unlocks with your customer link.
+      </p>
+      <p class="mt-3 text-sm text-muted leading-relaxed">
+        Paid customer? Open the link Rob emailed you: it ends in <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">?token=...</code> and unlocks the full content here.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a
+          href="/#pricing"
+          class="launchlook-btn launchlook-btn-primary plausible-event-name=ScaleUpCheckout"
+        >
+          Get Scale Up ($49)
+        </a>
+        <a href="/#hero" class="launchlook-btn launchlook-btn-secondary">
+          Or try 3 free findings first
+        </a>
+      </div>
+    </aside>
 
     <blockquote class="mt-8 border-l-2 border-accent pl-6 text-muted leading-relaxed">
       <p>A short list for founders about to share a real link, built with Lovable, Bolt, Base44, Replit, v0, Cursor, or similar.</p>
       <p class="mt-3">Open your app in a <strong class="text-ink font-medium">normal browser tab</strong> (not the builder preview). Check what you can. Fix what you can. Get help for the rest.</p>
-      <p class="mt-4 text-sm">
-        Want the longer version? <a href="#" data-launchlook-github="checklist" class="underline hover:text-ink">Full checklist on GitHub</a> (optional deep checks).
-      </p>
     </blockquote>
 
     <h2 class="font-serif text-2xl mt-12 mb-3">How to use it</h2>
     <ol class="list-decimal pl-6 text-muted space-y-1.5 text-sm leading-relaxed">
       <li>Work through each section, about <strong class="text-ink font-medium">20 minutes</strong> total.</li>
       <li>Mark each line: done, problem, or not sure.</li>
-      <li>Problems become your fix list. “Not sure” is a good reason to get a second pair of eyes.</li>
+      <li>Problems become your fix list. "Not sure" is a good reason to get a second pair of eyes.</li>
     </ol>
-    <p class="mt-4 text-sm text-muted">This is what <em>visitors</em> notice. Not a code review or security audit. For deep security, tools like <a class="underline hover:text-ink" href="https://vibeappscanner.com" rel="noopener noreferrer">VAS</a> complement this well.</p>
+    <p class="mt-4 text-sm text-muted">This is what <em>visitors</em> notice. Not a code review or security audit.</p>
 
-    <!-- 1 -->
+    <!-- 1. First look -->
     <h2 class="font-serif text-2xl mt-12 mb-1">1. First look</h2>
     <p class="text-sm text-muted mb-4">~5 minutes · homepage and footer</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
       <li><input type="checkbox" /> The live link loads without feeling broken or endlessly spinning</li>
-      <li><input type="checkbox" /> The browser tab shows your app name (not “My App” or generic builder text)</li>
-      <li><input type="checkbox" /> A stranger can tell what your app does within a few seconds of reading the homepage</li>
-      <li><input type="checkbox" /> No placeholder text left behind (lorem ipsum, “Your Company Name,” “[insert tagline],” obvious TODO notes)</li>
-      <li><input type="checkbox" /> No default “welcome to your new app” copy from the builder (it sounds like <em>your</em> product)</li>
-      <li><input type="checkbox" /> Your product name appears in the header, not the platform’s logo as the star</li>
-      <li><input type="checkbox" /> Nothing obviously “for developers only” on the public site (test data buttons, skip-login, seed sample data)</li>
-      <li><input type="checkbox" /> The main button on the homepage does what it promises when you click it</li>
+      <li><input type="checkbox" /> The browser tab shows your app name (not "My App" or generic builder text)</li>
+      <li data-checklist-full><input type="checkbox" /> A stranger can tell what your app does within a few seconds of reading the homepage</li>
+      <li data-checklist-full><input type="checkbox" /> No placeholder text left behind (lorem ipsum, "Your Company Name," "[insert tagline]," obvious TODO notes)</li>
+      <li data-checklist-full><input type="checkbox" /> No default "welcome to your new app" copy from the builder (it sounds like <em>your</em> product)</li>
+      <li data-checklist-full><input type="checkbox" /> Your product name appears in the header, not the platform's logo as the star</li>
+      <li data-checklist-full><input type="checkbox" /> Nothing obviously "for developers only" on the public site (test data buttons, skip-login, seed sample data)</li>
+      <li data-checklist-full><input type="checkbox" /> The main button on the homepage does what it promises when you click it</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
 
-    <!-- 2 -->
-    <h2 class="font-serif text-2xl mt-12 mb-1">2. Trust & contact</h2>
+    <!-- 2. Trust & contact -->
+    <h2 class="font-serif text-2xl mt-12 mb-1">2. Trust &amp; contact</h2>
     <p class="text-sm text-muted mb-4">~3 minutes</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
       <li><input type="checkbox" /> Privacy policy page works (often at /privacy)</li>
       <li><input type="checkbox" /> Terms page works (often at /terms)</li>
-      <li><input type="checkbox" /> Visitors can find how to reach you (support email in footer or a contact page)</li>
-      <li><input type="checkbox" /> That email is real and one you check, not support@example.com</li>
-      <li><input type="checkbox" /> Footer links to privacy and terms work (no “page not found”)</li>
+      <li data-checklist-full><input type="checkbox" /> Visitors can find how to reach you (support email in footer or a contact page)</li>
+      <li data-checklist-full><input type="checkbox" /> That email is real and one you check, not support@example.com</li>
+      <li data-checklist-full><input type="checkbox" /> Footer links to privacy and terms work (no "page not found")</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
 
-    <!-- 3 -->
+    <!-- 3. Main flow -->
     <h2 class="font-serif text-2xl mt-12 mb-1">3. Does the main flow work?</h2>
     <p class="text-sm text-muted mb-4">~10 minutes · the one thing users come to do</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
       <li><input type="checkbox" /> Buttons and menu links you tried actually do something (no dead ends)</li>
       <li><input type="checkbox" /> If people sign up: confirmation email arrives (check spam)</li>
-      <li><input type="checkbox" /> If people sign up: you can log in afterward with that account</li>
-      <li><input type="checkbox" /> If people sign up: you can log out</li>
-      <li><input type="checkbox" /> The core workflow finishes: book, pay, submit, save, whatever your app is for</li>
-      <li><input type="checkbox" /> After submitting a form, you see a clear “it worked” or “something went wrong” message</li>
-      <li><input type="checkbox" /> If you charge money: a test payment completes and shows a sensible thank-you page</li>
-      <li><input type="checkbox" /> A brand-new user isn’t staring at a totally blank screen with no hint what to do next</li>
+      <li data-checklist-full><input type="checkbox" /> If people sign up: you can log in afterward with that account</li>
+      <li data-checklist-full><input type="checkbox" /> If people sign up: you can log out</li>
+      <li data-checklist-full><input type="checkbox" /> The core workflow finishes: book, pay, submit, save, whatever your app is for</li>
+      <li data-checklist-full><input type="checkbox" /> After submitting a form, you see a clear "it worked" or "something went wrong" message</li>
+      <li data-checklist-full><input type="checkbox" /> If you charge money: a test payment completes and shows a sensible thank-you page</li>
+      <li data-checklist-full><input type="checkbox" /> A brand-new user isn't staring at a totally blank screen with no hint what to do next</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
 
-    <!-- 4 -->
+    <!-- 4. On a phone -->
     <h2 class="font-serif text-2xl mt-12 mb-1">4. On a phone</h2>
     <p class="text-sm text-muted mb-4">~5 minutes · open the site on your phone or narrow the browser window</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
       <li><input type="checkbox" /> No sideways scrolling. Everything fits the screen width</li>
       <li><input type="checkbox" /> Text is readable without pinching to zoom</li>
-      <li><input type="checkbox" /> Buttons are easy to tap (not tiny)</li>
-      <li><input type="checkbox" /> The main workflow is usable on phone, not only on desktop</li>
+      <li data-checklist-full><input type="checkbox" /> Buttons are easy to tap (not tiny)</li>
+      <li data-checklist-full><input type="checkbox" /> The main workflow is usable on phone, not only on desktop</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
 
-    <!-- 5 -->
+    <!-- 5. Sharing -->
     <h2 class="font-serif text-2xl mt-12 mb-1">5. Sharing your link</h2>
     <p class="text-sm text-muted mb-4">~2 minutes</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
       <li><input type="checkbox" /> Paste your URL into Slack, iMessage, or LinkedIn: the preview shows the right title and description (not generic builder fluff)</li>
+      <li data-checklist-full><input type="checkbox" /> Open the link in an incognito window to be sure it's reachable without your logged-in session</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
 
-    <!-- 6 optional -->
+    <!-- 6. Sign-in (optional) -->
     <h2 class="font-serif text-2xl mt-12 mb-1">6. If people can sign in <span class="text-muted font-sans text-base font-normal">(optional)</span></h2>
     <p class="text-sm text-muted mb-4">Skip if your app has no accounts · otherwise create two throwaway test accounts</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Signed in as person A, you cannot see person B’s private stuff (messages, files, bookings, etc.)</li>
-      <li><input type="checkbox" /> When signed out, opening “dashboard” or “settings” asks you to log in. It doesn’t show someone else’s data.</li>
+      <li><input type="checkbox" /> Signed in as person A, you cannot see person B's private stuff (messages, files, bookings, etc.)</li>
+      <li><input type="checkbox" /> When signed out, opening "dashboard" or "settings" asks you to log in. It doesn't show someone else's data.</li>
+      <li data-checklist-full><input type="checkbox" /> Password reset works end to end: request, email arrives, link opens, new password sticks</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
-    <p class="text-xs text-muted mt-3">Need a thorough two-account review? That’s included in <a href="/#pricing" class="underline hover:text-ink">Scale Up ($49)</a> and <a href="/#pricing" class="underline hover:text-ink">Pro ($99)</a>.</p>
+    <p data-checklist-upsell class="text-xs text-muted mt-3">A thorough two-account review with screenshots is included in <a href="/#pricing" class="underline hover:text-ink">Scale Up ($49)</a> and <a href="/#pricing" class="underline hover:text-ink">Pro ($99)</a>.</p>
 
-    <!-- 7 gut -->
+    <!-- 7. Gut check -->
     <h2 class="font-serif text-2xl mt-12 mb-1">7. Gut check</h2>
     <p class="text-sm text-muted mb-4">~2 minutes</p>
     <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> You’d be comfortable sending this link to a friend today</li>
-      <li><input type="checkbox" /> You wouldn’t be embarrassed if someone screenshotted the homepage</li>
+      <li><input type="checkbox" /> You'd be comfortable sending this link to a friend today</li>
+      <li><input type="checkbox" /> You wouldn't be embarrassed if someone screenshotted the homepage</li>
+      <li data-checklist-full><input type="checkbox" /> If a journalist or a potential customer landed on this page right now, your story holds together</li>
+      <li data-checklist-locked class="text-muted italic">[continued — included with Scale Up]</li>
     </ul>
 
-    <h2 class="font-serif text-2xl mt-14 mb-3">What to do next</h2>
-    <ul class="list-disc pl-6 text-muted space-y-2 text-sm leading-relaxed">
-      <li><strong class="text-ink">Fix before you share widely:</strong> broken signup, missing privacy/terms, placeholder text, dev-only buttons still visible, one user seeing another’s data.</li>
+    <!-- Full-only: What to do next + share blocks -->
+    <h2 data-checklist-full class="font-serif text-2xl mt-14 mb-3">What to do next</h2>
+    <ul data-checklist-full class="list-disc pl-6 text-muted space-y-2 text-sm leading-relaxed">
+      <li><strong class="text-ink">Fix before you share widely:</strong> broken signup, missing privacy/terms, placeholder text, dev-only buttons still visible, one user seeing another's data.</li>
       <li><strong class="text-ink">Fix soon after launch:</strong> mobile layout quirks, weak link previews, empty screens without guidance.</li>
       <li><strong class="text-ink">More than ~5 serious problems?</strong> Pause the launch push until the worst ones are handled.</li>
     </ul>
 
-    <div class="mt-14 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
-      <h3 class="font-serif text-2xl">Rather have someone run this for you?</h3>
-      <p class="mt-3 text-muted text-sm leading-relaxed">LaunchLook walks every screen of your live URL and a founder personally reviews every finding before it ships. You get back a plain-English report with screenshots and paste-ready fix prompts for your builder.</p>
+    <!-- Public bottom-of-page upsell, hidden for paid token holders -->
+    <div data-checklist-upsell class="mt-14 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+      <h3 class="font-serif text-2xl">Want the full checklist now?</h3>
+      <p class="mt-3 text-muted text-sm leading-relaxed">It's included with every Scale Up ($49) and Pro ($99) Package. Or send your live URL on the home page for 3 free findings first, no credit card.</p>
       <p class="mt-3 text-sm">
-        <strong class="text-ink">Starter ($19)</strong> · up to 10 findings, Quick Start Guide for your users<br />
-        <strong class="text-ink">Scale Up ($49)</strong> · deeper pass + user data isolation check (up to 30 findings)<br />
-        <strong class="text-ink">Pro ($99)</strong> · full audit + Loom walkthrough (up to 40 findings)
+        <strong class="text-ink">Scale Up ($49)</strong> · full checklist + deeper audit (up to 30 findings)<br />
+        <strong class="text-ink">Pro ($99)</strong> · full checklist + integrations review + Loom walkthrough (up to 40 findings)
       </p>
-      <a href="/#pricing" class="launchlook-btn launchlook-btn-primary mt-5">See pricing</a>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=ScaleUpCheckout">Get Scale Up ($49)</a>
+        <a href="/#hero" class="launchlook-btn launchlook-btn-secondary">Get 3 free findings first</a>
+      </div>
     </div>
 
-    <div class="mt-10 rounded-lg border border-dashed border-line bg-surface-tint px-4 py-4 text-sm text-muted">
-      <p class="font-medium text-ink">Share this checklist</p>
-      <p class="mt-1">Know someone launching with Lovable or Bolt? Send them <strong class="text-ink">https://launchlook.app/checklist</strong>. Free, no signup.</p>
-    </div>
-
-    <p class="mt-6 text-sm text-muted">Free to copy and share. Maintained by <a href="/" class="underline hover:text-ink">LaunchLook</a>.</p>
+    <p data-checklist-upsell class="mt-6 text-sm text-muted">Maintained by <a href="/" class="underline hover:text-ink">LaunchLook</a>.</p>
   </article>
 
   <footer class="border-t border-line">
@@ -173,10 +214,37 @@
       <ul class="flex flex-wrap gap-x-6 gap-y-2">
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
         <li><a href="/" class="hover:text-ink">Home</a></li>
-        <li><a href="#" data-launchlook-github="checklist" class="hover:text-ink">GitHub</a></li>
       </ul>
     </div>
   </footer>
+
+  <!--
+    Token gate: fetches /data/checklist_tokens.json (a flat list of valid
+    tokens issued to paid customers) and unlocks the full content when the
+    URL's ?token= parameter is present in the list. Manual token grant for
+    now per docs/ROB-REMAINING-TODO.md; a future worker can drive this off
+    the Stripe webhook automatically.
+  -->
+  <script>
+    (function () {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const token = (params.get('token') || '').trim();
+        if (!token) return;
+        fetch('/data/checklist_tokens.json', { cache: 'no-store' })
+          .then(function (res) { return res.ok ? res.json() : null; })
+          .then(function (data) {
+            if (!data) return;
+            const valid = Array.isArray(data.tokens) ? data.tokens : [];
+            if (valid.indexOf(token) !== -1) {
+              document.body.setAttribute('data-checklist-unlocked', 'true');
+            }
+          })
+          .catch(function () { /* silent: stays gated */ });
+      } catch (e) { /* silent */ }
+    })();
+  </script>
+
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>

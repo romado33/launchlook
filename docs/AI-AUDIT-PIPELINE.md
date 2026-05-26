@@ -499,8 +499,75 @@ list stays a one-stop read.
 
 ---
 
+## Free -> Starter deduplication
+
+When a buyer used the free 3-finding hook and then upgrades to Starter
+for the same email + URL within 90 days, the paid pipeline MUST surface
+**10 NEW findings**, excluding the prior 3. This is non-negotiable per
+`docs/PRODUCT-DECISIONS.md` section 2: the Free -> Starter conversion
+is the funnel's most fragile moment; re-reading the free preview would
+burn it.
+
+### How it works in the pipeline
+
+1. `scripts/ai_audit/free_audit_lookup.load_excluded_fingerprints(...)`
+   queries the Notion **Free Audit Requests DB**
+   (`NOTION_FREE_AUDIT_DB_ID`) for the most recent row matching
+   `(email, URL host, within 90 days)`. It pulls the
+   `Finding Fingerprints` rich-text column and parses out the
+   semicolon-separated hashes. Optional `Finding Summaries` get parsed
+   too (newline-separated, one short summary per prior finding).
+2. `scripts/ai_audit/dedup.render_exclude_block(fps, summaries)`
+   renders an `### EXCLUDE_FINGERPRINTS` block that the pipeline
+   appends to the finding-generation user prompt. The LLM is told NOT
+   to re-surface them.
+3. After generation + sort + cap, `dedup.collisions(...)` checks
+   whether any survived. If yes, the pipeline re-prompts the LLM once
+   with a `### COLLISION_RETRY` hint listing the colliding titles and
+   asking for replacements. The fresh findings get filtered through
+   the same collision check; anything that still collides is dropped.
+   If we still can't fill the cap, the pipeline logs a warning and
+   ships anyway (soft constraint per the q4 task spec).
+
+### Where the fingerprints come from
+
+The free-audit Notion row stores `Finding Fingerprints` AFTER Rob
+approves the 3 free findings via the audit UI. The helper
+`free_audit_lookup.persist_free_audit_fingerprints(row_id, fps, summaries)`
+writes them back. Hook it from the free-tier deliver step (queued in
+`ROB-REMAINING-TODO.md` until that script lands; in the meantime Rob
+copies the hashes from the pipeline log into the Notion column by hand).
+
+### Fingerprint shape
+
+`hashlib.sha256(category_id + url_path + normalized_description)`
+truncated to 16 hex chars (64 bits). See `scripts/ai_audit/dedup.py`
+docstring for the rationale and stability guarantees (wording drift,
+trailing-slash path canonicalization, case-insensitive description).
+Tests live in `tests/test_dedup.py` (3 main cases + 6 edge cases).
+
+### Customer-visible boundary
+
+Per `docs/SIMPLICITY-GUARDRAILS.md` section 6 the dedup mechanism never
+crosses into customer copy. If a customer asks, the answer is "your
+Starter findings build on your free preview." Never "deduplication,"
+"fingerprints," "exclude block," or "collision retry."
+
+### Why we chose Notion over a separate datastore
+
+The Notion free-audit DB is the same surface Rob already opens to
+clear the queue (per `docs/FREE-AUDIT-WORKFLOW.md` section 3). Storing
+the fingerprints there means: one place to manage abuse, dedup,
+status, and delivery state. A future worker can move this to a real
+datastore once volume justifies the complexity (no fixed trigger yet).
+
+---
+
 ## Related docs
 
+* `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 3-finding
+  hook -- queue triage, manual pipeline run, dedup write-back, abuse
+  watch.
 * `docs/MANUAL-REVIEW-WORKFLOW.md`: the previous (pre-AI) workflow,
   kept for reference.
 * `docs/DELIVERY-PIPELINE.md`: what happens after the YAML lands

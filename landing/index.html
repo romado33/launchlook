@@ -42,38 +42,51 @@
       <nav class="flex items-center gap-5 text-sm text-muted">
         <a href="#pricing" class="hover:text-ink">Pricing</a>
         <a href="#faq" class="hover:text-ink">FAQ</a>
-        <a href="/checklist" class="hover:text-ink">Free checklist</a>
+        <a href="#hero" class="hover:text-ink">Free audit</a>
         <a href="/webflow" class="hover:text-ink">Webflow</a>
       </nav>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="relative overflow-hidden border-b border-line">
+  <section id="hero" class="relative overflow-hidden border-b border-line">
     <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
     <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
     <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
-    <p class="text-xs font-medium text-accent uppercase tracking-widest">Lovable · Bolt · Base44 · Replit · v0 · Cursor · and more</p>
+    <p class="text-xs font-medium text-accent uppercase tracking-widest">Lovable &middot; Bolt &middot; Base44 &middot; Replit &middot; v0 &middot; Cursor &middot; and more</p>
     <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
-      Find the embarrassing bugs, trust gaps, and confusing screens before your first users do.
+      What would your first user notice &mdash; before they notice it?
     </h1>
     <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
-      Send your app URL. A real person walks every screen and sends back a shareable PDF: the issues a first-time visitor would notice, screenshots, and paste-ready fix prompts you can drop straight into your AI builder.
+      Get 3 free findings on what to fix before you share your site publicly. No credit card, no scanner dump, 24-hour turnaround.
     </p>
-    <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
-      <a href="#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=StarterCheckout">Get Starter Package ($19)</a>
+
+    <form data-free-audit-form action="/api/free-audit" method="POST" class="mt-7 max-w-xl rounded-2xl border border-line bg-white px-5 py-5 sm:px-6 sm:py-6 shadow-sm shadow-ink/5">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <label class="block">
+          <span class="text-xs font-medium text-muted">Where should we look?</span>
+          <input type="url" name="url" placeholder="https://your-site.com" required autocomplete="url" inputmode="url" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
+        </label>
+        <label class="block">
+          <span class="text-xs font-medium text-muted">Where do we send your findings?</span>
+          <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
+        </label>
+      </div>
+      <button type="submit" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-4 plausible-event-name=FreeAuditSignup">Get my free 3 findings</button>
+      <p data-free-audit-status class="mt-3 text-sm text-muted hidden" role="status" aria-live="polite"></p>
+      <p class="mt-3 text-xs text-muted">We'll send your top 3 launch issues within 24 hours. Free, no credit card. One email per submission &mdash; no spam, no newsletter.</p>
+    </form>
+
+    <div class="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-secondary">Want all 10? See Starter ($19)</a>
       <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
-      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist (~20 min)</a>
-      <!-- TODO(q4): when the free 3-finding audit form ships, add class="plausible-event-name=FreeAuditSignup" to its submit button. -->
-      <!-- The Plausible tagged-events script will fire the FreeAuditSignup goal on click; no extra JS needed. -->
     </div>
     <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Every report personally reviewed by a founder before delivery</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No GitHub or code access. Your live URL is enough.</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Plain-English findings, paste-ready fix prompts. No jargon to Google.</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span><strong class="text-ink font-medium">Quick Start Guide</strong> for your first users (included on every paid tier)</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">&#10003;</span><span>A real person reads your live app, then we email you 3 plain-English findings.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">&#10003;</span><span>No code repo access. Your live URL is enough.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">&#10003;</span><span>No jargon. No <code class="text-xs bg-white/80 px-1 py-0.5 rounded">SEC-001</code> codes to Google.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">&#10003;</span><span>Upgrade to <strong class="text-ink">Starter ($19)</strong> for all 10 issues. Your Starter findings build on the free 3 (no rehash).</span></li>
     </ul>
-    <p class="mt-5 text-sm text-muted">Delivered within 48 hours (usually 24) · 7-day full refund if the report isn't useful.</p>
     </div>
   </section>
 
@@ -180,15 +193,15 @@
     </div>
   </section>
 
-  <!-- Free checklist -->
+  <!-- Free audit recap -->
   <section class="bg-surface-warm border-y border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner-tight flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
         <p class="section-label">Free</p>
-        <h2 class="font-serif text-xl mt-1">Not ready to pay? Run the checklist yourself.</h2>
-        <p class="text-sm text-muted mt-2 max-w-prose">Plain-English, ~20 minutes. What visitors notice before you share your link. Share <code class="text-xs bg-white/80 px-1 py-0.5 rounded">launchlook.app/checklist</code> with a founder friend.</p>
+        <h2 class="font-serif text-xl mt-1">Not ready to pay? Get 3 findings, free.</h2>
+        <p class="text-sm text-muted mt-2 max-w-prose">Send your URL above. Within 24 hours we'll email the 3 things a first-time visitor would notice. No credit card, no scanner dump.</p>
       </div>
-      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary shrink-0">Open free checklist</a>
+      <a href="#hero" class="launchlook-btn launchlook-btn-secondary shrink-0">Get my 3 free findings</a>
     </div>
   </section>
 
@@ -201,7 +214,7 @@
       <p class="text-sm text-muted mb-4 max-w-prose">We're early. No fake testimonials. After your checkup, we'll ask (optional) for a one-line quote we can share on LinkedIn.</p>
       <div class="flex flex-wrap gap-3 mb-6">
         <a href="/sample" class="launchlook-btn launchlook-btn-secondary">View sample report</a>
-        <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist</a>
+        <a href="#hero" class="launchlook-btn launchlook-btn-secondary">Get 3 free findings</a>
       </div>
       <div class="grid sm:grid-cols-2 gap-4 text-sm">
         <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
@@ -318,8 +331,8 @@
             <li>Mobile layout sanity check</li>
             <li>Delivered by email</li>
           </ul>
-          <a href="/checklist" class="launchlook-btn launchlook-btn-secondary launchlook-btn-block mt-6">
-            Get the free checklist
+          <a href="#hero" class="launchlook-btn launchlook-btn-secondary launchlook-btn-block mt-6">
+            Get my 3 free findings
           </a>
         </div>
 
@@ -429,7 +442,7 @@
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refer a founder?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or share the <a href="/checklist" class="underline hover:text-ink">free checklist</a> link: <strong class="text-ink">launchlook.app/checklist</strong>.</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or send them straight to <strong class="text-ink"><a href="https://launchlook.app/#hero" class="underline hover:text-ink">launchlook.app</a></strong> for their own 3 free findings.</p>
         </details>
       </div>
     </div>
@@ -457,12 +470,10 @@
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
-        <li><a href="#" data-launchlook-github="checklist" class="hover:text-ink">GitHub</a></li>
       </ul>
     </div>
   </footer>
@@ -470,5 +481,6 @@
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
+  <script src="/assets/free-audit.js" defer></script>
 </body>
 </html>

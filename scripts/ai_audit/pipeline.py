@@ -35,6 +35,8 @@ from . import cost_tracker  # noqa: E402
 from . import feedback as feedback_log  # noqa: E402
 from . import html_extract, llm_client  # noqa: E402
 from . import security_lite  # noqa: E402
+from . import dedup as dedup_module  # noqa: E402  -- free->Starter dedup helpers
+from . import free_audit_lookup  # noqa: E402  -- Notion lookup for prior free-audit fingerprints
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -562,9 +564,10 @@ def build_finding_user_prompt(
     prescreener_hits: list[dict[str, Any]],
     pages: list[dict[str, Any]],
     library: list[dict[str, Any]],
+    exclude_block: str = "",
 ) -> str:
     template = _read_prompt("finding_generation.txt")
-    return template.format(
+    body = template.format(
         max_findings=cap,
         tier=customer_ctx.tier,
         customer_name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip(),
@@ -579,6 +582,13 @@ def build_finding_user_prompt(
         html_extracts=html_extract.render_pages_for_prompt(pages),
         page_status_summary=html_extract.render_status_summary(pages),
     )
+    if exclude_block:
+        # Appended below the rendered template so prompt files keep
+        # working without a placeholder edit. See
+        # docs/AI-AUDIT-PIPELINE.md (Free -> Starter dedup) for the
+        # full contract.
+        body = body.rstrip() + "\n\n" + exclude_block.strip() + "\n"
+    return body
 
 
 def build_verdict_user_prompt(
@@ -817,6 +827,17 @@ def run(
     library = load_findings_library()
     system_prompt = build_system_prompt(customer_ctx.platform, tier=customer_ctx.tier)
 
+    # ---- 4b. Free -> Starter dedup lookup (PRODUCT-DECISIONS.md section 2) ----
+    # Same email + same URL host within 90 days -> exclude the prior 3
+    # free-audit fingerprints so the LLM is forced to surface NEW issues.
+    excluded_fps, prior_summaries, _free_row_id = free_audit_lookup.load_excluded_fingerprints(
+        email=customer_ctx.email,
+        url=customer_ctx.url,
+    )
+    if excluded_fps:
+        print(f"[dedup] {len(excluded_fps)} prior free-audit fingerprint(s) to exclude")
+    exclude_block = dedup_module.render_exclude_block(excluded_fps, prior_summaries)
+
     finding_prompt = build_finding_user_prompt(
         customer_ctx,
         cap=cap,
@@ -824,6 +845,7 @@ def run(
         prescreener_hits=prescreener_hits,
         pages=pages,
         library=library,
+        exclude_block=exclude_block,
     )
     finding_prompt = _maybe_append_webflow_checks(finding_prompt, customer_ctx.platform)
 
@@ -845,6 +867,56 @@ def run(
 
         findings = yaml_writer.sort_findings(findings)[:cap]
         print(f"[llm] {len(findings)} finding(s) after merge + cap")
+
+        # ---- 5b. Dedup pass against the prior free-audit fingerprints ----
+        if excluded_fps:
+            clashes = dedup_module.collisions(findings, excluded_fps, base_url=customer_ctx.url)
+            if clashes:
+                clash_titles = [c.get("title", "?") for c in clashes]
+                print(f"[dedup] {len(clashes)} finding(s) collide with prior free audit; re-prompting once")
+                kept = dedup_module.filter_out_collisions(findings, excluded_fps, base_url=customer_ctx.url)
+                needed = cap - len(kept)
+                if needed > 0:
+                    retry_block = exclude_block + (
+                        "\n\n### COLLISION_RETRY\n\n"
+                        f"The following {len(clashes)} candidate finding(s) overlap with the "
+                        "prior free-audit findings above. REPLACE them with genuinely different "
+                        "issues (different category or different specific instance). Do not "
+                        "return any of these titles again:\n"
+                        + "\n".join(f"  - {t}" for t in clash_titles)
+                        + "\n"
+                    )
+                    retry_prompt = build_finding_user_prompt(
+                        customer_ctx,
+                        cap=needed,
+                        n_screenshots=len(screenshots),
+                        prescreener_hits=prescreener_hits,
+                        pages=pages,
+                        library=library,
+                        exclude_block=retry_block,
+                    )
+                    retry_prompt = _maybe_append_webflow_checks(retry_prompt, customer_ctx.platform)
+                    try:
+                        replacements = client.generate_findings(
+                            system_prompt=system_prompt,
+                            user_prompt=retry_prompt,
+                            screenshots=screenshots,
+                            max_findings=needed,
+                        )
+                    except Exception as exc:  # noqa: BLE001
+                        print(f"[dedup] WARN: re-prompt failed ({exc}); shipping with collisions filtered out", file=sys.stderr)
+                        replacements = []
+                    # Drop any re-prompt response that ALSO collides; soft
+                    # constraint per task spec, ship even if imperfect.
+                    fresh = dedup_module.filter_out_collisions(replacements or [], excluded_fps, base_url=customer_ctx.url)
+                    findings = yaml_writer.sort_findings(kept + fresh)[:cap]
+                    remaining_clash = dedup_module.collisions(findings, excluded_fps, base_url=customer_ctx.url)
+                    if remaining_clash:
+                        print(f"[dedup] WARN: {len(remaining_clash)} collision(s) still present after re-prompt; shipping anyway (soft constraint)", file=sys.stderr)
+                    print(f"[dedup] post-retry: {len(findings)} finding(s) total")
+                else:
+                    findings = yaml_writer.sort_findings(kept)
+                    print(f"[dedup] removed {len(clashes)} colliding finding(s); cap already met")
 
         # ---- 6. Verdict ----
         verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
