@@ -23,16 +23,15 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from lib.customer_loader import Customer, load_customer, slugify  # noqa: E402
-
 
 VIEWPORTS = {
     "desktop": (1440, 900),
@@ -107,7 +106,7 @@ def capture(customer: Customer, paths: list[str]) -> dict[str, Any]:
     meta: dict[str, Any] = {
         "customer": customer.slug,
         "app_url": customer.app_url,
-        "captured_at": datetime.now(timezone.utc).isoformat(),
+        "captured_at": datetime.now(UTC).isoformat(),
         "viewports": {},
     }
 
@@ -131,10 +130,16 @@ def capture(customer: Customer, paths: list[str]) -> dict[str, Any]:
                 for path in paths:
                     url = join_url(base_url, path)
                     out_path = vp_dir / f"{path_slug(path)}.png"
-                    entry: dict[str, Any] = {"path": path, "url": url, "file": str(out_path.relative_to(out_dir))}
+                    entry: dict[str, Any] = {
+                        "path": path,
+                        "url": url,
+                        "file": str(out_path.relative_to(out_dir)),
+                    }
                     page = context.new_page()
                     try:
-                        response = page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
+                        response = page.goto(
+                            url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle"
+                        )
                         status = response.status if response else None
                         entry["status"] = status
                         dismiss_cookie_banner(page)
@@ -145,7 +150,9 @@ def capture(customer: Customer, paths: list[str]) -> dict[str, Any]:
                         msg = str(exc)
                         if "ERR_INVALID_AUTH_CREDENTIALS" in msg or "401" in msg:
                             entry["status"] = "auth_required"
-                            print(f"  [{viewport_name}] AUTH required at {path} - skipped")
+                            print(
+                                f"  [{viewport_name}] AUTH required at {path} - skipped"
+                            )
                         elif "timeout" in msg.lower():
                             entry["status"] = "timeout"
                             print(f"  [{viewport_name}] TIMEOUT at {path}")
@@ -202,17 +209,17 @@ def render_index(customer: Customer, meta: dict[str, Any]) -> Path:
             img = (
                 f'<img loading="lazy" src="{file_rel}" alt="{entry["path"]}">'
                 if file_rel and (out_dir / file_rel).exists()
-                else '<div class="missing">No screenshot (status: ' f'{status})</div>'
+                else '<div class="missing">No screenshot (status: ' f"{status})</div>"
             )
             cards.append(
-                f'''<div class="card">
+                f"""<div class="card">
   <div class="card-head">
     <code class="path">{entry["path"]}</code>
     <span class="{badge_cls}">{status}</span>
   </div>
   <div class="card-url"><a href="{url}" target="_blank" rel="noopener">{url}</a></div>
   {img}
-</div>'''
+</div>"""
             )
         return "\n".join(cards)
 
@@ -273,9 +280,15 @@ def render_index(customer: Customer, meta: dict[str, Any]) -> Path:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--customer-id", help="Notion Customers DB page id (or unique prefix)")
-    parser.add_argument("--url", help="Override URL - useful for smoke tests without Notion")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--customer-id", help="Notion Customers DB page id (or unique prefix)"
+    )
+    parser.add_argument(
+        "--url", help="Override URL - useful for smoke tests without Notion"
+    )
     parser.add_argument(
         "--paths",
         nargs="*",

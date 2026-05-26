@@ -48,7 +48,8 @@ from __future__ import annotations
 
 import hashlib
 import re
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 from urllib.parse import urlparse
 
 __all__ = [
@@ -174,11 +175,13 @@ def fingerprint(finding: dict[str, Any], *, base_url: str | None = None) -> str:
             desc_source = value
             break
     desc = normalize_description(desc_source)
-    blob = f"{category}\x1f{path}\x1f{desc}".encode("utf-8")
+    blob = f"{category}\x1f{path}\x1f{desc}".encode()
     return hashlib.sha256(blob).hexdigest()[:_DIGEST_LEN]
 
 
-def fingerprints(findings: Iterable[dict[str, Any]], *, base_url: str | None = None) -> list[str]:
+def fingerprints(
+    findings: Iterable[dict[str, Any]], *, base_url: str | None = None
+) -> list[str]:
     """Fingerprint each finding, preserving input order. Skips non-dicts."""
     out: list[str] = []
     for f in findings or []:

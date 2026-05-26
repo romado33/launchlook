@@ -27,7 +27,7 @@ from __future__ import annotations
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 try:
@@ -78,7 +78,9 @@ def main() -> int:
     print("1. Auth + identity")
     try:
         me = notion.users.me()
-        name = me.get("name") or me.get("bot", {}).get("owner", {}).get("user", {}).get("name", me.get("id"))
+        name = me.get("name") or me.get("bot", {}).get("owner", {}).get("user", {}).get(
+            "name", me.get("id")
+        )
         out(PASS, f"connected as: {name}")
     except APIResponseError as e:
         out(FAIL, f"auth failed: {e}")
@@ -152,7 +154,10 @@ def main() -> int:
             )
             rows = resp.get("results", [])
             if not rows:
-                out(FAIL, "no row matched Name='FL-001' (try checking the title column name)")
+                out(
+                    FAIL,
+                    "no row matched Name='FL-001' (try checking the title column name)",
+                )
                 fails.append("fl-001 lookup")
             else:
                 props = rows[0].get("properties", {})
@@ -174,7 +179,9 @@ def main() -> int:
         out(SKIP, "NOTION_REPORTS_PARENT_PAGE_ID not set or page unreachable")
     else:
         try:
-            children = notion.blocks.children.list(block_id=reports_page["id"]).get("results", [])
+            children = notion.blocks.children.list(block_id=reports_page["id"]).get(
+                "results", []
+            )
             out(PASS, f"{len(children)} child block(s) under Reports parent")
             for child in children[:5]:
                 ctype = child.get("type", "?")
@@ -199,7 +206,7 @@ def main() -> int:
 
     customers_ds_id = customers_db["data_sources"][0]["id"]
 
-    test_marker = f"SMOKE TEST {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}"
+    test_marker = f"SMOKE TEST {datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')}"
 
     # 6. Create
     print("6. Create temporary Customer row (write permission)")
@@ -212,9 +219,11 @@ def main() -> int:
             "Platform": {"select": {"name": "Lovable"}},
             "Tier": {"select": {"name": "Starter Package"}},
             "Status": {"select": {"name": "Paid"}},
-            "Payment Date": {"date": {"start": datetime.now(timezone.utc).date().isoformat()}},
+            "Payment Date": {"date": {"start": datetime.now(UTC).date().isoformat()}},
             "Intake Received": {"checkbox": False},
-            "Notes": {"rich_text": [{"text": {"content": "Auto-deleted by smoke test."}}]},
+            "Notes": {
+                "rich_text": [{"text": {"content": "Auto-deleted by smoke test."}}]
+            },
         }
         created = notion.pages.create(
             parent={"data_source_id": customers_ds_id},
@@ -235,16 +244,33 @@ def main() -> int:
         page = notion.pages.retrieve(page_id=page_id)
         props = page["properties"]
 
-        title_text = props["Name"]["title"][0]["plain_text"] if props["Name"]["title"] else ""
+        title_text = (
+            props["Name"]["title"][0]["plain_text"] if props["Name"]["title"] else ""
+        )
         email = props["Email"]["email"]
         tier = props["Tier"]["select"]["name"] if props["Tier"]["select"] else None
-        date_val = props["Payment Date"]["date"]["start"] if props["Payment Date"]["date"] else None
+        date_val = (
+            props["Payment Date"]["date"]["start"]
+            if props["Payment Date"]["date"]
+            else None
+        )
 
-        ok = title_text == test_marker and email == "smoke-test@launchlook.app" and tier == "Starter Package" and date_val
+        ok = (
+            title_text == test_marker
+            and email == "smoke-test@launchlook.app"
+            and tier == "Starter Package"
+            and date_val
+        )
         if ok:
-            out(PASS, f"all properties round-tripped: title, email, tier={tier}, date={date_val}")
+            out(
+                PASS,
+                f"all properties round-tripped: title, email, tier={tier}, date={date_val}",
+            )
         else:
-            out(FAIL, f"property mismatch: title={title_text!r}, email={email!r}, tier={tier!r}, date={date_val!r}")
+            out(
+                FAIL,
+                f"property mismatch: title={title_text!r}, email={email!r}, tier={tier!r}, date={date_val!r}",
+            )
             fails.append("read-back")
     except (APIResponseError, KeyError, IndexError) as e:
         out(FAIL, f"read-back failed: {e}")

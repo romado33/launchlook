@@ -207,7 +207,9 @@ def compute_checksum(record: dict[str, Any]) -> str:
         "issued_by": record["issued_by"],
         "customer_url": record["customer_url"],
     }
-    payload = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    payload = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode(
+        "utf-8"
+    )
     return "sha256:" + hashlib.sha256(payload).hexdigest()
 
 
@@ -257,7 +259,7 @@ def render_svg(ctx: BadgeContext, variant: str) -> str:
         f'width="{BADGE_WIDTH}" height="{BADGE_HEIGHT}" '
         f'viewBox="0 0 {BADGE_WIDTH} {BADGE_HEIGHT}" '
         f'role="img" aria-label="{_xml_escape(aria_label)}">\n'
-        f'  <title>{_xml_escape(primary_text)} ({_xml_escape(ctx.tier_display)})</title>\n'
+        f"  <title>{_xml_escape(primary_text)} ({_xml_escape(ctx.tier_display)})</title>\n"
         f'  <rect x="0.5" y="0.5" width="{BADGE_WIDTH - 1}" height="{BADGE_HEIGHT - 1}" '
         f'rx="6" ry="6" fill="{bg}" stroke="{border}" stroke-width="1"/>\n'
         # Small check glyph (no third-party icon font).
@@ -265,16 +267,16 @@ def render_svg(ctx: BadgeContext, variant: str) -> str:
         f'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n'
         f'    <circle cx="10" cy="10" r="9" fill="none" stroke="{check}" stroke-width="1.5"/>\n'
         f'    <polyline points="6,10.5 9,13.5 14,7.5"/>\n'
-        f'  </g>\n'
+        f"  </g>\n"
         f'  <text x="46" y="24" '
         f'font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" '
         f'font-size="13" font-weight="600" fill="{ink}" letter-spacing="0.01em">'
-        f'{_xml_escape(primary_text)}</text>\n'
+        f"{_xml_escape(primary_text)}</text>\n"
         f'  <text x="46" y="40" '
         f'font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" '
         f'font-size="10" font-weight="400" fill="{muted}" letter-spacing="0.02em">'
-        f'{_xml_escape(secondary_text)}</text>\n'
-        f'</svg>\n'
+        f"{_xml_escape(secondary_text)}</text>\n"
+        f"</svg>\n"
     )
 
 
@@ -350,7 +352,9 @@ def render_png(svg_text: str, out_path: Path, variant: str, ctx: BadgeContext) -
     # Small check circle (approx. SVG glyph at 14,18 box of 20x20).
     cx, cy = 14 * scale + 10 * scale, 18 * scale + 10 * scale
     r = 9 * scale
-    draw.ellipse([(cx - r, cy - r), (cx + r, cy + r)], outline=ink, width=max(1, scale // 2))
+    draw.ellipse(
+        [(cx - r, cy - r), (cx + r, cy + r)], outline=ink, width=max(1, scale // 2)
+    )
     pts = [
         (14 * scale + 6 * scale, 18 * scale + int(10.5 * scale)),
         (14 * scale + 9 * scale, 18 * scale + int(13.5 * scale)),
@@ -493,7 +497,9 @@ def write_badge_assets(
     return written
 
 
-def load_existing_verify(slug: str, verify_root: Path = VERIFY_DATA_ROOT) -> dict[str, Any] | None:
+def load_existing_verify(
+    slug: str, verify_root: Path = VERIFY_DATA_ROOT
+) -> dict[str, Any] | None:
     path = verify_root / f"{slug}.json"
     if not path.exists():
         return None
@@ -555,7 +561,9 @@ def main(argv: list[str] | None = None) -> int:
         try:
             verified_at = datetime.strptime(args.verified_at, "%Y-%m-%d").date()
         except ValueError:
-            sys.exit(f"ERROR: --verified-at must be YYYY-MM-DD, got {args.verified_at!r}")
+            sys.exit(
+                f"ERROR: --verified-at must be YYYY-MM-DD, got {args.verified_at!r}"
+            )
     else:
         verified_at = date.today()
 

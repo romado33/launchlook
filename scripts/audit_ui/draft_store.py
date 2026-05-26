@@ -15,10 +15,9 @@ import json
 import os
 import re
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 SAFE_SLUG = re.compile(r"[^a-z0-9._-]+")
 
@@ -39,11 +38,13 @@ def save_draft(drafts_dir: Path, slug: str, payload: dict[str, Any]) -> Path:
 
     record = {
         "slug": safe_slug(slug),
-        "saved_at": datetime.now(timezone.utc).isoformat(),
+        "saved_at": datetime.now(UTC).isoformat(),
         "payload": payload,
     }
 
-    fd, tmp_name = tempfile.mkstemp(prefix=".draft-", suffix=".json", dir=str(drafts_dir))
+    fd, tmp_name = tempfile.mkstemp(
+        prefix=".draft-", suffix=".json", dir=str(drafts_dir)
+    )
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(record, f, ensure_ascii=False, indent=2)

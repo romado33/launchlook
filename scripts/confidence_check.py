@@ -39,7 +39,7 @@ from __future__ import annotations
 
 import argparse
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -148,7 +148,7 @@ def re_scan_url(url: str, *, provider: str = "stub") -> dict[str, Any]:
         return {
             "url": url,
             "provider": "stub",
-            "captured_at": datetime.now(timezone.utc).isoformat(),
+            "captured_at": datetime.now(UTC).isoformat(),
             "findings": [],
             "passed_checks": [],
             "notes": (
@@ -242,11 +242,13 @@ def compare_findings(
             still_present.append(entry)
 
     for new_finding in by_title.values():
-        new.append({
-            "title": new_finding.get("title", ""),
-            "severity": new_finding.get("severity", "medium"),
-            "saboteur_note": _saboteur_voice_new(new_finding),
-        })
+        new.append(
+            {
+                "title": new_finding.get("title", ""),
+                "severity": new_finding.get("severity", "medium"),
+                "saboteur_note": _saboteur_voice_new(new_finding),
+            }
+        )
 
     return {"fixed": fixed, "still_present": still_present, "new": new}
 
@@ -278,7 +280,9 @@ def _verdict_for(buckets: dict[str, list[dict[str, Any]]]) -> dict[str, str]:
     if any((i.get("severity") or "").lower() == "critical" for i in new):
         label = "Do not invite real users yet"
         emoji = "🔴"
-        summary = "A new critical issue turned up during the re-scan — that's the blocker."
+        summary = (
+            "A new critical issue turned up during the re-scan — that's the blocker."
+        )
     elif _has_severe(new) or _has_severe(still):
         label = "Needs fixes before launch"
         emoji = "🔴"
@@ -295,9 +299,7 @@ def _verdict_for(buckets: dict[str, list[dict[str, Any]]]) -> dict[str, str]:
     else:
         label = "Ready to share"
         emoji = "🟢"
-        summary = (
-            "Looks clean. The fixes you applied stuck and nothing new turned up."
-        )
+        summary = "Looks clean. The fixes you applied stuck and nothing new turned up."
 
     narrative_parts: list[str] = []
     if fixed:
@@ -362,7 +364,7 @@ def run_confidence_check(
     buckets = compare_findings(original_findings, re_scanned_findings)
     verdict = _verdict_for(buckets)
 
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     output_path = CONFIDENCE_CHECKS_DIR / f"{customer_id}-{timestamp}.yaml"
 
     result = {

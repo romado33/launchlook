@@ -35,7 +35,6 @@ import urllib.request
 from typing import Any
 from urllib.parse import urlparse
 
-
 SNOOP_PERSONA = "The Snoop"
 SNOOP_TAG = "Caught by The Snoop"
 CATEGORY_ID = "security_lite"
@@ -254,7 +253,7 @@ def _redact_match(match: str) -> str:
 
 def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
-    seen_keys: set[str] = set()
+    seen_keys: set[tuple[str, str]] = set()
     for page in pages or []:
         body_blob_parts: list[str] = []
         text = page.get("text") or ""
@@ -319,8 +318,7 @@ def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
                         {
                             "severity": "high",
                             "title": (
-                                "Public link to "
-                                f"{label} visible on your site"
+                                "Public link to " f"{label} visible on your site"
                             ),
                             "what_we_saw": (
                                 f"On {path}, the rendered HTML contains a "

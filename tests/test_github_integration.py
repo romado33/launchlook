@@ -32,7 +32,6 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts import github_integration as gh  # noqa: E402
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -182,7 +181,8 @@ class IssueBodyTests(unittest.TestCase):
 
     def test_unknown_severity_renders_safely(self):
         body = gh.issue_body_from_finding(
-            _finding(severity="weird"), _audit_metadata(),
+            _finding(severity="weird"),
+            _audit_metadata(),
         )
         self.assertIn("weird", body)
         self.assertIn("**Severity:**", body)
@@ -223,7 +223,9 @@ class CreateIssueTests(unittest.TestCase):
         # Verify the URL we POSTed to
         self.assertEqual(session.post.call_count, 1)
         args, kwargs = session.post.call_args
-        self.assertEqual(args[0], "https://api.github.com/repos/jane-sparkle/main-site/issues")
+        self.assertEqual(
+            args[0], "https://api.github.com/repos/jane-sparkle/main-site/issues"
+        )
 
         # Verify payload shape
         payload = kwargs["json"]
@@ -237,7 +239,9 @@ class CreateIssueTests(unittest.TestCase):
 
     def test_403_raises_helpful_error(self):
         session = gh.authenticated_session("dummy-token")
-        session.post = MagicMock(return_value=_fake_response(403, {"message": "forbidden"}))
+        session.post = MagicMock(
+            return_value=_fake_response(403, {"message": "forbidden"})
+        )
         with self.assertRaises(RuntimeError) as ctx:
             gh.create_issue(
                 session,
@@ -251,7 +255,9 @@ class CreateIssueTests(unittest.TestCase):
 
     def test_404_raises_helpful_error(self):
         session = gh.authenticated_session("dummy-token")
-        session.post = MagicMock(return_value=_fake_response(404, {"message": "not found"}))
+        session.post = MagicMock(
+            return_value=_fake_response(404, {"message": "not found"})
+        )
         with self.assertRaises(RuntimeError) as ctx:
             gh.create_issue(
                 session,
@@ -300,8 +306,10 @@ class RateLimitTests(unittest.TestCase):
         }
         sleep_calls: list[float] = []
 
-        with patch.object(gh, "_load_yaml", return_value=data), \
-             patch.object(gh, "requests") as mock_requests:
+        with (
+            patch.object(gh, "_load_yaml", return_value=data),
+            patch.object(gh, "requests") as mock_requests,
+        ):
             mock_session = MagicMock()
             mock_session.post = MagicMock(return_value=_fake_response(201))
             mock_session.headers = {"Authorization": "Bearer dummy"}
@@ -337,8 +345,10 @@ class DryRunTests(unittest.TestCase):
             "findings": [_finding(title=f"Finding {i}") for i in range(2)],
             "github": {"repo": "https://github.com/owner/repo"},
         }
-        with patch.object(gh, "_load_yaml", return_value=data), \
-             patch.object(gh, "requests") as mock_requests:
+        with (
+            patch.object(gh, "_load_yaml", return_value=data),
+            patch.object(gh, "requests") as mock_requests,
+        ):
             buf = io.StringIO()
             results = gh.create_all_issues(
                 repo_url="https://github.com/owner/repo",
@@ -372,6 +382,7 @@ class TokenResolutionTests(unittest.TestCase):
             try:
                 # Ensure the var isn't set
                 import os
+
                 os.environ.pop("Q19_TEST_PAT_DOES_NOT_EXIST", None)
                 with self.assertRaises(RuntimeError) as ctx:
                     gh.resolve_token_from_yaml(

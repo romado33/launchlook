@@ -1,4 +1,5 @@
 """One-off helper: refresh customer explanations in findings.json for non-technical readers."""
+
 from __future__ import annotations
 
 import json
@@ -36,9 +37,7 @@ PLAIN: dict[str, str] = {
         "The small icon in the browser tab is still the default. "
         "Your app should have its own so people recognize the tab."
     ),
-    "FL-025": (
-        "Browser tabs show a generic title instead of your app name."
-    ),
+    "FL-025": ("Browser tabs show a generic title instead of your app name."),
     "FL-030": (
         "The first time someone signs in, the main screen is empty "
         "with no hint about what to do next."
@@ -47,7 +46,7 @@ PLAIN: dict[str, str] = {
         "While content is loading, the screen stays blank — people may think the app froze."
     ),
     "FL-032": (
-        'If someone types a wrong web address, they get a generic error '
+        "If someone types a wrong web address, they get a generic error "
         'instead of a friendly "page not found" screen with a way home.'
     ),
     "FL-033": (
@@ -67,9 +66,7 @@ PLAIN: dict[str, str] = {
         "Text on mobile is hard to read (about {SIZE}px). "
         "Most apps use at least 16px on phones."
     ),
-    "FL-019": (
-        "Some buttons on mobile are too small to tap comfortably."
-    ),
+    "FL-019": ("Some buttons on mobile are too small to tap comfortably."),
 }
 
 
@@ -80,7 +77,9 @@ def main() -> None:
         if f["id"] in PLAIN:
             f["explanation"] = PLAIN[f["id"]]
             n += 1
-    PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    PATH.write_text(
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     print(f"Updated {n} explanations in {PATH}")
 
 

@@ -49,19 +49,26 @@ After audit:
    - Note crawler ideas in templates/notion/crawler-wishlist.md
 """
 
-STEPS_LAUNCH = STEPS_QUICK + """
+STEPS_LAUNCH = (
+    STEPS_QUICK
+    + """
 Launch Pack additions (+15 min):
    - Two test accounts: User A vs User B cross-data check
    - python scripts/qsg_compose_prompt.py ... > output/<customer>/qsg_prompt.txt
    - Paste into ChatGPT, edit, paste into report Part 2
    - python scripts/qsg_render.py --input ... --output ...html
 """
+)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tier", choices=["starter", "launch", "quick"], default="starter",
-                        help="'quick' is an alias for starter")
+    parser.add_argument(
+        "--tier",
+        choices=["starter", "launch", "quick"],
+        default="starter",
+        help="'quick' is an alias for starter",
+    )
     args = parser.parse_args()
     tier = "starter" if args.tier == "quick" else args.tier
 

@@ -96,21 +96,21 @@ def _rating_for(metric: str, value: float | None) -> str:
 _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
     ("lcp", "lovable"): (
         "Open your homepage in Lovable. Find the largest image at the top of the page. "
-        "Ask Lovable: \"Make the hero image lazy-load only after the page is interactive, "
-        "and add a low-resolution placeholder so visitors see something immediately.\""
+        'Ask Lovable: "Make the hero image lazy-load only after the page is interactive, '
+        'and add a low-resolution placeholder so visitors see something immediately."'
     ),
     ("lcp", "bolt"): (
         "Open your project in Bolt. Find the top-of-page image or headline. Ask Bolt: "
-        "\"Preload the hero image and serve a smaller WebP variant. Add width and height "
-        "so the browser reserves space while it loads.\""
+        '"Preload the hero image and serve a smaller WebP variant. Add width and height '
+        'so the browser reserves space while it loads."'
     ),
     ("lcp", "v0"): (
-        "Open your homepage component in v0. Ask v0: \"Wrap the hero image in Next.js Image "
-        "with priority=true and provide explicit width and height. Preload the chosen variant.\""
+        'Open your homepage component in v0. Ask v0: "Wrap the hero image in Next.js Image '
+        'with priority=true and provide explicit width and height. Preload the chosen variant."'
     ),
     ("lcp", "cursor"): (
         "In Cursor, open the homepage component. Identify the hero image or headline element. "
-        "Add <link rel=\"preload\" as=\"image\" href=\"...\"> to the document head and set "
+        'Add <link rel="preload" as="image" href="..."> to the document head and set '
         "explicit width and height on the element so it doesn't reflow."
     ),
     ("lcp", "webflow"): (
@@ -124,17 +124,17 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "the page starts rendering."
     ),
     ("inp", "lovable"): (
-        "Open your homepage in Lovable. Ask Lovable: \"Find every button or input handler on "
+        'Open your homepage in Lovable. Ask Lovable: "Find every button or input handler on '
         "the homepage that does heavy work synchronously. Defer the heavy parts with "
-        "requestIdleCallback so the page reacts to taps right away.\""
+        'requestIdleCallback so the page reacts to taps right away."'
     ),
     ("inp", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Profile homepage onClick handlers. Move any "
-        "blocking work off the main thread; debounce input handlers; preload heavy modules.\""
+        'Open your project in Bolt. Ask Bolt: "Profile homepage onClick handlers. Move any '
+        'blocking work off the main thread; debounce input handlers; preload heavy modules."'
     ),
     ("inp", "v0"): (
-        "Open the homepage in v0. Ask v0: \"Audit React event handlers for blocking work. "
-        "Wrap heavy logic in startTransition or move it to a server action.\""
+        'Open the homepage in v0. Ask v0: "Audit React event handlers for blocking work. '
+        'Wrap heavy logic in startTransition or move it to a server action."'
     ),
     ("inp", "cursor"): (
         "In Cursor, open the homepage React component. Find handlers attached to onClick or "
@@ -152,18 +152,18 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "instantly responsive."
     ),
     ("cls", "lovable"): (
-        "Open your homepage in Lovable. Ask Lovable: \"Find every image and embedded video on "
+        'Open your homepage in Lovable. Ask Lovable: "Find every image and embedded video on '
         "the homepage and add explicit width and height so the browser reserves the right amount "
-        "of space while loading.\""
+        'of space while loading."'
     ),
     ("cls", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Add explicit width and height to every image, "
+        'Open your project in Bolt. Ask Bolt: "Add explicit width and height to every image, '
         "iframe, and ad slot on the homepage. Reserve space for above-the-fold fonts with "
-        "size-adjust.\""
+        'size-adjust."'
     ),
     ("cls", "v0"): (
-        "Open the homepage in v0. Ask v0: \"Use the Next.js Image component with width and "
-        "height set on every image. Add font-display: optional or size-adjust to webfonts.\""
+        'Open the homepage in v0. Ask v0: "Use the Next.js Image component with width and '
+        'height set on every image. Add font-display: optional or size-adjust to webfonts."'
     ),
     ("cls", "cursor"): (
         "In Cursor, find every <img>, <iframe>, and ad container on the homepage. Add explicit "
@@ -195,7 +195,7 @@ def _fix_prompt_for(metric: str, platform: str) -> str:
 
 
 def _cache_key(url: str, strategy: str) -> str:
-    h = hashlib.sha1(f"{url}|{strategy}".encode("utf-8")).hexdigest()
+    h = hashlib.sha1(f"{url}|{strategy}".encode()).hexdigest()
     return h
 
 
@@ -245,7 +245,9 @@ def fetch_psi(
     max_retries: int = 3,
 ) -> dict[str, Any] | None:
     """Call the PSI v5 API. Returns parsed JSON, or None on failure."""
-    key = api_key or os.environ.get("PSI_API_KEY") or os.environ.get("PAGESPEED_API_KEY")
+    key = (
+        api_key or os.environ.get("PSI_API_KEY") or os.environ.get("PAGESPEED_API_KEY")
+    )
     cache_key = _cache_key(url, strategy)
     if use_cache:
         cached = _read_cache(cache_key)

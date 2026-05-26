@@ -81,7 +81,7 @@ def query_notion_customers():
     try:
         from notion_client import Client
     except ImportError:
-        sys.exit("ERROR: notion-client package not installed. Run: pip install -e \".\"")
+        sys.exit('ERROR: notion-client package not installed. Run: pip install -e "."')
 
     notion = Client(auth=require_env("NOTION_TOKEN"))
     db_id = require_env("NOTION_CUSTOMERS_DB_ID")
@@ -135,7 +135,9 @@ def parse_customer(row: dict) -> dict | None:
         "email": email,
         "app_url": text("App URL"),
         "tier": text("Tier"),
-        "delivered_date": date_field("Payment Date"),  # using payment date as proxy if Delivery Date isn't stored separately
+        "delivered_date": date_field(
+            "Payment Date"
+        ),  # using payment date as proxy if Delivery Date isn't stored separately
         "follow_up_sent": checked("Follow-up Sent"),
         "referral_code": text("Referral Code"),
     }
@@ -145,13 +147,13 @@ def send_email(to: str, subject: str, body: str, dry_run: bool = False) -> None:
     if dry_run:
         print(f"  [DRY RUN] would send to {to}:")
         print(f"  Subject: {subject}")
-        print(f"  Body:\n    " + body.replace("\n", "\n    "))
+        print("  Body:\n    " + body.replace("\n", "\n    "))
         return
 
     try:
         import resend
     except ImportError:
-        sys.exit("ERROR: resend package not installed. Run: pip install -e \".\"")
+        sys.exit('ERROR: resend package not installed. Run: pip install -e "."')
 
     resend.api_key = require_env("RESEND_API_KEY")
     from_email = os.getenv("FROM_EMAIL", "hello@launchlook.app")
@@ -185,14 +187,23 @@ def mark_followup_sent(page_id: str, dry_run: bool = False) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dry-run", action="store_true", help="Don't actually send or update Notion")
-    parser.add_argument("--days-after", type=int, default=3, help="Days after Delivered to send follow-up (default: 3)")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Don't actually send or update Notion"
+    )
+    parser.add_argument(
+        "--days-after",
+        type=int,
+        default=3,
+        help="Days after Delivered to send follow-up (default: 3)",
+    )
     args = parser.parse_args()
 
     today = date.today()
     target_date = today - timedelta(days=args.days_after)
 
-    print(f"Looking for customers delivered on {target_date.isoformat()} (today minus {args.days_after} days)")
+    print(
+        f"Looking for customers delivered on {target_date.isoformat()} (today minus {args.days_after} days)"
+    )
 
     customers = [parse_customer(r) for r in query_notion_customers()]
     customers = [c for c in customers if c]
@@ -206,10 +217,14 @@ def main() -> int:
 
         print(f"\nCustomer: {c['name']} ({c['email']})")
         subject, body = get_template("followup-d3.txt")
-        rendered = render(body, {
-            "NAME": c["name"],
-            "REFERRAL_CODE": c["referral_code"] or "(none — generate via scripts/referral_create.py)",
-        })
+        rendered = render(
+            body,
+            {
+                "NAME": c["name"],
+                "REFERRAL_CODE": c["referral_code"]
+                or "(none — generate via scripts/referral_create.py)",
+            },
+        )
         send_email(c["email"], subject, rendered, dry_run=args.dry_run)
         mark_followup_sent(c["page_id"], dry_run=args.dry_run)
         sent_count += 1

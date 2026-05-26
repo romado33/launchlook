@@ -29,9 +29,20 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = REPO_ROOT / "templates" / "qsg"
 
 FORBIDDEN_WORDS = [
-    "leverage", "seamless", "robust", "cutting-edge", "innovative",
-    "streamline", "powerful", "elevate", "empower", "unlock",
-    "supercharge", "revolutionize", "best-in-class", "world-class",
+    "leverage",
+    "seamless",
+    "robust",
+    "cutting-edge",
+    "innovative",
+    "streamline",
+    "powerful",
+    "elevate",
+    "empower",
+    "unlock",
+    "supercharge",
+    "revolutionize",
+    "best-in-class",
+    "world-class",
 ]
 
 
@@ -91,7 +102,10 @@ def render(
     size_kb = len(html.encode("utf-8")) / 1024
     print(f"Wrote {output_path} ({size_kb:.1f} KB)", file=sys.stderr)
     if size_kb > 50:
-        print("WARN: HTML exceeds 50KB target — consider trimming the QSG.", file=sys.stderr)
+        print(
+            "WARN: HTML exceeds 50KB target — consider trimming the QSG.",
+            file=sys.stderr,
+        )
 
     flagged = check_forbidden(md_text)
     if flagged:
@@ -99,10 +113,14 @@ def render(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("--input", required=True, help="Path to edited quickstart.md")
     parser.add_argument("--output", required=True, help="Path to write quickstart.html")
-    parser.add_argument("--app-name", default="App", help="Fallback title if Markdown has no # heading")
+    parser.add_argument(
+        "--app-name", default="App", help="Fallback title if Markdown has no # heading"
+    )
     parser.add_argument("--color", help="Primary accent color hex (e.g. #0d9488)")
     args = parser.parse_args()
 

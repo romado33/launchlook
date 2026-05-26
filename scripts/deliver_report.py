@@ -35,6 +35,10 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 try:
     from dotenv import load_dotenv
 
@@ -122,7 +126,9 @@ def validate(data: dict[str, Any]) -> None:
 
     tier = customer["tier"]
     if tier not in VALID_TIERS:
-        sys.exit(f"ERROR: customer.tier must be one of {sorted(VALID_TIERS)}, got: {tier!r}")
+        sys.exit(
+            f"ERROR: customer.tier must be one of {sorted(VALID_TIERS)}, got: {tier!r}"
+        )
 
     findings = data.get("findings") or []
     if not isinstance(findings, list) or not findings:
@@ -184,14 +190,16 @@ def build_jinja_env():
         sys.exit("ERROR: jinja2 not installed. Run: pip install -r requirements.txt")
 
     return Environment(
-        loader=FileSystemLoader([
-            str(REPORT_TEMPLATE_DIR),
-            str(QSG_TEMPLATE_DIR),
-            str(EMAIL_TEMPLATE_DIR),
-            str(CONFIDENCE_CHECK_TEMPLATE_DIR),
-            str(HANDOFF_TEMPLATE_DIR),
-            str(SHAREABLE_TEMPLATE_DIR),
-        ]),
+        loader=FileSystemLoader(
+            [
+                str(REPORT_TEMPLATE_DIR),
+                str(QSG_TEMPLATE_DIR),
+                str(EMAIL_TEMPLATE_DIR),
+                str(CONFIDENCE_CHECK_TEMPLATE_DIR),
+                str(HANDOFF_TEMPLATE_DIR),
+                str(SHAREABLE_TEMPLATE_DIR),
+            ]
+        ),
         autoescape=select_autoescape(["html", "xml", "j2"]),
         trim_blocks=False,
         lstrip_blocks=False,
@@ -230,7 +238,9 @@ def parse_tier_override(raw: str | None) -> tuple[str | None, bool]:
     return canonical, has_addon
 
 
-def severity_buckets_for_handoff(findings: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+def severity_buckets_for_handoff(
+    findings: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
     """Group findings into the 3 Handoff Report sections."""
     high: list[dict[str, Any]] = []
     medium: list[dict[str, Any]] = []
@@ -327,7 +337,7 @@ def deliver_handoff_report(
     from scripts.ai_audit import pipeline as ai_pipeline  # noqa: WPS433
 
     narrative = ai_pipeline.run_handoff_report(
-        data,
+        audit_payload=data,
         effective_tier=canonical_tier,
         audit_date=delivered_at,
         provider=provider,
@@ -343,7 +353,9 @@ def deliver_handoff_report(
     html = render_handoff_html(env, data, narrative, delivered_at)
     pdf_path = out_dir / "handoff-report.pdf"
     try:
-        html_to_pdf(html, pdf_path, data.get("customer", {}).get("first_name", "customer"))
+        html_to_pdf(
+            html, pdf_path, data.get("customer", {}).get("first_name", "customer")
+        )
         print(f"  ✓ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
     except SystemExit as exc:
         print(f"  ! Handoff PDF skipped: {exc}", file=sys.stderr)
@@ -355,10 +367,13 @@ def deliver_handoff_report(
     return md_path, pdf_path
 
 
-def render_main_report_html(env, data: dict[str, Any], delivered_at: str, qsg_link: str | None) -> str:
+def render_main_report_html(
+    env, data: dict[str, Any], delivered_at: str, qsg_link: str | None
+) -> str:
     customer = dict(data["customer"])
     customer["url_redacted_or_shown"] = display_url(
-        customer.get("app_url", ""), bool(customer.get("url_redacted")),
+        customer.get("app_url", ""),
+        bool(customer.get("url_redacted")),
     )
 
     template = env.get_template("report.html.j2")
@@ -398,12 +413,12 @@ def html_to_pdf(html: str, out_path: Path, customer_name: str) -> None:
 
     footer_html = (
         '<div style="font-size:8pt; color:#6B6359; width:100%; '
-        'padding:0 20mm; font-family:-apple-system,sans-serif; '
+        "padding:0 20mm; font-family:-apple-system,sans-serif; "
         'display:flex; justify-content:space-between;">'
-        f'<span>LaunchLook · launchlook.app · prepared {date.today().isoformat()}</span>'
-        f'<span>Confidential, for {customer_name} only · '
+        f"<span>LaunchLook · launchlook.app · prepared {date.today().isoformat()}</span>"
+        f"<span>Confidential, for {customer_name} only · "
         '<span class="pageNumber"></span> / <span class="totalPages"></span></span>'
-        '</div>'
+        "</div>"
     )
 
     with sync_playwright() as p:
@@ -423,7 +438,7 @@ def html_to_pdf(html: str, out_path: Path, customer_name: str) -> None:
                     "left": "20mm",
                 },
                 display_header_footer=True,
-                header_template='<span></span>',
+                header_template="<span></span>",
                 footer_template=footer_html,
             )
         finally:
@@ -454,7 +469,9 @@ def _verified_badge_context(customer: dict[str, Any]) -> dict[str, Any]:
         "pro": 180,
         "pro package": 180,
     }.get(tier_alias, 30)
-    domain = os.getenv("LAUNCHLOOK_DOMAIN", "launchlook.app").strip() or "launchlook.app"
+    domain = (
+        os.getenv("LAUNCHLOOK_DOMAIN", "launchlook.app").strip() or "launchlook.app"
+    )
     platform = (customer.get("platform") or "").strip().lower()
     return {
         "slug": slug,
@@ -463,11 +480,14 @@ def _verified_badge_context(customer: dict[str, Any]) -> dict[str, Any]:
         "badge_url_light": f"https://{domain}/images/badges/{slug}/light.svg",
         "badge_url_dark": f"https://{domain}/images/badges/{slug}/dark.svg",
         "domain": domain,
-        "is_webflow": platform == "webflow" or (customer.get("builder") or "").strip().lower() == "webflow",
+        "is_webflow": platform == "webflow"
+        or (customer.get("builder") or "").strip().lower() == "webflow",
     }
 
 
-def render_email_bodies(env, data: dict[str, Any], delivered_at: str) -> tuple[str, str, str]:
+def render_email_bodies(
+    env, data: dict[str, Any], delivered_at: str
+) -> tuple[str, str, str]:
     customer = data["customer"]
     n_findings = len(data["findings"])
     subject = f"Your LaunchLook report is ready, {customer['first_name']}"
@@ -511,11 +531,13 @@ def send_via_resend(
 
     encoded_attachments = []
     for path in attachments:
-        encoded_attachments.append({
-            "filename": path.name,
-            "content": base64.b64encode(path.read_bytes()).decode("ascii"),
-            "content_type": "application/pdf",
-        })
+        encoded_attachments.append(
+            {
+                "filename": path.name,
+                "content": base64.b64encode(path.read_bytes()).decode("ascii"),
+                "content_type": "application/pdf",
+            }
+        )
 
     payload: dict[str, Any] = {
         "from": f"Rob at LaunchLook <{from_email}>",
@@ -645,7 +667,9 @@ def deliver_confidence_check(args) -> int:
 
     env = build_jinja_env()
 
-    print(f"→ Customer:   {cc.get('customer_first_name', customer_id)} ({cc.get('customer_email', '?')})")
+    print(
+        f"→ Customer:   {cc.get('customer_first_name', customer_id)} ({cc.get('customer_email', '?')})"
+    )
     print(f"→ App:        {cc.get('app_name', '?')}")
     print(f"→ Original:   {cc.get('original_audit_id', '?')}")
     print(
@@ -724,8 +748,18 @@ def _format_audit_date_human(iso: str) -> str:
     try:
         parts = iso.split("-")
         months = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December",
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
         ]
         return f"{months[int(parts[1]) - 1]} {int(parts[2])}, {parts[0]}"
     except (ValueError, IndexError):
@@ -877,7 +911,9 @@ def _generate_shareable_page(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
         "--customer",
         required=True,
@@ -887,11 +923,25 @@ def main() -> int:
             "data/confidence_checks/<slug>-*.yaml)."
         ),
     )
-    parser.add_argument("--send", action="store_true", help="Send via Resend (default is dry-run preview)")
-    parser.add_argument("--dry-run", action="store_true", help="Force dry-run (default behavior)")
-    parser.add_argument("--no-open", action="store_true", help="Skip auto-opening PDFs in dry-run")
-    parser.add_argument("--qsg-link", default=None, help="Optional public URL of the QSG PDF (for the report cross-link)")
-    parser.add_argument("--yes", action="store_true", help="Skip the send confirmation prompt")
+    parser.add_argument(
+        "--send",
+        action="store_true",
+        help="Send via Resend (default is dry-run preview)",
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Force dry-run (default behavior)"
+    )
+    parser.add_argument(
+        "--no-open", action="store_true", help="Skip auto-opening PDFs in dry-run"
+    )
+    parser.add_argument(
+        "--qsg-link",
+        default=None,
+        help="Optional public URL of the QSG PDF (for the report cross-link)",
+    )
+    parser.add_argument(
+        "--yes", action="store_true", help="Skip the send confirmation prompt"
+    )
     parser.add_argument(
         "--confidence-check",
         action="store_true",
@@ -960,7 +1010,11 @@ def main() -> int:
     # Pro tier GitHub integration reminder. Never auto-runs: Rob has to
     # invoke scripts/github_push.py manually after reviewing the YAML.
     # See docs/GITHUB-INTEGRATION.md.
-    if customer["tier"] == "Pro Package" and isinstance(data.get("github"), dict) and data["github"].get("repo"):
+    if (
+        customer["tier"] == "Pro Package"
+        and isinstance(data.get("github"), dict)
+        and data["github"].get("repo")
+    ):
         print(
             "→ GitHub integration available for this customer. "
             f"Run: `python scripts/github_push.py --customer {args.customer}` "

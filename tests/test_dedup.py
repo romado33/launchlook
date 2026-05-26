@@ -29,7 +29,6 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.ai_audit import dedup  # noqa: E402
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -105,10 +104,30 @@ def _starter_candidate_findings() -> list[dict]:
             "path": "/",
         },
         # 7-10 to round out the cap; doesn't matter for assertions.
-        {"category_id": "trust_gaps", "title": "Support email is support@example.com", "what_we_saw": "fake email", "path": "/"},
-        {"category_id": "mobile_layout", "title": "Hamburger nav off-screen at 320px", "what_we_saw": "off-screen nav", "path": "/"},
-        {"category_id": "broken_ctas_links", "title": "Quick Book button does nothing", "what_we_saw": "dead button", "path": "/"},
-        {"category_id": "broken_ctas_links", "title": "Footer GitHub link 404s", "what_we_saw": "dead link", "path": "/"},
+        {
+            "category_id": "trust_gaps",
+            "title": "Support email is support@example.com",
+            "what_we_saw": "fake email",
+            "path": "/",
+        },
+        {
+            "category_id": "mobile_layout",
+            "title": "Hamburger nav off-screen at 320px",
+            "what_we_saw": "off-screen nav",
+            "path": "/",
+        },
+        {
+            "category_id": "broken_ctas_links",
+            "title": "Quick Book button does nothing",
+            "what_we_saw": "dead button",
+            "path": "/",
+        },
+        {
+            "category_id": "broken_ctas_links",
+            "title": "Footer GitHub link 404s",
+            "what_we_saw": "dead link",
+            "path": "/",
+        },
     ]
 
 
@@ -154,11 +173,13 @@ class PartialCollisionsCase(unittest.TestCase):
         titles = sorted(c["title"] for c in clashes)
         self.assertEqual(
             titles,
-            sorted([
-                "Your privacy policy link returns a 404",
-                "Dev bypass still on /auth",
-                "Pricing page CTA hidden by mobile banner",
-            ]),
+            sorted(
+                [
+                    "Your privacy policy link returns a 404",
+                    "Dev bypass still on /auth",
+                    "Pricing page CTA hidden by mobile banner",
+                ]
+            ),
         )
 
     def test_filter_drops_only_the_overlapping(self) -> None:
@@ -216,23 +237,47 @@ class AllCollisionsCase(unittest.TestCase):
 
 class StabilityCase(unittest.TestCase):
     def test_trailing_slash_canonicalization(self) -> None:
-        a = {"category_id": "trust_gaps", "what_we_saw": "missing privacy page", "path": "/legal/"}
-        b = {"category_id": "trust_gaps", "what_we_saw": "missing privacy page", "path": "/legal"}
+        a = {
+            "category_id": "trust_gaps",
+            "what_we_saw": "missing privacy page",
+            "path": "/legal/",
+        }
+        b = {
+            "category_id": "trust_gaps",
+            "what_we_saw": "missing privacy page",
+            "path": "/legal",
+        }
         self.assertEqual(dedup.fingerprint(a), dedup.fingerprint(b))
 
     def test_full_url_collapses_to_path(self) -> None:
-        a = {"category_id": "trust_gaps", "what_we_saw": "x", "url": "https://ex.com/pricing"}
+        a = {
+            "category_id": "trust_gaps",
+            "what_we_saw": "x",
+            "url": "https://ex.com/pricing",
+        }
         b = {"category_id": "trust_gaps", "what_we_saw": "x", "path": "/pricing"}
         self.assertEqual(dedup.fingerprint(a), dedup.fingerprint(b))
 
     def test_punctuation_and_case_drift_does_not_break_collision(self) -> None:
-        a = {"category_id": "copy_clarity", "what_we_saw": "Lorem ipsum dolor sit amet.", "path": "/"}
-        b = {"category_id": "copy_clarity", "what_we_saw": "lorem ipsum, dolor sit amet!", "path": "/"}
+        a = {
+            "category_id": "copy_clarity",
+            "what_we_saw": "Lorem ipsum dolor sit amet.",
+            "path": "/",
+        }
+        b = {
+            "category_id": "copy_clarity",
+            "what_we_saw": "lorem ipsum, dolor sit amet!",
+            "path": "/",
+        }
         self.assertEqual(dedup.fingerprint(a), dedup.fingerprint(b))
 
     def test_different_path_keeps_them_distinct(self) -> None:
         a = {"category_id": "mobile_layout", "what_we_saw": "cta hidden", "path": "/"}
-        b = {"category_id": "mobile_layout", "what_we_saw": "cta hidden", "path": "/pricing"}
+        b = {
+            "category_id": "mobile_layout",
+            "what_we_saw": "cta hidden",
+            "path": "/pricing",
+        }
         self.assertNotEqual(dedup.fingerprint(a), dedup.fingerprint(b))
 
     def test_missing_fields_still_produces_hash(self) -> None:
@@ -242,7 +287,13 @@ class StabilityCase(unittest.TestCase):
         self.assertEqual(len(fp), 16)
 
     def test_non_dict_findings_are_skipped(self) -> None:
-        out = dedup.fingerprints([{"category_id": "trust_gaps", "what_we_saw": "x", "path": "/"}, None, "skip me"])
+        out = dedup.fingerprints(
+            [
+                {"category_id": "trust_gaps", "what_we_saw": "x", "path": "/"},
+                None,
+                "skip me",
+            ]
+        )
         self.assertEqual(len(out), 1)
 
 

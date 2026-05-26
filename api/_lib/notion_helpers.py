@@ -21,7 +21,7 @@ are ignored; None / empty values are skipped so we never blank out a column.
 from __future__ import annotations
 
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from .env import require_env
@@ -133,7 +133,7 @@ def build_properties(fields: dict[str, Any]) -> dict[str, Any]:
 def _to_iso(dt: Any) -> str:
     if isinstance(dt, datetime):
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
+            dt = dt.replace(tzinfo=UTC)
         return dt.isoformat()
     return str(dt)
 
@@ -166,7 +166,7 @@ def find_customer_by_email(
                 filter_clause,
                 {
                     "timestamp": "created_time",
-                    "created_time": {"on_or_after": since.astimezone(timezone.utc).isoformat()},
+                    "created_time": {"on_or_after": since.astimezone(UTC).isoformat()},
                 },
             ]
         }
@@ -179,7 +179,11 @@ def find_customer_by_email(
         )
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
-    rows = [r for r in resp.get("results", []) if not (r.get("archived") or r.get("in_trash"))]
+    rows = [
+        r
+        for r in resp.get("results", [])
+        if not (r.get("archived") or r.get("in_trash"))
+    ]
     return rows[0] if rows else None
 
 
@@ -198,7 +202,7 @@ def upsert_customer(
     treated as "the same customer". This stops us from clobbering an older
     completed customer record when the same email re-purchases.
     """
-    since = datetime.now(timezone.utc) - match_window if match_window else None
+    since = datetime.now(UTC) - match_window if match_window else None
     existing = find_customer_by_email(client, ds_id, email_for_match, since=since)
     props = build_properties(fields)
     if existing:

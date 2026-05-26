@@ -44,14 +44,13 @@ import re
 import socket
 import sys
 import traceback
-from datetime import datetime, timedelta, timezone
+import urllib.error
+import urllib.request
+from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
-
-import urllib.error
-import urllib.request
 
 # Make the api/_lib package importable when Vercel invokes this file directly.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -85,7 +84,9 @@ ERR_EMAIL = "That email doesn't look right. Double-check and try again."
 ERR_URL = "We couldn't reach that URL. Make sure it starts with https://, isn't localhost, and is reachable on the public internet."
 ERR_RATE_EMAIL = "We've already queued a few free audits for this email recently. Try again in a few weeks, or pick up Starter ($19) to keep going."
 ERR_RATE_IP = "A few free audits have already gone in from your network today. Try again tomorrow."
-ERR_GENERIC = "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
+ERR_GENERIC = (
+    "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
+)
 
 
 def validate_email(value: str) -> str | None:
@@ -176,7 +177,9 @@ def _get_free_audit_ds_id(client: Client) -> str:
     return sources[0]["id"]
 
 
-def _build_props(*, email: str, url: str, ip: str, source: str, platform: str) -> dict[str, Any]:
+def _build_props(
+    *, email: str, url: str, ip: str, source: str, platform: str
+) -> dict[str, Any]:
     title = f"{email} -- {urlparse(url).hostname or 'unknown'}"
     return {
         "Request": {"title": [{"text": {"content": title[:2000]}}]},
@@ -189,7 +192,9 @@ def _build_props(*, email: str, url: str, ip: str, source: str, platform: str) -
     }
 
 
-def _count_recent_requests_by_email(client: Client, ds_id: str, email: str, since: datetime) -> int:
+def _count_recent_requests_by_email(
+    client: Client, ds_id: str, email: str, since: datetime
+) -> int:
     """Count free-audit rows for this email created at or after `since`."""
     try:
         resp = client.data_sources.query(
@@ -197,17 +202,26 @@ def _count_recent_requests_by_email(client: Client, ds_id: str, email: str, sinc
             filter={
                 "and": [
                     {"property": "Email", "email": {"equals": email}},
-                    {"timestamp": "created_time", "created_time": {"on_or_after": since.isoformat()}},
+                    {
+                        "timestamp": "created_time",
+                        "created_time": {"on_or_after": since.isoformat()},
+                    },
                 ]
             },
             page_size=10,
         )
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
-    return sum(1 for r in resp.get("results", []) if not r.get("archived") and not r.get("in_trash"))
+    return sum(
+        1
+        for r in resp.get("results", [])
+        if not r.get("archived") and not r.get("in_trash")
+    )
 
 
-def _count_recent_requests_by_ip(client: Client, ds_id: str, ip: str, since: datetime) -> int:
+def _count_recent_requests_by_ip(
+    client: Client, ds_id: str, ip: str, since: datetime
+) -> int:
     if not ip:
         return 0
     try:
@@ -216,17 +230,26 @@ def _count_recent_requests_by_ip(client: Client, ds_id: str, ip: str, since: dat
             filter={
                 "and": [
                     {"property": "IP", "rich_text": {"equals": ip}},
-                    {"timestamp": "created_time", "created_time": {"on_or_after": since.isoformat()}},
+                    {
+                        "timestamp": "created_time",
+                        "created_time": {"on_or_after": since.isoformat()},
+                    },
                 ]
             },
             page_size=20,
         )
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
-    return sum(1 for r in resp.get("results", []) if not r.get("archived") and not r.get("in_trash"))
+    return sum(
+        1
+        for r in resp.get("results", [])
+        if not r.get("archived") and not r.get("in_trash")
+    )
 
 
-def _find_duplicate(client: Client, ds_id: str, email: str, url: str, since: datetime) -> dict | None:
+def _find_duplicate(
+    client: Client, ds_id: str, email: str, url: str, since: datetime
+) -> dict | None:
     """Same email + same hostname within the window -> treat as duplicate."""
     host = (urlparse(url).hostname or "").lower()
     if not host:
@@ -237,7 +260,10 @@ def _find_duplicate(client: Client, ds_id: str, email: str, url: str, since: dat
             filter={
                 "and": [
                     {"property": "Email", "email": {"equals": email}},
-                    {"timestamp": "created_time", "created_time": {"on_or_after": since.isoformat()}},
+                    {
+                        "timestamp": "created_time",
+                        "created_time": {"on_or_after": since.isoformat()},
+                    },
                 ]
             },
             page_size=20,
@@ -259,18 +285,22 @@ def _find_duplicate(client: Client, ds_id: str, email: str, url: str, since: dat
 # Confirmation email (Resend REST)
 # ---------------------------------------------------------------------------
 
+
 # Plain-English founder voice per SIMPLICITY-GUARDRAILS section 5.1 and 6.
 # Single short paragraph, no "AI-powered" framing, no platform branding,
 # signs as "-- Rob" per section 5.2.
 def _send_confirmation_email(*, to: str, audit_url: str) -> None:
     api_key = optional_env("RESEND_API_KEY")
     if not api_key:
-        print("[free-audit] WARN: RESEND_API_KEY missing; skipping confirmation email", file=sys.stderr)
+        print(
+            "[free-audit] WARN: RESEND_API_KEY missing; skipping confirmation email",
+            file=sys.stderr,
+        )
         return
     from_email = optional_env("FROM_EMAIL", "hello@launchlook.app")
     admin_email = optional_env("ADMIN_EMAIL")
 
-    host = (urlparse(audit_url).hostname or audit_url)
+    host = urlparse(audit_url).hostname or audit_url
     subject = f"Got it -- your 3 findings for {host} are queued"
     text_body = (
         f"Hi,\n\n"
@@ -302,10 +332,15 @@ def _send_confirmation_email(*, to: str, audit_url: str) -> None:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=8) as resp:  # noqa: S310 - explicit trusted host
+        with urllib.request.urlopen(
+            req, timeout=8
+        ) as resp:  # noqa: S310 - explicit trusted host
             resp.read()
     except urllib.error.HTTPError as exc:
-        print(f"[free-audit] WARN: Resend HTTP {exc.code}: {exc.read()[:200]!r}", file=sys.stderr)
+        print(
+            f"[free-audit] WARN: Resend HTTP {exc.code}: {exc.read()[:200]!r}",
+            file=sys.stderr,
+        )
     except urllib.error.URLError as exc:
         print(f"[free-audit] WARN: Resend network error: {exc}", file=sys.stderr)
 
@@ -325,7 +360,7 @@ def process_request(
     email_sender=_send_confirmation_email,
 ) -> tuple[int, dict[str, Any]]:
     """Validate + rate-limit + persist + notify. Returns (status_code, body)."""
-    now = now or datetime.now(timezone.utc)
+    now = now or datetime.now(UTC)
 
     email = validate_email(str(payload.get("email") or ""))
     if not email:
@@ -339,7 +374,9 @@ def process_request(
     if platform not in {"vibe-coder", "webflow"}:
         platform = "vibe-coder"
 
-    factory = notion_client_factory or (lambda: Client(auth=require_env("NOTION_TOKEN")))
+    factory = notion_client_factory or (
+        lambda: Client(auth=require_env("NOTION_TOKEN"))
+    )
     try:
         client = factory()
         ds_id = _get_free_audit_ds_id(client)
@@ -488,14 +525,19 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801 (Vercel convention)
 
             self._respond_json(status, body)
         except Exception as exc:  # noqa: BLE001
-            print(f"[free-audit] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr)
+            print(
+                f"[free-audit] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr
+            )
             self._respond_json(500, {"status": "error", "message": ERR_GENERIC})
 
     def do_GET(self) -> None:  # noqa: N802
         # Tiny health-check so we can verify the route is alive in a browser.
         self._respond_json(
             200,
-            {"status": "ok", "hint": "POST {url, email} as JSON to queue a free 3-finding audit."},
+            {
+                "status": "ok",
+                "hint": "POST {url, email} as JSON to queue a free 3-finding audit.",
+            },
         )
 
     def _respond_json(self, status: int, body: dict[str, Any]) -> None:

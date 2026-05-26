@@ -113,22 +113,22 @@ _WHY_IT_MATTERS = (
 # Fix prompts: keyed by (bucket, platform).
 _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
     ("image_alt", "lovable"): (
-        "Open Lovable and ask it: \"Find every <img> tag on the homepage with no alt attribute "
-        "or an empty one. For decorative images keep alt=\\\"\\\", for content images write what "
-        "the image shows in 5-10 plain words.\""
+        'Open Lovable and ask it: "Find every <img> tag on the homepage with no alt attribute '
+        'or an empty one. For decorative images keep alt=\\"\\", for content images write what '
+        'the image shows in 5-10 plain words."'
     ),
     ("image_alt", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"List every <img> on the homepage. Add an alt "
-        "attribute to each one describing the content of the image, or alt=\\\"\\\" if it's purely "
-        "decorative.\""
+        'Open your project in Bolt. Ask Bolt: "List every <img> on the homepage. Add an alt '
+        'attribute to each one describing the content of the image, or alt=\\"\\" if it\'s purely '
+        'decorative."'
     ),
     ("image_alt", "v0"): (
-        "Open the homepage in v0. Ask v0: \"Audit every Image component on the page. Pass a "
-        "descriptive alt prop on each one; pass alt=\\\"\\\" only for purely decorative images.\""
+        'Open the homepage in v0. Ask v0: "Audit every Image component on the page. Pass a '
+        'descriptive alt prop on each one; pass alt=\\"\\" only for purely decorative images."'
     ),
     ("image_alt", "cursor"): (
         "In Cursor, search the homepage for <img tags. Add an alt attribute to every match -- "
-        "5-10 words describing what the image shows for content images, alt=\"\" for purely "
+        '5-10 words describing what the image shows for content images, alt="" for purely '
         "decorative ones."
     ),
     ("image_alt", "webflow"): (
@@ -140,17 +140,17 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "purely decorative images, mark them as decorative so screen readers skip them."
     ),
     ("color_contrast", "lovable"): (
-        "Open Lovable and ask it: \"Find every text block on the homepage where the foreground "
+        'Open Lovable and ask it: "Find every text block on the homepage where the foreground '
         "color doesn't meet a 4.5:1 contrast ratio against the background. Suggest darker text "
-        "or a lighter background that passes.\""
+        'or a lighter background that passes."'
     ),
     ("color_contrast", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Audit the homepage CSS for any text-on-background "
-        "color pair below 4.5:1 contrast. Adjust the colors so every paragraph and CTA passes.\""
+        'Open your project in Bolt. Ask Bolt: "Audit the homepage CSS for any text-on-background '
+        'color pair below 4.5:1 contrast. Adjust the colors so every paragraph and CTA passes."'
     ),
     ("color_contrast", "v0"): (
-        "Open the homepage in v0. Ask v0: \"Increase the contrast of any low-contrast text by "
-        "darkening the foreground or lightening the background, targeting at least 4.5:1.\""
+        'Open the homepage in v0. Ask v0: "Increase the contrast of any low-contrast text by '
+        'darkening the foreground or lightening the background, targeting at least 4.5:1."'
     ),
     ("color_contrast", "cursor"): (
         "In Cursor, run a quick contrast audit on the homepage. For each failing pair, edit the "
@@ -166,20 +166,20 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "webaim.org show you the exact ratio; pick a darker text color or lighter background."
     ),
     ("form_label", "lovable"): (
-        "Open Lovable and ask it: \"Find every form field on the homepage with no visible label "
-        "or no associated <label for>. Add a clear visible label tied to each input.\""
+        'Open Lovable and ask it: "Find every form field on the homepage with no visible label '
+        'or no associated <label for>. Add a clear visible label tied to each input."'
     ),
     ("form_label", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Audit homepage form fields. Wrap each input in a "
-        "<label> tag, or use a <label for> with a matching id. Visible labels beat placeholders.\""
+        'Open your project in Bolt. Ask Bolt: "Audit homepage form fields. Wrap each input in a '
+        '<label> tag, or use a <label for> with a matching id. Visible labels beat placeholders."'
     ),
     ("form_label", "v0"): (
-        "Open the homepage form in v0. Ask v0: \"Add a visible <Label> component to every "
-        "<Input> so screen readers and voice-input users know what to type.\""
+        'Open the homepage form in v0. Ask v0: "Add a visible <Label> component to every '
+        '<Input> so screen readers and voice-input users know what to type."'
     ),
     ("form_label", "cursor"): (
         "In Cursor, open the form component on the homepage. For every <input> add a paired "
-        "<label for=\"...\"> with text describing what to type. Don't rely on placeholders alone."
+        '<label for="..."> with text describing what to type. Don\'t rely on placeholders alone.'
     ),
     ("form_label", "webflow"): (
         "Open Webflow Designer. Select each form input, open the Settings panel, and add a "
@@ -190,18 +190,18 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "aren't enough -- they disappear once the visitor starts typing."
     ),
     ("button_name", "lovable"): (
-        "Open Lovable and ask it: \"Find every <button> or <a> on the homepage with no visible "
+        'Open Lovable and ask it: "Find every <button> or <a> on the homepage with no visible '
         "text (icon-only buttons especially). Add a short text label or a hidden description "
-        "for assistive tools.\""
+        'for assistive tools."'
     ),
     ("button_name", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Audit icon-only buttons and links on the "
+        'Open your project in Bolt. Ask Bolt: "Audit icon-only buttons and links on the '
         "homepage. Add either visible text or a hidden description for assistive tools "
-        "describing the action.\""
+        'describing the action."'
     ),
     ("button_name", "v0"): (
-        "Open the homepage in v0. Ask v0: \"Add a hidden description for assistive tools to "
-        "every icon-only Button component so screen readers announce its purpose.\""
+        'Open the homepage in v0. Ask v0: "Add a hidden description for assistive tools to '
+        'every icon-only Button component so screen readers announce its purpose."'
     ),
     ("button_name", "cursor"): (
         "In Cursor, search the homepage for icon-only buttons or links. For each one, add a "
@@ -219,19 +219,19 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
     ),
     ("keyboard", "lovable"): (
         "Open Lovable and ask it: \"Find every interactive element on the homepage that's "
-        "skipped by Tab navigation. Add tabindex=\\\"0\\\" or convert it to a real <button>.\""
+        'skipped by Tab navigation. Add tabindex=\\"0\\" or convert it to a real <button>."'
     ),
     ("keyboard", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Audit homepage interactives. Any clickable <div> "
-        "or <span> should become a <button> or get tabindex=\\\"0\\\" plus an Enter handler.\""
+        'Open your project in Bolt. Ask Bolt: "Audit homepage interactives. Any clickable <div> '
+        'or <span> should become a <button> or get tabindex=\\"0\\" plus an Enter handler."'
     ),
     ("keyboard", "v0"): (
-        "Open the homepage in v0. Ask v0: \"Replace clickable <div> elements with proper "
-        "<Button> components, or add keyboard handlers (Enter, Space) and tabindex=\\\"0\\\".\""
+        'Open the homepage in v0. Ask v0: "Replace clickable <div> elements with proper '
+        '<Button> components, or add keyboard handlers (Enter, Space) and tabindex=\\"0\\"."'
     ),
     ("keyboard", "cursor"): (
         "In Cursor, find clickable <div> or <span> elements on the homepage. Convert them to "
-        "<button>, or add role=\"button\" plus tabindex=\"0\" plus key handlers for Enter and "
+        '<button>, or add role="button" plus tabindex="0" plus key handlers for Enter and '
         "Space."
     ),
     ("keyboard", "webflow"): (
@@ -395,9 +395,7 @@ def to_findings(
 
     cap = _tier_cap(tier)
     actionable = [(bucket, count) for bucket, count in bucketed.items() if count > 0]
-    actionable.sort(
-        key=lambda pair: (-_BUCKET_RANK.get(pair[0], 0), -pair[1])
-    )
+    actionable.sort(key=lambda pair: (-_BUCKET_RANK.get(pair[0], 0), -pair[1]))
 
     findings: list[dict[str, Any]] = []
     failed_ids: list[str] = []
@@ -418,11 +416,7 @@ def to_findings(
         )
         failed_ids.append(_check_id(bucket))
 
-    passed_ids = [
-        _check_id(b)
-        for b in _BUCKET_TITLES
-        if b not in bucketed
-    ]
+    passed_ids = [_check_id(b) for b in _BUCKET_TITLES if b not in bucketed]
 
     return {
         "findings": findings,

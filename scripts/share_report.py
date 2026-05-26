@@ -25,9 +25,18 @@ import argparse
 import json
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+# Windows consoles default to cp1252; force UTF-8 so unicode is safe to print.
+for _stream_name in ("stdout", "stderr"):
+    _stream = getattr(sys, _stream_name, None)
+    if _stream is not None and hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8")
+        except Exception:  # noqa: BLE001
+            pass
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -82,7 +91,7 @@ def _stamp_history(data: dict[str, Any], event: str) -> None:
     history.append(
         {
             "event": event,
-            "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "at": datetime.now(UTC).isoformat(timespec="seconds"),
         }
     )
 
@@ -179,11 +188,21 @@ def main(argv: list[str] | None = None) -> int:
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--slug", required=True, help="Customer slug (e.g. jane-sparkle-marketplace)")
+    parser.add_argument(
+        "--slug", required=True, help="Customer slug (e.g. jane-sparkle-marketplace)"
+    )
     action = parser.add_mutually_exclusive_group(required=True)
-    action.add_argument("--public", action="store_true", help="Make the report visible at /r/{slug}")
-    action.add_argument("--private", action="store_true", help="Revert the report to private (gentle message shown)")
-    action.add_argument("--status", action="store_true", help="Print the current state and exit")
+    action.add_argument(
+        "--public", action="store_true", help="Make the report visible at /r/{slug}"
+    )
+    action.add_argument(
+        "--private",
+        action="store_true",
+        help="Revert the report to private (gentle message shown)",
+    )
+    action.add_argument(
+        "--status", action="store_true", help="Print the current state and exit"
+    )
     action.add_argument(
         "--share-handoff",
         action="store_true",

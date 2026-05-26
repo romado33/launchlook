@@ -34,12 +34,11 @@ import contextvars
 import json
 import os
 import statistics
-import tempfile
 import time
-from datetime import datetime, timezone
+from collections.abc import Iterator
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterator
-
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 COSTS_DIR = REPO_ROOT / "data" / "ai_costs"
@@ -60,29 +59,41 @@ COSTS_DIR = REPO_ROOT / "data" / "ai_costs"
 PRICING: dict[str, dict[str, float]] = {
     # Anthropic Claude Sonnet 4.5 (current default per docs/PRODUCT-DECISIONS.md
     # and scripts/ai_audit/llm_client.DEFAULT_CLAUDE_MODEL).
-    "claude-sonnet-4-5-20250929": {"input_per_million": 3.00, "output_per_million": 15.00},
-    "claude-sonnet-4-5":          {"input_per_million": 3.00, "output_per_million": 15.00},
+    "claude-sonnet-4-5-20250929": {
+        "input_per_million": 3.00,
+        "output_per_million": 15.00,
+    },
+    "claude-sonnet-4-5": {"input_per_million": 3.00, "output_per_million": 15.00},
     # Sibling Sonnets - same per-token pricing.
-    "claude-sonnet-4-6":          {"input_per_million": 3.00, "output_per_million": 15.00},
-    "claude-sonnet-4-0":          {"input_per_million": 3.00, "output_per_million": 15.00},
+    "claude-sonnet-4-6": {"input_per_million": 3.00, "output_per_million": 15.00},
+    "claude-sonnet-4-0": {"input_per_million": 3.00, "output_per_million": 15.00},
     # Claude 3.5 Sonnet - kept in the fallback chain in llm_client.py.
-    "claude-3-5-sonnet-20241022": {"input_per_million": 3.00, "output_per_million": 15.00},
-    "claude-3-5-sonnet-latest":   {"input_per_million": 3.00, "output_per_million": 15.00},
+    "claude-3-5-sonnet-20241022": {
+        "input_per_million": 3.00,
+        "output_per_million": 15.00,
+    },
+    "claude-3-5-sonnet-latest": {
+        "input_per_million": 3.00,
+        "output_per_million": 15.00,
+    },
     # Other tiers - included so the cost calc still works if Rob ever
     # overrides LAUNCHLOOK_CLAUDE_MODEL to a different model.
-    "claude-opus-4-5-20250929":   {"input_per_million": 5.00, "output_per_million": 25.00},
-    "claude-opus-4-5":            {"input_per_million": 5.00, "output_per_million": 25.00},
-    "claude-haiku-4-5":           {"input_per_million": 1.00, "output_per_million": 5.00},
+    "claude-opus-4-5-20250929": {
+        "input_per_million": 5.00,
+        "output_per_million": 25.00,
+    },
+    "claude-opus-4-5": {"input_per_million": 5.00, "output_per_million": 25.00},
+    "claude-haiku-4-5": {"input_per_million": 1.00, "output_per_million": 5.00},
     # OpenAI - GPT-4o family + a couple of likely successors.
-    "gpt-4o":                     {"input_per_million": 2.50, "output_per_million": 10.00},
-    "gpt-4o-mini":                {"input_per_million": 0.15, "output_per_million": 0.60},
-    "gpt-4.1":                    {"input_per_million": 2.00, "output_per_million": 8.00},
-    "gpt-4.1-mini":               {"input_per_million": 0.40, "output_per_million": 1.60},
+    "gpt-4o": {"input_per_million": 2.50, "output_per_million": 10.00},
+    "gpt-4o-mini": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gpt-4.1": {"input_per_million": 2.00, "output_per_million": 8.00},
+    "gpt-4.1-mini": {"input_per_million": 0.40, "output_per_million": 1.60},
     # GPT-5 family pricing (best-effort estimate; update from openai.com
     # when finalized for our deployment).
-    "gpt-5-mini":                 {"input_per_million": 0.25, "output_per_million": 2.00},
+    "gpt-5-mini": {"input_per_million": 0.25, "output_per_million": 2.00},
     # Stub provider - always free in our test runs.
-    "stub-deterministic":         {"input_per_million": 0.00, "output_per_million": 0.00},
+    "stub-deterministic": {"input_per_million": 0.00, "output_per_million": 0.00},
 }
 
 # Severity thresholds for `--alert` mode. Calibrated against the
@@ -90,13 +101,13 @@ PRICING: dict[str, dict[str, float]] = {
 # tier price is the "this audit is eating margin" line.
 TIER_PRICE_USD: dict[str, float] = {
     "Starter Package": 19.00,
-    "Full Package":    49.00,  # internal name for the Scale Up tier
-    "Pro Package":     99.00,
+    "Full Package": 49.00,  # internal name for the Scale Up tier
+    "Pro Package": 99.00,
 }
-PER_CUSTOMER_COST_ALERT_RATIO = 0.20   # alert when cost > 20% of tier price
-PER_CUSTOMER_HIGH_COST_RATIO  = 0.10   # flag as outlier above 10% of tier price
-DAILY_COST_ALERT_USD          = 50.00  # rough sanity check; tune as volume grows
-PER_CUSTOMER_CALL_COUNT_ALERT = 15     # likely loop/retry storm above this
+PER_CUSTOMER_COST_ALERT_RATIO = 0.20  # alert when cost > 20% of tier price
+PER_CUSTOMER_HIGH_COST_RATIO = 0.10  # flag as outlier above 10% of tier price
+DAILY_COST_ALERT_USD = 50.00  # rough sanity check; tune as volume grows
+PER_CUSTOMER_CALL_COUNT_ALERT = 15  # likely loop/retry storm above this
 
 CALL_TYPES = {
     "finding_generation",
@@ -125,7 +136,9 @@ def calculate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
         pricing = PRICING["claude-sonnet-4-5-20250929"]
         _warn_unknown_model_once(model)
     in_cost = (max(0, int(input_tokens)) / 1_000_000.0) * pricing["input_per_million"]
-    out_cost = (max(0, int(output_tokens)) / 1_000_000.0) * pricing["output_per_million"]
+    out_cost = (max(0, int(output_tokens)) / 1_000_000.0) * pricing[
+        "output_per_million"
+    ]
     return round(in_cost + out_cost, 6)
 
 
@@ -137,6 +150,7 @@ def _warn_unknown_model_once(model: str) -> None:
         return
     _warned_models.add(model)
     import sys
+
     print(
         f"[cost_tracker] WARN: unknown model {model!r}, using Sonnet 4.5 rates as fallback. "
         "Add a pricing row in scripts/ai_audit/cost_tracker.PRICING.",
@@ -150,11 +164,11 @@ def _warn_unknown_model_once(model: str) -> None:
 
 
 def _utc_iso() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def _today_path() -> Path:
-    return COSTS_DIR / f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.jsonl"
+    return COSTS_DIR / f"{datetime.now(UTC).strftime('%Y-%m-%d')}.jsonl"
 
 
 def log_call(
@@ -176,15 +190,15 @@ def log_call(
         call_type = "other"
     cost = calculate_cost(model, input_tokens, output_tokens)
     row = {
-        "timestamp":     _utc_iso(),
-        "customer_id":   (customer_id or "unknown").strip() or "unknown",
-        "tier":          (tier or "unknown").strip() or "unknown",
-        "model":         (model or "unknown").strip() or "unknown",
-        "call_type":     call_type,
-        "input_tokens":  int(max(0, input_tokens)),
+        "timestamp": _utc_iso(),
+        "customer_id": (customer_id or "unknown").strip() or "unknown",
+        "tier": (tier or "unknown").strip() or "unknown",
+        "model": (model or "unknown").strip() or "unknown",
+        "call_type": call_type,
+        "input_tokens": int(max(0, input_tokens)),
         "output_tokens": int(max(0, output_tokens)),
-        "cost_usd":      cost,
-        "latency_ms":    int(max(0, latency_ms)),
+        "cost_usd": cost,
+        "latency_ms": int(max(0, latency_ms)),
     }
     _append_row(_today_path(), row)
     return row
@@ -236,7 +250,7 @@ def iter_rows_since(days: int) -> Iterator[dict[str, Any]]:
     """
     from datetime import timedelta
 
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=max(0, days - 1))).date()
+    cutoff = (datetime.now(UTC) - timedelta(days=max(0, days - 1))).date()
     if not COSTS_DIR.exists():
         return
     for path in sorted(COSTS_DIR.glob("*.jsonl")):
@@ -285,15 +299,15 @@ def aggregate_customer(customer_id: str) -> dict[str, Any]:
             if last_seen is None or ts > last_seen:
                 last_seen = ts
     return {
-        "customer_id":    customer_id,
-        "tier":           tier or "unknown",
-        "call_count":     call_count,
-        "input_tokens":   input_total,
-        "output_tokens":  output_total,
-        "cost_usd":       round(total_cost, 6),
+        "customer_id": customer_id,
+        "tier": tier or "unknown",
+        "call_count": call_count,
+        "input_tokens": input_total,
+        "output_tokens": output_total,
+        "cost_usd": round(total_cost, 6),
         "call_type_counts": call_type_counts,
-        "first_seen":     first_seen,
-        "last_seen":      last_seen,
+        "first_seen": first_seen,
+        "last_seen": last_seen,
     }
 
 
@@ -302,7 +316,7 @@ def daily_summary(date: str | None = None) -> dict[str, Any]:
 
     ``date`` defaults to today (UTC), formatted YYYY-MM-DD.
     """
-    date = date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    date = date or datetime.now(UTC).strftime("%Y-%m-%d")
     rows = list(iter_rows(date))
     if not rows:
         return {
@@ -335,16 +349,16 @@ def daily_summary(date: str | None = None) -> dict[str, Any]:
         ct = row.get("call_type", "other")
         call_types[ct] = call_types.get(ct, 0) + 1
     return {
-        "date":            date,
-        "call_count":      len(rows),
-        "customer_count":  len(customers),
-        "total_cost_usd":  round(total_cost, 6),
-        "input_tokens":    in_tok,
-        "output_tokens":   out_tok,
-        "p50_latency_ms":  int(statistics.median(latencies)) if latencies else 0,
-        "p95_latency_ms":  _percentile(latencies, 95),
-        "models":          models,
-        "call_types":      call_types,
+        "date": date,
+        "call_count": len(rows),
+        "customer_count": len(customers),
+        "total_cost_usd": round(total_cost, 6),
+        "input_tokens": in_tok,
+        "output_tokens": out_tok,
+        "p50_latency_ms": int(statistics.median(latencies)) if latencies else 0,
+        "p95_latency_ms": _percentile(latencies, 95),
+        "models": models,
+        "call_types": call_types,
     }
 
 
@@ -369,7 +383,9 @@ _tier_var: contextvars.ContextVar[str] = contextvars.ContextVar(
 )
 
 
-def set_context(customer_id: str, tier: str) -> tuple[contextvars.Token, contextvars.Token]:
+def set_context(
+    customer_id: str, tier: str
+) -> tuple[contextvars.Token, contextvars.Token]:
     """Set the customer_id + tier visible to every LLM call until reset.
 
     Returns the ``contextvars.Token`` pair so the caller can ``reset`` them
@@ -430,7 +446,7 @@ class CallTracker:
         self._recorded = False
         self.row: dict[str, Any] | None = None
 
-    def __enter__(self) -> "CallTracker":
+    def __enter__(self) -> CallTracker:
         self._t0 = time.perf_counter()
         return self
 
@@ -457,6 +473,7 @@ class CallTracker:
             )
         except Exception as exc:  # noqa: BLE001
             import sys
+
             print(f"[cost_tracker] WARN: failed to log call: {exc}", file=sys.stderr)
         finally:
             self._recorded = True

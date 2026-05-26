@@ -48,7 +48,7 @@ import json
 import os
 import sys
 import traceback
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
@@ -74,7 +74,7 @@ CENTS_TO_TIER = {
     1900: "Starter Package",
     4900: "Scale Up Package",
     9900: "Pro Package",
-    900: "Starter Package",   # legacy pre-price-bump
+    900: "Starter Package",  # legacy pre-price-bump
     2900: "Scale Up Package",  # legacy pre-price-bump (was "Full Package")
 }
 
@@ -122,7 +122,9 @@ def cents_to_tier(amount_cents: int | None) -> str | None:
 def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
     """Handle a checkout.session.completed object."""
     details = session.get("customer_details") or {}
-    email = (details.get("email") or session.get("customer_email") or "").strip().lower()
+    email = (
+        (details.get("email") or session.get("customer_email") or "").strip().lower()
+    )
     if not email:
         return {"status": "error", "reason": "no email on checkout session"}
 
@@ -135,7 +137,9 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
     ds_id = get_customers_ds_id(client)
 
     # If a Tally intake already created the row, preserve that status.
-    from _lib.notion_helpers import find_customer_by_email  # local import to avoid cycles
+    from _lib.notion_helpers import (
+        find_customer_by_email,
+    )  # local import to avoid cycles
 
     existing = find_customer_by_email(client, ds_id, email)
     existing_status: str | None = None
@@ -155,12 +159,14 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
         f"Amount: ${amount_dollars:.2f} {session.get('currency', 'usd').upper()}",
     ]
     if not tier:
-        notes_lines.append(f"Tier could not be inferred from amount ({amount_cents} cents).")
+        notes_lines.append(
+            f"Tier could not be inferred from amount ({amount_cents} cents)."
+        )
 
     fields: dict[str, Any] = {
         "email": email,
         "status": status_to_set,
-        "payment_date": datetime.now(timezone.utc).isoformat(),
+        "payment_date": datetime.now(UTC).isoformat(),
         "stripe_payment_id": session_id,
         "notes": "\n".join(notes_lines),
     }
@@ -177,9 +183,6 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
         "amount_usd": amount_dollars,
         "session_id": session_id,
     }
-
-
-
 
 
 # ---------------------------------------------------------------------------
@@ -226,7 +229,9 @@ def handoff_report_label(amount_cents: int | None) -> str:
 def confidence_check_label(amount_cents: int | None) -> str:
     if amount_cents is None:
         return "Confidence Check"
-    return CONFIDENCE_CHECK_CENTS_TO_LABEL.get(amount_cents, f"Confidence Check (${amount_cents/100:.2f})")
+    return CONFIDENCE_CHECK_CENTS_TO_LABEL.get(
+        amount_cents, f"Confidence Check (${amount_cents/100:.2f})"
+    )
 
 
 def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
@@ -238,11 +243,15 @@ def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
     customer never sees a failed purchase.
     """
     customer_details = session.get("customer_details") or {}
-    email = (customer_details.get("email") or session.get("customer_email") or "").strip()
+    email = (
+        customer_details.get("email") or session.get("customer_email") or ""
+    ).strip()
     amount_cents = session.get("amount_total")
-    label = confidence_check_label(amount_cents if isinstance(amount_cents, int) else None)
+    label = confidence_check_label(
+        amount_cents if isinstance(amount_cents, int) else None
+    )
 
-    paid_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    paid_at = datetime.now(UTC).isoformat(timespec="seconds")
 
     # Notion write (best-effort).
     db_id = os.getenv("NOTION_CONFIDENCE_CHECK_DB_ID", "").strip()
@@ -254,7 +263,9 @@ def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
                 "customer_email": {"email": email},
                 "original_audit_id": {"rich_text": []},
                 "paid_at": {"date": {"start": paid_at}},
-                "price_paid": {"number": amount_cents if isinstance(amount_cents, int) else None},
+                "price_paid": {
+                    "number": amount_cents if isinstance(amount_cents, int) else None
+                },
                 "status": {"select": {"name": "queued"}},
             }
             client.pages.create(parent={"database_id": db_id}, properties=properties)
@@ -300,22 +311,22 @@ def handle_reverify_purchase(session: dict[str, Any]) -> dict[str, Any]:
     retry the webhook forever on a single malformed row.
     """
     customer_details = session.get("customer_details") or {}
-    email = (customer_details.get("email") or session.get("customer_email") or "").strip()
+    email = (
+        customer_details.get("email") or session.get("customer_email") or ""
+    ).strip()
     amount_cents = session.get("amount_total")
     session_id = session.get("id") or ""
 
     metadata = session.get("metadata") or {}
     customer_slug = (
-        metadata.get("customer_slug")
-        or session.get("client_reference_id")
-        or ""
+        metadata.get("customer_slug") or session.get("client_reference_id") or ""
     )
     if isinstance(customer_slug, str):
         customer_slug = customer_slug.strip()
     else:
         customer_slug = ""
 
-    paid_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    paid_at = datetime.now(UTC).isoformat(timespec="seconds")
 
     db_id = os.getenv("NOTION_CONFIDENCE_CHECK_DB_ID", "").strip()
     notion_status = "skipped"
@@ -333,9 +344,7 @@ def handle_reverify_purchase(session: dict[str, Any]) -> dict[str, Any]:
                 },
                 "status": {"select": {"name": "queued"}},
                 "original_audit_id": {
-                    "rich_text": [
-                        {"text": {"content": " | ".join(note_lines)[:2000]}}
-                    ]
+                    "rich_text": [{"text": {"content": " | ".join(note_lines)[:2000]}}]
                 },
             }
             client.pages.create(parent={"database_id": db_id}, properties=properties)
@@ -359,7 +368,9 @@ def handle_reverify_purchase(session: dict[str, Any]) -> dict[str, Any]:
 
             resend.api_key = resend_key
             from_email = os.getenv("FROM_EMAIL", "hello@launchlook.app")
-            subject = "Got your re-verification. Your fresh LaunchLook badge is on the way."
+            subject = (
+                "Got your re-verification. Your fresh LaunchLook badge is on the way."
+            )
             slug_line = (
                 f"  Slug we have on file: {customer_slug}\n\n"
                 if customer_slug
@@ -377,16 +388,20 @@ def handle_reverify_purchase(session: dict[str, Any]) -> dict[str, Any]:
                 "URL has changed since the original audit.\n\n"
                 "Rob\n"
             )
-            resend.Emails.send({
-                "from": f"Rob at LaunchLook <{from_email}>",
-                "to": [email],
-                "subject": subject,
-                "text": body_text,
-                "reply_to": from_email,
-            })
+            resend.Emails.send(
+                {
+                    "from": f"Rob at LaunchLook <{from_email}>",
+                    "to": [email],
+                    "subject": subject,
+                    "text": body_text,
+                    "reply_to": from_email,
+                }
+            )
             email_status = "sent"
         except Exception as exc:  # noqa: BLE001
-            sys.stderr.write(f"[q17] reverify confirmation email failed for {email}: {exc}\n")
+            sys.stderr.write(
+                f"[q17] reverify confirmation email failed for {email}: {exc}\n"
+            )
             email_status = "error"
 
     return {
@@ -420,9 +435,8 @@ def handle_handoff_report_purchase(session: dict[str, Any]) -> dict[str, Any]:
     """
     amount_cents = (session.get("amount_total") or 0) or None
     customer_email = (
-        ((session.get("customer_details") or {}).get("email") or "").strip()
-        or (session.get("customer_email") or "").strip()
-    )
+        (session.get("customer_details") or {}).get("email") or ""
+    ).strip() or (session.get("customer_email") or "").strip()
     label = handoff_report_label(amount_cents)
     return {
         "status": "handoff_report_recorded",
@@ -501,13 +515,19 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
             result = process_event(event)
             self._respond(200, result)
         except Exception as exc:  # noqa: BLE001
-            print(f"[stripe-webhook] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr)
+            print(
+                f"[stripe-webhook] ERROR: {exc}\n{traceback.format_exc()}",
+                file=sys.stderr,
+            )
             self._respond(500, {"error": str(exc)})
 
     def do_GET(self) -> None:  # noqa: N802
         self._respond(
             200,
-            {"status": "ok", "hint": "POST a Stripe event with Stripe-Signature header."},
+            {
+                "status": "ok",
+                "hint": "POST a Stripe event with Stripe-Signature header.",
+            },
         )
 
     def _respond(self, status: int, body: dict[str, Any]) -> None:

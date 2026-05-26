@@ -34,7 +34,6 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.ai_audit import form_smoke_test as fst  # noqa: E402
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -288,28 +287,34 @@ def _three_failed_results() -> list[dict]:
 
 class TierCapCase(unittest.TestCase):
     def test_starter_caps_at_one_actionable_finding(self) -> None:
-        out = fst.to_findings(_three_failed_results(), tier="Starter Package", platform="lovable")
+        out = fst.to_findings(
+            _three_failed_results(), tier="Starter Package", platform="lovable"
+        )
         actionable = [f for f in out["findings"] if not f.get("skipped")]
         self.assertEqual(len(actionable), 1)
 
     def test_scale_up_caps_at_three_actionable_findings(self) -> None:
-        out = fst.to_findings(_three_failed_results(), tier="Scale Up Package", platform="lovable")
+        out = fst.to_findings(
+            _three_failed_results(), tier="Scale Up Package", platform="lovable"
+        )
         actionable = [f for f in out["findings"] if not f.get("skipped")]
         self.assertEqual(len(actionable), 3)
 
     def test_pro_surfaces_all_actionable_findings(self) -> None:
         # Add a fourth so we can prove Pro doesn't get capped at 3.
         raw = _three_failed_results()
-        raw.append({
-            "form": {
-                "id": "support",
-                "name": "Get support",
-                "selector": "#support",
-                "fields": [{"type": "email", "name": "email", "id": "se"}],
-            },
-            "outcome": "no_response",
-            "filled": {},
-        })
+        raw.append(
+            {
+                "form": {
+                    "id": "support",
+                    "name": "Get support",
+                    "selector": "#support",
+                    "fields": [{"type": "email", "name": "email", "id": "se"}],
+                },
+                "outcome": "no_response",
+                "filled": {},
+            }
+        )
         out = fst.to_findings(raw, tier="Pro Package", platform="lovable")
         actionable = [f for f in out["findings"] if not f.get("skipped")]
         self.assertEqual(len(actionable), 4)
@@ -334,7 +339,9 @@ class SafetyGuardrailsCase(unittest.TestCase):
         self.assertEqual(fst._skip_reason(_checkout_form()), "checkout_skipped")
 
     def test_destructive_form_detected_as_skip(self) -> None:
-        self.assertEqual(fst._skip_reason(_delete_account_form()), "destructive_skipped")
+        self.assertEqual(
+            fst._skip_reason(_delete_account_form()), "destructive_skipped"
+        )
 
     def test_clean_form_not_skipped(self) -> None:
         self.assertIsNone(fst._skip_reason(_newsletter_form()))
@@ -371,7 +378,9 @@ class SafetyGuardrailsCase(unittest.TestCase):
         self.assertEqual(len(skipped), 1)
         self.assertEqual(skipped[0]["severity"], "low")
 
-    def test_skipped_findings_survive_tier_cap_even_with_competing_actionable(self) -> None:
+    def test_skipped_findings_survive_tier_cap_even_with_competing_actionable(
+        self,
+    ) -> None:
         # Starter cap is 1 actionable. Add a no_response and a checkout
         # skip; both should land in the output (skipped findings never
         # get capped).
@@ -398,7 +407,9 @@ class SafetyGuardrailsCase(unittest.TestCase):
     def test_blocked_selector_match_is_substring(self) -> None:
         # The customer-YAML opt-out should accept a selector substring.
         self.assertTrue(fst._is_blocked_selector("#prod-checkout", ["#prod-checkout"]))
-        self.assertTrue(fst._is_blocked_selector("form#prod-checkout", ["#prod-checkout"]))
+        self.assertTrue(
+            fst._is_blocked_selector("form#prod-checkout", ["#prod-checkout"])
+        )
         self.assertFalse(fst._is_blocked_selector("#newsletter", ["#prod-checkout"]))
         self.assertFalse(fst._is_blocked_selector("#x", []))
 

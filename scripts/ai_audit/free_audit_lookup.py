@@ -32,7 +32,7 @@ from __future__ import annotations
 
 import os
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from urllib.parse import urlparse
 
@@ -70,7 +70,10 @@ def _get_ds_id(client) -> str | None:
     try:
         db = client.databases.retrieve(database_id=db_id)
     except Exception as exc:  # noqa: BLE001
-        print(f"[dedup] WARN: NOTION_FREE_AUDIT_DB_ID retrieve failed: {exc}", file=sys.stderr)
+        print(
+            f"[dedup] WARN: NOTION_FREE_AUDIT_DB_ID retrieve failed: {exc}",
+            file=sys.stderr,
+        )
         return None
     sources = db.get("data_sources") or []
     if not sources:
@@ -118,14 +121,17 @@ def load_excluded_fingerprints(
     if not ds_id:
         return [], [], None
 
-    cutoff = (now or datetime.now(timezone.utc)) - timedelta(days=window_days)
+    cutoff = (now or datetime.now(UTC)) - timedelta(days=window_days)
     try:
         resp = client.data_sources.query(
             data_source_id=ds_id,
             filter={
                 "and": [
                     {"property": PROP_EMAIL, "email": {"equals": email_norm}},
-                    {"timestamp": "created_time", "created_time": {"on_or_after": cutoff.isoformat()}},
+                    {
+                        "timestamp": "created_time",
+                        "created_time": {"on_or_after": cutoff.isoformat()},
+                    },
                 ]
             },
             sorts=[{"timestamp": "created_time", "direction": "descending"}],
@@ -146,7 +152,9 @@ def load_excluded_fingerprints(
         if existing_host != host:
             continue
         raw_fp = _rich_text_value(props.get(PROP_FINGERPRINTS))
-        fingerprints = [fp.strip() for fp in raw_fp.split(FINGERPRINT_SEPARATOR) if fp.strip()]
+        fingerprints = [
+            fp.strip() for fp in raw_fp.split(FINGERPRINT_SEPARATOR) if fp.strip()
+        ]
         raw_summaries = _rich_text_value(props.get(PROP_SUMMARIES))
         # Summaries are optional and stored on a separate rich-text line
         # per finding; split on newline so blank rows degrade to empty.
@@ -186,6 +194,9 @@ def persist_free_audit_fingerprints(
     try:
         client.pages.update(page_id=row_id, properties=payload)
     except Exception as exc:  # noqa: BLE001
-        print(f"[dedup] WARN: free-audit fingerprint persist failed: {exc}", file=sys.stderr)
+        print(
+            f"[dedup] WARN: free-audit fingerprint persist failed: {exc}",
+            file=sys.stderr,
+        )
         return False
     return True

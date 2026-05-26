@@ -28,10 +28,8 @@ from __future__ import annotations
 
 import re
 import sys
-from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlparse
-
 
 DEFAULT_PATHS = [
     "/",
@@ -45,9 +43,9 @@ DEFAULT_PATHS = [
 
 
 PAGE_TIMEOUT_MS = 15_000
-TEXT_CAP = 6000      # chars of visible text per page
-LINK_CAP = 60        # links per page
-BUTTON_CAP = 40      # buttons / role=button per page
+TEXT_CAP = 6000  # chars of visible text per page
+LINK_CAP = 60  # links per page
+BUTTON_CAP = 40  # buttons / role=button per page
 
 
 def join_url(base: str, path: str) -> str:
@@ -80,8 +78,10 @@ def _clean_html_to_extract(html: str, url: str) -> dict[str, Any]:
 
     meta: dict[str, str] = {}
     for m in soup.find_all("meta"):
-        name = m.get("name") or m.get("property") or ""
-        content = m.get("content") or ""
+        # BeautifulSoup attr access can return AttributeValueList for multi-valued
+        # attrs; coerce to str before the str-only ops we need below.
+        name = str(m.get("name") or m.get("property") or "")
+        content = str(m.get("content") or "")
         if name and content:
             meta[name.strip().lower()] = _collapse_ws(content)[:300]
 
@@ -92,8 +92,17 @@ def _clean_html_to_extract(html: str, url: str) -> dict[str, Any]:
 
     buttons: list[str] = []
     seen_buttons: set[str] = set()
-    for el in soup.select("button, [role='button'], input[type='submit'], input[type='button']"):
-        label = _collapse_ws(el.get_text(" ", strip=True) or el.get("value", "") or el.get("aria-label", ""))
+    for el in soup.select(
+        "button, [role='button'], input[type='submit'], input[type='button']"
+    ):
+        # See comment above re: BeautifulSoup AttributeValueList; coerce to str.
+        label = _collapse_ws(
+            str(
+                el.get_text(" ", strip=True)
+                or el.get("value", "")
+                or el.get("aria-label", "")
+            )
+        )
         if label and label not in seen_buttons:
             seen_buttons.add(label)
             buttons.append(label)
@@ -103,7 +112,7 @@ def _clean_html_to_extract(html: str, url: str) -> dict[str, Any]:
     links: list[dict[str, str]] = []
     seen_links: set[str] = set()
     for a in soup.find_all("a", href=True):
-        href = a["href"].strip()
+        href = str(a["href"]).strip()
         if not href or href.startswith("#") or href.startswith("javascript:"):
             continue
         label = _collapse_ws(a.get_text(" ", strip=True))
@@ -162,14 +171,18 @@ def extract_pages(
                 page = context.new_page()
                 entry: dict[str, Any] = {"path": path, "url": url}
                 try:
-                    response = page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
+                    response = page.goto(
+                        url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle"
+                    )
                     status = response.status if response else None
                     entry["status"] = status
                     if status and 200 <= status < 400:
                         html = page.content()
                         cleaned = _clean_html_to_extract(html, url)
                         entry.update(cleaned)
-                        print(f"  [html] {status} {path} ({len(cleaned['text'])} chars)")
+                        print(
+                            f"  [html] {status} {path} ({len(cleaned['text'])} chars)"
+                        )
                     else:
                         entry["title"] = ""
                         entry["meta"] = {}
@@ -220,7 +233,13 @@ def render_pages_for_prompt(pages: list[dict[str, Any]]) -> str:
         if p.get("title"):
             lines.append(f"  title: {p['title']}")
         meta = p.get("meta") or {}
-        for k in ("description", "og:title", "og:description", "og:image", "twitter:card"):
+        for k in (
+            "description",
+            "og:title",
+            "og:description",
+            "og:image",
+            "twitter:card",
+        ):
             v = meta.get(k)
             if v:
                 lines.append(f"  meta[{k}]: {v}")
@@ -229,7 +248,9 @@ def render_pages_for_prompt(pages: list[dict[str, Any]]) -> str:
             lines.append("  buttons: " + " | ".join(buttons[:20]))
         links = p.get("links") or []
         if links:
-            link_lines = ", ".join(f"{l['text']}->{l['href']}" for l in links[:15])
+            link_lines = ", ".join(
+                f"{link['text']}->{link['href']}" for link in links[:15]
+            )
             lines.append("  links: " + link_lines)
         text = p.get("text") or ""
         if text:

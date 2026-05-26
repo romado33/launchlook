@@ -29,13 +29,17 @@ except ImportError:
 def require_env(key: str) -> str:
     val = os.getenv(key)
     if not val:
-        sys.exit(f"ERROR: {key} not set. Copy .env.example to .env and fill in Notion values.")
+        sys.exit(
+            f"ERROR: {key} not set. Copy .env.example to .env and fill in Notion values."
+        )
     return val
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--list-customers", action="store_true", help="Query first 5 Customers rows")
+    parser.add_argument(
+        "--list-customers", action="store_true", help="Query first 5 Customers rows"
+    )
     args = parser.parse_args()
 
     try:
@@ -51,8 +55,14 @@ def main() -> int:
 
     db_id = os.getenv("NOTION_CUSTOMERS_DB_ID")
     if not db_id:
-        print("WARN: NOTION_CUSTOMERS_DB_ID not set — skipping database query.", file=sys.stderr)
-        print("Create Customers DB in Notion, import templates/notion/customers-db.csv, share with integration.", file=sys.stderr)
+        print(
+            "WARN: NOTION_CUSTOMERS_DB_ID not set — skipping database query.",
+            file=sys.stderr,
+        )
+        print(
+            "Create Customers DB in Notion, import templates/notion/customers-db.csv, share with integration.",
+            file=sys.stderr,
+        )
         return 0
 
     db = notion.databases.retrieve(database_id=db_id)
@@ -64,7 +74,10 @@ def main() -> int:
     if args.list_customers:
         data_sources = db.get("data_sources", [])
         if not data_sources:
-            print("ERROR: database has no data_sources (newer Notion API). Re-share the DB with the integration.", file=sys.stderr)
+            print(
+                "ERROR: database has no data_sources (newer Notion API). Re-share the DB with the integration.",
+                file=sys.stderr,
+            )
             return 1
         ds_id = data_sources[0]["id"]
         results = notion.data_sources.query(data_source_id=ds_id, page_size=5)

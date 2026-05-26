@@ -475,7 +475,9 @@ def delete_form(form_id: str, api_key: str) -> None:
     url = f"{TALLY_API_URL}/{form_id}"
     resp = requests.delete(url, headers=_auth_headers(api_key), timeout=30)
     if resp.status_code in (200, 202, 204):
-        print(f"Deleted Tally form {form_id} (HTTP {resp.status_code}).", file=sys.stderr)
+        print(
+            f"Deleted Tally form {form_id} (HTTP {resp.status_code}).", file=sys.stderr
+        )
         return
     if resp.status_code == 404:
         print(
@@ -508,7 +510,9 @@ def summarize_local_payload(payload: dict) -> dict:
     for b in payload["blocks"]:
         counts[b["groupType"]] = counts.get(b["groupType"], 0) + 1
     question_groups = sum(
-        1 for b in payload["blocks"] if b["type"] == "TITLE" and b["groupType"] == "QUESTION"
+        1
+        for b in payload["blocks"]
+        if b["type"] == "TITLE" and b["groupType"] == "QUESTION"
     )
     return {"counts": counts, "question_groups": question_groups}
 
@@ -530,7 +534,7 @@ def print_next_steps(form: dict, summary: dict) -> None:
         f"  Edit in app:  https://tally.so/forms/{form_id}/edit",
         f"  Response:     {RESPONSE_PATH}",
         "",
-        f"  Local payload sanity check:",
+        "  Local payload sanity check:",
         f"    Question groups (TITLE/QUESTION blocks): {summary['question_groups']}",
         f"    Block counts by groupType: {summary['counts']}",
         "",
@@ -546,10 +550,16 @@ def print_next_steps(form: dict, summary: dict) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--publish", action="store_true", help="Create as PUBLISHED (default: DRAFT)")
-    group.add_argument("--dry-run", action="store_true", help="Print JSON payload only, don't call API")
+    group.add_argument(
+        "--publish", action="store_true", help="Create as PUBLISHED (default: DRAFT)"
+    )
+    group.add_argument(
+        "--dry-run", action="store_true", help="Print JSON payload only, don't call API"
+    )
     parser.add_argument(
         "--replace",
         metavar="FORM_ID",

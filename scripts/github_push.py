@@ -136,7 +136,9 @@ def main() -> int:
             dry_run=True,
             labels=labels,
         )
-        print(f"Dry-run complete: {len(results)} issue(s) would be created on {repo_url}.")
+        print(
+            f"Dry-run complete: {len(results)} issue(s) would be created on {repo_url}."
+        )
         if pr_number:
             print(
                 f"PR comment would target #{pr_number} on the same repo "
@@ -151,7 +153,9 @@ def main() -> int:
         return 2
 
     print(f"→ Repo:     {repo_url}")
-    print(f"→ YAML:     {yaml_path.relative_to(REPO_ROOT) if yaml_path.is_relative_to(REPO_ROOT) else yaml_path}")
+    print(
+        f"→ YAML:     {yaml_path.relative_to(REPO_ROOT) if yaml_path.is_relative_to(REPO_ROOT) else yaml_path}"
+    )
     print(f"→ Findings: {len(data.get('findings') or [])}")
     print(f"→ Labels:   {', '.join(labels) or '(none)'}")
     print(f"→ Token:    via env var {env_var} (value redacted)")
@@ -159,10 +163,14 @@ def main() -> int:
         print(f"→ PR:       #{pr_number} (summary comment will be posted after issues)")
 
     if not args.yes:
-        confirm = input(
-            "\nThis will create one GitHub issue per finding (no undo — "
-            "re-running creates duplicates). Type 'push' to confirm: "
-        ).strip().lower()
+        confirm = (
+            input(
+                "\nThis will create one GitHub issue per finding (no undo — "
+                "re-running creates duplicates). Type 'push' to confirm: "
+            )
+            .strip()
+            .lower()
+        )
         if confirm != "push":
             print("Aborted. No issues were created.")
             return 1

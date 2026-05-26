@@ -22,7 +22,7 @@ import argparse
 import csv
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import urldefrag, urljoin, urlparse
@@ -31,7 +31,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from lib.customer_loader import Customer, load_customer  # noqa: E402
-
 
 FINDINGS_CSV = REPO_ROOT / "findings_library" / "findings.csv"
 
@@ -161,7 +160,9 @@ def crawl(base_url: str, max_pages: int = MAX_PAGES) -> list[dict[str, Any]]:
                 url = queue.pop(0)
                 page = context.new_page()
                 try:
-                    response = page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
+                    response = page.goto(
+                        url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle"
+                    )
                     status = response.status if response else None
                     html = page.content() if status and 200 <= status < 400 else ""
                     print(f"  [crawl] {status} {url} ({len(html)} chars)")
@@ -207,14 +208,18 @@ def crawl(base_url: str, max_pages: int = MAX_PAGES) -> list[dict[str, Any]]:
 # ---------------------------------------------------------------------------
 
 
-def context_snippet(text: str, match: re.Match[str], before: int = 5, after: int = 50) -> str:
+def context_snippet(
+    text: str, match: re.Match[str], before: int = 5, after: int = 50
+) -> str:
     start = max(0, match.start() - before)
     end = min(len(text), match.end() + after)
     snippet = text[start:end].replace("\n", " ").replace("\r", " ")
     return re.sub(r"\s+", " ", snippet).strip()
 
 
-def scan(pages: list[dict[str, Any]], findings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def scan(
+    pages: list[dict[str, Any]], findings: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     """Return one record per (finding, page) where the regex matches."""
     hits: list[dict[str, Any]] = []
     for finding in findings:
@@ -240,15 +245,19 @@ def scan(pages: list[dict[str, Any]], findings: list[dict[str, Any]]) -> list[di
 # ---------------------------------------------------------------------------
 
 
-def render_markdown(customer: Customer, pages: list[dict[str, Any]], hits: list[dict[str, Any]]) -> str:
-    now = datetime.now(timezone.utc).isoformat()
+def render_markdown(
+    customer: Customer, pages: list[dict[str, Any]], hits: list[dict[str, Any]]
+) -> str:
+    now = datetime.now(UTC).isoformat()
     page_count = len([p for p in pages if p.get("html")])
     lines: list[str] = []
     lines.append(f"# Prescreen findings - {customer.name}")
     lines.append("")
     lines.append(f"_Generated {now}_")
     lines.append("")
-    lines.append("> **These are PATTERN HITS, not confirmed findings.** Rob confirms each one (or dismisses it) before it goes into the YAML for the delivered report. False positives are expected - that is what the human review is for.")
+    lines.append(
+        "> **These are PATTERN HITS, not confirmed findings.** Rob confirms each one (or dismisses it) before it goes into the YAML for the delivered report. False positives are expected - that is what the human review is for."
+    )
     lines.append("")
     lines.append("## Run summary")
     lines.append("")
@@ -267,7 +276,9 @@ def render_markdown(customer: Customer, pages: list[dict[str, Any]], hits: list[
     if not hits:
         lines.append("## No pattern hits")
         lines.append("")
-        lines.append("Nothing in `findings_library/findings.csv` matched the rendered HTML on any crawled page. Either the site is clean of these specific patterns, or the patterns need broadening.")
+        lines.append(
+            "Nothing in `findings_library/findings.csv` matched the rendered HTML on any crawled page. Either the site is clean of these specific patterns, or the patterns need broadening."
+        )
         return "\n".join(lines)
 
     # Group hits by finding id for a cleaner review flow.
@@ -316,10 +327,16 @@ def render_markdown(customer: Customer, pages: list[dict[str, Any]], hits: list[
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--customer-id", help="Notion Customers DB page id (or unique prefix)")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--customer-id", help="Notion Customers DB page id (or unique prefix)"
+    )
     parser.add_argument("--url", help="Override URL - smoke test without Notion")
-    parser.add_argument("--max-pages", type=int, default=MAX_PAGES, help="Cap on pages crawled")
+    parser.add_argument(
+        "--max-pages", type=int, default=MAX_PAGES, help="Cap on pages crawled"
+    )
     args = parser.parse_args()
 
     max_pages = max(1, args.max_pages)

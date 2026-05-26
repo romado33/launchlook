@@ -28,7 +28,7 @@ import json
 import re
 import sys
 import traceback
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
@@ -58,7 +58,10 @@ LABEL_RULES: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"app\s*name", re.I), "app_name"),
     (re.compile(r"platform|which platform", re.I), "platform"),
     (re.compile(r"tier|which tier|package", re.I), "tier"),
-    (re.compile(r"what does your app do|one\s*line|description", re.I), "app_description"),
+    (
+        re.compile(r"what does your app do|one\s*line|description", re.I),
+        "app_description",
+    ),
 ]
 
 
@@ -101,7 +104,7 @@ def _value_from_field(field: dict[str, Any]) -> Any:
                 labels.append(match["text"] if match else entry)
             else:
                 labels.append(str(entry))
-        return ", ".join(l for l in labels if l)
+        return ", ".join(label for label in labels if label)
     if isinstance(val, str):
         match = next((o for o in options if o.get("id") == val), None)
         return match["text"] if match else val
@@ -199,7 +202,7 @@ def process_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "tier": flat.get("tier") or "",
         "status": STATUS_INTAKE,
         "intake_received": True,
-        "intake_received_at": datetime.now(timezone.utc).isoformat(),
+        "intake_received_at": datetime.now(UTC).isoformat(),
         "notes": _notes_from_extras(flat),
     }
     if flat.get("app_description"):
@@ -251,14 +254,20 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801 (Vercel convention)
             result = process_payload(payload)
             self._respond(200, result)
         except Exception as exc:  # noqa: BLE001
-            print(f"[tally-webhook] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr)
+            print(
+                f"[tally-webhook] ERROR: {exc}\n{traceback.format_exc()}",
+                file=sys.stderr,
+            )
             self._respond(500, {"error": str(exc)})
 
     def do_GET(self) -> None:  # noqa: N802
         # Useful for sanity-checking the route in a browser.
         self._respond(
             200,
-            {"status": "ok", "hint": "POST a Tally FORM_RESPONSE here with ?t=<token>."},
+            {
+                "status": "ok",
+                "hint": "POST a Tally FORM_RESPONSE here with ?t=<token>.",
+            },
         )
 
     def _respond(self, status: int, body: dict[str, Any]) -> None:

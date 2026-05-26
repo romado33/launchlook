@@ -12,85 +12,95 @@
  */
 
 (function () {
-  'use strict';
+  "use strict";
 
   function attach(form) {
     if (form.__launchlookFreeAuditBound) return;
     form.__launchlookFreeAuditBound = true;
 
-    var errorEl = form.querySelector('[data-launchlook-free-audit-error]');
+    var errorEl = form.querySelector("[data-launchlook-free-audit-error]");
     var submitBtn = form.querySelector('button[type="submit"]');
 
     function showError(msg) {
       if (!errorEl) return;
       errorEl.textContent = msg;
-      errorEl.classList.remove('hidden');
+      errorEl.classList.remove("hidden");
     }
 
     function clearError() {
       if (!errorEl) return;
-      errorEl.textContent = '';
-      errorEl.classList.add('hidden');
+      errorEl.textContent = "";
+      errorEl.classList.add("hidden");
     }
 
-    form.addEventListener('submit', function (event) {
+    form.addEventListener("submit", function (event) {
       event.preventDefault();
       clearError();
       if (submitBtn) {
-        submitBtn.setAttribute('aria-disabled', 'true');
-        submitBtn.dataset.label = submitBtn.dataset.label || submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
+        submitBtn.setAttribute("aria-disabled", "true");
+        submitBtn.dataset.label =
+          submitBtn.dataset.label || submitBtn.textContent;
+        submitBtn.textContent = "Sending...";
       }
 
       var payload = {};
       // Pull every named input the form has (URL, email, optional platform).
       Array.prototype.forEach.call(form.elements, function (el) {
         if (!el.name) return;
-        payload[el.name] = (el.value || '').trim();
+        payload[el.name] = (el.value || "").trim();
       });
 
-      fetch('/api/free-audit', {
-        method: 'POST',
+      fetch("/api/free-audit", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: 'same-origin'
+        credentials: "same-origin",
       })
         .then(function (res) {
-          return res.json().then(function (data) { return { ok: res.ok, status: res.status, data: data }; });
+          return res.json().then(function (data) {
+            return { ok: res.ok, status: res.status, data: data };
+          });
         })
         .then(function (resp) {
-          if (resp.ok && resp.data && (resp.data.status === 'queued' || resp.data.status === 'duplicate')) {
+          if (
+            resp.ok &&
+            resp.data &&
+            (resp.data.status === "queued" || resp.data.status === "duplicate")
+          ) {
             // Plausible's tagged-events handler already fired the goal on
             // the click; redirect now and let the thanks page do the rest.
-            window.location.assign('/thanks-free-audit');
+            window.location.assign("/thanks-free-audit");
             return;
           }
-          var msg = (resp.data && resp.data.message) || 'Something went wrong on our end. Email hello@launchlook.app and we will sort it.';
+          var msg =
+            (resp.data && resp.data.message) ||
+            "Something went wrong on our end. Email hello@launchlook.app and we will sort it.";
           showError(msg);
           if (submitBtn) {
-            submitBtn.removeAttribute('aria-disabled');
-            submitBtn.textContent = submitBtn.dataset.label || 'Get my free 3 findings';
+            submitBtn.removeAttribute("aria-disabled");
+            submitBtn.textContent =
+              submitBtn.dataset.label || "Get my free 3 findings";
           }
         })
         .catch(function () {
           // Network blip: fall back to a native form POST so the request still
           // reaches the serverless function.
-          form.removeEventListener('submit', arguments.callee, false);
+          form.removeEventListener("submit", arguments.callee, false);
           form.submit();
         });
     });
   }
 
   function init() {
-    var forms = document.querySelectorAll('form[data-launchlook-free-audit]');
+    var forms = document.querySelectorAll("form[data-launchlook-free-audit]");
     Array.prototype.forEach.call(forms, attach);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
   }

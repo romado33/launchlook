@@ -33,7 +33,7 @@ import sys
 import tempfile
 import time
 import unittest
-from datetime import date, timedelta
+from datetime import date
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -42,11 +42,11 @@ if str(REPO_ROOT) not in sys.path:
 
 # Import the badge generator + verify API as plain modules so the tests
 # do not need an HTTP layer or Vercel runtime.
-from scripts import generate_verified_badge as badge_gen  # noqa: E402
-
 # `api/verify.py` is not a regular package (the directory has no
 # __init__.py). Load it via importlib so the tests stay drop-in.
 import importlib.util  # noqa: E402
+
+from scripts import generate_verified_badge as badge_gen  # noqa: E402
 
 _VERIFY_PATH = REPO_ROOT / "api" / "verify.py"
 _spec = importlib.util.spec_from_file_location("verify_api", _VERIFY_PATH)
@@ -127,7 +127,8 @@ class TestBadgeGeneration(unittest.TestCase):
             with self.subTest(tier=tier):
                 ctx = _make_ctx(verified_at=verified, tier=tier)
                 self.assertEqual(
-                    (ctx.expires_at - ctx.verified_at).days, days,
+                    (ctx.expires_at - ctx.verified_at).days,
+                    days,
                     f"{tier} should expire {days} days from {verified}",
                 )
 
@@ -186,8 +187,14 @@ class TestVerifyApi(unittest.TestCase):
         self._tmpdir.cleanup()
         verify_api._reset_rate_state_for_tests()
 
-    def _seed(self, slug: str, *, verified_at: date, expires_at: date,
-              tier: str = "Scale Up Package") -> None:
+    def _seed(
+        self,
+        slug: str,
+        *,
+        verified_at: date,
+        expires_at: date,
+        tier: str = "Scale Up Package",
+    ) -> None:
         record = {
             "customer_slug": slug,
             "verified_at": verified_at.isoformat(),
@@ -201,11 +208,12 @@ class TestVerifyApi(unittest.TestCase):
         path.write_text(json.dumps(record), encoding="utf-8")
 
     def test_valid_badge_returns_200_and_valid_true(self) -> None:
-        self._seed("jane-sparkle",
-                   verified_at=date(2026, 5, 26),
-                   expires_at=date(2026, 8, 24))
+        self._seed(
+            "jane-sparkle", verified_at=date(2026, 5, 26), expires_at=date(2026, 8, 24)
+        )
         status, body = verify_api.handle_verify(
-            "jane-sparkle", ip="1.1.1.1",
+            "jane-sparkle",
+            ip="1.1.1.1",
             verify_root=self.verify_root,
             today=date(2026, 6, 15),
             enforce_rate_limit=False,
@@ -218,11 +226,12 @@ class TestVerifyApi(unittest.TestCase):
         self.assertEqual(body["customer_url"], "https://jane-sparkle.example.com")
 
     def test_expired_badge_returns_200_and_valid_false(self) -> None:
-        self._seed("expired-co",
-                   verified_at=date(2026, 1, 1),
-                   expires_at=date(2026, 4, 1))
+        self._seed(
+            "expired-co", verified_at=date(2026, 1, 1), expires_at=date(2026, 4, 1)
+        )
         status, body = verify_api.handle_verify(
-            "expired-co", ip="1.1.1.1",
+            "expired-co",
+            ip="1.1.1.1",
             verify_root=self.verify_root,
             today=date(2026, 5, 1),
             enforce_rate_limit=False,
@@ -235,7 +244,8 @@ class TestVerifyApi(unittest.TestCase):
 
     def test_unknown_slug_returns_404(self) -> None:
         status, body = verify_api.handle_verify(
-            "never-existed", ip="1.1.1.1",
+            "never-existed",
+            ip="1.1.1.1",
             verify_root=self.verify_root,
             enforce_rate_limit=False,
         )
@@ -247,7 +257,9 @@ class TestVerifyApi(unittest.TestCase):
 
     def test_missing_slug_returns_400(self) -> None:
         status, body = verify_api.handle_verify(
-            "", ip="1.1.1.1", verify_root=self.verify_root,
+            "",
+            ip="1.1.1.1",
+            verify_root=self.verify_root,
             enforce_rate_limit=False,
         )
         self.assertEqual(status, 400)
@@ -255,7 +267,8 @@ class TestVerifyApi(unittest.TestCase):
 
     def test_invalid_slug_format_returns_400(self) -> None:
         status, body = verify_api.handle_verify(
-            "../etc/passwd", ip="1.1.1.1",
+            "../etc/passwd",
+            ip="1.1.1.1",
             verify_root=self.verify_root,
             enforce_rate_limit=False,
         )
@@ -263,20 +276,22 @@ class TestVerifyApi(unittest.TestCase):
         self.assertEqual(body["error"], "missing_slug")
 
     def test_rate_limit_after_10_requests_per_minute(self) -> None:
-        self._seed("rl-target",
-                   verified_at=date(2026, 5, 26),
-                   expires_at=date(2026, 8, 24))
+        self._seed(
+            "rl-target", verified_at=date(2026, 5, 26), expires_at=date(2026, 8, 24)
+        )
         ip = "9.9.9.9"
         for _ in range(verify_api.RATE_LIMIT_PER_MINUTE):
             status, _ = verify_api.handle_verify(
-                "rl-target", ip=ip,
+                "rl-target",
+                ip=ip,
                 verify_root=self.verify_root,
                 today=date(2026, 6, 1),
             )
             self.assertEqual(status, 200)
 
         status, body = verify_api.handle_verify(
-            "rl-target", ip=ip,
+            "rl-target",
+            ip=ip,
             verify_root=self.verify_root,
             today=date(2026, 6, 1),
         )
@@ -375,11 +390,14 @@ class TestReVerification(unittest.TestCase):
             badge_gen.VERIFY_DATA_ROOT = verify_root
             try:
                 with self.assertRaises(SystemExit) as cm:
-                    badge_gen.main([
-                        "--customer", str(yaml_path),
-                        "--re-verify",
-                        "--skip-png",
-                    ])
+                    badge_gen.main(
+                        [
+                            "--customer",
+                            str(yaml_path),
+                            "--re-verify",
+                            "--skip-png",
+                        ]
+                    )
                 self.assertIn("re-verify", str(cm.exception))
             finally:
                 badge_gen.BADGE_OUTPUT_ROOT = original_badge
@@ -408,7 +426,8 @@ class TestScopePageLanguage(unittest.TestCase):
         )
         matches = forbidden.findall(text)
         self.assertEqual(
-            matches, [],
+            matches,
+            [],
             f"verify-scope.html still references {matches!r}; "
             "per SIMPLICITY-GUARDRAILS section 3 the scope page must not "
             "over-promise.",

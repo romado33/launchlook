@@ -81,7 +81,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument("--slug", required=True, help="Customer slug (filename for customers/<slug>.yaml)")
+    parser.add_argument(
+        "--slug",
+        required=True,
+        help="Customer slug (filename for customers/<slug>.yaml)",
+    )
     parser.add_argument("--url", required=True, help="Customer app URL (https://...)")
     parser.add_argument(
         "--tier",
@@ -89,13 +93,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         choices=["Starter Package", "Scale Up Package", "Pro Package"],
         help="Tier purchased",
     )
-    parser.add_argument("--builder", required=True, help="Builder (Lovable, Bolt, v0, Cursor, Replit, Base44, Other)")
-    parser.add_argument("--name", default="", help='Customer full name (e.g. "Jane Smith")')
-    parser.add_argument("--first-name", default="", dest="first_name", help="Override first name")
-    parser.add_argument("--last-name", default="", dest="last_name", help="Override last name")
+    parser.add_argument(
+        "--builder",
+        required=True,
+        help="Builder (Lovable, Bolt, v0, Cursor, Replit, Base44, Other)",
+    )
+    parser.add_argument(
+        "--name", default="", help='Customer full name (e.g. "Jane Smith")'
+    )
+    parser.add_argument(
+        "--first-name", default="", dest="first_name", help="Override first name"
+    )
+    parser.add_argument(
+        "--last-name", default="", dest="last_name", help="Override last name"
+    )
     parser.add_argument("--email", default="", help="Customer email")
-    parser.add_argument("--app-name", required=True, dest="app_name", help="Customer app/product name")
-    parser.add_argument("--intake-notes", default="", dest="intake_notes", help="Optional intake notes pulled from Tally")
+    parser.add_argument(
+        "--app-name", required=True, dest="app_name", help="Customer app/product name"
+    )
+    parser.add_argument(
+        "--intake-notes",
+        default="",
+        dest="intake_notes",
+        help="Optional intake notes pulled from Tally",
+    )
     parser.add_argument(
         "--platform",
         default="vibe-coder",
@@ -114,10 +135,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         choices=["auto", "claude", "gpt", "stub"],
         help="LLM provider. auto picks Claude if available, then GPT. stub runs offline (smoke test).",
     )
-    parser.add_argument("--skip-capture", action="store_true", help="Skip screenshot capture (use existing screenshots)")
-    parser.add_argument("--skip-prescreen", action="store_true", help="Skip regex prescreener")
-    parser.add_argument("--dry-run", action="store_true", help="Do not write YAML; print to stdout")
-    parser.add_argument("--max-findings", type=int, default=None, help="Cap findings count (default: tier cap)")
+    parser.add_argument(
+        "--skip-capture",
+        action="store_true",
+        help="Skip screenshot capture (use existing screenshots)",
+    )
+    parser.add_argument(
+        "--skip-prescreen", action="store_true", help="Skip regex prescreener"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Do not write YAML; print to stdout"
+    )
+    parser.add_argument(
+        "--max-findings",
+        type=int,
+        default=None,
+        help="Cap findings count (default: tier cap)",
+    )
     return parser.parse_args(argv)
 
 

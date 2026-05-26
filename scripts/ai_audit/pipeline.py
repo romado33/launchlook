@@ -18,7 +18,6 @@ helper returns a single dict that the caller patches into its own state.
 from __future__ import annotations
 
 import csv
-import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -31,16 +30,18 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.audit_ui import yaml_writer  # noqa: E402
 
-from . import cost_tracker  # noqa: E402
-from . import feedback as feedback_log  # noqa: E402
-from . import html_extract, llm_client  # noqa: E402
-from . import security_lite  # noqa: E402
-from . import performance_speed  # noqa: E402  -- pre-generated Core Web Vitals translator
-from . import accessibility_axe  # noqa: E402  -- pre-generated axe-core findings
-from . import form_smoke_test  # noqa: E402  -- pre-generated form-submit smoke test (q15)
+from . import (  # noqa: E402
+    accessibility_axe,  # noqa: E402  -- pre-generated axe-core findings
+    cost_tracker,  # noqa: E402
+    form_smoke_test,  # noqa: E402  -- pre-generated form-submit smoke test (q15)
+    free_audit_lookup,  # noqa: E402  -- Notion lookup for prior free-audit fingerprints
+    html_extract,
+    llm_client,
+    performance_speed,  # noqa: E402  -- pre-generated Core Web Vitals translator
+    security_lite,  # noqa: E402
+)
 from . import dedup as dedup_module  # noqa: E402  -- free->Starter dedup helpers
-from . import free_audit_lookup  # noqa: E402  -- Notion lookup for prior free-audit fingerprints
-
+from . import feedback as feedback_log  # noqa: E402
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
@@ -92,10 +93,13 @@ def normalize_platform(value: str | None) -> str:
         return cleaned
     return DEFAULT_PLATFORM
 
+
 DELIVER_REPORT = REPO_ROOT / "scripts" / "deliver_report.py"
 FINDINGS_CSV = REPO_ROOT / "findings_library" / "findings.csv"
-SCREENSHOTS_OUT_ROOT = REPO_ROOT / "output" / "customers"   # capture_screenshots.py landing zone
-SCREENSHOTS_MIRROR = REPO_ROOT / "screenshots"               # legacy + audit-UI lookup path
+SCREENSHOTS_OUT_ROOT = (
+    REPO_ROOT / "output" / "customers"
+)  # capture_screenshots.py landing zone
+SCREENSHOTS_MIRROR = REPO_ROOT / "screenshots"  # legacy + audit-UI lookup path
 
 
 # ---------------------------------------------------------------------------
@@ -140,12 +144,8 @@ class PipelineResult:
 #   cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
 # Captures every "Tier Name": <int> pair so the pipeline auto-tracks future
 # tier additions without a code edit here.
-_TIER_CAP_DICT_PATTERN = re.compile(
-    r'cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier'
-)
-_TIER_CAP_ENTRY_PATTERN = re.compile(
-    r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)'
-)
+_TIER_CAP_DICT_PATTERN = re.compile(r"cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier")
+_TIER_CAP_ENTRY_PATTERN = re.compile(r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)')
 
 
 def load_tier_caps() -> dict[str, int]:
@@ -207,7 +207,9 @@ def render_categories_for_prompt(
         if min_tier and customer_rank < tier_rank.get(min_tier, 0):
             continue
         cid = cat.get("id", "?")
-        display = cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
+        display = (
+            cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
+        )
         sev = cat.get("severity_default", "medium")
         desc = (cat.get("description_for_llm") or "").strip()
         source = cat.get("source", "llm")
@@ -268,12 +270,15 @@ def stage_capture(customer_ctx: CustomerContext) -> dict[str, Any]:
     customer = Customer(
         page_id=None,
         slug=customer_ctx.slug,
-        name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip() or customer_ctx.slug,
+        name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip()
+        or customer_ctx.slug,
         email=customer_ctx.email,
         app_url=customer_ctx.url,
     )
 
-    meta = capture_screenshots.capture(customer, list(capture_screenshots.DEFAULT_PATHS))
+    meta = capture_screenshots.capture(
+        customer, list(capture_screenshots.DEFAULT_PATHS)
+    )
     try:
         capture_screenshots.render_index(customer, meta)
     except Exception as exc:  # noqa: BLE001
@@ -305,7 +310,10 @@ def _mirror_screenshots(customer) -> None:
         try:
             shutil.copyfile(shot, out_path)
         except Exception as exc:  # noqa: BLE001
-            print(f"  [capture] WARN: mirror copy failed for {shot}: {exc}", file=sys.stderr)
+            print(
+                f"  [capture] WARN: mirror copy failed for {shot}: {exc}",
+                file=sys.stderr,
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -359,7 +367,9 @@ def _format_prescreener_hits(hits: list[dict[str, Any]]) -> str:
 # ---------------------------------------------------------------------------
 
 
-def stage_html(customer_ctx: CustomerContext, paths: list[str] | None = None) -> list[dict[str, Any]]:
+def stage_html(
+    customer_ctx: CustomerContext, paths: list[str] | None = None
+) -> list[dict[str, Any]]:
     return html_extract.extract_pages(customer_ctx.url, paths=paths)
 
 
@@ -401,7 +411,9 @@ def collect_screenshots(slug: str, *, max_shots: int = 8) -> list[tuple[str, Pat
             candidate = src / viewport / f"{name}.png"
             if candidate.exists() and candidate not in seen:
                 seen.add(candidate)
-                found.append((f"{viewport} /{('' if name=='home' else name)}", candidate))
+                found.append(
+                    (f"{viewport} /{('' if name=='home' else name)}", candidate)
+                )
             if len(found) >= max_shots:
                 break
 
@@ -686,12 +698,12 @@ def build_verdict_user_prompt(
     template = _read_prompt("verdict_generation.txt")
     summary_lines = []
     for f in findings:
-        summary_lines.append(
-            f"  - [{f.get('severity','?'):<8}] {f.get('title','?')}"
-        )
+        summary_lines.append(f"  - [{f.get('severity','?'):<8}] {f.get('title','?')}")
     return template.format(
         app_name=customer_ctx.app_name,
-        findings_summary="\n".join(summary_lines) if summary_lines else "  (no findings)",
+        findings_summary=(
+            "\n".join(summary_lines) if summary_lines else "  (no findings)"
+        ),
     )
 
 
@@ -716,7 +728,9 @@ def _default_verdict(findings: list[dict[str, Any]], app_name: str) -> dict[str,
     finding mix. The label is the customer-facing hero phrase; the
     emoji is a small accent.
     """
-    has_critical = any((f.get("severity") or "").lower() == "critical" for f in findings)
+    has_critical = any(
+        (f.get("severity") or "").lower() == "critical" for f in findings
+    )
     high_count = sum(1 for f in findings if (f.get("severity") or "").lower() == "high")
     has_security = any(
         (f.get("category") or "") == security_lite.CATEGORY_ID
@@ -815,7 +829,9 @@ def compute_passed_checks(
 
     passed: list[str] = []
     for cat in categories:
-        cid = cat.get("id")
+        cid = str(cat.get("id") or "")
+        if not cid:
+            continue
         min_tier = cat.get("tier_min")
         if min_tier and customer_rank < tier_rank.get(min_tier, 0):
             continue
@@ -835,7 +851,9 @@ def compute_passed_checks(
         elif (cat.get("source") == "external") and external_passed_ids is not None:
             if not external_passed_ids.get(cid):
                 continue
-        display = cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
+        display = str(
+            cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
+        )
         passed.append(display.strip().rstrip("."))
     return passed[:8]
 
@@ -845,8 +863,7 @@ def compute_passed_checks(
 # ---------------------------------------------------------------------------
 
 
-
-def _form_smoke_config(customer_ctx: "CustomerContext") -> dict[str, object]:
+def _form_smoke_config(customer_ctx: CustomerContext) -> dict[str, object]:
     """Read the optional ``form_smoke_test`` block from the customer YAML.
 
     The customer YAML can opt out of the form-smoke-test runner (q15) or
@@ -879,7 +896,10 @@ def _form_smoke_config(customer_ctx: "CustomerContext") -> dict[str, object]:
 
         data = _yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}
     except Exception as exc:  # noqa: BLE001
-        print(f"[form-smoke] WARN: could not read {yaml_path.name}: {exc}", file=sys.stderr)
+        print(
+            f"[form-smoke] WARN: could not read {yaml_path.name}: {exc}",
+            file=sys.stderr,
+        )
         return cfg
     block = (data or {}).get("form_smoke_test")
     if not isinstance(block, dict):
@@ -964,7 +984,12 @@ def run(
         )
     except Exception as exc:  # noqa: BLE001
         print(f"[performance] WARN: skipped: {exc}", file=sys.stderr)
-        perf = {"findings": [], "passed_check_ids": [], "failed_check_ids": [], "fetched": False}
+        perf = {
+            "findings": [],
+            "passed_check_ids": [],
+            "failed_check_ids": [],
+            "fetched": False,
+        }
     print(
         f"[performance] fetched={perf.get('fetched')} "
         f"{len(perf['findings'])} finding(s); "
@@ -984,7 +1009,12 @@ def run(
         )
     except Exception as exc:  # noqa: BLE001
         print(f"[a11y] WARN: skipped: {exc}", file=sys.stderr)
-        a11y = {"findings": [], "passed_check_ids": [], "failed_check_ids": [], "ran": False}
+        a11y = {
+            "findings": [],
+            "passed_check_ids": [],
+            "failed_check_ids": [],
+            "ran": False,
+        }
     print(
         f"[a11y] ran={a11y.get('ran')} "
         f"{len(a11y['findings'])} finding(s); "
@@ -1002,14 +1032,21 @@ def run(
     # 'round-trip') never appears on customer surfaces per
     # SIMPLICITY-GUARDRAILS section 6.
     form_cfg = _form_smoke_config(customer_ctx)
+    # form_cfg values are typed dict[str, object]; coerce to the concrete
+    # parameter types the runner expects.
+    _form_email = form_cfg.get("customer_email")
+    _form_blocked = form_cfg.get("blocked_forms") or []
+    _form_enabled = form_cfg.get("enabled", True)
     try:
         form_smoke = form_smoke_test.run_form_smoke_test(
             base_url=customer_ctx.url,
             tier=customer_ctx.tier,
             platform=(customer_ctx.builder or customer_ctx.platform or "generic"),
-            customer_email=form_cfg.get("customer_email"),
-            blocked_selectors=form_cfg.get("blocked_forms") or [],
-            enabled=form_cfg.get("enabled", True),
+            customer_email=_form_email if isinstance(_form_email, str) else None,
+            blocked_selectors=(
+                list(_form_blocked) if isinstance(_form_blocked, list) else []
+            ),
+            enabled=bool(_form_enabled),
             email_roundtrip=(
                 form_smoke_test.default_email_roundtrip
                 if (customer_ctx.tier or "").strip().lower() in {"pro", "pro package"}
@@ -1018,7 +1055,12 @@ def run(
         )
     except Exception as exc:  # noqa: BLE001
         print(f"[form-smoke] WARN: skipped: {exc}", file=sys.stderr)
-        form_smoke = {"findings": [], "passed_check_ids": [], "failed_check_ids": [], "ran": False}
+        form_smoke = {
+            "findings": [],
+            "passed_check_ids": [],
+            "failed_check_ids": [],
+            "ran": False,
+        }
     print(
         f"[form-smoke] ran={form_smoke.get('ran')} "
         f"{len(form_smoke['findings'])} finding(s); "
@@ -1044,9 +1086,11 @@ def run(
     # ---- 4b. Free -> Starter dedup lookup (PRODUCT-DECISIONS.md section 2) ----
     # Same email + same URL host within 90 days -> exclude the prior 3
     # free-audit fingerprints so the LLM is forced to surface NEW issues.
-    excluded_fps, prior_summaries, _free_row_id = free_audit_lookup.load_excluded_fingerprints(
-        email=customer_ctx.email,
-        url=customer_ctx.url,
+    excluded_fps, prior_summaries, _free_row_id = (
+        free_audit_lookup.load_excluded_fingerprints(
+            email=customer_ctx.email,
+            url=customer_ctx.url,
+        )
     )
     if excluded_fps:
         print(f"[dedup] {len(excluded_fps)} prior free-audit fingerprint(s) to exclude")
@@ -1081,7 +1125,9 @@ def run(
         perf_findings = list(perf.get("findings") or [])
         a11y_findings = list(a11y.get("findings") or [])
         form_findings = list(form_smoke.get("findings") or [])
-        external_findings = snoop_findings + perf_findings + a11y_findings + form_findings
+        external_findings = (
+            snoop_findings + perf_findings + a11y_findings + form_findings
+        )
         if external_findings:
             findings = external_findings + list(findings or [])
             print(
@@ -1096,11 +1142,17 @@ def run(
 
         # ---- 5b. Dedup pass against the prior free-audit fingerprints ----
         if excluded_fps:
-            clashes = dedup_module.collisions(findings, excluded_fps, base_url=customer_ctx.url)
+            clashes = dedup_module.collisions(
+                findings, excluded_fps, base_url=customer_ctx.url
+            )
             if clashes:
                 clash_titles = [c.get("title", "?") for c in clashes]
-                print(f"[dedup] {len(clashes)} finding(s) collide with prior free audit; re-prompting once")
-                kept = dedup_module.filter_out_collisions(findings, excluded_fps, base_url=customer_ctx.url)
+                print(
+                    f"[dedup] {len(clashes)} finding(s) collide with prior free audit; re-prompting once"
+                )
+                kept = dedup_module.filter_out_collisions(
+                    findings, excluded_fps, base_url=customer_ctx.url
+                )
                 needed = cap - len(kept)
                 if needed > 0:
                     retry_block = exclude_block + (
@@ -1121,7 +1173,9 @@ def run(
                         library=library,
                         exclude_block=retry_block,
                     )
-                    retry_prompt = _maybe_append_webflow_checks(retry_prompt, customer_ctx.platform)
+                    retry_prompt = _maybe_append_webflow_checks(
+                        retry_prompt, customer_ctx.platform
+                    )
                     try:
                         replacements = client.generate_findings(
                             system_prompt=system_prompt,
@@ -1130,19 +1184,31 @@ def run(
                             max_findings=needed,
                         )
                     except Exception as exc:  # noqa: BLE001
-                        print(f"[dedup] WARN: re-prompt failed ({exc}); shipping with collisions filtered out", file=sys.stderr)
+                        print(
+                            f"[dedup] WARN: re-prompt failed ({exc}); shipping with collisions filtered out",
+                            file=sys.stderr,
+                        )
                         replacements = []
                     # Drop any re-prompt response that ALSO collides; soft
                     # constraint per task spec, ship even if imperfect.
-                    fresh = dedup_module.filter_out_collisions(replacements or [], excluded_fps, base_url=customer_ctx.url)
+                    fresh = dedup_module.filter_out_collisions(
+                        replacements or [], excluded_fps, base_url=customer_ctx.url
+                    )
                     findings = yaml_writer.sort_findings(kept + fresh)[:cap]
-                    remaining_clash = dedup_module.collisions(findings, excluded_fps, base_url=customer_ctx.url)
+                    remaining_clash = dedup_module.collisions(
+                        findings, excluded_fps, base_url=customer_ctx.url
+                    )
                     if remaining_clash:
-                        print(f"[dedup] WARN: {len(remaining_clash)} collision(s) still present after re-prompt; shipping anyway (soft constraint)", file=sys.stderr)
+                        print(
+                            f"[dedup] WARN: {len(remaining_clash)} collision(s) still present after re-prompt; shipping anyway (soft constraint)",
+                            file=sys.stderr,
+                        )
                     print(f"[dedup] post-retry: {len(findings)} finding(s) total")
                 else:
                     findings = yaml_writer.sort_findings(kept)
-                    print(f"[dedup] removed {len(clashes)} colliding finding(s); cap already met")
+                    print(
+                        f"[dedup] removed {len(clashes)} colliding finding(s); cap already met"
+                    )
 
         # ---- 5c. Persona tags (q5/q13) ----
         # Validates / repairs the per-finding ``tag`` field so every
@@ -1160,7 +1226,10 @@ def run(
             if not verdict.get("summary") or not verdict.get("narrative"):
                 raise RuntimeError("verdict missing summary or narrative")
         except Exception as exc:  # noqa: BLE001
-            print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
+            print(
+                f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default",
+                file=sys.stderr,
+            )
             verdict = _default_verdict(findings, customer_ctx.app_name)
 
         # Constrain to the four canonical labels regardless of LLM drift.
@@ -1175,10 +1244,13 @@ def run(
                 qsg = client.generate_qsg(
                     system_prompt=system_prompt,
                     user_prompt=qsg_prompt,
-                    screenshots=screenshots[:4],   # fewer images for the QSG call
+                    screenshots=screenshots[:4],  # fewer images for the QSG call
                 )
         except Exception as exc:  # noqa: BLE001
-            print(f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty", file=sys.stderr)
+            print(
+                f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty",
+                file=sys.stderr,
+            )
 
     # ---- 8. Payload + YAML ----
     categories = load_finding_categories()
@@ -1485,7 +1557,6 @@ def run_handoff_report(
     template gates that section so the empty string is never rendered.
     """
     customer = (audit_payload or {}).get("customer") or {}
-    verdict = (audit_payload or {}).get("verdict") or {}
     findings = (audit_payload or {}).get("findings") or []
 
     stub_context = {

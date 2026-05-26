@@ -50,7 +50,6 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
 VERIFY_DATA_ROOT = REPO_ROOT / "landing" / "data" / "verified"
 
@@ -293,11 +292,7 @@ def _client_ip(headers: Any) -> str:
         first = raw.split(",")[0].strip()
         if first:
             return first
-    return (
-        headers.get("x-real-ip")
-        or headers.get("X-Real-IP")
-        or ""
-    )
+    return headers.get("x-real-ip") or headers.get("X-Real-IP") or ""
 
 
 # ---------------------------------------------------------------------------

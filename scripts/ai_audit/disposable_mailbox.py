@@ -122,7 +122,9 @@ def _ensure_mail_tm_session(address: str) -> dict[str, Any] | None:
 
     local = hashlib.sha1(address.encode("utf-8")).hexdigest()[:16]
     provider_address = f"{local}@{domain}"
-    password = os.environ.get("LAUNCHLOOK_MAIL_TM_PASSWORD") or "LaunchLookSmokeTest!2026"
+    password = (
+        os.environ.get("LAUNCHLOOK_MAIL_TM_PASSWORD") or "LaunchLookSmokeTest!2026"
+    )
 
     created = _request(
         f"{_MAIL_TM_BASE}/accounts",

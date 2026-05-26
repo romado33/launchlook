@@ -73,7 +73,9 @@ def main() -> int:
         print("No findings matched.", file=sys.stderr)
         return 1
 
-    print(f"Found {len(matches)} finding(s) (library v{data.get('version', '?')}, {len(findings)} total)")
+    print(
+        f"Found {len(matches)} finding(s) (library v{data.get('version', '?')}, {len(findings)} total)"
+    )
     for f in matches:
         print_finding(f)
 

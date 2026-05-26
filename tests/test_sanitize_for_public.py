@@ -19,7 +19,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.sanitize_for_public import (
+from scripts.sanitize_for_public import (  # noqa: E402
     PUBLIC_CUSTOMER_KEYS,
     PUBLIC_FINDING_KEYS,
     sanitize_customer,
@@ -27,7 +27,6 @@ from scripts.sanitize_for_public import (
     sanitize_report_json,
     sanitize_verdict,
 )
-
 
 # ---------------------------------------------------------------------------
 # sanitize_finding
@@ -39,8 +38,7 @@ def test_sanitize_finding_strips_customer_url() -> None:
         "title": "Dev Bypass button signs visitors in",
         "severity": "critical",
         "what_we_saw": (
-            "On https://sparkle.lovable.app/auth, the Dev Bypass button is "
-            "visible."
+            "On https://sparkle.lovable.app/auth, the Dev Bypass button is " "visible."
         ),
         "why_it_matters": (
             "Anyone with the URL sparkle.lovable.app can skip authentication."

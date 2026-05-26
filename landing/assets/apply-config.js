@@ -9,7 +9,13 @@
   // Scale Up replaces the old "launch" / "full" tier slot. Keep the legacy
   // keys as fallbacks so older config.local.js files keep working until Rob
   // updates them.
-  var scaleUpUrl = stripe.scaleup || stripe.scaleUp || stripe.launch || stripe.launchPack || stripe.full || "";
+  var scaleUpUrl =
+    stripe.scaleup ||
+    stripe.scaleUp ||
+    stripe.launch ||
+    stripe.launchPack ||
+    stripe.full ||
+    "";
   var proUrl = stripe.pro || "";
   // Confidence Check / Saboteur re-scan add-on (q6).
   var saboteurUrl = stripe.saboteur || "";
@@ -57,10 +63,26 @@
     });
   }
 
-  setLinkState("[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick']", safeHttpsUrl(starterUrl), "Payment link not configured");
-  setLinkState("[data-launchlook-stripe='scaleup'], [data-launchlook-stripe='launch'], [data-launchlook-stripe='full']", safeHttpsUrl(scaleUpUrl), "Payment link not configured");
-  setLinkState("[data-launchlook-stripe='pro']", safeHttpsUrl(proUrl), "Payment link not configured");
-  setLinkState("[data-launchlook-stripe='saboteur']", safeHttpsUrl(saboteurUrl), "Payment link not configured (Confidence Check $19 - see docs/CONFIDENCE-CHECK-WORKFLOW.md)");
+  setLinkState(
+    "[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick']",
+    safeHttpsUrl(starterUrl),
+    "Payment link not configured",
+  );
+  setLinkState(
+    "[data-launchlook-stripe='scaleup'], [data-launchlook-stripe='launch'], [data-launchlook-stripe='full']",
+    safeHttpsUrl(scaleUpUrl),
+    "Payment link not configured",
+  );
+  setLinkState(
+    "[data-launchlook-stripe='pro']",
+    safeHttpsUrl(proUrl),
+    "Payment link not configured",
+  );
+  setLinkState(
+    "[data-launchlook-stripe='saboteur']",
+    safeHttpsUrl(saboteurUrl),
+    "Payment link not configured (Confidence Check $19 - see docs/CONFIDENCE-CHECK-WORKFLOW.md)",
+  );
 
   var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
   if (checklistUrl) {
@@ -73,7 +95,7 @@
   function intakeMailto(email) {
     var subject = encodeURIComponent("LaunchLook intake");
     var body = encodeURIComponent(
-      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Scale Up Package / Pro Package):\n"
+      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Scale Up Package / Pro Package):\n",
     );
     return "mailto:" + email + "?subject=" + subject + "&body=" + body;
   }

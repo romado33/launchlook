@@ -24,17 +24,14 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from scripts import share_report
-from scripts.deliver_report import (
-    SHAREABLE_PAGES_DIR,
-    SHAREABLE_REPORTS_DATA_DIR,
+from scripts import share_report  # noqa: E402
+from scripts.deliver_report import (  # noqa: E402
     _build_share_metadata,
     _generate_shareable_page,
     load_customer_yaml,
     slugify,
     validate,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures

@@ -30,10 +30,9 @@ import argparse
 import json
 import sys
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
@@ -51,7 +50,6 @@ for _stream_name in ("stdout", "stderr"):
 
 from scripts.ai_audit import cost_tracker  # noqa: E402
 
-
 CUSTOMERS_JSON = REPO_ROOT / "data" / "customers.json"
 
 # Local-tracker tier slugs (from scripts/customers_track.py) -> internal
@@ -59,8 +57,8 @@ CUSTOMERS_JSON = REPO_ROOT / "data" / "customers.json"
 # §1 (Starter $19, Scale Up $49, Pro $99).
 LOCAL_TIER_TO_PIPELINE_TIER = {
     "starter": "Starter Package",
-    "full":    "Full Package",  # internal name for Scale Up
-    "pro":     "Pro Package",
+    "full": "Full Package",  # internal name for Scale Up
+    "pro": "Pro Package",
 }
 TIER_PRICE_USD = cost_tracker.TIER_PRICE_USD
 
@@ -116,11 +114,15 @@ def revenue_from_cost_rows(rows: list[dict[str, Any]]) -> tuple[float, dict[str,
             continue
         seen_per_tier[tier].add(cid)
     counts = {tier: len(ids) for tier, ids in seen_per_tier.items()}
-    revenue = sum(TIER_PRICE_USD.get(tier, 0.0) * len(ids) for tier, ids in seen_per_tier.items())
+    revenue = sum(
+        TIER_PRICE_USD.get(tier, 0.0) * len(ids) for tier, ids in seen_per_tier.items()
+    )
     return revenue, counts
 
 
-def revenue_from_local_tracker(since_date: str | None = None) -> tuple[float, dict[str, int]]:
+def revenue_from_local_tracker(
+    since_date: str | None = None,
+) -> tuple[float, dict[str, int]]:
     """Sum delivered-audit revenue from ``data/customers.json``.
 
     ``since_date`` filters by ``delivered_at`` >= YYYY-MM-DD. Returns
@@ -149,7 +151,9 @@ def revenue_from_local_tracker(since_date: str | None = None) -> tuple[float, di
 # ---------------------------------------------------------------------------
 
 
-def group_rows_by_customer(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+def group_rows_by_customer(
+    rows: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
     groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         groups[row.get("customer_id", "unknown")].append(row)
@@ -167,12 +171,12 @@ def summarize_customer(rows: list[dict[str, Any]]) -> dict[str, Any]:
     for r in rows:
         call_types[r.get("call_type", "other")] += 1
     return {
-        "call_count":    len(rows),
-        "tier":          tier,
-        "input_tokens":  in_tok,
+        "call_count": len(rows),
+        "tier": tier,
+        "input_tokens": in_tok,
         "output_tokens": out_tok,
-        "cost_usd":      round(total_cost, 6),
-        "call_types":    dict(call_types),
+        "cost_usd": round(total_cost, 6),
+        "call_types": dict(call_types),
     }
 
 
@@ -194,7 +198,9 @@ def mode_daily(date: str) -> int:
     print(f"  Unique customers:  {summary['customer_count']}")
     print(f"  Input tokens:      {summary['input_tokens']:,}")
     print(f"  Output tokens:     {summary['output_tokens']:,}")
-    print(f"  Latency p50/p95:   {summary['p50_latency_ms']} ms / {summary['p95_latency_ms']} ms")
+    print(
+        f"  Latency p50/p95:   {summary['p50_latency_ms']} ms / {summary['p95_latency_ms']} ms"
+    )
     print()
     print("  Calls by model:")
     for model, count in sorted(summary["models"].items(), key=lambda x: -x[1]):
@@ -263,10 +269,12 @@ def mode_summary(days: int) -> int:
     print(f"  Total revenue:     {_fmt_usd(revenue)}   [{revenue_source}]")
     if revenue > 0:
         margin_emoji = "OK " if margin_ratio >= 0.70 else "!! "
-        print(f"  Margin:            {margin_emoji}{_fmt_ratio(margin_ratio)}   "
-              f"(target >=70%; gap5 spec)")
+        print(
+            f"  Margin:            {margin_emoji}{_fmt_ratio(margin_ratio)}   "
+            f"(target >=70%; gap5 spec)"
+        )
     else:
-        print( "  Margin:            n/a (no completed audits in window)")
+        print("  Margin:            n/a (no completed audits in window)")
 
     print()
     print("  Audits counted by tier:")
@@ -290,8 +298,10 @@ def mode_summary(days: int) -> int:
             continue
         avg = sum(costs) / len(costs)
         avg_ratio = avg / TIER_PRICE_USD.get(tier, 1.0)
-        print(f"    {tier:<18}  avg {_fmt_usd(avg)}  "
-              f"({_fmt_ratio(avg_ratio)} of tier price; n={len(costs)})")
+        print(
+            f"    {tier:<18}  avg {_fmt_usd(avg)}  "
+            f"({_fmt_ratio(avg_ratio)} of tier price; n={len(costs)})"
+        )
 
     outliers: list[tuple[str, dict[str, Any], float]] = []
     for cid, rows_for_cust in grouped.items():
@@ -306,12 +316,16 @@ def mode_summary(days: int) -> int:
             outliers.append((cid, c, ratio))
     if outliers:
         print()
-        print(f"  High-cost outliers (>{int(cost_tracker.PER_CUSTOMER_HIGH_COST_RATIO * 100)}% "
-              "of tier price):")
+        print(
+            f"  High-cost outliers (>{int(cost_tracker.PER_CUSTOMER_HIGH_COST_RATIO * 100)}% "
+            "of tier price):"
+        )
         for cid, c, ratio in sorted(outliers, key=lambda x: -x[2]):
-            print(f"    {cid:<24}  {c['tier']:<18}  "
-                  f"{_fmt_usd(c['cost_usd'])} ({_fmt_ratio(ratio)})  "
-                  f"calls={c['call_count']}")
+            print(
+                f"    {cid:<24}  {c['tier']:<18}  "
+                f"{_fmt_usd(c['cost_usd'])} ({_fmt_ratio(ratio)})  "
+                f"calls={c['call_count']}"
+            )
     return 0
 
 
@@ -378,7 +392,7 @@ def mode_alert(days: int) -> int:
 def _days_ago(days: int) -> str:
     from datetime import timedelta
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=max(0, days - 1))
+    cutoff = datetime.now(UTC) - timedelta(days=max(0, days - 1))
     return cutoff.strftime("%Y-%m-%d")
 
 
@@ -388,14 +402,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument("--date", help="YYYY-MM-DD (UTC). Daily totals + per-model breakdown.")
+    parser.add_argument(
+        "--date", help="YYYY-MM-DD (UTC). Daily totals + per-model breakdown."
+    )
     parser.add_argument("--customer", help="Aggregate cost for one customer slug.")
-    parser.add_argument("--summary", action="store_true",
-                        help="Period summary with margin analysis. Use with --days.")
-    parser.add_argument("--alert", action="store_true",
-                        help="Print threshold-trip alerts only. Use with --days.")
-    parser.add_argument("--days", type=int, default=7,
-                        help="Window for --summary / --alert (default: 7).")
+    parser.add_argument(
+        "--summary",
+        action="store_true",
+        help="Period summary with margin analysis. Use with --days.",
+    )
+    parser.add_argument(
+        "--alert",
+        action="store_true",
+        help="Print threshold-trip alerts only. Use with --days.",
+    )
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=7,
+        help="Window for --summary / --alert (default: 7).",
+    )
     return parser.parse_args(argv)
 
 

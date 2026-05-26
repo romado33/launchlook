@@ -21,8 +21,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from collections import Counter
+from datetime import UTC, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -45,8 +45,13 @@ def _pct(part: int, total: int) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--since", help="Only count drafts reviewed on/after this ISO date (e.g. 2026-05-01)")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--since",
+        help="Only count drafts reviewed on/after this ISO date (e.g. 2026-05-01)",
+    )
     args = parser.parse_args(argv)
 
     if not FEEDBACK_DIR.exists():
@@ -55,11 +60,13 @@ def main(argv: list[str] | None = None) -> int:
 
     cutoff = _parse_iso(args.since) if args.since else None
     if args.since and not cutoff:
-        print(f"WARN: could not parse --since {args.since!r}, ignoring", file=sys.stderr)
+        print(
+            f"WARN: could not parse --since {args.since!r}, ignoring", file=sys.stderr
+        )
 
-    actions_total = Counter()
-    severity_drift = Counter()           # ai_sev -> final_sev
-    rejected_titles = Counter()
+    actions_total: Counter = Counter()
+    severity_drift: Counter = Counter()  # ai_sev -> final_sev
+    rejected_titles: Counter = Counter()
     edited_pairs: list[tuple[str, str]] = []
     regenerations: list[int] = []
     drafts_count = 0
@@ -73,8 +80,14 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, json.JSONDecodeError):
             continue
 
-        reviewed_at = _parse_iso(data.get("reviewed_at") or data.get("ai_generated_at") or "")
-        if cutoff and reviewed_at and reviewed_at < cutoff.replace(tzinfo=cutoff.tzinfo or timezone.utc):
+        reviewed_at = _parse_iso(
+            data.get("reviewed_at") or data.get("ai_generated_at") or ""
+        )
+        if (
+            cutoff
+            and reviewed_at
+            and reviewed_at < cutoff.replace(tzinfo=cutoff.tzinfo or UTC)
+        ):
             continue
 
         drafts_count += 1
@@ -110,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
     drafts = actions_total.get("draft", 0)
 
     avg_regens = sum(regenerations) / len(regenerations) if regenerations else 0.0
-    approved_or_draft = approved + drafts   # silent approves count as approvals
+    approved_or_draft = approved + drafts  # silent approves count as approvals
 
     print()
     print("LaunchLook AI quality summary")
@@ -128,10 +141,14 @@ def main(argv: list[str] | None = None) -> int:
     print()
     print("Per-finding outcomes")
     print("-" * 56)
-    print(f"  Approved (no edits):      {approved_or_draft:>4}  {_pct(approved_or_draft, total_actions)}")
+    print(
+        f"  Approved (no edits):      {approved_or_draft:>4}  {_pct(approved_or_draft, total_actions)}"
+    )
     print(f"  Edited before ship:       {edited:>4}  {_pct(edited, total_actions)}")
     print(f"  Rejected (deleted):       {rejected:>4}  {_pct(rejected, total_actions)}")
-    print(f"  Regeneration requests:    {regenerated:>4}  (cumulative, separate from above)")
+    print(
+        f"  Regeneration requests:    {regenerated:>4}  (cumulative, separate from above)"
+    )
     print(f"  Avg regens per finding:   {avg_regens:.2f}")
 
     if severity_drift:

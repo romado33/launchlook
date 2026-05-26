@@ -48,9 +48,20 @@ SYSTEM_PROMPT_PATH = REPO_ROOT / "prompts" / "quickstart_system.txt"
 USER_TEMPLATE_PATH = REPO_ROOT / "prompts" / "quickstart_user.txt"
 
 FORBIDDEN_WORDS = [
-    "leverage", "seamless", "robust", "cutting-edge", "innovative",
-    "streamline", "powerful", "elevate", "empower", "unlock",
-    "supercharge", "revolutionize", "best-in-class", "world-class",
+    "leverage",
+    "seamless",
+    "robust",
+    "cutting-edge",
+    "innovative",
+    "streamline",
+    "powerful",
+    "elevate",
+    "empower",
+    "unlock",
+    "supercharge",
+    "revolutionize",
+    "best-in-class",
+    "world-class",
 ]
 
 
@@ -71,7 +82,7 @@ def call_openai(system: str, user: str, model: str = "gpt-5-medium") -> str:
     try:
         from openai import OpenAI  # noqa: F401
     except ImportError:
-        sys.exit("ERROR: openai package not installed. Run: pip install -e \".[ai]\"")
+        sys.exit('ERROR: openai package not installed. Run: pip install -e ".[ai]"')
 
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -97,7 +108,7 @@ def call_anthropic(system: str, user: str, model: str = "claude-sonnet-4-5") -> 
     try:
         import anthropic  # noqa: F401
     except ImportError:
-        sys.exit("ERROR: anthropic package not installed. Run: pip install -e \".[ai]\"")
+        sys.exit('ERROR: anthropic package not installed. Run: pip install -e ".[ai]"')
 
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
@@ -124,7 +135,9 @@ def check_forbidden(text: str) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, help="Path to intake JSON file")
-    parser.add_argument("--output", required=True, help="Path to write the Markdown QSG")
+    parser.add_argument(
+        "--output", required=True, help="Path to write the Markdown QSG"
+    )
     parser.add_argument(
         "--provider",
         choices=["openai", "anthropic", "auto"],
@@ -163,7 +176,10 @@ def main() -> int:
 
     flagged = check_forbidden(markdown)
     if flagged:
-        print(f"WARN: forbidden marketing words detected in output: {flagged}", file=sys.stderr)
+        print(
+            f"WARN: forbidden marketing words detected in output: {flagged}",
+            file=sys.stderr,
+        )
         print("WARN: edit before sending to customer.", file=sys.stderr)
 
     output_path = Path(args.output)
@@ -171,7 +187,10 @@ def main() -> int:
     output_path.write_text(markdown, encoding="utf-8")
 
     print(f"Wrote {output_path} ({len(markdown.split())} words)", file=sys.stderr)
-    print("Next: open in editor, spot-edit, paste into customer's Notion Launch report.", file=sys.stderr)
+    print(
+        "Next: open in editor, spot-edit, paste into customer's Notion Launch report.",
+        file=sys.stderr,
+    )
 
     return 0
 

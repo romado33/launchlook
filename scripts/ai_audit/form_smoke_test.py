@@ -43,8 +43,9 @@ import json
 import os
 import re
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 CATEGORY_ID = "form_submit_smoke"
 
@@ -232,22 +233,22 @@ PLAIN_ENGLISH: dict[str, str] = {
 
 _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
     ("no_response", "lovable"): (
-        "Open Lovable and ask it: \"Find the submit handler for {form_name}. Add a "
+        'Open Lovable and ask it: "Find the submit handler for {form_name}. Add a '
         "visible success state: either swap the button to a checkmark, show a "
         "confirmation message above the form, or redirect to /thank-you. Wrap the "
-        "submit call in try/catch so server errors surface as a clear toast.\""
+        'submit call in try/catch so server errors surface as a clear toast."'
     ),
     ("no_response", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Audit the submit handler on "
+        'Open your project in Bolt. Ask Bolt: "Audit the submit handler on '
         "{form_name}. Add a visible success path (confirmation message, toast, or "
         "redirect to /thank-you) and a visible error path (clear error toast) so "
-        "the user is never left guessing.\""
+        'the user is never left guessing."'
     ),
     ("no_response", "v0"): (
-        "Open the form component in v0. Ask v0: \"Add a useState success flag to "
+        'Open the form component in v0. Ask v0: "Add a useState success flag to '
         "the submit handler. Render a confirmation message when success is true, "
         "render an error message when an exception is thrown, and disable the "
-        "submit button while pending.\""
+        'submit button while pending."'
     ),
     ("no_response", "cursor"): (
         "In Cursor, open the submit handler for {form_name}. Add a useState success "
@@ -266,17 +267,17 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "guessing whether the submit worked."
     ),
     ("missing_thank_you", "lovable"): (
-        "Open Lovable and ask it: \"After the {form_name} submit succeeds, show a "
+        'Open Lovable and ask it: "After the {form_name} submit succeeds, show a '
         "thank-you message above the form (or redirect to /thank-you). Real "
-        "visitors need a visible confirmation, not just a quiet network 200.\""
+        'visitors need a visible confirmation, not just a quiet network 200."'
     ),
     ("missing_thank_you", "bolt"): (
-        "Open your project in Bolt. Ask Bolt: \"Add a post-submit thank-you state "
+        'Open your project in Bolt. Ask Bolt: "Add a post-submit thank-you state '
         "to {form_name}: either render a 'Thanks, we got it!' div in place of the "
-        "form, or route to a /thank-you page.\""
+        'form, or route to a /thank-you page."'
     ),
     ("missing_thank_you", "v0"): (
-        "Open the form component in v0. Ask v0: \"After a successful submit, "
+        'Open the form component in v0. Ask v0: "After a successful submit, '
         "replace the form with a small 'Thanks, we got it!' card. Keep the same "
         "visual width so the page doesn't reflow.\""
     ),
@@ -296,7 +297,7 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "should never have to guess whether the submission landed."
     ),
     ("submit_button_inert", "lovable"): (
-        "Open Lovable and ask it: \"Check the onClick / onSubmit handler for "
+        'Open Lovable and ask it: "Check the onClick / onSubmit handler for '
         "{form_name}. Make sure the form actually calls the submit endpoint, and "
         "that the click handler isn't being swallowed by a wrapping element.\""
     ),
@@ -307,9 +308,9 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "swallowing the click."
     ),
     ("no_required_validation", "lovable"): (
-        "Open Lovable and ask it: \"Add a required attribute to every essential "
+        'Open Lovable and ask it: "Add a required attribute to every essential '
         "input on {form_name} and show a clear validation message if the user "
-        "submits with an empty required field.\""
+        'submits with an empty required field."'
     ),
     ("no_required_validation", "generic"): (
         "Add HTML5 `required` (or framework-level required validation) to every "
@@ -317,9 +318,9 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "visitor tries to submit an empty form."
     ),
     ("form_action_404", "lovable"): (
-        "Open Lovable and ask it: \"The {form_name} form posts to {action_url}, "
+        'Open Lovable and ask it: "The {form_name} form posts to {action_url}, '
         "which returns 404. Wire the form to a real backend route or service "
-        "(Lovable Functions, your own API, a form-handler like Formspree).\""
+        '(Lovable Functions, your own API, a form-handler like Formspree)."'
     ),
     ("form_action_404", "generic"): (
         "{form_name} is posting to {action_url}, which 404s. Wire the form to a "
@@ -331,7 +332,7 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "Open Lovable and ask it: \"Loosen the validation on '{field_name}' in "
         "{form_name}. Right now valid-looking input is being rejected, which "
         "means real visitors can't submit. Show what input is expected if you "
-        "have a specific format requirement.\""
+        'have a specific format requirement."'
     ),
     ("validation_error", "generic"): (
         "The {field_name} field on {form_name} rejects valid-looking input. Loosen "
@@ -350,7 +351,7 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "(and ideally surfaces a 'are you sure?' confirmation step)."
     ),
     ("no_confirmation_email", "lovable"): (
-        "Open Lovable and ask it: \"After {form_name} submits successfully, send "
+        'Open Lovable and ask it: "After {form_name} submits successfully, send '
         "a confirmation email via Resend (or your configured email service). "
         "Verify the sending domain so emails don't land in spam.\""
     ),
@@ -459,7 +460,12 @@ def _captures_email(form_info: dict[str, Any]) -> bool:
     for f in form_info.get("fields") or []:
         if (f.get("type") or "").lower() == "email":
             return True
-        for hay in (f.get("name"), f.get("id"), f.get("placeholder"), f.get("autocomplete")):
+        for hay in (
+            f.get("name"),
+            f.get("id"),
+            f.get("placeholder"),
+            f.get("autocomplete"),
+        ):
             if hay and "email" in str(hay).lower():
                 return True
     return False
@@ -886,7 +892,12 @@ def run_form_smoke_test_raw(
 
 
 def _check_id(form_info: dict[str, Any], outcome: str) -> str:
-    raw_id = (form_info.get("id") or form_info.get("name") or form_info.get("selector") or "form")
+    raw_id = (
+        form_info.get("id")
+        or form_info.get("name")
+        or form_info.get("selector")
+        or "form"
+    )
     safe = re.sub(r"[^a-z0-9]+", "-", raw_id.lower()).strip("-") or "form"
     return f"form_submit_smoke.{safe}.{outcome}"
 
@@ -1012,13 +1023,17 @@ def to_findings(
         form_info = entry.get("form") or {}
         form_name = _form_display_name(form_info)
         description = PLAIN_ENGLISH["no_confirmation_email"].format(form_name=form_name)
-        fix_prompt = _fix_prompt_for("no_confirmation_email", platform, form_name=form_name)
+        fix_prompt = _fix_prompt_for(
+            "no_confirmation_email", platform, form_name=form_name
+        )
         check_id = _check_id(form_info, "no_confirmation_email")
         actionable.append(
             {
                 "id": check_id,
                 "category": CATEGORY_ID,
-                "title": _OUTCOME_TITLES["no_confirmation_email"].format(form_name=form_name),
+                "title": _OUTCOME_TITLES["no_confirmation_email"].format(
+                    form_name=form_name
+                ),
                 "severity": "high",
                 "what_we_saw": description,
                 "why_it_matters": _why_it_matters(True),
@@ -1099,9 +1114,14 @@ def run_form_smoke_test(
         }
 
     email_results: list[dict[str, Any]] = []
-    if (tier or "").strip().lower() in {"pro", "pro package"} and email_roundtrip is not None:
+    if (tier or "").strip().lower() in {
+        "pro",
+        "pro package",
+    } and email_roundtrip is not None:
         try:
-            email_results = email_roundtrip(raw_results=raw, customer_email=customer_email) or []
+            email_results = (
+                email_roundtrip(raw_results=raw, customer_email=customer_email) or []
+            )
         except Exception:  # noqa: BLE001
             email_results = []
 

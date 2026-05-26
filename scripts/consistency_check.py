@@ -27,13 +27,12 @@ script can later be wired in as a pre-commit hook.
 from __future__ import annotations
 
 import argparse
-import dataclasses
 import re
 import sys
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from collections.abc import Iterable
+from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Callable, Iterable
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -157,48 +156,141 @@ class Issue:
 # more general ones below.
 STALE_TIER_AUTO_FIXES: tuple[tuple[str, str, str], ...] = (
     # (old_literal, new_literal, plain-English explanation)
-    ("Get Full Package ($49)", "Get Scale Up Package ($49)", "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1."),
-    ("Get Full Package", "Get Scale Up Package", "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1."),
-    ("Full Package ($49)", "Scale Up Package ($49)", "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1."),
-    ("Full Package", "Scale Up Package", "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1."),
-    ("Full ($49)", "Scale Up ($49)", "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1."),
-    ("Full $49", "Scale Up $49", "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1."),
-    ("Everything in Full,", "Everything in Scale Up,", "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1."),
-    ("Everything in Full ", "Everything in Scale Up ", "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1."),
-    ("everything in Full plus", "everything in Scale Up plus", "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1."),
-    ("Starter, Full, and Pro", "Starter, Scale Up, and Pro", "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1."),
-    ("Full (cap 25)", "Scale Up Package (cap 30)", "Renamed Full to Scale Up and updated cap to 30 per PRODUCT-DECISIONS section 1."),
+    (
+        "Get Full Package ($49)",
+        "Get Scale Up Package ($49)",
+        "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Get Full Package",
+        "Get Scale Up Package",
+        "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Full Package ($49)",
+        "Scale Up Package ($49)",
+        "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Full Package",
+        "Scale Up Package",
+        "Renamed Full Package to Scale Up Package per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Full ($49)",
+        "Scale Up ($49)",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Full $49",
+        "Scale Up $49",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Everything in Full,",
+        "Everything in Scale Up,",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Everything in Full ",
+        "Everything in Scale Up ",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "everything in Full plus",
+        "everything in Scale Up plus",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Starter, Full, and Pro",
+        "Starter, Scale Up, and Pro",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Full (cap 25)",
+        "Scale Up Package (cap 30)",
+        "Renamed Full to Scale Up and updated cap to 30 per PRODUCT-DECISIONS section 1.",
+    ),
 )
 
 
 # Stale tier mentions that require human judgement (no clean string-replace).
 STALE_TIER_FLAGS: tuple[tuple[re.Pattern[str], str, str], ...] = (
-    (re.compile(r"\bShip Package\b"), "Deprecated tier (no longer in the ladder). Verify whether this should be Starter / Scale Up / Pro per PRODUCT-DECISIONS section 1.", SEV_HUMAN),
-    (re.compile(r"\bFounder Roast\b"), "Cancelled tier per PRODUCT-DECISIONS section 3. Remove the reference or replace with Pro Package.", SEV_HUMAN),
-    (re.compile(r"\bpriority triage\b"), "Replaced in q3 with plain-English Starter framing per PRODUCT-DECISIONS section 7. Replace with 'top issues' or 'the most important findings'.", SEV_HUMAN),
-    (re.compile(r"\bPriority triage\b"), "Replaced in q3 with plain-English Starter framing per PRODUCT-DECISIONS section 7. Replace with 'Top issues' or similar.", SEV_HUMAN),
+    (
+        re.compile(r"\bShip Package\b"),
+        "Deprecated tier (no longer in the ladder). Verify whether this should be Starter / Scale Up / Pro per PRODUCT-DECISIONS section 1.",
+        SEV_HUMAN,
+    ),
+    (
+        re.compile(r"\bFounder Roast\b"),
+        "Cancelled tier per PRODUCT-DECISIONS section 3. Remove the reference or replace with Pro Package.",
+        SEV_HUMAN,
+    ),
+    (
+        re.compile(r"\bpriority triage\b"),
+        "Replaced in q3 with plain-English Starter framing per PRODUCT-DECISIONS section 7. Replace with 'top issues' or 'the most important findings'.",
+        SEV_HUMAN,
+    ),
+    (
+        re.compile(r"\bPriority triage\b"),
+        "Replaced in q3 with plain-English Starter framing per PRODUCT-DECISIONS section 7. Replace with 'Top issues' or similar.",
+        SEV_HUMAN,
+    ),
 )
 
 
 # Stale price patterns. The fixes here are HUMAN review only because changing
 # a price string is a semantic change, not a name change.
 STALE_PRICE_FLAGS: tuple[tuple[re.Pattern[str], str], ...] = (
-    (re.compile(r"Full \(\$29\)"), "Stale Full $29 price (bumped to $49). Replace with 'Scale Up ($49)' per PRODUCT-DECISIONS section 7."),
-    (re.compile(r"Starter \(\$9\)"), "Stale Starter $9 price (bumped to $19). Replace with 'Starter ($19)' per PRODUCT-DECISIONS section 7."),
-    (re.compile(r"Starter Package \(\$9\)"), "Stale Starter Package $9 price (bumped to $19). Replace with 'Starter Package ($19)' per PRODUCT-DECISIONS section 7."),
+    (
+        re.compile(r"Full \(\$29\)"),
+        "Stale Full $29 price (bumped to $49). Replace with 'Scale Up ($49)' per PRODUCT-DECISIONS section 7.",
+    ),
+    (
+        re.compile(r"Starter \(\$9\)"),
+        "Stale Starter $9 price (bumped to $19). Replace with 'Starter ($19)' per PRODUCT-DECISIONS section 7.",
+    ),
+    (
+        re.compile(r"Starter Package \(\$9\)"),
+        "Stale Starter Package $9 price (bumped to $19). Replace with 'Starter Package ($19)' per PRODUCT-DECISIONS section 7.",
+    ),
 )
 
 
 # Stale finding caps (now wrong vs PRODUCT-DECISIONS section 1).
 STALE_CAP_FLAGS: tuple[tuple[re.Pattern[str], str], ...] = (
-    (re.compile(r"\bStarter caps at 7\b"), "Starter cap was bumped to 10. Update to 'Starter caps at 10' per PRODUCT-DECISIONS section 1."),
-    (re.compile(r"\bcap 7\b"), "Starter cap was bumped to 10. Update reference to 'cap 10' per PRODUCT-DECISIONS section 1."),
-    (re.compile(r"\bcap 25\b"), "Scale Up cap was bumped to 30 (was 25). Update reference to 'cap 30' per PRODUCT-DECISIONS section 1."),
-    (re.compile(r"\btop 7 things\b"), "Starter cap was bumped to 10 (was 7). Verify whether '7' is still the right number to mention here."),
-    (re.compile(r"\bthe 7 most important\b"), "Starter cap was bumped to 10 (was 7). Verify whether '7 most important' should be '10 most important'."),
-    (re.compile(r"\b7 most important findings\b"), "Starter cap was bumped to 10 (was 7). Verify whether '7 most important' should be '10 most important'."),
-    (re.compile(r"\bUp to 25\b"), "Scale Up cap was bumped to 30 (was 25). Verify whether 'Up to 25' should be 'Up to 30'."),
-    (re.compile(r"\bup to 25 findings\b"), "Scale Up cap was bumped to 30 (was 25). Verify whether '25 findings' should be '30 findings'."),
+    (
+        re.compile(r"\bStarter caps at 7\b"),
+        "Starter cap was bumped to 10. Update to 'Starter caps at 10' per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        re.compile(r"\bcap 7\b"),
+        "Starter cap was bumped to 10. Update reference to 'cap 10' per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        re.compile(r"\bcap 25\b"),
+        "Scale Up cap was bumped to 30 (was 25). Update reference to 'cap 30' per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        re.compile(r"\btop 7 things\b"),
+        "Starter cap was bumped to 10 (was 7). Verify whether '7' is still the right number to mention here.",
+    ),
+    (
+        re.compile(r"\bthe 7 most important\b"),
+        "Starter cap was bumped to 10 (was 7). Verify whether '7 most important' should be '10 most important'.",
+    ),
+    (
+        re.compile(r"\b7 most important findings\b"),
+        "Starter cap was bumped to 10 (was 7). Verify whether '7 most important' should be '10 most important'.",
+    ),
+    (
+        re.compile(r"\bUp to 25\b"),
+        "Scale Up cap was bumped to 30 (was 25). Verify whether 'Up to 25' should be 'Up to 30'.",
+    ),
+    (
+        re.compile(r"\bup to 25 findings\b"),
+        "Scale Up cap was bumped to 30 (was 25). Verify whether '25 findings' should be '30 findings'.",
+    ),
 )
 
 
@@ -207,73 +299,287 @@ STALE_CAP_FLAGS: tuple[tuple[re.Pattern[str], str], ...] = (
 # ---------------------------------------------------------------------------
 
 # Each entry: (regex, suggested-replacement description, severity, optional auto-fix pair).
-FORBIDDEN_VOCAB: tuple[tuple[re.Pattern[str], str, str, tuple[str, str] | None], ...] = (
-    (re.compile(r"\bCore Web Vitals\b"), "Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bLCP\b"), "Internal CWV jargon. Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bINP\b"), "Internal CWV jargon. Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bCLS\b"), "Internal CWV jargon. Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\baxe-core\b"), "Use 'accessibility checks' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bWCAG\b"), "Use 'accessibility checks' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bScale-Ready\b"), "Use 'growth-readiness checks' (buyer-facing name from finding_categories.yaml).", SEV_HUMAN, None),
-    (re.compile(r"\bCompliance-Lite\b"), "Use 'common legal must-haves' (buyer-facing name from finding_categories.yaml).", SEV_HUMAN, None),
-    (re.compile(r"\bai_sounding\b"), "Internal taxonomy. Use 'copy that sounds AI-written'.", SEV_HUMAN, None),
-    (re.compile(r"\bform-submit smoke test\b"), "Use 'form & signup flows' per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bsynthetic values\b"), "Internal jargon. Use plain-English 'safe test data' or similar.", SEV_HUMAN, None),
-    (re.compile(r"\bround-trip\b"), "Internal jargon. Use plain-English 'whether the form actually delivers' or similar.", SEV_HUMAN, None),
-    (re.compile(r"\bregression test\b"), "Use The Saboteur language: 'did anything break after AI changes' or similar.", SEV_HUMAN, None),
-    (re.compile(r"\bunit test\b"), "Engineering jargon. Use plain English.", SEV_HUMAN, None),
-    (re.compile(r"\bchaos monkey\b"), "Engineering jargon. Use The Saboteur language.", SEV_HUMAN, None),
-    (re.compile(r"\bpentest\b"), "Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.)", SEV_HUMAN, None),
-    (re.compile(r"\bsecurity audit\b"), "Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.)", SEV_HUMAN, None),
-    (re.compile(r"\bvulnerability scan\b"), "Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bpassionate\b"), "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the sentence.", SEV_HUMAN, None),
-    (re.compile(r"\bobsessed\b"), "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the sentence.", SEV_HUMAN, None),
-    (re.compile(r"\bfounder-led\b"), "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the sentence.", SEV_HUMAN, None),
-    (re.compile(r"\bstakeholder summary\b"), "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the phrase.", SEV_HUMAN, None),
-    (re.compile(r"\bexecutive overview\b"), "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Use 'verdict' instead.", SEV_HUMAN, None),
-    (re.compile(r"\bcomprehensive deliverable\b"), "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the phrase.", SEV_HUMAN, None),
-    (re.compile(r"\bleverage\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\butilize\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6. Use 'use'.", SEV_HUMAN, None),
-    (re.compile(r"\brobust\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bseamless\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bintuitive\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\belevate\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bempower\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
-    (re.compile(r"\bunlock\b"), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.", SEV_HUMAN, None),
+FORBIDDEN_VOCAB: tuple[
+    tuple[re.Pattern[str], str, str, tuple[str, str] | None], ...
+] = (
+    (
+        re.compile(r"\bCore Web Vitals\b"),
+        "Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bLCP\b"),
+        "Internal CWV jargon. Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bINP\b"),
+        "Internal CWV jargon. Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bCLS\b"),
+        "Internal CWV jargon. Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\baxe-core\b"),
+        "Use 'accessibility checks' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bWCAG\b"),
+        "Use 'accessibility checks' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bScale-Ready\b"),
+        "Use 'growth-readiness checks' (buyer-facing name from finding_categories.yaml).",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bCompliance-Lite\b"),
+        "Use 'common legal must-haves' (buyer-facing name from finding_categories.yaml).",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bai_sounding\b"),
+        "Internal taxonomy. Use 'copy that sounds AI-written'.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bform-submit smoke test\b"),
+        "Use 'form & signup flows' per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bsynthetic values\b"),
+        "Internal jargon. Use plain-English 'safe test data' or similar.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bround-trip\b"),
+        "Internal jargon. Use plain-English 'whether the form actually delivers' or similar.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bregression test\b"),
+        "Use The Saboteur language: 'did anything break after AI changes' or similar.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bunit test\b"),
+        "Engineering jargon. Use plain English.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bchaos monkey\b"),
+        "Engineering jargon. Use The Saboteur language.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bpentest\b"),
+        "Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.)",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bsecurity audit\b"),
+        "Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.)",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bvulnerability scan\b"),
+        "Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bpassionate\b"),
+        "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the sentence.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bobsessed\b"),
+        "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the sentence.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bfounder-led\b"),
+        "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the sentence.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bstakeholder summary\b"),
+        "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the phrase.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bexecutive overview\b"),
+        "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Use 'verdict' instead.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bcomprehensive deliverable\b"),
+        "Corporate vocabulary per SIMPLICITY-GUARDRAILS section 6. Cut the phrase.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bleverage\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\butilize\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6. Use 'use'.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\brobust\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bseamless\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bintuitive\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\belevate\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bempower\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
+    (
+        re.compile(r"\bunlock\b"),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6.",
+        SEV_HUMAN,
+        None,
+    ),
     # 'comprehensive' is allowed only inside 'comprehensive checklist' (the literal
     # product name from PRODUCT-DECISIONS section 8). Anywhere else, flag it.
-    (re.compile(r"\bcomprehensive (?!checklist)\w+", re.IGNORECASE), "Vocabulary list per SIMPLICITY-GUARDRAILS section 6. Only 'comprehensive checklist' is allowed (PRODUCT-DECISIONS section 8). Reword.", SEV_HUMAN, None),
+    (
+        re.compile(r"\bcomprehensive (?!checklist)\w+", re.IGNORECASE),
+        "Vocabulary list per SIMPLICITY-GUARDRAILS section 6. Only 'comprehensive checklist' is allowed (PRODUCT-DECISIONS section 8). Reword.",
+        SEV_HUMAN,
+        None,
+    ),
     # 'AI scanner' is only allowed when explicitly framed as a competitor /
     # anti-pattern. We catch the standalone usage; reviewers eyeball the
     # framing.
-    (re.compile(r"\bAI scanner\b"), "Per q3 settle, 'AI-powered audit + founder review' is the canonical positioning. Verify this usage is anti-pattern framing (talking about competitor tools), not self-description.", SEV_HUMAN, None),
+    (
+        re.compile(r"\bAI scanner\b"),
+        "Per q3 settle, 'AI-powered audit + founder review' is the canonical positioning. Verify this usage is anti-pattern framing (talking about competitor tools), not self-description.",
+        SEV_HUMAN,
+        None,
+    ),
 )
 
 # Persona typo patterns (case-sensitive + structure-sensitive).
 PERSONA_TYPO_FLAGS: tuple[tuple[re.Pattern[str], str, str], ...] = (
-    (re.compile(r"\bPhone First Friend\b"), "Missing hyphen. Use 'The Phone-First Friend' (TESTERS-CAST.md).", "The Phone-First Friend"),
-    (re.compile(r"\bphone first friend\b"), "Missing hyphen + lowercase. Use 'The Phone-First Friend' (TESTERS-CAST.md).", "The Phone-First Friend"),
-    (re.compile(r"\bPhonefirst Friend\b"), "Spacing typo. Use 'The Phone-First Friend' (TESTERS-CAST.md).", "The Phone-First Friend"),
-    (re.compile(r"\bStranger who Tried\b"), "Casing typo. Use 'The Stranger Who Tried to Sign Up' (TESTERS-CAST.md).", "The Stranger Who Tried to Sign Up"),
-    (re.compile(r"\bThe stranger who tried\b"), "Casing typo. Use 'The Stranger Who Tried to Sign Up' (TESTERS-CAST.md).", "The Stranger Who Tried to Sign Up"),
+    (
+        re.compile(r"\bPhone First Friend\b"),
+        "Missing hyphen. Use 'The Phone-First Friend' (TESTERS-CAST.md).",
+        "The Phone-First Friend",
+    ),
+    (
+        re.compile(r"\bphone first friend\b"),
+        "Missing hyphen + lowercase. Use 'The Phone-First Friend' (TESTERS-CAST.md).",
+        "The Phone-First Friend",
+    ),
+    (
+        re.compile(r"\bPhonefirst Friend\b"),
+        "Spacing typo. Use 'The Phone-First Friend' (TESTERS-CAST.md).",
+        "The Phone-First Friend",
+    ),
+    (
+        re.compile(r"\bStranger who Tried\b"),
+        "Casing typo. Use 'The Stranger Who Tried to Sign Up' (TESTERS-CAST.md).",
+        "The Stranger Who Tried to Sign Up",
+    ),
+    (
+        re.compile(r"\bThe stranger who tried\b"),
+        "Casing typo. Use 'The Stranger Who Tried to Sign Up' (TESTERS-CAST.md).",
+        "The Stranger Who Tried to Sign Up",
+    ),
 )
 
 
 # Stale internal category names that should never leak to customer surfaces.
 STALE_CATEGORY_FLAGS: tuple[tuple[re.Pattern[str], str], ...] = (
-    (re.compile(r"\bTrust gaps\b"), "Internal taxonomy. Use buyer-facing 'trust signals & legal pages'."),
-    (re.compile(r"\bBroken CTAs\b"), "Internal taxonomy. Use buyer-facing 'broken buttons & dead links'."),
-    (re.compile(r"\bSecurity-lite\b"), "Internal taxonomy. Use buyer-facing 'obvious visible risks'."),
-    (re.compile(r"\bMobile audit\b"), "Internal taxonomy. Use buyer-facing 'mobile layout issues'."),
-    (re.compile(r"\bCopy & clarity\b"), "Internal taxonomy. Use buyer-facing 'confusing or placeholder text'."),
-    (re.compile(r"\bCross-user data check\b"), "Internal taxonomy. Use buyer-facing 'user data isolation'."),
-    (re.compile(r"\bAI-sounding copy detection\b"), "Internal taxonomy. Use buyer-facing 'copy that sounds AI-written'."),
+    (
+        re.compile(r"\bTrust gaps\b"),
+        "Internal taxonomy. Use buyer-facing 'trust signals & legal pages'.",
+    ),
+    (
+        re.compile(r"\bBroken CTAs\b"),
+        "Internal taxonomy. Use buyer-facing 'broken buttons & dead links'.",
+    ),
+    (
+        re.compile(r"\bSecurity-lite\b"),
+        "Internal taxonomy. Use buyer-facing 'obvious visible risks'.",
+    ),
+    (
+        re.compile(r"\bMobile audit\b"),
+        "Internal taxonomy. Use buyer-facing 'mobile layout issues'.",
+    ),
+    (
+        re.compile(r"\bCopy & clarity\b"),
+        "Internal taxonomy. Use buyer-facing 'confusing or placeholder text'.",
+    ),
+    (
+        re.compile(r"\bCross-user data check\b"),
+        "Internal taxonomy. Use buyer-facing 'user data isolation'.",
+    ),
+    (
+        re.compile(r"\bAI-sounding copy detection\b"),
+        "Internal taxonomy. Use buyer-facing 'copy that sounds AI-written'.",
+    ),
 )
 
 
 # ---------------------------------------------------------------------------
 # File helpers
 # ---------------------------------------------------------------------------
+
 
 def discover_files(globs: Iterable[str]) -> list[Path]:
     seen: list[Path] = []
@@ -298,7 +604,9 @@ def relative(path: Path) -> str:
         return str(path).replace("\\", "/")
 
 
-def trim_snippet(line: str, span: tuple[int, int] | None = None, max_len: int = 160) -> str:
+def trim_snippet(
+    line: str, span: tuple[int, int] | None = None, max_len: int = 160
+) -> str:
     snippet = line.rstrip("\n").strip()
     if len(snippet) <= max_len:
         return snippet
@@ -306,7 +614,11 @@ def trim_snippet(line: str, span: tuple[int, int] | None = None, max_len: int = 
         return snippet[:max_len] + "..."
     start = max(0, span[0] - 30)
     end = min(len(snippet), span[1] + 60)
-    return ("..." if start > 0 else "") + snippet[start:end] + ("..." if end < len(snippet) else "")
+    return (
+        ("..." if start > 0 else "")
+        + snippet[start:end]
+        + ("..." if end < len(snippet) else "")
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -459,6 +771,7 @@ def find_em_dashes(path: Path) -> list[Issue]:
 # Pattern-driven checks
 # ---------------------------------------------------------------------------
 
+
 def scan_with_patterns(
     path: Path,
     patterns: Iterable[tuple[re.Pattern[str], str, str]],
@@ -516,7 +829,9 @@ def scan_stale_category_names(path: Path) -> list[Issue]:
     # internal names appearing in customer-facing prose.
     is_yaml = path.suffix in {".yaml", ".yml"}
     for lineno, line in enumerate(text.splitlines(), start=1):
-        if is_yaml and re.match(r"\s*(category|display_name_internal|id|tester|source|tier_min)\s*:", line):
+        if is_yaml and re.match(
+            r"\s*(category|display_name_internal|id|tester|source|tier_min)\s*:", line
+        ):
             continue
         for pattern, message in STALE_CATEGORY_FLAGS:
             match = pattern.search(line)
@@ -617,7 +932,9 @@ def scan_forbidden_vocab(path: Path) -> list[Issue]:
     is_yaml = path.suffix in {".yaml", ".yml"}
     comment_mask = _classify_lines(text, path.suffix)
     for lineno, line in enumerate(text.splitlines(), start=1):
-        if is_yaml and re.match(r"\s*(category|display_name_internal|id|tester|source|tier_min)\s*:", line):
+        if is_yaml and re.match(
+            r"\s*(category|display_name_internal|id|tester|source|tier_min)\s*:", line
+        ):
             continue
         if comment_mask[lineno - 1]:
             continue
@@ -642,6 +959,7 @@ def scan_forbidden_vocab(path: Path) -> list[Issue]:
 # ---------------------------------------------------------------------------
 # Stripe pricing routing check (api/, scripts/)
 # ---------------------------------------------------------------------------
+
 
 def scan_stripe_pricing() -> list[Issue]:
     """Verify cents-to-tier mapping in api/stripe-webhook.py aligns with canonical.
@@ -672,12 +990,21 @@ def scan_stripe_pricing() -> list[Issue]:
         ]
     text = read_text(webhook)
     expected_pairs = [
-        ("1900: \"Starter Package\"", "Starter $19 maps to Starter Package."),
-        ("4900: \"Scale Up Package\"", "Scale Up $49 maps to Scale Up Package."),
-        ("9900: \"Pro Package\"", "Pro $99 maps to Pro Package."),
-        ("CONFIDENCE_CHECK_METADATA_VALUE = \"confidence_check\"", "q6 Confidence Check metadata routing present."),
-        ("REVERIFY_METADATA_VALUE = \"reverify\"", "q17 badge re-verification metadata routing present."),
-        ("HANDOFF_REPORT_METADATA_VALUE = \"handoff_report\"", "q18 Handoff Report metadata routing present."),
+        ('1900: "Starter Package"', "Starter $19 maps to Starter Package."),
+        ('4900: "Scale Up Package"', "Scale Up $49 maps to Scale Up Package."),
+        ('9900: "Pro Package"', "Pro $99 maps to Pro Package."),
+        (
+            'CONFIDENCE_CHECK_METADATA_VALUE = "confidence_check"',
+            "q6 Confidence Check metadata routing present.",
+        ),
+        (
+            'REVERIFY_METADATA_VALUE = "reverify"',
+            "q17 badge re-verification metadata routing present.",
+        ),
+        (
+            'HANDOFF_REPORT_METADATA_VALUE = "handoff_report"',
+            "q18 Handoff Report metadata routing present.",
+        ),
     ]
     for needle, _explanation in expected_pairs:
         if needle not in text:
@@ -701,6 +1028,7 @@ def scan_stripe_pricing() -> list[Issue]:
 # ---------------------------------------------------------------------------
 # Auto-fix application
 # ---------------------------------------------------------------------------
+
 
 def apply_auto_fixes(issues: list[Issue]) -> tuple[int, dict[str, int]]:
     """Apply every Issue whose auto_fixable=True. Returns (count, by_file_count)."""
@@ -743,6 +1071,7 @@ def apply_auto_fixes(issues: list[Issue]) -> tuple[int, dict[str, int]]:
 # Audit driver
 # ---------------------------------------------------------------------------
 
+
 def run_audit() -> list[Issue]:
     issues: list[Issue] = []
 
@@ -768,6 +1097,7 @@ def run_audit() -> list[Issue]:
 # ---------------------------------------------------------------------------
 # Report rendering
 # ---------------------------------------------------------------------------
+
 
 def render_report(
     *,
@@ -814,13 +1144,14 @@ def render_report(
         remaining = remaining_per_kind.get(kind, 0)
         summary_rows.append(f"| {label} | {total} | {autofixed} | {remaining} |")
 
-    needs_review_lines = []
     review_groupings: dict[str, list[Issue]] = {}
     for issue in issues_after:
         if issue.severity in (SEV_HUMAN, SEV_CRITICAL):
             review_groupings.setdefault(issue.kind, []).append(issue)
 
-    def _render_group(kind: str, heading: str, suggested_action_col: str = "Suggested replacement") -> str:
+    def _render_group(
+        kind: str, heading: str, suggested_action_col: str = "Suggested replacement"
+    ) -> str:
         items = review_groupings.get(kind, [])
         if not items:
             return f"### {heading}\n\nNone remaining.\n"
@@ -834,9 +1165,7 @@ def render_report(
         body = (
             f"### {heading} ({len(items)} instance{'s' if len(items) != 1 else ''})\n\n"
             f"| File | Line | Context | {suggested_action_col} |\n"
-            f"|---|---|---|---|\n"
-            + "\n".join(rows)
-            + "\n"
+            f"|---|---|---|---|\n" + "\n".join(rows) + "\n"
         )
         return body
 
@@ -857,22 +1186,28 @@ def render_report(
     else:
         auto_fixed_log_body = (
             "| File | Line | Fix | Kind |\n"
-            "|---|---|---|---|\n"
-            + "\n".join(auto_fixed_log_rows)
-            + "\n"
+            "|---|---|---|---|\n" + "\n".join(auto_fixed_log_rows) + "\n"
         )
 
     files_modified_count = len(auto_fixed_by_file) if auto_fix_ran else 0
 
     parts: list[str] = []
     parts.append("# LaunchLook Internal Consistency Audit\n")
-    parts.append(f"Generated: {generated_iso} by `scripts/consistency_check.py` (q-final-audit worker)\n")
+    parts.append(
+        f"Generated: {generated_iso} by `scripts/consistency_check.py` (q-final-audit worker)\n"
+    )
     parts.append("")
     parts.append("Canonical truth sources audited against:")
-    parts.append("- `docs/SIMPLICITY-GUARDRAILS.md` section 6 (forbidden vocab, em-dash rule)")
-    parts.append("- `docs/PRODUCT-DECISIONS.md` section 1 (tier ladder, finding caps), section 7 (pricing)")
+    parts.append(
+        "- `docs/SIMPLICITY-GUARDRAILS.md` section 6 (forbidden vocab, em-dash rule)"
+    )
+    parts.append(
+        "- `docs/PRODUCT-DECISIONS.md` section 1 (tier ladder, finding caps), section 7 (pricing)"
+    )
     parts.append("- `docs/TESTERS-CAST.md` (canonical 7-persona spelling)")
-    parts.append("- `scripts/ai_audit/finding_categories.yaml` (buyer-facing finding category names)")
+    parts.append(
+        "- `scripts/ai_audit/finding_categories.yaml` (buyer-facing finding category names)"
+    )
     parts.append("- `api/stripe-webhook.py` (Stripe cents-to-tier mapping)")
     parts.append("")
     parts.append("## Summary")
@@ -893,7 +1228,11 @@ def render_report(
     parts.append("")
     parts.append(_render_group(KIND_STALE_TIER, "Stale tier names + finding caps"))
     parts.append(_render_group(KIND_STALE_PRICE, "Stale prices"))
-    parts.append(_render_group(KIND_FORBIDDEN_VOCAB, "Forbidden vocab still on customer surfaces"))
+    parts.append(
+        _render_group(
+            KIND_FORBIDDEN_VOCAB, "Forbidden vocab still on customer surfaces"
+        )
+    )
     parts.append(_render_group(KIND_EM_DASH, "Em-dashes on customer-facing surfaces"))
     parts.append(_render_group(KIND_PERSONA_TYPO, "Persona typos"))
     parts.append(_render_group(KIND_CATEGORY_TYPO, "Stale internal category names"))
@@ -908,14 +1247,22 @@ def render_report(
         for issue in critical_issues:
             snippet = issue.snippet.replace("|", "\\|")
             fix = issue.suggested_fix.replace("|", "\\|")
-            parts.append(f"| `{issue.file}` | {issue.line if issue.line else '-'} | {snippet} | {fix} |")
+            parts.append(
+                f"| `{issue.file}` | {issue.line if issue.line else '-'} | {snippet} | {fix} |"
+            )
     parts.append("")
     parts.append("## Notes for q-final-lint")
     parts.append("")
     parts.append("- After this audit, run linters as planned.")
-    parts.append("- Em-dash replacements are stylistic: review the surrounding sentence and pick parenthetical / period / comma / colon. Do not bulk-replace globally; meaning gets lost.")
-    parts.append("- Stale finding caps (Starter cap=10, Scale Up cap=30) and Starter framing copy are surfaced for human review; pricing-page numbers that conflict with PRODUCT-DECISIONS section 1 need a copywriting pass, not a string-replace.")
-    parts.append(f"- Re-run this audit at any time with `python scripts/consistency_check.py --report-only` to verify a fix.")
+    parts.append(
+        "- Em-dash replacements are stylistic: review the surrounding sentence and pick parenthetical / period / comma / colon. Do not bulk-replace globally; meaning gets lost."
+    )
+    parts.append(
+        "- Stale finding caps (Starter cap=10, Scale Up cap=30) and Starter framing copy are surfaced for human review; pricing-page numbers that conflict with PRODUCT-DECISIONS section 1 need a copywriting pass, not a string-replace."
+    )
+    parts.append(
+        "- Re-run this audit at any time with `python scripts/consistency_check.py --report-only` to verify a fix."
+    )
     parts.append("")
     return "\n".join(parts)
 
@@ -923,6 +1270,7 @@ def render_report(
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -957,7 +1305,7 @@ def main(argv: list[str]) -> int:
     else:
         issues_after = list(issues_before)
 
-    generated_iso = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generated_iso = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
     report = render_report(
         issues_before=issues_before,
         issues_after=issues_after,
@@ -975,7 +1323,9 @@ def main(argv: list[str]) -> int:
 
     print(f"[consistency_check] Issues before fix: {len(issues_before)}")
     if auto_fix_ran:
-        print(f"[consistency_check] Auto-safe fixes applied: {auto_fixed_count} replacement(s) across {len(auto_fixed_by_file)} file(s)")
+        print(
+            f"[consistency_check] Auto-safe fixes applied: {auto_fixed_count} replacement(s) across {len(auto_fixed_by_file)} file(s)"
+        )
         print(f"[consistency_check] Issues after fix:  {len(issues_after)}")
     print(f"[consistency_check] Needs human review:  {human}")
     print(f"[consistency_check] Critical (block ship): {critical}")

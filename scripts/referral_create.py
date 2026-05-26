@@ -63,7 +63,7 @@ def create_stripe_coupon(code: str, first_name: str, email: str | None) -> str:
     try:
         import stripe
     except ImportError:
-        sys.exit("ERROR: stripe package not installed. Run: pip install -e \".\"")
+        sys.exit('ERROR: stripe package not installed. Run: pip install -e "."')
 
     stripe.api_key = require_env("STRIPE_SECRET_KEY")
 
@@ -96,15 +96,13 @@ def update_notion_customer(page_id: str, referral_code: str) -> None:
     try:
         from notion_client import Client
     except ImportError:
-        sys.exit("ERROR: notion-client package not installed. Run: pip install -e \".\"")
+        sys.exit('ERROR: notion-client package not installed. Run: pip install -e "."')
 
     notion = Client(auth=require_env("NOTION_TOKEN"))
     notion.pages.update(
         page_id=page_id,
         properties={
-            "Referral Code": {
-                "rich_text": [{"text": {"content": referral_code}}]
-            }
+            "Referral Code": {"rich_text": [{"text": {"content": referral_code}}]}
         },
     )
 
@@ -112,10 +110,21 @@ def update_notion_customer(page_id: str, referral_code: str) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--customer-id", help="Notion page ID of the customer row")
-    parser.add_argument("--first-name", help="Customer first name (used as coupon prefix)")
+    parser.add_argument(
+        "--first-name", help="Customer first name (used as coupon prefix)"
+    )
     parser.add_argument("--email", help="Customer email (stored in coupon metadata)")
-    parser.add_argument("--collision-suffix", type=int, default=0, help="Add a random N-char suffix (use 4 if you've hit a name collision)")
-    parser.add_argument("--dry-run", action="store_true", help="Print the would-be code without calling Stripe")
+    parser.add_argument(
+        "--collision-suffix",
+        type=int,
+        default=0,
+        help="Add a random N-char suffix (use 4 if you've hit a name collision)",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print the would-be code without calling Stripe",
+    )
 
     args = parser.parse_args()
 
@@ -156,7 +165,9 @@ def main() -> int:
         update_notion_customer(args.customer_id, actual_code)
         print("Notion updated.")
     else:
-        print(f"\nManual step: copy this code into the customer's Notion row → Referral Code:")
+        print(
+            "\nManual step: copy this code into the customer's Notion row → Referral Code:"
+        )
         print(f"  {actual_code}")
 
     return 0

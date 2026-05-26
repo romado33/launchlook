@@ -26,7 +26,7 @@ import csv
 import json
 import secrets
 import sys
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -61,7 +61,7 @@ VALID_STATUSES = {
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def load_milestones_config() -> dict:
@@ -109,7 +109,9 @@ def delivery_due_from_payment(payment_date: str, tier: str) -> str:
 
 
 def counts_paying(store: dict, cfg: dict) -> int:
-    exclude = set(cfg.get("counts_as_paying", {}).get("exclude_statuses", ["lead", "refunded"]))
+    exclude = set(
+        cfg.get("counts_as_paying", {}).get("exclude_statuses", ["lead", "refunded"])
+    )
     require_payment = cfg.get("counts_as_paying", {}).get("requires_payment_date", True)
     n = 0
     for c in store.get("customers", []):
@@ -223,16 +225,24 @@ def cmd_stats(_: argparse.Namespace) -> int:
     target_10 = goals.get("paying_customers_automation_unlock", 10)
     paying = counts_paying(store, cfg)
     delivered = sum(1 for c in store["customers"] if c.get("status") == "delivered")
-    auditing = sum(1 for c in store["customers"] if c.get("status") in ("auditing", "intake_received"))
+    auditing = sum(
+        1
+        for c in store["customers"]
+        if c.get("status") in ("auditing", "intake_received")
+    )
     print(f"Paying customers (milestone count): {paying}")
     print(f"Delivered: {delivered}  |  In progress: {auditing}")
-    print(f"60-day target: {paying}/{target_8}  |  Automation unlock: {paying}/{target_10}")
+    print(
+        f"60-day target: {paying}/{target_8}  |  Automation unlock: {paying}/{target_10}"
+    )
     ms = store.get("milestones", {})
     if paying >= target_10:
         if ms.get("customer_10_unlock_acknowledged"):
             print("Customer 10 gate: UNLOCKED (acknowledged)")
         else:
-            print("Customer 10 gate: REACHED — run: python scripts/customers_track.py acknowledge-milestone-10")
+            print(
+                "Customer 10 gate: REACHED — run: python scripts/customers_track.py acknowledge-milestone-10"
+            )
             print("Then read: docs/CUSTOMER-10-RUNBOOK.md")
     else:
         print(f"Customer 10 gate: {target_10 - paying} paying customer(s) to go")
@@ -311,7 +321,9 @@ def cmd_acknowledge_milestone_10(_: argparse.Namespace) -> int:
     target_10 = cfg.get("goals", {}).get("paying_customers_automation_unlock", 10)
     paying = counts_paying(store, cfg)
     if paying < target_10:
-        sys.exit(f"ERROR: only {paying} paying customers — need {target_10} before acknowledging")
+        sys.exit(
+            f"ERROR: only {paying} paying customers — need {target_10} before acknowledging"
+        )
     store.setdefault("milestones", {})
     store["milestones"]["customer_10_unlock_acknowledged"] = True
     store["milestones"]["customer_10_unlocked_at"] = utc_now_iso()
@@ -354,10 +366,14 @@ def cmd_export_csv(_: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     sub = p.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("init", help="Create data/customers.json from example").set_defaults(func=cmd_init)
+    sub.add_parser("init", help="Create data/customers.json from example").set_defaults(
+        func=cmd_init
+    )
 
     add = sub.add_parser("add", help="Register a new paying customer")
     add.add_argument("--name", required=True)
@@ -375,7 +391,9 @@ def build_parser() -> argparse.ArgumentParser:
     lst.add_argument("--status", choices=sorted(VALID_STATUSES))
     lst.set_defaults(func=cmd_list)
 
-    sub.add_parser("stats", help="Paying count + milestone progress").set_defaults(func=cmd_stats)
+    sub.add_parser("stats", help="Paying count + milestone progress").set_defaults(
+        func=cmd_stats
+    )
 
     show = sub.add_parser("show", help="JSON for one customer")
     show.add_argument("customer_id")
@@ -405,11 +423,13 @@ def build_parser() -> argparse.ArgumentParser:
     md.add_argument("--notion-report-url")
     md.set_defaults(func=cmd_mark_delivered)
 
-    sub.add_parser("acknowledge-milestone-10", help="Record that you read the customer-10 runbook").set_defaults(
-        func=cmd_acknowledge_milestone_10
-    )
+    sub.add_parser(
+        "acknowledge-milestone-10", help="Record that you read the customer-10 runbook"
+    ).set_defaults(func=cmd_acknowledge_milestone_10)
 
-    sub.add_parser("export-csv", help="Write data/customers-export.csv").set_defaults(func=cmd_export_csv)
+    sub.add_parser("export-csv", help="Write data/customers-export.csv").set_defaults(
+        func=cmd_export_csv
+    )
 
     return p
 

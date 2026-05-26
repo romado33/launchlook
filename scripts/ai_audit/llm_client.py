@@ -31,16 +31,17 @@ import os
 import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from . import cost_tracker
-
 
 # ---------------------------------------------------------------------------
 # Default model names (override via env var)
 # ---------------------------------------------------------------------------
 
-DEFAULT_CLAUDE_MODEL = os.getenv("LAUNCHLOOK_CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
+DEFAULT_CLAUDE_MODEL = os.getenv(
+    "LAUNCHLOOK_CLAUDE_MODEL", "claude-sonnet-4-5-20250929"
+)
 DEFAULT_CLAUDE_FALLBACKS = [
     "claude-sonnet-4-5-20250929",
     "claude-3-5-sonnet-20241022",
@@ -387,11 +388,13 @@ class ClaudeClient(LLMClient):
         content_blocks = self._build_content_blocks(user_prompt, screenshots)
 
         last_err: Exception | None = None
-        candidates = [self.model] + [m for m in DEFAULT_CLAUDE_FALLBACKS if m != self.model]
+        candidates = [self.model] + [
+            m for m in DEFAULT_CLAUDE_FALLBACKS if m != self.model
+        ]
         for candidate in candidates:
             try:
                 with cost_tracker.track_call(call_type) as _tracker:
-                    resp = self._client.messages.create(
+                    resp = self._client.messages.create(  # type: ignore[call-overload]  # anthropic SDK model arg is a Literal union; ours is a runtime str
                         model=candidate,
                         max_tokens=8000,
                         system=system_prompt,
@@ -408,9 +411,14 @@ class ClaudeClient(LLMClient):
                         )
                 self.model = candidate
                 for block in resp.content:
-                    if getattr(block, "type", None) == "tool_use" and getattr(block, "name", None) == tool_name:
+                    if (
+                        getattr(block, "type", None) == "tool_use"
+                        and getattr(block, "name", None) == tool_name
+                    ):
                         return dict(block.input or {})
-                raise RuntimeError(f"Claude returned no tool_use block for {tool_name!r}")
+                raise RuntimeError(
+                    f"Claude returned no tool_use block for {tool_name!r}"
+                )
             except self._anthropic.NotFoundError as exc:
                 last_err = exc
                 continue
@@ -561,11 +569,13 @@ class GPTClient(LLMClient):
         ]
 
         last_err: Exception | None = None
-        candidates = [self.model] + [m for m in DEFAULT_GPT_FALLBACKS if m != self.model]
+        candidates = [self.model] + [
+            m for m in DEFAULT_GPT_FALLBACKS if m != self.model
+        ]
         for candidate in candidates:
             try:
                 with cost_tracker.track_call(call_type) as _tracker:
-                    resp = self._client.chat.completions.create(
+                    resp = self._client.chat.completions.create(  # type: ignore[call-overload]  # openai SDK model arg is a Literal union; ours is a runtime str
                         model=candidate,
                         messages=messages,
                         response_format={
@@ -595,7 +605,7 @@ class GPTClient(LLMClient):
                 if "json_schema" in str(exc).lower():
                     # Fall back to plain json_object on older models.
                     try:
-                        resp = self._client.chat.completions.create(
+                        resp = self._client.chat.completions.create(  # type: ignore[call-overload]  # openai SDK model arg is a Literal union; ours is a runtime str
                             model=candidate,
                             messages=messages,
                             response_format={"type": "json_object"},
@@ -710,7 +720,6 @@ def _normalize_qsg(payload: dict[str, Any]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-
 def _stub_token_estimate(system_prompt: str, user_prompt: str) -> int:
     """Rough char/4 estimate for the stub provider's cost log row."""
     return max(1, (len(system_prompt) + len(user_prompt)) // 4)
@@ -734,8 +743,13 @@ class StubClient(LLMClient):
     name = "stub"
     model = "stub-deterministic"
 
-    def __init__(self, *, prescreener_hits: list[dict[str, Any]] | None = None,
-                 builder: str = "Lovable", app_name: str = "your app") -> None:
+    def __init__(
+        self,
+        *,
+        prescreener_hits: list[dict[str, Any]] | None = None,
+        builder: str = "Lovable",
+        app_name: str = "your app",
+    ) -> None:
         self._hits = prescreener_hits or []
         self._builder = builder or "Lovable"
         self._app_name = app_name or "your app"
@@ -749,8 +763,11 @@ class StubClient(LLMClient):
         max_findings: int,
     ) -> list[dict[str, Any]]:
         with cost_tracker.track_call("finding_generation") as _t:
-            _t.set_usage(self.model, _stub_token_estimate(system_prompt, user_prompt),
-                         _stub_output_estimate(max_findings * 180))
+            _t.set_usage(
+                self.model,
+                _stub_token_estimate(system_prompt, user_prompt),
+                _stub_output_estimate(max_findings * 180),
+            )
         sev_map = {
             "Critical": "critical",
             "High": "high",
@@ -773,7 +790,8 @@ class StubClient(LLMClient):
             out.append(
                 {
                     "severity": sev,
-                    "title": finding.get("name", fid) or "Issue detected by prescreener",
+                    "title": finding.get("name", fid)
+                    or "Issue detected by prescreener",
                     "what_we_saw": (
                         f"On {page.get('url', 'the live URL')}, the prescreener matched "
                         f"the pattern '{sample[:60]}' from {fid}."
@@ -812,10 +830,15 @@ class StubClient(LLMClient):
             )
         return out[:max_findings]
 
-    def generate_verdict(self, *, system_prompt: str, user_prompt: str) -> dict[str, Any]:
+    def generate_verdict(
+        self, *, system_prompt: str, user_prompt: str
+    ) -> dict[str, Any]:
         with cost_tracker.track_call("verdict_generation") as _t:
-            _t.set_usage(self.model, _stub_token_estimate(system_prompt, user_prompt),
-                         _stub_output_estimate(200))
+            _t.set_usage(
+                self.model,
+                _stub_token_estimate(system_prompt, user_prompt),
+                _stub_output_estimate(200),
+            )
         return {
             "label": "Safe for friends/family testing",
             "emoji": "🟡",
@@ -836,8 +859,11 @@ class StubClient(LLMClient):
         screenshots: list[tuple[str, Path]],
     ) -> dict[str, Any]:
         with cost_tracker.track_call("qsg_generation") as _t:
-            _t.set_usage(self.model, _stub_token_estimate(system_prompt, user_prompt),
-                         _stub_output_estimate(600))
+            _t.set_usage(
+                self.model,
+                _stub_token_estimate(system_prompt, user_prompt),
+                _stub_output_estimate(600),
+            )
         return {
             "title": f"{self._app_name}, Getting Started",
             "intro": (
@@ -918,7 +944,9 @@ def build_client(
 
     if provider == "claude":
         if not anthropic_key:
-            sys.exit("ERROR: --provider claude but ANTHROPIC_API_KEY is not set in .env")
+            sys.exit(
+                "ERROR: --provider claude but ANTHROPIC_API_KEY is not set in .env"
+            )
         return ClaudeClient(api_key=anthropic_key)
 
     if provider == "gpt":

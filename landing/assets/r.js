@@ -20,27 +20,29 @@
  */
 
 (function () {
-  'use strict';
+  "use strict";
 
-  var STATES = ['loading', 'private', 'missing', 'public', 'error'];
+  var STATES = ["loading", "private", "missing", "public", "error"];
 
   function show(state) {
     STATES.forEach(function (key) {
       var el = document.querySelector('[data-r-state="' + key + '"]');
       if (!el) return;
       if (key === state) {
-        el.classList.remove('hidden');
+        el.classList.remove("hidden");
       } else {
-        el.classList.add('hidden');
+        el.classList.add("hidden");
       }
     });
     track(state);
   }
 
   function track(state) {
-    if (typeof window.plausible !== 'function') return;
+    if (typeof window.plausible !== "function") return;
     try {
-      window.plausible('ReportView', { props: { state: state, slug: readSlug() } });
+      window.plausible("ReportView", {
+        props: { state: state, slug: readSlug() },
+      });
     } catch (e) {
       /* analytics is best-effort, never break the page */
     }
@@ -55,47 +57,58 @@
     }
     try {
       var qs = new URLSearchParams(window.location.search);
-      return (qs.get('slug') || '').trim();
+      return (qs.get("slug") || "").trim();
     } catch (e) {
-      return '';
+      return "";
     }
   }
 
   function humanDate(iso) {
-    if (!iso) return '';
-    var parts = iso.split('-');
+    if (!iso) return "";
+    var parts = iso.split("-");
     if (parts.length !== 3) return iso;
     var months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
-    var month = months[parseInt(parts[1], 10) - 1] || '';
+    var month = months[parseInt(parts[1], 10) - 1] || "";
     var day = parseInt(parts[2], 10);
     var year = parts[0];
     if (!month) return iso;
-    return month + ' ' + day + ', ' + year;
+    return month + " " + day + ", " + year;
   }
 
   function setText(selector, value) {
     var el = document.querySelector(selector);
-    if (el) el.textContent = value == null ? '' : value;
+    if (el) el.textContent = value == null ? "" : value;
   }
 
   function personaClass(tag) {
-    if (!tag) return '';
-    if (tag.indexOf('Skeptic') !== -1) return 'persona-skeptic';
-    if (tag.indexOf('Klutz') !== -1) return 'persona-klutz';
-    if (tag.indexOf('Tourist') !== -1) return 'persona-tourist';
-    if (tag.indexOf('Snoop') !== -1) return 'persona-snoop';
-    if (tag.indexOf('Phone-First Friend') !== -1) return 'persona-phone-first-friend';
-    if (tag.indexOf('Saboteur') !== -1) return 'persona-saboteur';
-    if (tag.indexOf('Stranger') !== -1) return 'persona-stranger';
-    return '';
+    if (!tag) return "";
+    if (tag.indexOf("Skeptic") !== -1) return "persona-skeptic";
+    if (tag.indexOf("Klutz") !== -1) return "persona-klutz";
+    if (tag.indexOf("Tourist") !== -1) return "persona-tourist";
+    if (tag.indexOf("Snoop") !== -1) return "persona-snoop";
+    if (tag.indexOf("Phone-First Friend") !== -1)
+      return "persona-phone-first-friend";
+    if (tag.indexOf("Saboteur") !== -1) return "persona-saboteur";
+    if (tag.indexOf("Stranger") !== -1) return "persona-stranger";
+    return "";
   }
 
   function renderVerified(slug, data) {
-    var banner = document.querySelector('[data-r-verified]');
-    var line = document.querySelector('[data-r-verified-line]');
+    var banner = document.querySelector("[data-r-verified]");
+    var line = document.querySelector("[data-r-verified-line]");
     if (!banner || !line) return;
     // We piggyback on the data already in the report JSON. If the badge
     // slug + audit date are present we render a tier-tagged verification
@@ -106,134 +119,144 @@
     if (!auditDate || !tier || !verifiedSlug) return;
     // Compute expiry from tier (mirrors the q17 generator's table).
     var days = 30;
-    var tl = (tier || '').toLowerCase();
-    if (tl.indexOf('pro') !== -1) days = 180;
-    else if (tl.indexOf('scale') !== -1 || tl.indexOf('full') !== -1) days = 90;
-    var expiryIso = '';
+    var tl = (tier || "").toLowerCase();
+    if (tl.indexOf("pro") !== -1) days = 180;
+    else if (tl.indexOf("scale") !== -1 || tl.indexOf("full") !== -1) days = 90;
+    var expiryIso = "";
     try {
-      var d = new Date(auditDate + 'T00:00:00Z');
+      var d = new Date(auditDate + "T00:00:00Z");
       d.setUTCDate(d.getUTCDate() + days);
       expiryIso = d.toISOString().slice(0, 10);
     } catch (e) {
-      expiryIso = '';
+      expiryIso = "";
     }
-    var tierShort = tier.replace(/\s+Package$/i, '');
-    line.textContent = (
-      '\u2713 LaunchLook Verified \u2014 ' +
-      tierShort + ' audit completed ' + humanDate(auditDate) + '. ' +
-      (expiryIso ? 'Valid through ' + humanDate(expiryIso) + '.' : '')
-    );
-    banner.classList.remove('hidden');
+    var tierShort = tier.replace(/\s+Package$/i, "");
+    line.textContent =
+      "\u2713 LaunchLook Verified \u2014 " +
+      tierShort +
+      " audit completed " +
+      humanDate(auditDate) +
+      ". " +
+      (expiryIso ? "Valid through " + humanDate(expiryIso) + "." : "");
+    banner.classList.remove("hidden");
   }
 
   function renderPublic(slug, data) {
-    var appName = data.app_name || (data.customer && data.customer.app_name) || 'this app';
-    var tier = data.tier || (data.customer && data.customer.tier) || 'audit';
-    var tierShort = tier.replace(/\s+Package$/i, '');
+    var appName =
+      data.app_name || (data.customer && data.customer.app_name) || "this app";
+    var tier = data.tier || (data.customer && data.customer.tier) || "audit";
+    var tierShort = tier.replace(/\s+Package$/i, "");
 
-    document.title = 'LaunchLook audit: ' + appName;
+    document.title = "LaunchLook audit: " + appName;
 
-    setText('[data-r-eyebrow]', 'LaunchLook \u00b7 ' + tierShort + ' audit');
-    setText('[data-r-app-name]', appName);
-    var auditLine = 'Pre-launch audit prepared ' + humanDate(data.audit_date || '') + '.';
+    setText("[data-r-eyebrow]", "LaunchLook \u00b7 " + tierShort + " audit");
+    setText("[data-r-app-name]", appName);
+    var auditLine =
+      "Pre-launch audit prepared " + humanDate(data.audit_date || "") + ".";
     if (data.customer && data.customer.builder) {
-      auditLine = auditLine + ' Built with ' + data.customer.builder + '.';
+      auditLine = auditLine + " Built with " + data.customer.builder + ".";
     }
-    setText('[data-r-audit-line]', auditLine);
+    setText("[data-r-audit-line]", auditLine);
 
     var verdict = data.verdict || {};
-    setText('[data-r-verdict-label]', verdict.label || verdict.summary || '');
+    setText("[data-r-verdict-label]", verdict.label || verdict.summary || "");
     if (verdict.label && verdict.summary && verdict.label !== verdict.summary) {
-      setText('[data-r-verdict-summary]', verdict.summary);
+      setText("[data-r-verdict-summary]", verdict.summary);
     } else {
-      setText('[data-r-verdict-summary]', '');
+      setText("[data-r-verdict-summary]", "");
     }
-    setText('[data-r-verdict-narrative]', verdict.narrative || '');
+    setText("[data-r-verdict-narrative]", verdict.narrative || "");
 
     var passed = data.passed_checks || [];
     if (passed.length) {
-      var wrap = document.querySelector('[data-r-passed-wrap]');
-      var list = document.querySelector('[data-r-passed]');
+      var wrap = document.querySelector("[data-r-passed-wrap]");
+      var list = document.querySelector("[data-r-passed]");
       if (wrap && list) {
         passed.forEach(function (item) {
-          var li = document.createElement('li');
-          li.className = 'flex gap-2 text-ink';
-          var check = document.createElement('span');
-          check.className = 'text-accent font-semibold';
-          check.setAttribute('aria-hidden', 'true');
-          check.textContent = '\u2713';
-          var text = document.createElement('span');
+          var li = document.createElement("li");
+          li.className = "flex gap-2 text-ink";
+          var check = document.createElement("span");
+          check.className = "text-accent font-semibold";
+          check.setAttribute("aria-hidden", "true");
+          check.textContent = "\u2713";
+          var text = document.createElement("span");
           text.textContent = item;
           li.appendChild(check);
           li.appendChild(text);
           list.appendChild(li);
         });
-        wrap.classList.remove('hidden');
+        wrap.classList.remove("hidden");
       }
     }
 
     var findings = data.findings || [];
     if (findings.length) {
-      var fwrap = document.querySelector('[data-r-findings-wrap]');
-      var fcontainer = document.querySelector('[data-r-findings]');
+      var fwrap = document.querySelector("[data-r-findings-wrap]");
+      var fcontainer = document.querySelector("[data-r-findings]");
       if (fwrap && fcontainer) {
         // Sort by severity, mirroring the PDF order.
         var sevOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-        findings.slice().sort(function (a, b) {
-          var av = sevOrder[a.severity] == null ? 99 : sevOrder[a.severity];
-          var bv = sevOrder[b.severity] == null ? 99 : sevOrder[b.severity];
-          return av - bv;
-        }).forEach(function (f, idx) {
-          var card = document.createElement('article');
-          var sev = (f.severity || 'low').toLowerCase();
-          card.className = 'rounded-xl border border-line bg-white p-5 shadow-sm shadow-ink/5 finding-card finding-' + sev;
-          card.setAttribute('data-severity', sev);
+        findings
+          .slice()
+          .sort(function (a, b) {
+            var av = sevOrder[a.severity] == null ? 99 : sevOrder[a.severity];
+            var bv = sevOrder[b.severity] == null ? 99 : sevOrder[b.severity];
+            return av - bv;
+          })
+          .forEach(function (f, idx) {
+            var card = document.createElement("article");
+            var sev = (f.severity || "low").toLowerCase();
+            card.className =
+              "rounded-xl border border-line bg-white p-5 shadow-sm shadow-ink/5 finding-card finding-" +
+              sev;
+            card.setAttribute("data-severity", sev);
 
-          var head = document.createElement('div');
-          head.className = 'flex flex-wrap items-baseline gap-2 mb-2';
+            var head = document.createElement("div");
+            head.className = "flex flex-wrap items-baseline gap-2 mb-2";
 
-          var sevPill = document.createElement('span');
-          sevPill.className = 'text-[10px] font-semibold uppercase tracking-widest text-muted';
-          sevPill.textContent = sev;
-          head.appendChild(sevPill);
+            var sevPill = document.createElement("span");
+            sevPill.className =
+              "text-[10px] font-semibold uppercase tracking-widest text-muted";
+            sevPill.textContent = sev;
+            head.appendChild(sevPill);
 
-          var title = document.createElement('h3');
-          title.className = 'font-medium text-base text-ink flex-1';
-          title.textContent = f.title || ('Finding ' + (idx + 1));
-          head.appendChild(title);
+            var title = document.createElement("h3");
+            title.className = "font-medium text-base text-ink flex-1";
+            title.textContent = f.title || "Finding " + (idx + 1);
+            head.appendChild(title);
 
-          if (f.tag) {
-            var tag = document.createElement('span');
-            tag.className = 'persona-tag ' + personaClass(f.tag);
-            tag.textContent = f.tag;
-            head.appendChild(tag);
-          }
+            if (f.tag) {
+              var tag = document.createElement("span");
+              tag.className = "persona-tag " + personaClass(f.tag);
+              tag.textContent = f.tag;
+              head.appendChild(tag);
+            }
 
-          card.appendChild(head);
+            card.appendChild(head);
 
-          if (f.what_we_saw) {
-            var p1 = document.createElement('p');
-            p1.className = 'mt-2 text-sm text-muted leading-relaxed';
-            var label1 = document.createElement('strong');
-            label1.className = 'text-ink';
-            label1.textContent = 'What we saw. ';
-            p1.appendChild(label1);
-            p1.appendChild(document.createTextNode(f.what_we_saw));
-            card.appendChild(p1);
-          }
-          if (f.why_it_matters) {
-            var p2 = document.createElement('p');
-            p2.className = 'mt-2 text-sm text-muted leading-relaxed';
-            var label2 = document.createElement('strong');
-            label2.className = 'text-ink';
-            label2.textContent = 'Why it matters. ';
-            p2.appendChild(label2);
-            p2.appendChild(document.createTextNode(f.why_it_matters));
-            card.appendChild(p2);
-          }
-          fcontainer.appendChild(card);
-        });
-        fwrap.classList.remove('hidden');
+            if (f.what_we_saw) {
+              var p1 = document.createElement("p");
+              p1.className = "mt-2 text-sm text-muted leading-relaxed";
+              var label1 = document.createElement("strong");
+              label1.className = "text-ink";
+              label1.textContent = "What we saw. ";
+              p1.appendChild(label1);
+              p1.appendChild(document.createTextNode(f.what_we_saw));
+              card.appendChild(p1);
+            }
+            if (f.why_it_matters) {
+              var p2 = document.createElement("p");
+              p2.className = "mt-2 text-sm text-muted leading-relaxed";
+              var label2 = document.createElement("strong");
+              label2.className = "text-ink";
+              label2.textContent = "Why it matters. ";
+              p2.appendChild(label2);
+              p2.appendChild(document.createTextNode(f.why_it_matters));
+              card.appendChild(p2);
+            }
+            fcontainer.appendChild(card);
+          });
+        fwrap.classList.remove("hidden");
       }
     }
 
@@ -241,61 +264,68 @@
     // scripts/share_report.py --share-handoff.
     var handoff = data.handoff_report || {};
     if (handoff.available && handoff.shared) {
-      var hwrap = document.querySelector('[data-r-handoff]');
-      var hlink = document.querySelector('[data-r-handoff-link]');
+      var hwrap = document.querySelector("[data-r-handoff]");
+      var hlink = document.querySelector("[data-r-handoff-link]");
       if (hwrap && hlink) {
-        hlink.setAttribute('href', '/data/handoff/' + encodeURIComponent(slug) + '.pdf');
-        hwrap.classList.remove('hidden');
+        hlink.setAttribute(
+          "href",
+          "/data/handoff/" + encodeURIComponent(slug) + ".pdf",
+        );
+        hwrap.classList.remove("hidden");
       }
     }
 
     renderVerified(slug, data);
-    show('public');
+    show("public");
   }
 
   function fetchReport(slug) {
-    var url = '/data/reports/' + encodeURIComponent(slug) + '.json';
+    var url = "/data/reports/" + encodeURIComponent(slug) + ".json";
     return fetch(url, {
-      headers: { 'Accept': 'application/json' },
-      credentials: 'omit',
-      cache: 'no-cache'
-    }).then(function (res) {
-      return { status: res.status, body: res.ok ? res.json() : null };
-    }).then(function (resp) {
-      if (!resp.body) {
-        return { status: resp.status, body: null };
-      }
-      return resp.body.then(function (json) {
-        return { status: resp.status, body: json };
+      headers: { Accept: "application/json" },
+      credentials: "omit",
+      cache: "no-cache",
+    })
+      .then(function (res) {
+        return { status: res.status, body: res.ok ? res.json() : null };
+      })
+      .then(function (resp) {
+        if (!resp.body) {
+          return { status: resp.status, body: null };
+        }
+        return resp.body.then(function (json) {
+          return { status: resp.status, body: json };
+        });
       });
-    });
   }
 
   function init() {
     var slug = readSlug();
     if (!slug) {
-      show('missing');
+      show("missing");
       return;
     }
-    show('loading');
-    fetchReport(slug).then(function (resp) {
-      if (resp.status === 404 || !resp.body) {
-        show('missing');
-        return;
-      }
-      var data = resp.body;
-      if (data.is_public !== true) {
-        show('private');
-        return;
-      }
-      renderPublic(slug, data);
-    }).catch(function () {
-      show('error');
-    });
+    show("loading");
+    fetchReport(slug)
+      .then(function (resp) {
+        if (resp.status === 404 || !resp.body) {
+          show("missing");
+          return;
+        }
+        var data = resp.body;
+        if (data.is_public !== true) {
+          show("private");
+          return;
+        }
+        renderPublic(slug, data);
+      })
+      .catch(function () {
+        show("error");
+      });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
   }

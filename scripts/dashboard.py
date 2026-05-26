@@ -34,7 +34,7 @@ import os
 import sys
 import time
 import webbrowser
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -177,20 +177,28 @@ def revenue_for_tier(tier: str | None) -> int:
 
 
 def compute_metrics(customers: list[dict]) -> dict[str, Any]:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     week_ago = now - timedelta(days=7)
 
     real = [c for c in customers if not c["name"].startswith("EXAMPLE")]
 
-    total_revenue = sum(revenue_for_tier(c["tier"]) for c in real if c["status"] != STATUS_REFUNDED)
+    total_revenue = sum(
+        revenue_for_tier(c["tier"]) for c in real if c["status"] != STATUS_REFUNDED
+    )
     week_revenue = sum(
         revenue_for_tier(c["tier"])
         for c in real
-        if c["payment_date"] and c["payment_date"] >= week_ago and c["status"] != STATUS_REFUNDED
+        if c["payment_date"]
+        and c["payment_date"] >= week_ago
+        and c["status"] != STATUS_REFUNDED
     )
 
     delivered_count = sum(1 for c in real if c["status"] == STATUS_DELIVERED)
-    in_flight_count = sum(1 for c in real if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS))
+    in_flight_count = sum(
+        1
+        for c in real
+        if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS)
+    )
 
     by_status: dict[str, int] = {s: 0 for s in PIPELINE_STAGES + [STATUS_REFUNDED]}
     by_tier: dict[str, int] = {t: 0 for t in TIER_PRICE}
@@ -205,17 +213,18 @@ def compute_metrics(customers: list[dict]) -> dict[str, Any]:
 
     # Action queue: paid but not delivered, sort by delivery_due ascending (overdue first)
     action_queue = [
-        c for c in real
+        c
+        for c in real
         if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS)
     ]
     action_queue.sort(
-        key=lambda c: c["delivery_due"] or datetime.max.replace(tzinfo=timezone.utc)
+        key=lambda c: c["delivery_due"] or datetime.max.replace(tzinfo=UTC)
     )
 
     # Recent customers (last 10 by payment_date)
     recent = sorted(
         [c for c in real if c["payment_date"]],
-        key=lambda c: c["payment_date"] or datetime.min.replace(tzinfo=timezone.utc),
+        key=lambda c: c["payment_date"] or datetime.min.replace(tzinfo=UTC),
         reverse=True,
     )[:10]
 
@@ -262,7 +271,9 @@ def render_html(m: dict[str, Any], notion_db_id: str) -> str:
           <tbody>{queue_rows}</tbody>
         </table>"""
     else:
-        queue_table = '<p class="muted">No customers waiting on a report. Inbox zero.</p>'
+        queue_table = (
+            '<p class="muted">No customers waiting on a report. Inbox zero.</p>'
+        )
 
     # Recent customers
     if m["recent"]:
@@ -288,7 +299,9 @@ def render_html(m: dict[str, Any], notion_db_id: str) -> str:
 
     # Tier + platform breakdowns
     tier_summary = breakdown_html("By tier", m["by_tier"], total=m["total_customers"])
-    platform_summary = breakdown_html("By platform", m["by_platform"], total=m["total_customers"])
+    platform_summary = breakdown_html(
+        "By platform", m["by_platform"], total=m["total_customers"]
+    )
 
     example_warning = ""
     if m["example_count"]:
@@ -480,7 +493,11 @@ def action_row_html(c: dict, now: datetime) -> str:
 
 def recent_row_html(c: dict) -> str:
     name = html.escape(c["name"])
-    paid = c["payment_date"].astimezone().strftime("%Y-%m-%d") if c["payment_date"] else "—"
+    paid = (
+        c["payment_date"].astimezone().strftime("%Y-%m-%d")
+        if c["payment_date"]
+        else "—"
+    )
     return f"""
         <tr>
           <td>{name}</td>
@@ -495,7 +512,7 @@ def pipeline_html(by_status: dict[str, int]) -> str:
     counts = [by_status.get(s, 0) for s in PIPELINE_STAGES]
     max_count = max(counts) if counts and max(counts) > 0 else 1
     rows = []
-    for stage, count in zip(PIPELINE_STAGES, counts):
+    for stage, count in zip(PIPELINE_STAGES, counts, strict=False):
         pct = int((count / max_count) * 100)
         rows.append(
             f'<div class="funnel-row">'
@@ -510,13 +527,18 @@ def pipeline_html(by_status: dict[str, int]) -> str:
 def breakdown_html(label: str, items: dict[str, int], total: int) -> str:
     if not any(items.values()):
         return f'<h3 style="margin:0 0 8px; font-size:14px; color: var(--muted)">{label}</h3><p class="muted" style="margin:0">No data yet.</p>'
-    parts = [f'<h3 style="margin:0 0 8px; font-size:14px; color: var(--muted); text-transform: uppercase; letter-spacing:0.05em;">{label}</h3>', "<ul>"]
+    parts = [
+        f'<h3 style="margin:0 0 8px; font-size:14px; color: var(--muted); text-transform: uppercase; letter-spacing:0.05em;">{label}</h3>',
+        "<ul>",
+    ]
     sorted_items = sorted(items.items(), key=lambda kv: kv[1], reverse=True)
     for k, v in sorted_items:
         if v == 0:
             continue
         pct = (v / total * 100) if total else 0
-        parts.append(f'<li><span class="label">{html.escape(k)}</span><span><strong>{v}</strong> <span class="muted">({pct:.0f}%)</span></span></li>')
+        parts.append(
+            f'<li><span class="label">{html.escape(k)}</span><span><strong>{v}</strong> <span class="muted">({pct:.0f}%)</span></span></li>'
+        )
     parts.append("</ul>")
     return "".join(parts)
 
@@ -555,8 +577,17 @@ def generate_once() -> Path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--open", action="store_true", help="Open the HTML in your default browser after generating.")
-    parser.add_argument("--watch", type=int, metavar="SECONDS", help="Regenerate every N seconds. Ctrl+C to stop.")
+    parser.add_argument(
+        "--open",
+        action="store_true",
+        help="Open the HTML in your default browser after generating.",
+    )
+    parser.add_argument(
+        "--watch",
+        type=int,
+        metavar="SECONDS",
+        help="Regenerate every N seconds. Ctrl+C to stop.",
+    )
     args = parser.parse_args()
 
     if args.watch:

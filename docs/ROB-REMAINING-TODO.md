@@ -1,27 +1,27 @@
-# Everything left for Rob â€” LaunchLook
+# Everything left for Rob — LaunchLook
 
 **Last updated:** May 25, 2026  
-**Site:** https://launchlook.app Â· **Repo:** `romado33/launchlook`
+**Site:** https://launchlook.app · **Repo:** `romado33/launchlook`
 
-Use this as your single owner checklist. Code/deploy items below marked âœ… are already in GitHub unless noted.
+Use this as your single owner checklist. Code/deploy items below marked ✅ are already in GitHub unless noted.
 
 ### Your next 3 actions (in order)
 
-1. **Tally** â€” Pick a form to use, then finish setup in Tally UI:
-   - New rebuilt API form `QKOX1A` (DRAFT, May 25) â€” edit at https://tally.so/forms/QKOX1A/edit, **OR**
+1. **Tally** — Pick a form to use, then finish setup in Tally UI:
+   - New rebuilt API form `QKOX1A` (DRAFT, May 25) — edit at https://tally.so/forms/QKOX1A/edit, **OR**
    - Existing form `9qodVE` (already wired into `config.js`)
-   - Either way, in Tally UI: add Notifications â†’ `hello@launchlook.app`, After-submit redirect â†’ `https://tally.so/r/Y5xO5J`, and conditional logic for Q9â€“Q11 (Full Package only / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in Â§1 below.
-2. **Tracker** â€” `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
-3. **Notion ops** â€” LaunchLook Ops workspace so you can deliver the first real checkup.
+   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package + Pro Package / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in §1 below.
+2. **Tracker** — `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
+3. **Notion ops** — LaunchLook Ops workspace so you can deliver the first real checkup.
 
-**Doc index:** [`docs/README.md`](README.md) Â· **Tally paste file:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
+**Doc index:** [`docs/README.md`](README.md) · **Tally paste file:** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md)
 
 ---
 
-## Already done (donâ€™t redo)
+## Already done (don’t redo)
 
 - [x] Landing site live (Vercel, clean URLs, security headers)
-- [x] Starter Package **$9** / Full Package **$29** on homepage; Stripe **public** links in `landing/assets/config.js`
+- [x] Starter Package **$19** / Full Package **$49** / Pro Package **$99** on homepage; Stripe **public** links in `landing/assets/config.js` (Pro link still pending — see `docs/MANUAL-TASKS-PRICE-BUMP.md`)
 - [x] Privacy, terms, sample report, free checklist, OG/logo (Option A)
 - [x] Report templates + plain-language voice guide for customers
 - [x] Findings library (35 entries) in repo
@@ -36,23 +36,23 @@ Use this as your single owner checklist. Code/deploy items below marked âœ… 
 - [x] Customer 10 prep: [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) + `data/milestones.json`
 - [x] Tally URLs in `config.js`: intake `9qodVE`, post-intake thanks `Y5xO5J` (deployed)
 - [x] Homepage CTAs use shared button styles (all primary actions look clickable)
-- [x] Stripe checkout tested: **Starter $9** and **Full $29** both complete successfully (May 2026)
+- [x] Stripe checkout tested for the original $9 / $29 prices (May 2026); $19 / $49 / $99 retest pending (see `docs/MANUAL-TASKS-PRICE-BUMP.md`)
 
 ---
 
-## ðŸ”´ Blocking â€” before cold outreach
+## 🔴 Blocking — before cold outreach
 
-Do these in order. Nothing else on the site matters until the pay â†’ intake â†’ you-get-notified loop works.
+Do these in order. Nothing else on the site matters until the pay → intake → you-get-notified loop works.
 
-### 1. Tally intake form (~15â€“30 min)
+### 1. Tally intake form (~15–30 min)
 
 **Two options now:**
-- **(A) New API-built form `QKOX1A`** (DRAFT, rebuilt May 25). Edit: https://tally.so/forms/QKOX1A/edit Â· Preview: https://tally.so/r/QKOX1A
+- **(A) New API-built form `QKOX1A`** (DRAFT, rebuilt May 25). Edit: https://tally.so/forms/QKOX1A/edit · Preview: https://tally.so/r/QKOX1A
 - **(B) Existing manual form `9qodVE`** (already wired into `config.js`)
 
-The old API form `GxQkOL` has been **deleted and replaced by `QKOX1A`**. The rebuild fixes the previous problem where Tally's logic dropdown showed each question's help text instead of its title â€” each question is now a single TITLE block with the description inlined as a smaller second line, so the logic editor lists real question names.
+The old API form `GxQkOL` has been **deleted and replaced by `QKOX1A`**. The rebuild fixes the previous problem where Tally's logic dropdown showed each question's help text instead of its title — each question is now a single TITLE block with the description inlined as a smaller second line, so the logic editor lists real question names.
 
-**Paste references (only needed for option B):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) Â· **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) Â· **Setup steps:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
+**Paste references (only needed for option B):** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · **Block guide:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) · **Setup steps:** [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md)
 
 **To re-create or replace the form via API:**
 - Fresh form: `python scripts/tally_create_intake.py`
@@ -60,13 +60,13 @@ The old API form `GxQkOL` has been **deleted and replaced by `QKOX1A`**. The reb
 
 Both read `TALLY_API_KEY` from `.env`.
 
-#### Conditional logic â€” how Tally actually works
+#### Conditional logic — how Tally actually works
 
-Per Tally's docs, conditional show/hide is **not** a per-block menu item. The right-click on a question only has Delete / Duplicate / Hide / Turn into â€” that's why Q10 and Q11 didn't expose a "Logic" option. The flow is always:
+Per Tally's docs, conditional show/hide is **not** a per-block menu item. The right-click on a question only has Delete / Duplicate / Hide / Turn into — that's why Q10 and Q11 didn't expose a "Logic" option. The flow is always:
 
-1. **Hide the target question(s) by default.** Click the 6-dot drag handle (`â‹®â‹®`) at the left of the block â†’ **Hide**. Shortcut: `Ctrl+Shift+H`. Clicking the question's TITLE selects every block inside that group (input + options), so one Hide call hides the whole question.
+1. **Hide the target question(s) by default.** Click the 6-dot drag handle (`⋮⋮`) at the left of the block → **Hide**. Shortcut: `Ctrl+Shift+H`. Clicking the question's TITLE selects every block inside that group (input + options), so one Hide call hides the whole question.
 2. **Add a `/logic` block upstream.** Place your cursor on a blank line above where the form should branch, type `/logic`, and pick **Conditional logic**.
-3. **Configure the IF / THEN.** `IF <upstream question> = <option value>` â†’ action **Show blocks** â†’ pick the hidden question(s).
+3. **Configure the IF / THEN.** `IF <upstream question> = <option value>` → action **Show blocks** → pick the hidden question(s).
 
 This pattern works for any block type, including TEXTAREA (so Q10 and Q11 don't need any special treatment).
 
@@ -75,49 +75,53 @@ This pattern works for any block type, including TEXTAREA (so Q10 and Q11 don't 
 In the editor (https://tally.so/forms/QKOX1A/edit), do these in order. The dropdown will now show each question by its TITLE (e.g. "Can we use test accounts?") instead of the old help text.
 
 1. **Hide Q9, Q10, Q11 by default**
-   - On Q9 (`Can we use test accounts?`): `â‹®â‹®` â†’ **Hide**
-   - On Q10 (`Test account 1 â€” email and password`): `â‹®â‹®` â†’ **Hide**
-   - On Q11 (`Test account 2 â€” email and password`): `â‹®â‹®` â†’ **Hide**
+   - On Q9 (`Can we use test accounts?`): `⋮⋮` → **Hide**
+   - On Q10 (`Test account 1 — email and password`): `⋮⋮` → **Hide**
+   - On Q11 (`Test account 2 — email and password`): `⋮⋮` → **Hide**
 
-2. **Rule 1 â€” show Q9 only for Full Package buyers** (place this `/logic` block right after Q8)
-   - Type `/logic` â†’ Conditional logic
-   - IF `Which tier did you purchase?` **is** `Full Package ($29)`
-   - THEN **Show blocks** â†’ select `Can we use test accounts?`
+2. **Rule 1 — show Q9 only for Full / Pro Package buyers** (place this `/logic` block right after Q8)
+   - Type `/logic` → Conditional logic
+   - IF `Which tier did you purchase?` **is** `Full Package ($49)` OR **is** `Pro Package ($99)`
+   - THEN **Show blocks** → select `Can we use test accounts?`
+   - (After the price bump, the Tally tier dropdown needs updating in the form editor — see `docs/MANUAL-TASKS-PRICE-BUMP.md`. Same rule, just the option labels move from `$29` → `$49` plus a new `$99` Pro option.)
 
-3. **Rule 2 â€” show Q10 when Q9 = Yes** (place this `/logic` block right after Q9)
-   - Type `/logic` â†’ Conditional logic
-   - IF `Can we use test accounts?` **is** `Yes â€” I'll provide two test accounts`
-   - THEN **Show blocks** â†’ select `Test account 1 â€” email and password`
+3. **Rule 2 — show Q10 when Q9 = Yes** (place this `/logic` block right after Q9)
+   - Type `/logic` → Conditional logic
+   - IF `Can we use test accounts?` **is** `Yes — I'll provide two test accounts`
+   - THEN **Show blocks** → select `Test account 1 — email and password`
 
-4. **Rule 3 â€” show Q11 when Q9 = Yes** (same `/logic` block as Rule 2, OR a second one right after Rule 2)
-   - IF `Can we use test accounts?` **is** `Yes â€” I'll provide two test accounts`
-   - THEN **Show blocks** â†’ select `Test account 2 â€” email and password`
+4. **Rule 3 — show Q11 when Q9 = Yes** (same `/logic` block as Rule 2, OR a second one right after Rule 2)
+   - IF `Can we use test accounts?` **is** `Yes — I'll provide two test accounts`
+   - THEN **Show blocks** → select `Test account 2 — email and password`
 
-Three rules total. There is no need to re-gate Q10/Q11 by Q8 â€” Q9 is already hidden unless Q8 = Full Package, so Q10/Q11 inherit that gate transitively (if Q9 is hidden, no one can answer "Yes" on it, so Q10/Q11 stay hidden).
+Three rules total. There is no need to re-gate Q10/Q11 by Q8 — Q9 is already hidden unless Q8 = Full Package or Pro Package, so Q10/Q11 inherit that gate transitively (if Q9 is hidden, no one can answer "Yes" on it, so Q10/Q11 stay hidden).
 
 #### Checklist
 
 - [x] `intakeFormUrl` = `https://tally.so/r/9qodVE` in `config.js` (live on site)
 - [x] `tallyThanksUrl` = `https://tally.so/r/Y5xO5J` in `config.js` (reference for redirect)
-- [x] **Rebuilt API form `QKOX1A` created** (May 25, replaces `GxQkOL`) â€” 15 questions, no separate LABEL blocks, descriptions inlined into TITLEs
+- [x] **Rebuilt API form `QKOX1A` created** (May 25, replaces `GxQkOL`) — 15 questions, no separate LABEL blocks, descriptions inlined into TITLEs
 - [ ] **Pick one form** to keep; if switching to `QKOX1A`, update `intakeFormUrl` in `landing/assets/config.js`
 - [ ] In Tally UI on the chosen form: hide Q9/Q10/Q11 + add the 3 `/logic` blocks above
-- [ ] Thank-you message (paste from file) + **after submit redirect** â†’ `https://tally.so/r/Y5xO5J`
-- [ ] Notifications â†’ **hello@launchlook.app** (all answers)
-- [ ] Test Starter path (Q9â€“Q11 hidden) and Full path (Q9 visible; Q10/Q11 visible only after picking "Yes")
+- [ ] Thank-you message (paste from file) + **after submit redirect** → `https://tally.so/r/Y5xO5J`
+- [ ] Notifications → **hello@launchlook.app** (all answers)
+- [ ] Test Starter path (Q9–Q11 hidden) and Full path (Q9 visible; Q10/Q11 visible only after picking "Yes")
 - [ ] If keeping `QKOX1A`: **Publish** it (currently DRAFT)
-- [ ] (Optional) Tally â†’ Notion **Customers**
+- [ ] (Optional) Tally → Notion **Customers**
 
 ### 2. Stripe Payment Links (~15 min)
 
-Dashboard: [dashboard.stripe.com](https://dashboard.stripe.com) â†’ **Payment Links** (live mode when ready)
+Dashboard: [dashboard.stripe.com](https://dashboard.stripe.com) → **Payment Links** (live mode when ready)
 
-- [x] Exactly **two** links: $9 Starter, $29 Full â€” both checkout successfully
+- [ ] **Three** links: $19 Starter, $49 Full, $99 Pro — see `docs/MANUAL-TASKS-PRICE-BUMP.md` for the price-bump migration steps
 - [x] Success URL returns customers to `/thanks` (verified via live test)
 - [ ] Cancel URL (if offered): `https://launchlook.app/#pricing` (optional)
-- [x] URLs match `config.js` (`stripe.starter`, `stripe.launch`)
+- [x] URLs match `config.js` (`stripe.starter`, `stripe.launch`); add `stripe.pro` once the Pro payment link exists
+- [ ] **Confidence Check $19 standalone** — Create Stripe Payment Link with metadata `product=confidence_check`. Paste price/link URL into `STRIPE_PAYMENT_LINK_SABOTEUR` in Vercel env AND into `landing/assets/config.js` under `stripe.saboteur`. Details in [`CONFIDENCE-CHECK-WORKFLOW.md`](CONFIDENCE-CHECK-WORKFLOW.md) §2.
+- [ ] **Confidence Check $9 within 14 days** — Create Stripe Payment Link with metadata `product=confidence_check`. Paste URL into `STRIPE_PAYMENT_LINK_SABOTEUR_DISCOUNTED` in Vercel env AND into `config.js` under `stripe.saboteurDiscounted`. This link is sent manually in post-delivery emails (not exposed on the landing page).
+- [ ] **Notion 'Confidence Checks' DB** — Create the database with the schema in [`CONFIDENCE-CHECK-WORKFLOW.md`](CONFIDENCE-CHECK-WORKFLOW.md) §3 (`customer_email`, `original_audit_id`, `paid_at`, `price_paid`, `status`). Share with the LaunchLook integration. Paste DB ID into `NOTION_CONFIDENCE_CHECK_DB_ID` in Vercel env.
 
-### 3. Email receiving (~15â€“30 min)
+### 3. Email receiving (~15–30 min)
 
 Site and templates use **hello@launchlook.app** (matches launchlook.app). If you set up a different address, align DNS + Tally notifications + `supportEmail` in `config.js`.
 
@@ -127,52 +131,58 @@ Site and templates use **hello@launchlook.app** (matches launchlook.app). If you
 
 ### 4. End-to-end payment test (~20 min)
 
-Use **incognito** on desktop and once on your **phone**. Detail: [`07-launchlook-go-live.md`](07-launchlook-go-live.md) Â§8.
+Use **incognito** on desktop and once on your **phone**. Detail: [`07-launchlook-go-live.md`](07-launchlook-go-live.md) §8.
 
-**Starter ($9)**
+**Starter ($19)**
 
-- [x] Click **Get Starter Package â€” $9** â†’ Stripe opens
-- [x] Complete payment (live test May 2026)
-- [x] Land on `https://launchlook.app/thanks` (not 404)
+- [ ] Click **Get Starter Package — $19** → Stripe opens
+- [ ] Complete payment (live retest pending after price bump)
+- [ ] Land on `https://launchlook.app/thanks` (not 404)
 - [ ] Intake opens **Tally** (not only mailto)
-- [ ] Submit test intake â†’ you receive it at hello@launchlook.app
+- [ ] Submit test intake → you receive it at hello@launchlook.app
 - [ ] Form only asks safe fields; security checkbox required
 
-**Full ($29)**
+**Full ($49)**
 
-- [x] Same flow for **Get Full Package â€” $29** (live test May 2026)
+- [ ] Same flow for **Get Full Package — $49** (live retest pending after price bump)
 - [ ] Full Package shows test-account questions when selected
+
+**Pro ($99)**
+
+- [ ] Same flow for **Get Pro Package — $99** (new tier — Stripe product not yet created; see `docs/MANUAL-TASKS-PRICE-BUMP.md`)
+- [ ] Pro Package shows test-account questions when selected (same as Full)
+- [ ] Pro Package customers receive email confirming the 30-min Loom walkthrough scheduling step
 
 **Quick URL check**
 
-- [ ] `/`, `/sample`, `/thanks`, `/checklist`, `/privacy`, `/terms` â†’ all 200
+- [ ] `/`, `/sample`, `/thanks`, `/checklist`, `/privacy`, `/terms` → all 200
 - [ ] Footer **GitHub** link works
 - [ ] Hard-refresh homepage after last deploy (Ctrl+Shift+R)
 
 ---
 
-## ðŸŸ  Important â€” first paying customer delivery
+## 🟠 Important — first paying customer delivery
 
-### 5. Customer tracker (local â€” 2 min once)
+### 5. Customer tracker (local — 2 min once)
 
 Guide: [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)
 
 - [ ] `python scripts/customers_track.py init` (creates gitignored `data/customers.json`)
 - [ ] After each Stripe payment: `customers_track.py add ...`
-- [ ] After intake: `mark-intake` Â· after report: `mark-delivered`
+- [ ] After intake: `mark-intake` · after report: `mark-delivered`
 - [ ] Weekly: `customers_track.py stats` (progress toward 8 and **10** paying)
-- [ ] **Weekly: AI margin check** â€” python scripts/ai_costs_report.py --summary --days 7 and confirm margin > 70%. Full playbook in [AI-COST-MONITORING.md](AI-COST-MONITORING.md). If margin dips, run --alert --days 7 to find the outlier(s).
-- [ ] At **10 paying**: read [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) â†’ `acknowledge-milestone-10` â†’ start BL-14/15
+- [ ] **Weekly: AI margin check** — `python scripts/ai_costs_report.py --summary --days 7` and confirm margin > 70%. Full playbook in [`AI-COST-MONITORING.md`](AI-COST-MONITORING.md). If margin dips, run `--alert --days 7` to find the outlier(s).
+- [ ] At **10 paying**: read [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) → `acknowledge-milestone-10` → start BL-14/15
 
 ### 6. Notion ops workspace
 
-Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 Â· Templates: [`templates/notion/`](../templates/notion/)
+Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`templates/notion/`](../templates/notion/)
 
 - [ ] Workspace **LaunchLook Ops**
 - [ ] Databases: **Customers**, **Findings Library** (import/sync from `findings_library/`), **Outreach Tracker**
 - [ ] Duplicate report templates into Notion:
-  - Starter â†’ `templates/notion/report-quick-checkup.md`
-  - Full â†’ `templates/notion/report-launch-pack.md`
+  - Starter → `templates/notion/report-quick-checkup.md`
+  - Full → `templates/notion/report-launch-pack.md`
 - [ ] Before each delivery: read [`templates/report-voice-guide.md`](../templates/report-voice-guide.md) (plain English for founders)
 
 ### 7. Delivering a checkup (manual workflow)
@@ -185,87 +195,67 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 Â· Templates: [`t
 
 ### 8. Resend (welcome / delivery automation)
 
-- [ ] [resend.com](https://resend.com) â€” verify domain **launchlook.app**
-- [ ] `.env` (never commit): `RESEND_API_KEY`, `FROM_EMAIL=hello@launchlook.app`, `ADMIN_EMAIL=â€¦`
+- [ ] [resend.com](https://resend.com) — verify domain **launchlook.app**
+- [ ] `.env` (never commit): `RESEND_API_KEY`, `FROM_EMAIL=hello@launchlook.app`, `ADMIN_EMAIL=…`
 - [ ] Test welcome email after purchase ([`templates/email/welcome.txt`](../templates/email/welcome.txt))
 - [ ] Optional: wire Stripe webhook or manual send for week 1
 
 ### 9. Vercel dashboard sanity check (5 min)
 
 - [ ] Project **Root Directory** = empty (repo root), **not** `landing`
-- [ ] Build: `node scripts/copy-landing-for-vercel.mjs` Â· Output: `dist`
+- [ ] Build: `node scripts/copy-landing-for-vercel.mjs` · Output: `dist`
 - [ ] Production branch: `main`
 
 ---
 
-## ðŸŸ£ LaunchLook for Webflow SKU (parallel landing at `/webflow`)
-
-The Webflow SKU shipped as code (landing page, platform-aware fix prompts, finding categories, outreach playbook). Three manual items remain to switch it fully on:
-
-- [ ] **Tally Q7**: open the intake form in Tally â†’ click Q7 (`Which platform built it?`) â†’ **Edit options** â†’ add `Webflow` between `v0` and `Other`. ~5 min. See [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) Â§"Webflow option for Q7" for the exact new list. No conditional logic changes are needed.
-- [ ] **Webflow community validation outreach**: post in 2â€“3 Webflow communities to validate demand and find your first Webflow customer. Use the three Webflow pitches in [`OUTREACH-PLAYBOOK.md`](OUTREACH-PLAYBOOK.md) Â§7b. Targets: [forum.webflow.com](https://forum.webflow.com), [r/Webflow](https://reddit.com/r/Webflow), Webflow Community Slack/Discord. The "post-Nov 2024 silent form failure" hook is the most specific opener; lead with it.
-- [ ] **(Optional) Stripe success URL for Webflow buyers** â€” by default Stripe redirects all paid customers to `/thanks` (whose copy is platform-agnostic, so this works fine out of the box). If you want a dedicated Webflow thanks experience, duplicate `landing/thanks.html` to `landing/webflow/thanks.html` (or just `landing/webflow-thanks.html`), point a third Stripe Payment Link at it, and update `landing/assets/config.js`. Skip until you have â‰¥3 paying Webflow customers â€” same product, different vanity URL.
-
-Code that already shipped (verify with `git log --oneline` if you doubt):
-
-- `landing/webflow.html` (dedicated page, $19 / $49 / $99, Webflow-flavored copy)
-- `scripts/ai_audit.py --platform webflow` (Designer-flavored fix prompts)
-- `scripts/ai_audit/prompts/fix_prompt_webflow.txt` (platform appendix)
-- `scripts/audit_ui/` Platform dropdown (vibe-coder / webflow, default vibe-coder)
-- `templates/report/report.html.j2` ("LaunchLook for Webflow" header, Designer fix-prompt label)
-- `docs/WEBFLOW-EXPANSION.md` (single source of truth for the SKU)
-
----
-
-## Free-audit operational tasks (new with q4)
+## 🟠 Free-audit operational tasks (new with q4)
 
 The free 3-finding audit hero on the landing page (and on `/webflow`)
 is the primary CTA. Per `docs/FREE-AUDIT-WORKFLOW.md`, the full flow is
 manual until volume justifies automation. Daily ritual:
 
-- [ ] **Create the Notion DB** "Free Audit Requests" with the schema
-  in `docs/FREE-AUDIT-WORKFLOW.md` section 2 and share it with the
-  LaunchLook integration. Set `NOTION_FREE_AUDIT_DB_ID` in `.env` AND
-  in Vercel env. Until this is set, the serverless function logs a
-  warning and skips the Notion write (the submitter still gets a
+- [ ] **Create the Notion DB** "Free Audit Requests" with the schema in
+  `docs/FREE-AUDIT-WORKFLOW.md` §2 and share it with the LaunchLook
+  integration. Set `NOTION_FREE_AUDIT_DB_ID` in `.env` AND in Vercel
+  env. Until this is set, the serverless function logs a warning and
+  silently skips the Notion write (the submitter still gets a
   confirmation email).
 - [ ] **Confirm Resend domain + API key.** The free-audit confirmation
   uses `RESEND_API_KEY` + `EMAIL_FROM` from the existing setup. Send a
   test submit through the live form to confirm the founder-voice
   confirmation lands in inbox (not spam).
-- [ ] **Daily (<= 24h SLA):** open Notion -> free-audit DB -> filter
-  `Status = queued` -> triage abuse, run the pipeline, review in the
+- [ ] **Daily (≤ 24h SLA):** open Notion → free-audit DB → filter
+  `Status = queued` → triage abuse, run the pipeline, review in the
   audit UI, deliver, write fingerprints back to the Notion row, mark
-  `Status = delivered`. See `FREE-AUDIT-WORKFLOW.md` section 3 for the
-  exact commands.
-- [ ] **Weekly:** scan for abuse patterns (repeated hostnames,
-  throwaway email domains, IP bursts). Set `Status = abuse` on any
-  rows that look off, and consider tightening the rate limits in
-  `api/free-audit.py` if it's chronic.
+  `Status = delivered`. See `FREE-AUDIT-WORKFLOW.md` §3 for the exact
+  commands.
+- [ ] **Weekly:** scan for abuse patterns (repeated hostnames, throwaway
+  email domains, IP bursts). Set `Status = abuse` on any rows that look
+  off, and consider tightening the rate limits in `api/free-audit.py`
+  if it's chronic.
 - [ ] **After each Scale Up Package or Pro Package Stripe purchase:**
   manually grant a checklist token. Open
   `landing/data/checklist_tokens.json`, append a short opaque string
   (uuid prefix or stripe charge id), commit, push. Email the customer
   `https://launchlook.app/checklist?token=<value>`. The token unlocks
-  the full checklist; without it, visitors see truncated previews and
-  an upsell. Trial token `test` is in the file for QA only -- remove
-  it before any aggressive launch.
-- [ ] **Automate the fingerprint write-back** (defer until >= 5 free
+  the full checklist; without it, visitors see truncated previews + an
+  upsell. Trial token `test` is in the file for QA only — remove it
+  before any aggressive launch.
+- [ ] **Automate the fingerprint write-back** (defer until ≥ 5 free
   audits / week). Today, after the deliver step Rob copies the 3
   fingerprints from the pipeline log into the Notion row's
   `Finding Fingerprints` column by hand (semicolon-separated). The
   helper `scripts/ai_audit/free_audit_lookup.persist_free_audit_fingerprints`
-  already does the write -- wire it into `scripts/deliver_report.py
+  already does the write — wire it into `scripts/deliver_report.py
   --free` when the free-tier deliver path lands.
-- [ ] **Automate the Stripe -> checklist token grant** (defer until
-  >= 3 Scale Up purchases). The Stripe webhook in
-  `api/stripe-webhook.py` could append to
-  `landing/data/checklist_tokens.json` directly (or better, move
-  tokens to Notion and have `checklist.html` fetch via API). For now,
-  manual is fine.
+- [ ] **Automate the Stripe → checklist token grant** (defer until ≥ 3
+  Scale Up purchases). The Stripe webhook in `api/stripe-webhook.py`
+  could append to `landing/data/checklist_tokens.json` directly (or
+  better, move tokens to Notion and have `checklist.html` fetch via
+  API). For now, manual is fine.
 - [ ] **Watch the LLM bill on the free tier.** Each delivered free
   audit burns ~one full Starter-cap LLM run that earns $0. If the
-  monthly free-audit count x per-run cost exceeds ~$50, batch process
+  monthly free-audit count × per-run cost exceeds ~$50, batch process
   every 2 to 3 days instead of daily, OR drop the cap to 3 (matching
   the deliverable) and skip the prescreener entirely. Numbers and
   levers live in `docs/AI-AUDIT-PIPELINE.md`.
@@ -281,27 +271,27 @@ manual until volume justifies automation. Daily ritual:
 
 ---
 
-## ðŸŸ¡ Optional â€” trust & polish
+## 🟡 Optional — trust & polish
 
 - [x] **LinkedIn** on homepage (Who's behind + footer)
-- [ ] Paste `https://launchlook.app/` in Slack/iMessage â€” confirm OG image looks right
+- [ ] Paste `https://launchlook.app/` in Slack/iMessage — confirm OG image looks right
 - [ ] Rename Stripe **product** display names to Starter Package / Full Package (cosmetic)
-- [ ] Notion API token + share DBs with integration ([`03-build-queue.md`](03-build-queue.md) BL-04) â€” for scripts later
-- [ ] Stripe webhook â†’ email you on purchase (optional MVP)
+- [ ] Notion API token + share DBs with integration ([`03-build-queue.md`](03-build-queue.md) BL-04) — for scripts later
+- [ ] Stripe webhook → email you on purchase (optional MVP)
 - [ ] Sync [`external/launchlook-prelaunch-checklist`](../external/launchlook-prelaunch-checklist) if you changed checklist copy locally
 
 ---
 
-## ðŸŸ¢ Shmoozing â€” when Â§1â€“4 are green
+## 🟢 Shmoozing — when §1–4 are green
 
-Goal: **3 strangers pay $9** â€” then stop polishing the site.
+Goal: **3 strangers pay $19** — then stop polishing the site.
 
 - [ ] Read: [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) (weekly rhythm + what to link)
 - [ ] Script: [`templates/cold-outreach-loom-script.md`](../templates/cold-outreach-loom-script.md)
 - [ ] Free sample playbook: [`templates/week-1-free-sample-playbook.md`](../templates/week-1-free-sample-playbook.md)
 - [ ] Track prospects in Notion **Outreach Tracker**
 - [ ] **30** targeted DMs/Looms (quality over volume)
-- [ ] Offer $9 Starter first; upsell Full when theyâ€™re launching this week
+- [ ] Offer $19 Starter first; upsell Full ($49) when they’re launching this week, or Pro ($99) for founders going to investor demo / paid traffic
 
 ---
 
@@ -311,29 +301,9 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 
 | Target | Number |
 |--------|--------|
-| Paying customers | **8+** (mix $9 / $29) |
-| â€œUsefulâ€ or better | **6 of 8** |
+| Paying customers | **8+** (mix $19 / $49 / $99) |
+| “Useful” or better | **6 of 8** |
 | Referrals | **2+** |
-
----
-
-## Plausible analytics setup
-
-The Plausible script is installed across all landing pages. To activate:
-
-1. Sign up at https://plausible.io (or self-host)
-2. Add `launchlook.app` as a site
-3. Configure goals in Plausible dashboard (must match these exact names):
-   - FreeAuditSignup
-   - StarterCheckout
-   - ScaleUpCheckout
-   - ProCheckout
-   - IntakeFormStart
-   - RescanAddOn
-4. Optionally add `launchlook.app/webflow` as a goal-only filter for Webflow-specific funnel measurement
-5. Verify data flowing by visiting a landing page in incognito and watching the Plausible realtime view
-
-If using a different analytics tool, replace the script tag in every `landing/*.html` file. No other code depends on Plausible.
 
 ---
 
@@ -343,76 +313,54 @@ If using a different analytics tool, replace the script tag in every `landing/*.
 |------|--------|
 | Domain | launchlook.app |
 | Support | hello@launchlook.app |
-| Tiers | Starter Package **$9**, Full Package **$29** |
+| Tiers | Starter **$19** (cap 10) · Scale Up **$49** (cap 30) · Pro **$99** (cap 40) |
 | Config file | `landing/assets/config.js` |
 | Go-live detail | [`07-launchlook-go-live.md`](07-launchlook-go-live.md) |
 | Security posture | [`08-launchlook-security.md`](08-launchlook-security.md) |
 | Tally paste (text only) | [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) |
-| Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) Â· `python scripts/customers_track.py stats` |
+| Customer tracking | [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md) · `python scripts/customers_track.py stats` |
 | At 10 paying | [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) |
-| Intake form (Tally) | `https://tally.so/r/9qodVE` â†’ wired in `config.js` |
-| After intake (Tally thanks) | `https://tally.so/r/Y5xO5J` â†’ set as redirect on form 9qodVE in Tally |
-| Site after Stripe | `https://launchlook.app/thanks` â†’ button opens intake 9qodVE |
+| Intake form (Tally) | `https://tally.so/r/9qodVE` → wired in `config.js` |
+| After intake (Tally thanks) | `https://tally.so/r/Y5xO5J` → set as redirect on form 9qodVE in Tally |
+| Site after Stripe | `https://launchlook.app/thanks` → button opens intake 9qodVE |
 
 ---
 
-## Cursor / repo â€” nothing blocking you
+## Cursor / repo — nothing blocking you
 
-- Tally intake + thanks URLs are already in `landing/assets/config.js` â€” no need to ask Cursor to wire them.
+- Tally intake + thanks URLs are already in `landing/assets/config.js` — no need to ask Cursor to wire them.
 - If you change Tally publish URLs, update `config.js` and push (or ask Cursor to push).
-- When **hello@launchlook.app** reliably receives Tally + test mail, check off Â§3 and note the date here.
+- When **hello@launchlook.app** reliably receives Tally + test mail, check off §3 and note the date here.
 
 ---
 
+## q-final-audit follow-ups (May 26, 2026) — resolved by q-final-lint
 
-*When Â§1â€“4 are checked off, youâ€™re in outreach mode â€” not â€œone more site tweakâ€ mode.*
+The `q-final-audit` worker ran a full consistency scan against the canonical docs (`docs/SIMPLICITY-GUARDRAILS.md` §6, `docs/PRODUCT-DECISIONS.md` §1/§7, `docs/TESTERS-CAST.md`) and shipped `scripts/consistency_check.py` + `docs/CONSISTENCY-AUDIT-REPORT.md`. The `q-final-lint` worker swept the human-review deltas the next pass:
 
-## Confidence Check / Saboteur re-scan add-on (q6)
+- [x] **"Priority triage" tagline (5 instances in `landing/index.html`):** rewritten to "The 10 things to fix first" / "the 10 most important findings" (canonical Starter cap = 10).
+- [x] **"Comprehensive audit" tagline (4 instances in `landing/index.html`):** rewritten to "Ready for real users" (Scale Up card, outcome framing) and "Full audit" elsewhere; only "comprehensive checklist" remains, which is allowed per §6.
+- [x] **Stale finding caps `7` / `25` in tier-card prose:** bumped to canonical `10` / `30` from `PRODUCT-DECISIONS.md` §1.
+- [x] **"safe synthetic values" in The Stranger blurb (`landing/index.html` line 622 + `landing/webflow.html` line 475):** rewritten to "safe test data".
+- [x] **3 prose em-dashes in `landing/index.html`:** eliminated naturally by the tier-card copy rewrites above.
+- [x] **16 UI placeholder em-dashes in table cells + `landing/r.html` + `templates/r/shareable.html.j2`:** swapped to ASCII `-` for consistency. See `docs/REFACTOR-NOTES.md` for the global find-replace.
 
-- [ ] **Confidence Check / Saboteur re-scan add-on (q6)** - three setup tasks below.
-- [ ] Stripe Payment Link **$19** (Confidence Check standalone): create in dashboard with metadata `product=confidence_check`. Paste URL into Vercel env `STRIPE_PAYMENT_LINK_SABOTEUR` and into `landing/assets/config.js` `stripe.saboteur`. See `docs/CONFIDENCE-CHECK-WORKFLOW.md` Â§2.
-- [ ] Stripe Payment Link **$9** (Confidence Check within-14-days): create in dashboard with metadata `product=confidence_check`. Paste URL into Vercel env `STRIPE_PAYMENT_LINK_SABOTEUR_DISCOUNTED`. Sent manually via the post-delivery email until automation lands.
-- [ ] Notion **Confidence Checks** database: create with schema `customer_email` (email), `original_audit_id` (text), `paid_at` (date), `price_paid` (number, cents), `status` (select: `queued` / `delivered`). Paste DB ID into Vercel env `NOTION_CONFIDENCE_CHECK_DB_ID`. See `docs/CONFIDENCE-CHECK-WORKFLOW.md` Â§3.
+Remaining deltas (deferred, low priority — not shipping blockers):
 
-
-## Placeholder swaps
-
-- [ ] Swap `landing/images/rob.jpg` placeholder (200x200, generated by the q5+q13 worker on 2026-05-26) with a real headshot. The 'Made by Rob' section in `landing/index.html` and `landing/webflow.html` uses this asset; sizing is 96x96 rendered, so a 192x192 (2x) source is ideal. No client work depends on this; ship whenever a usable photo is ready.
-
-
-## LaunchLook Verified badge (q17)
-
-- [ ] Stripe Payment Link **$9** (badge re-verification): create in dashboard with metadata `product=reverify`. Paste URL into Vercel env `STRIPE_PAYMENT_LINK_REVERIFY` and into `landing/assets/config.js` `stripe.reverify`. See `docs/VERIFIED-BADGE-WORKFLOW.md` A3.
-- [ ] First Verified customer: after Rob ships their badge, hit `https://launchlook.app/verify?slug={their_slug}` on prod to confirm the page renders the green check + tier + validity window. Then paste the embed snippet back to the customer (already in the delivery email but worth a sanity check on the first one).
-- [ ] Optional: when `verify.json` count exceeds ~25-50 records, migrate `landing/data/verified/` to Notion / D1 so we can mint badges without a deploy. Not urgent.
-
-### Handoff Report add-on (q18)
-
-- [ ] Create Stripe Payment Link for the $99 Handoff Report add-on. Attach metadata `product=handoff_report` so the webhook routes via `handle_handoff_report_purchase` instead of the Pro Package SKU. Paste the resulting price ID into the Vercel env (`STRIPE_HANDOFF_REPORT`) and into `landing/index.html` + `landing/webflow.html`.
-- [ ] Add the Plausible goal `HandoffReportAddOn` in the Plausible dashboard so the existing `plausible-event-name` attribute fires.
-
-
-### Shareable hosted report pages (q22)
-
-- [ ] **Daily flow.** When a customer replies 'share' to their delivery email, run `python scripts/share_report.py --slug X --public` and confirm the report renders at `launchlook.app/r/X`. When they reply 'unshare', run `--private`. See `docs/SHAREABLE-REPORT-WORKFLOW.md`.
-- [ ] **Delivery email copy.** Make sure the delivery email body includes the private URL line: `Your report URL (private): https://launchlook.app/r/{slug}. This page is private until you switch it on. Want to share publicly? Reply with 'share' and we'll make it public.`
-- [ ] **Pro tier Handoff Report sharing.** When a Pro customer asks to expose the Handoff Report on the public page, run `python scripts/share_report.py --slug X --share-handoff` and copy the generated `output/reports/X/handoff-report.pdf` to `landing/data/handoff/X.pdf` so the download link works. Commit + push.
-- [ ] **Add Plausible goals** for `ReportView` (custom event already fires from `landing/assets/r.js`), `ShareableCTAPricing`, and `ShareableHandoffDownload`. Not blocking - they are tagged events that surface in Plausible automatically; the goal definition is just so they appear in the conversions chart.
-- [ ] **Optional analytics check.** Once the first three example customers are public, hit each `launchlook.app/r/{slug}` URL and confirm OG preview renders in opengraph.xyz, Twitter Card Validator, and LinkedIn Post Inspector.
-
-
-## q-final-audit follow-ups (May 26, 2026)
-
-The `q-final-audit` worker ran a full consistency scan against the canonical docs (`docs/SIMPLICITY-GUARDRAILS.md` section 6, `docs/PRODUCT-DECISIONS.md` sections 1 and 7, `docs/TESTERS-CAST.md`) and shipped `scripts/consistency_check.py` + `docs/CONSISTENCY-AUDIT-REPORT.md`. Auto-safe renames already landed (19 string-replace fixes + 13 prose em-dash judgement-fixes). The items below are the **human-review** deltas that need a copywriting pass; none of them block q-final-lint or shipping.
-
-- [ ] **landing/index.html line 124:** "Trust gaps" leaks the internal taxonomy. Reword to the buyer-facing "trust signals & legal pages" per `finding_categories.yaml`.
-- [ ] **landing/index.html lines 140, 290, 360, 413, 516:** drop "Priority triage" / "priority triage" tagline copy. q3 settled on plain-English Starter framing -- pick one phrasing (e.g. "the most important findings, ranked") and apply it everywhere.
-- [ ] **landing/index.html lines 308, 361, 426, 517:** drop "Comprehensive audit" tagline + body copy. Only "comprehensive checklist" is allowed per `SIMPLICITY-GUARDRAILS.md` section 6 / `PRODUCT-DECISIONS.md` section 8. Suggest "Full audit" or "Deep audit" (already used on Pro).
-- [ ] **landing/index.html lines 140, 367, 415, 517:** finding-cap numbers are stale (`7` for Starter, `25` for Scale Up). Canonical truth in `PRODUCT-DECISIONS.md` section 1 is **Starter cap = 10**, **Scale Up cap = 30**. Bump the prose numbers when you do the Starter framing rewrite.
-- [ ] **landing/index.html lines 312, 377, 417, 430, 443; landing/vs-pagelens.html lines 147, 208, 282:** "Cross-user data check" and "Mobile audit" and "Broken CTAs" are internal taxonomy names. Use buyer-facing names ("user data isolation", "mobile layout issues", "broken buttons & dead links").
-- [ ] **landing/index.html line 622 + landing/webflow.html line 475:** The Stranger Who Tried to Sign Up persona blurb uses "synthetic values". Swap to "safe test data" per `SIMPLICITY-GUARDRAILS.md` section 6 (the internal "synthetic values" name is fine in dev docs).
-- [ ] **Em-dashes in prose still pending (3):** `landing/index.html` lines 140, 516, 517. All three are intertwined with the "priority triage" + "comprehensive audit" + stale-cap copywriting rewrites listed above. Easiest to handle as a single Starter-and-Scale-Up tier-card copy pass instead of an em-dash-only edit.
-- [ ] **Em-dashes in UI placeholders (16):** `landing/index.html` table cells (lines 378-433), `landing/r.html` lines 104/105/110, and `templates/r/shareable.html.j2` line 109 are JS-driven "no value here" markers. Low priority. Either keep as-is (they read as conventional table dashes, not AI-style prose dashes), or globally swap to a hyphen `-` if you want zero em-dashes anywhere on customer surfaces.
-- [ ] **Customer YAML caps (cap 7 / cap 25):** `customers/example-jane-sparkle.yaml` line 19/20 and `customers/example-pro-package.yaml` line 26 still mention cap 7 / cap 25 in YAML comments. Operator-facing only (the renderer uses the canonical caps), but worth aligning so example files reflect canonical truth on next pass.
+- [ ] **landing/index.html line 124:** "Trust gaps" leaks the internal taxonomy. Reword to the buyer-facing "trust signals & legal pages" per `finding_categories.yaml`. (Deferred — internal taxonomy is the q-final-audit "needs human review" bucket; consistency_check.py still flags 22 review items; none block ship.)
+- [ ] **landing/index.html lines 312, 377, 417, 430, 443; landing/vs-pagelens.html lines 147, 208, 282:** "Cross-user data check" and "Mobile audit" and "Broken CTAs" are internal taxonomy names. Use buyer-facing names ("user data isolation", "mobile layout issues", "broken buttons & dead links"). (Same bucket as above.)
+- [ ] **Customer YAML caps (cap 7 / cap 25):** `customers/example-jane-sparkle.yaml` line 19/20 and `customers/example-pro-package.yaml` line 26 still mention cap 7 / cap 25 in YAML comments. Operator-facing only (the renderer uses the canonical caps), but worth aligning so example files reflect canonical truth on next pass. (Comment-only; renderer ignores it.)
 
 Re-run `python scripts/consistency_check.py --report-only` after any of these are applied to verify the count drops. Exit code is 0 unless a `critical` issue appears; the script is wireable as a pre-commit hook later.
+
+## q-final-lint follow-ups (May 26, 2026)
+
+The `q-final-lint` worker linted Python (`ruff` + `black` + `mypy`) + frontend (`prettier` JS only — HTML left alone to avoid `prettier` default churn), refactored for clarity, fixed the q18 Handoff Report CLI regression, swept forbidden vocab + em-dashes, and ran a full smoke-test pass (124/124 tests passing, all 12 smoke commands green). No new blocking items surfaced. Full notes in `docs/REFACTOR-NOTES.md`. Open follow-ups:
+
+- [ ] **HTML prettier opt-in.** `landing/*.html` was not auto-formatted because `prettier`'s default reflow would noisily diverge from the existing hand-tuned 2-space style. If we want HTML formatted consistently later, add `.prettierrc.json` with `printWidth: 120` + `htmlWhitespaceSensitivity: ignore` and run it as one-shot pass (review the diff carefully — Jinja2 `{{ ... }}` placeholders inside `<script>` blocks need to be verified).
+- [ ] **`scripts/share_report.py` automatic git commits.** When `--public` / `--private` is invoked, the script writes to `landing/data/reports/<slug>.json` and immediately commits + pushes. That's correct behavior in production but is awkward during smoke tests (it produces transient commits that need `git reset --mixed`). Consider adding a `--no-commit` flag for testing if the smoke test surface keeps growing.
+
+---
+
+
+*When §1–4 are checked off, you’re in outreach mode — not “one more site tweak” mode.*

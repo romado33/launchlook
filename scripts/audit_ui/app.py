@@ -22,19 +22,17 @@ output. This matches Rob's local-only workflow.
 
 from __future__ import annotations
 
-import io
 import re
 import threading
 import time
 from collections import deque
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from flask import Flask, abort, jsonify, render_template, request, send_from_directory
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
-from . import draft_store, deliver_runner, yaml_writer
-
+from . import deliver_runner, draft_store, yaml_writer
 
 # ---------------------------------------------------------------------------
 # Tier-cap discovery — read the cap values from deliver_report.py at startup
@@ -48,12 +46,8 @@ _DEFAULT_TIER_CAPS = {"Starter Package": 10, "Scale Up Package": 30, "Pro Packag
 #   cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
 # Captures every "Tier Name": <int> pair so the UI auto-tracks future tier
 # additions (e.g. Pro Package) without a code edit here.
-_TIER_CAP_DICT_PATTERN = re.compile(
-    r'cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier'
-)
-_TIER_CAP_ENTRY_PATTERN = re.compile(
-    r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)'
-)
+_TIER_CAP_DICT_PATTERN = re.compile(r"cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier")
+_TIER_CAP_ENTRY_PATTERN = re.compile(r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)')
 
 
 def discover_tier_caps(deliver_report_path: Path) -> dict[str, int]:
@@ -196,20 +190,22 @@ def _register_routes(app: Flask) -> None:
             if app.config["REVIEW_AI"]:
                 existing_customer = _load_customer_payload(app, slug)
                 feedback_record = _load_feedback(app, slug)
-        return jsonify({
-            "slug": slug,
-            "prefill": prefill,
-            "draft": existing_draft,
-            "review_ai": app.config["REVIEW_AI"],
-            "customer": existing_customer,
-            "feedback": feedback_record,
-            "tier_caps": app.config["TIER_CAPS"],
-            "severities": list(yaml_writer.VALID_SEVERITIES),
-            "tiers": list(yaml_writer.VALID_TIERS),
-            "builders": list(yaml_writer.VALID_BUILDERS),
-            "platforms": list(yaml_writer.VALID_PLATFORMS),
-            "default_platform": yaml_writer.DEFAULT_PLATFORM,
-        })
+        return jsonify(
+            {
+                "slug": slug,
+                "prefill": prefill,
+                "draft": existing_draft,
+                "review_ai": app.config["REVIEW_AI"],
+                "customer": existing_customer,
+                "feedback": feedback_record,
+                "tier_caps": app.config["TIER_CAPS"],
+                "severities": list(yaml_writer.VALID_SEVERITIES),
+                "tiers": list(yaml_writer.VALID_TIERS),
+                "builders": list(yaml_writer.VALID_BUILDERS),
+                "platforms": list(yaml_writer.VALID_PLATFORMS),
+                "default_platform": yaml_writer.DEFAULT_PLATFORM,
+            }
+        )
 
     @app.route("/api/draft", methods=["POST"])
     def api_draft_save() -> Any:
@@ -219,11 +215,13 @@ def _register_routes(app: Flask) -> None:
         if not slug:
             return jsonify({"error": "slug is required"}), 400
         path = draft_store.save_draft(app.config["DRAFTS_DIR"], slug, payload)
-        return jsonify({
-            "ok": True,
-            "path": str(path.relative_to(app.config["REPO_ROOT"])),
-            "saved_at": datetime.now(timezone.utc).isoformat(),
-        })
+        return jsonify(
+            {
+                "ok": True,
+                "path": str(path.relative_to(app.config["REPO_ROOT"])),
+                "saved_at": datetime.now(UTC).isoformat(),
+            }
+        )
 
     @app.route("/api/draft", methods=["GET"])
     def api_draft_load() -> Any:
@@ -258,18 +256,33 @@ def _register_routes(app: Flask) -> None:
         try:
             yaml_text = yaml_writer.form_to_yaml(payload)
         except Exception as exc:  # noqa: BLE001
-            return jsonify({"ok": False, "errors": [{"field": "_global", "message": f"YAML serialization failed: {exc}"}]}), 400
+            return (
+                jsonify(
+                    {
+                        "ok": False,
+                        "errors": [
+                            {
+                                "field": "_global",
+                                "message": f"YAML serialization failed: {exc}",
+                            }
+                        ],
+                    }
+                ),
+                400,
+            )
 
         customers_dir = app.config["CUSTOMERS_DIR"]
         customers_dir.mkdir(parents=True, exist_ok=True)
         target = customers_dir / f"{draft_store.safe_slug(slug)}.yaml"
         target.write_text(yaml_text, encoding="utf-8")
 
-        return jsonify({
-            "ok": True,
-            "yaml": yaml_text,
-            "path": str(target.relative_to(app.config["REPO_ROOT"])),
-        })
+        return jsonify(
+            {
+                "ok": True,
+                "yaml": yaml_text,
+                "path": str(target.relative_to(app.config["REPO_ROOT"])),
+            }
+        )
 
     @app.route("/api/customers")
     def api_customers_list() -> Any:
@@ -282,12 +295,16 @@ def _register_routes(app: Flask) -> None:
                 stat = path.stat()
             except OSError:
                 continue
-            items.append({
-                "slug": path.stem,
-                "filename": path.name,
-                "modified": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(),
-                "size": stat.st_size,
-            })
+            items.append(
+                {
+                    "slug": path.stem,
+                    "filename": path.name,
+                    "modified": datetime.fromtimestamp(
+                        stat.st_mtime, tz=UTC
+                    ).isoformat(),
+                    "size": stat.st_size,
+                }
+            )
         return jsonify({"customers": items})
 
     @app.route("/api/customers/<slug>")
@@ -322,7 +339,10 @@ def _register_routes(app: Flask) -> None:
 
         ext = Path(upload.filename).suffix.lower()
         if ext not in {".png", ".jpg", ".jpeg", ".gif", ".webp"}:
-            return jsonify({"error": f"Unsupported image extension: {ext or '(none)'}"}), 400
+            return (
+                jsonify({"error": f"Unsupported image extension: {ext or '(none)'}"}),
+                400,
+            )
 
         clean_slug = draft_store.safe_slug(slug)
         target_dir = app.config["SCREENSHOTS_DIR"] / clean_slug
@@ -331,12 +351,14 @@ def _register_routes(app: Flask) -> None:
         upload.save(target)
 
         rel = target.relative_to(app.config["REPO_ROOT"]).as_posix()
-        return jsonify({
-            "ok": True,
-            "path": rel,
-            "url": f"/screenshots/{clean_slug}/{target.name}",
-            "filename": target.name,
-        })
+        return jsonify(
+            {
+                "ok": True,
+                "path": rel,
+                "url": f"/screenshots/{clean_slug}/{target.name}",
+                "filename": target.name,
+            }
+        )
 
     @app.route("/screenshots/<path:relpath>")
     def serve_screenshot(relpath: str) -> Any:
@@ -346,7 +368,12 @@ def _register_routes(app: Flask) -> None:
     def api_deliver() -> Any:
         deliver_log: DeliverLog = app.config["DELIVER_LOG"]
         if deliver_log.running:
-            return jsonify({"ok": False, "error": "Another deliver job is already running."}), 409
+            return (
+                jsonify(
+                    {"ok": False, "error": "Another deliver job is already running."}
+                ),
+                409,
+            )
 
         data = request.get_json(silent=True) or {}
         slug = (data.get("slug") or "").strip()
@@ -357,10 +384,15 @@ def _register_routes(app: Flask) -> None:
         clean = draft_store.safe_slug(slug)
         customer_yaml = app.config["CUSTOMERS_DIR"] / f"{clean}.yaml"
         if not customer_yaml.exists():
-            return jsonify({
-                "ok": False,
-                "error": f"Customer YAML missing: {customer_yaml.name}. Click 'Generate YAML' first.",
-            }), 400
+            return (
+                jsonify(
+                    {
+                        "ok": False,
+                        "error": f"Customer YAML missing: {customer_yaml.name}. Click 'Generate YAML' first.",
+                    }
+                ),
+                400,
+            )
 
         deliver_log.begin()
         deliver_runner.run_deliver_in_thread(
@@ -523,7 +555,9 @@ _EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 _URL_RE = re.compile(r"^https?://", re.IGNORECASE)
 
 
-def _validate_payload(payload: dict[str, Any], tier_caps: dict[str, int]) -> list[dict[str, str]]:
+def _validate_payload(
+    payload: dict[str, Any], tier_caps: dict[str, int]
+) -> list[dict[str, str]]:
     errors: list[dict[str, str]] = []
 
     customer = payload.get("customer") or {}
@@ -534,58 +568,93 @@ def _validate_payload(payload: dict[str, Any], tier_caps: dict[str, int]) -> lis
     if not email:
         errors.append({"field": "customer.email", "message": "Email is required."})
     elif not _EMAIL_RE.match(email):
-        errors.append({"field": "customer.email", "message": "Email format looks invalid."})
+        errors.append(
+            {"field": "customer.email", "message": "Email format looks invalid."}
+        )
 
     app_url = (customer.get("app_url") or "").strip()
     if not app_url:
         errors.append({"field": "customer.app_url", "message": "App URL is required."})
     elif not _URL_RE.match(app_url):
-        errors.append({"field": "customer.app_url", "message": "App URL must start with http:// or https://."})
+        errors.append(
+            {
+                "field": "customer.app_url",
+                "message": "App URL must start with http:// or https://.",
+            }
+        )
 
     tier = (customer.get("tier") or "").strip()
     if tier not in yaml_writer.VALID_TIERS:
         errors.append({"field": "customer.tier", "message": "Choose a valid tier."})
 
     if not (customer.get("first_name") or "").strip():
-        errors.append({"field": "customer.first_name", "message": "First name is required."})
+        errors.append(
+            {"field": "customer.first_name", "message": "First name is required."}
+        )
 
     if not (customer.get("app_name") or "").strip():
-        errors.append({"field": "customer.app_name", "message": "App name is required."})
+        errors.append(
+            {"field": "customer.app_name", "message": "App name is required."}
+        )
 
     if not (customer.get("builder") or "").strip():
         errors.append({"field": "customer.builder", "message": "Pick a builder."})
 
-    platform = (customer.get("platform") or yaml_writer.DEFAULT_PLATFORM).strip().lower()
+    platform = (
+        (customer.get("platform") or yaml_writer.DEFAULT_PLATFORM).strip().lower()
+    )
     if platform and platform not in yaml_writer.VALID_PLATFORMS:
-        errors.append({
-            "field": "customer.platform",
-            "message": f"Platform must be one of {', '.join(yaml_writer.VALID_PLATFORMS)}.",
-        })
+        errors.append(
+            {
+                "field": "customer.platform",
+                "message": f"Platform must be one of {', '.join(yaml_writer.VALID_PLATFORMS)}.",
+            }
+        )
 
     if not (verdict.get("summary") or "").strip():
-        errors.append({"field": "verdict.summary", "message": "Verdict summary is required."})
+        errors.append(
+            {"field": "verdict.summary", "message": "Verdict summary is required."}
+        )
 
     if not (verdict.get("narrative") or "").strip():
-        errors.append({"field": "verdict.narrative", "message": "Verdict narrative is required."})
+        errors.append(
+            {"field": "verdict.narrative", "message": "Verdict narrative is required."}
+        )
 
     if not findings:
         errors.append({"field": "findings", "message": "Add at least one finding."})
 
     cap = tier_caps.get(tier)
     if cap and len(findings) > cap:
-        errors.append({
-            "field": "findings",
-            "message": f"{tier} caps at {cap} findings; this audit has {len(findings)}.",
-        })
+        errors.append(
+            {
+                "field": "findings",
+                "message": f"{tier} caps at {cap} findings; this audit has {len(findings)}.",
+            }
+        )
 
     for i, finding in enumerate(findings):
         for key in ("severity", "title", "what_we_saw", "why_it_matters", "fix_prompt"):
-            val = (finding.get(key) or "").strip() if isinstance(finding.get(key), str) else finding.get(key)
+            val = (
+                (finding.get(key) or "").strip()
+                if isinstance(finding.get(key), str)
+                else finding.get(key)
+            )
             if not val:
-                errors.append({"field": f"findings[{i}].{key}", "message": f"Finding {i + 1}: {key.replace('_', ' ')} is required."})
+                errors.append(
+                    {
+                        "field": f"findings[{i}].{key}",
+                        "message": f"Finding {i + 1}: {key.replace('_', ' ')} is required.",
+                    }
+                )
         sev = (finding.get("severity") or "").strip().lower()
         if sev and sev not in yaml_writer.VALID_SEVERITIES:
-            errors.append({"field": f"findings[{i}].severity", "message": f"Finding {i + 1}: severity must be one of {', '.join(yaml_writer.VALID_SEVERITIES)}."})
+            errors.append(
+                {
+                    "field": f"findings[{i}].severity",
+                    "message": f"Finding {i + 1}: severity must be one of {', '.join(yaml_writer.VALID_SEVERITIES)}.",
+                }
+            )
 
     # QSG is part of every paid tier's deliverable per PRODUCT-DECISIONS.md §8,
     # but the form only hard-enforces it on Scale Up + Pro (the deeper tiers
@@ -595,12 +664,32 @@ def _validate_payload(payload: dict[str, Any], tier_caps: dict[str, int]) -> lis
     if tier in ("Scale Up Package", "Pro Package"):
         qsg = payload.get("quick_start_guide") or {}
         if not (qsg.get("title") or "").strip():
-            errors.append({"field": "qsg.title", "message": f"Quick Start Guide title is required for {tier}."})
+            errors.append(
+                {
+                    "field": "qsg.title",
+                    "message": f"Quick Start Guide title is required for {tier}.",
+                }
+            )
         if not (qsg.get("intro") or "").strip():
-            errors.append({"field": "qsg.intro", "message": f"Quick Start Guide intro is required for {tier}."})
+            errors.append(
+                {
+                    "field": "qsg.intro",
+                    "message": f"Quick Start Guide intro is required for {tier}.",
+                }
+            )
         steps = qsg.get("steps") or []
-        non_empty_steps = [s for s in steps if isinstance(s, dict) and ((s.get("title") or "").strip() or (s.get("body") or "").strip())]
+        non_empty_steps = [
+            s
+            for s in steps
+            if isinstance(s, dict)
+            and ((s.get("title") or "").strip() or (s.get("body") or "").strip())
+        ]
         if not non_empty_steps:
-            errors.append({"field": "qsg.steps", "message": "Add at least one Quick Start Guide step."})
+            errors.append(
+                {
+                    "field": "qsg.steps",
+                    "message": "Add at least one Quick Start Guide step.",
+                }
+            )
 
     return errors

@@ -29,11 +29,19 @@ from typing import Any
 
 import yaml
 
-
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3}
 VALID_SEVERITIES = ("critical", "high", "medium", "low")
 VALID_TIERS = ("Starter Package", "Scale Up Package", "Pro Package")
-VALID_BUILDERS = ("Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Webflow", "Other")
+VALID_BUILDERS = (
+    "Lovable",
+    "Bolt",
+    "v0",
+    "Base44",
+    "Replit",
+    "Cursor",
+    "Webflow",
+    "Other",
+)
 VALID_PLATFORMS = ("vibe-coder", "webflow")
 DEFAULT_PLATFORM = "vibe-coder"
 
@@ -113,7 +121,9 @@ def form_to_yaml(payload: dict[str, Any]) -> str:
 
     parsed = yaml.safe_load(text)
     if not isinstance(parsed, dict):
-        raise ValueError("Internal error: serialized YAML did not round-trip as a mapping")
+        raise ValueError(
+            "Internal error: serialized YAML did not round-trip as a mapping"
+        )
 
     return text
 
@@ -200,7 +210,11 @@ def _clean_findings(raw: list[Any]) -> list[dict[str, Any]]:
         for key in _FINDING_KEYS:
             val = entry.get(key)
             if isinstance(val, str):
-                val = val.strip("\n") if key in ("what_we_saw", "why_it_matters", "fix_prompt") else val.strip()
+                val = (
+                    val.strip("\n")
+                    if key in ("what_we_saw", "why_it_matters", "fix_prompt")
+                    else val.strip()
+                )
             if key == "severity":
                 val = _normalize_severity(val)
             if val:
