@@ -57,7 +57,11 @@ TEMPLATE_ROOT = REPO_ROOT / "templates"
 REPORT_TEMPLATE_DIR = TEMPLATE_ROOT / "report"
 QSG_TEMPLATE_DIR = TEMPLATE_ROOT / "qsg"
 EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
+# q6: Confidence Check / Saboteur re-scan add-on.
+CONFIDENCE_CHECK_TEMPLATE_DIR = TEMPLATE_ROOT / "confidence_check"
+CONFIDENCE_CHECKS_DATA_DIR = REPO_ROOT / "data" / "confidence_checks"
 OUTPUT_ROOT = REPO_ROOT / "output" / "reports"
+CONFIDENCE_CHECK_OUTPUT_ROOT = REPO_ROOT / "output" / "confidence_checks"
 
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
 VALID_TIERS = {"Starter Package", "Scale Up Package", "Pro Package"}
@@ -171,6 +175,7 @@ def build_jinja_env():
             str(REPORT_TEMPLATE_DIR),
             str(QSG_TEMPLATE_DIR),
             str(EMAIL_TEMPLATE_DIR),
+            str(CONFIDENCE_CHECK_TEMPLATE_DIR),
         ]),
         autoescape=select_autoescape(["html", "xml", "j2"]),
         trim_blocks=False,
@@ -344,15 +349,175 @@ def open_in_viewer(path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
+
+
+# ---------------------------------------------------------------------------
+# q6: Confidence Check / Saboteur re-scan delivery
+# ---------------------------------------------------------------------------
+
+
+def latest_confidence_check_for(customer_id: str) -> Path:
+    """Return the most recent ``data/confidence_checks/<customer_id>-*.yaml``.
+
+    ``customer_id`` can also be a full path to a YAML file (for callers that
+    want to pin a specific re-scan).
+    """
+    candidate = Path(customer_id)
+    if candidate.suffix == ".yaml" and candidate.exists():
+        return candidate.resolve()
+    if not CONFIDENCE_CHECKS_DATA_DIR.exists():
+        sys.exit(
+            f"ERROR: {CONFIDENCE_CHECKS_DATA_DIR.relative_to(REPO_ROOT)} does not exist. "
+            "Run scripts/confidence_check.py first."
+        )
+    matches = sorted(CONFIDENCE_CHECKS_DATA_DIR.glob(f"{customer_id}-*.yaml"))
+    if not matches:
+        sys.exit(
+            f"ERROR: no confidence_checks YAML found for customer {customer_id!r}. "
+            "Run scripts/confidence_check.py first."
+        )
+    return matches[-1].resolve()
+
+
+def render_confidence_check_html(env, data: dict[str, Any], delivered_at: str) -> str:
+    template = env.get_template("confidence_check_report.html.j2")
+    cc = data.get("confidence_check") or {}
+    customer = {
+        "first_name": cc.get("customer_first_name", "there"),
+        "email": cc.get("customer_email", ""),
+        "app_name": cc.get("app_name", ""),
+        "app_url": cc.get("url", ""),
+        "tier": cc.get("tier", ""),
+        "builder": cc.get("builder", ""),
+    }
+    return template.render(
+        confidence_check=cc,
+        customer=customer,
+        verdict=data.get("verdict", {}) or {},
+        fixed=data.get("fixed", []) or [],
+        still_present=data.get("still_present", []) or [],
+        new=data.get("new", []) or [],
+        footer_note=data.get("footer_note", ""),
+        delivered_at=delivered_at,
+        original_audit_id=cc.get("original_audit_id"),
+    )
+
+
+def render_confidence_check_email(env, data: dict[str, Any], delivered_at: str) -> tuple[str, str, str]:
+    """Return ``(subject, text_body, html_body)`` for the Confidence Check email."""
+    cc = data.get("confidence_check") or {}
+    first_name = cc.get("customer_first_name", "there")
+    customer = {
+        "first_name": first_name,
+        "email": cc.get("customer_email", ""),
+        "app_name": cc.get("app_name", ""),
+        "app_url": cc.get("url", ""),
+    }
+    subject = f"Your Confidence Check is in - {first_name}, here's what The Saboteur found"
+    ctx = {
+        "customer": customer,
+        "confidence_check": cc,
+        "first_name": first_name,
+        "app_name": customer.get("app_name") or "your app",
+        "verdict": data.get("verdict", {}) or {},
+        "fixed_count": len(data.get("fixed", []) or []),
+        "still_count": len(data.get("still_present", []) or []),
+        "still_present_count": len(data.get("still_present", []) or []),
+        "new_count": len(data.get("new", []) or []),
+        "delivered_at": delivered_at,
+    }
+    text_body = env.get_template("confidence_check_email.txt.j2").render(**ctx)
+    html_body = env.get_template("confidence_check_email.html.j2").render(**ctx)
+    return subject, text_body, html_body
+
+
+def deliver_confidence_check(args) -> int:
+    """Render + (optionally) send the short-form Confidence Check report.
+
+    Skips Quick Start Guide generation per q6 spec - Confidence Check ships
+    only the short report.
+    """
+    try:
+        import yaml
+    except ImportError:
+        sys.exit("ERROR: pyyaml not installed. Run: pip install -r requirements.txt")
+
+    yaml_path = latest_confidence_check_for(args.customer)
+    with yaml_path.open("r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+
+    if not isinstance(data, dict):
+        sys.exit(f"ERROR: {yaml_path} did not parse as a YAML mapping")
+
+    cc = data.get("confidence_check") or {}
+    customer = {
+        "first_name": cc.get("customer_first_name", "customer"),
+        "email": cc.get("customer_email", ""),
+        "app_name": cc.get("app_name", ""),
+    }
+    slug = slugify(customer.get("first_name", "customer"), customer.get("app_name", ""))
+    delivered_at = date.today().isoformat()
+
+    env = build_jinja_env()
+    html = render_confidence_check_html(env, data, delivered_at)
+
+    out_dir = CONFIDENCE_CHECK_OUTPUT_ROOT / slug
+    out_dir.mkdir(parents=True, exist_ok=True)
+    html_path = out_dir / "confidence-check.html"
+    html_path.write_text(html, encoding="utf-8")
+    print(f"OK: HTML written to {html_path.relative_to(REPO_ROOT)}")
+
+    pdf_path = out_dir / "confidence-check.pdf"
+    try:
+        html_to_pdf(html, pdf_path, customer.get("first_name", "customer"))
+        print(f"OK: PDF written to {pdf_path.relative_to(REPO_ROOT)}")
+    except SystemExit as exc:
+        print(f"WARN: PDF skipped ({exc}). HTML preview at {html_path}.", file=sys.stderr)
+        pdf_path = None
+
+    subject, text_body, html_body = render_confidence_check_email(env, data, delivered_at)
+    text_out = out_dir / "email.txt"
+    html_out = out_dir / "email.html"
+    text_out.write_text(text_body, encoding="utf-8")
+    html_out.write_text(html_body, encoding="utf-8")
+    print(f"OK: Email preview at {text_out.relative_to(REPO_ROOT)} / {html_out.relative_to(REPO_ROOT)}")
+    print(f"   Subject: {subject}")
+
+    if args.send:
+        if not pdf_path or not pdf_path.exists():
+            sys.exit("ERROR: cannot --send without a rendered PDF.")
+        send_via_resend(
+            to_email=customer.get("email", ""),
+            subject=subject,
+            text=text_body,
+            html=html_body,
+            attachments=[pdf_path],
+            confirm=not args.yes,
+        )
+    elif not args.no_open and pdf_path and pdf_path.exists():
+        open_in_viewer(pdf_path)
+
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--customer", required=True, help="Path to customer YAML")
+    parser.add_argument("--customer", required=True, help="Path to customer YAML (or, with --confidence-check, customer slug)")
+    parser.add_argument(
+        "--confidence-check",
+        action="store_true",
+        help="q6: render the short-form Confidence Check report (skips QSG).",
+    )
     parser.add_argument("--send", action="store_true", help="Send via Resend (default is dry-run preview)")
     parser.add_argument("--dry-run", action="store_true", help="Force dry-run (default behavior)")
     parser.add_argument("--no-open", action="store_true", help="Skip auto-opening PDFs in dry-run")
     parser.add_argument("--qsg-link", default=None, help="Optional public URL of the QSG PDF (for the report cross-link)")
     parser.add_argument("--yes", action="store_true", help="Skip the send confirmation prompt")
     args = parser.parse_args()
+
+    if args.confidence_check:
+        return deliver_confidence_check(args)
+
 
     if args.send and args.dry_run:
         sys.exit("ERROR: --send and --dry-run are mutually exclusive")

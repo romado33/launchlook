@@ -64,6 +64,13 @@ data/ai_feedback/
 # docs/SIMPLICITY-GUARDRAILS.md §6 and docs/AI-COST-MONITORING.md)
 data/ai_costs/*.jsonl
 
+# PageSpeed Insights cache (q14: performance & speed). 24h TTL by default;
+# keeps re-runs from burning the 25K daily quota. Internal-only.
+data/psi_cache/
+
+# axe-core run cache (q16: accessibility checks). 24h TTL by default.
+data/axe_cache/
+
 # Playwright
 test-results/
 playwright-report/

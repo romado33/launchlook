@@ -11,6 +11,8 @@
   // updates them.
   var scaleUpUrl = stripe.scaleup || stripe.scaleUp || stripe.launch || stripe.launchPack || stripe.full || "";
   var proUrl = stripe.pro || "";
+  // Confidence Check / Saboteur re-scan add-on (q6).
+  var saboteurUrl = stripe.saboteur || "";
 
   function $(selector) {
     return document.querySelectorAll(selector);
@@ -58,6 +60,7 @@
   setLinkState("[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick']", safeHttpsUrl(starterUrl), "Payment link not configured");
   setLinkState("[data-launchlook-stripe='scaleup'], [data-launchlook-stripe='launch'], [data-launchlook-stripe='full']", safeHttpsUrl(scaleUpUrl), "Payment link not configured");
   setLinkState("[data-launchlook-stripe='pro']", safeHttpsUrl(proUrl), "Payment link not configured");
+  setLinkState("[data-launchlook-stripe='saboteur']", safeHttpsUrl(saboteurUrl), "Payment link not configured (Confidence Check $19 - see docs/CONFIDENCE-CHECK-WORKFLOW.md)");
 
   var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
   if (checklistUrl) {

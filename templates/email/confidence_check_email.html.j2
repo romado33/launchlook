@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Confidence Check is ready</title>
+</head>
+<body style="margin:0; padding:0; background:#FAF7F2; color:#1F1B16; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F2; padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px; background:#FFFFFF; border:1px solid #E7E0D6; border-radius:8px; padding:32px 32px 28px;">
+          <tr>
+            <td>
+              <p style="margin:0 0 4px; font-size:11px; font-weight:600; color:#B45309; letter-spacing:0.18em; text-transform:uppercase;">
+                LaunchLook · Confidence Check
+              </p>
+              <h1 style="margin:0 0 18px; font-family:Georgia,'Times New Roman',serif; font-size:24px; line-height:1.25; color:#1F1B16; font-weight:500;">
+                The Saboteur's back, {{ first_name }}.
+              </h1>
+
+              <p style="margin:0 0 14px; color:#1F1B16;">Hi {{ first_name }},</p>
+
+              <p style="margin:0 0 14px; color:#1F1B16;">
+                I re-walked <strong>{{ app_name }}</strong> after your fixes and packaged what I found into the attached PDF.
+              </p>
+
+              <p style="margin:0 0 6px; color:#1F1B16; font-weight:500;">
+                Quick read: {{ verdict.emoji }} {{ verdict.label }}
+              </p>
+              <p style="margin:0 0 14px; color:#6B6359;">
+                {{ verdict.summary }}
+              </p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px; border-collapse:collapse;">
+                <tr>
+                  <td style="padding:4px 16px 4px 0; color:#1F1B16;"><strong>✓ Now fixed</strong></td>
+                  <td style="padding:4px 0; color:#1F1B16;">{{ fixed_count }}</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 16px 4px 0; color:#1F1B16;"><strong>✗ Still showing up</strong></td>
+                  <td style="padding:4px 0; color:#1F1B16;">{{ still_count }}</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 16px 4px 0; color:#1F1B16;"><strong>⚠ New things that turned up</strong></td>
+                  <td style="padding:4px 0; color:#1F1B16;">{{ new_count }}</td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 14px; color:#1F1B16;">
+                Open the attached PDF for the full breakdown, with one line per finding in The Saboteur's voice.
+              </p>
+
+              <p style="margin:0 0 18px; color:#1F1B16;">
+                Need another after the next round of fixes? Just reply, or send in The Saboteur again from <a href="https://launchlook.app" style="color:#B45309; text-decoration:none;">launchlook.app</a>.
+              </p>
+
+              <p style="margin:0 0 4px; color:#1F1B16;">Thanks,</p>
+              <p style="margin:0; color:#1F1B16;">Rob</p>
+
+              <hr style="border:0; border-top:1px solid #E7E0D6; margin:24px 0 16px;" />
+
+              <p style="margin:0; font-size:12px; color:#6B6359;">
+                LaunchLook · <a href="https://launchlook.app" style="color:#B45309; text-decoration:none;">launchlook.app</a> · prepared {{ delivered_at }}<br />
+                Confidential. Prepared for {{ first_name }} only.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

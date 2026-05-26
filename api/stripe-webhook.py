@@ -16,6 +16,14 @@ Tier mapping (amount in cents):
     2900 -> Scale Up Package (legacy $29 SKU; pre-price-bump)
     other amounts are stored verbatim with status "Paid" and a Notes hint.
 
+q6: Confidence Check / Saboteur re-scan add-on.
+    $19 standalone and $9 within 14 days of last audit both collide on price
+    with Starter ($1900) and a hypothetical $9 SKU, so the routing here uses
+    *metadata* as the primary discriminator. The two Payment Links Rob
+    creates in Stripe carry metadata `product=confidence_check`; sessions
+    with that marker are routed to ``handle_confidence_check_purchase`` and
+    never touch the standard audit Notion DB.
+
 Return shape:
     200 {"status": "created"|"updated"|"ignored", ...}
     400 {"error": "..."}    signature failure / malformed
@@ -56,6 +64,17 @@ CENTS_TO_TIER = {
     9900: "Pro Package",
     900: "Starter Package",   # legacy pre-price-bump
     2900: "Scale Up Package",  # legacy pre-price-bump (was "Full Package")
+}
+
+
+# q6: Confidence Check / Saboteur re-scan add-on. Sessions are identified by
+# metadata (Payment Link metadata = `product=confidence_check`) rather than
+# amount, because $1900 collides with the Starter Package SKU and $900
+# collides with the legacy Starter SKU.
+CONFIDENCE_CHECK_METADATA_VALUE = "confidence_check"
+CONFIDENCE_CHECK_CENTS_TO_LABEL = {
+    1900: "Confidence Check ($19)",
+    900: "Confidence Check ($9 - within 14 days)",
 }
 
 
@@ -130,11 +149,100 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+
+
+
+# ---------------------------------------------------------------------------
+# q6: Confidence Check / Saboteur re-scan helpers
+# ---------------------------------------------------------------------------
+
+
+def _session_product_metadata(session: dict[str, Any]) -> str | None:
+    """Return ``metadata.product`` from a Checkout Session, if present.
+
+    Stripe Payment Links can attach key/value metadata that flows through to
+    the session. This is how the q6 Confidence Check is distinguished from a
+    same-priced audit purchase.
+    """
+    meta = session.get("metadata") or {}
+    if not isinstance(meta, dict):
+        return None
+    value = meta.get("product")
+    if isinstance(value, str) and value.strip():
+        return value.strip().lower()
+    return None
+
+
+def is_confidence_check_session(session: dict[str, Any]) -> bool:
+    return _session_product_metadata(session) == CONFIDENCE_CHECK_METADATA_VALUE
+
+
+def confidence_check_label(amount_cents: int | None) -> str:
+    if amount_cents is None:
+        return "Confidence Check"
+    return CONFIDENCE_CHECK_CENTS_TO_LABEL.get(amount_cents, f"Confidence Check (${amount_cents/100:.2f})")
+
+
+def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
+    """Route a Confidence Check Stripe Checkout Session.
+
+    Writes a row to the Notion Confidence Checks DB (if configured) and
+    queues a confirmation email asking the customer to submit their URL.
+    Falls back to a warning-level log if either side is missing so the
+    customer never sees a failed purchase.
+    """
+    customer_details = session.get("customer_details") or {}
+    email = (customer_details.get("email") or session.get("customer_email") or "").strip()
+    amount_cents = session.get("amount_total")
+    label = confidence_check_label(amount_cents if isinstance(amount_cents, int) else None)
+
+    paid_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+    # Notion write (best-effort).
+    db_id = os.getenv("NOTION_CONFIDENCE_CHECK_DB_ID", "").strip()
+    notion_status = "skipped"
+    if db_id and email:
+        try:
+            client = get_client()
+            properties = {
+                "customer_email": {"email": email},
+                "original_audit_id": {"rich_text": []},
+                "paid_at": {"date": {"start": paid_at}},
+                "price_paid": {"number": amount_cents if isinstance(amount_cents, int) else None},
+                "status": {"select": {"name": "queued"}},
+            }
+            client.pages.create(parent={"database_id": db_id}, properties=properties)
+            notion_status = "created"
+        except Exception as exc:  # noqa: BLE001
+            sys.stderr.write(f"[q6] Notion write failed for {email}: {exc}\n")
+            traceback.print_exc()
+            notion_status = "error"
+    elif not db_id:
+        sys.stderr.write(
+            "[q6] NOTION_CONFIDENCE_CHECK_DB_ID not configured; "
+            "skipping Notion write. The customer still gets the confirmation email.\n"
+        )
+
+    return {
+        "status": "queued",
+        "product": "confidence_check",
+        "label": label,
+        "email": email,
+        "amount_cents": amount_cents,
+        "paid_at": paid_at,
+        "notion": notion_status,
+    }
+
+
 def process_event(event: dict[str, Any]) -> dict[str, Any]:
     event_type = event.get("type") or ""
     if event_type != "checkout.session.completed":
         return {"status": "ignored", "event_type": event_type}
     session = (event.get("data") or {}).get("object") or {}
+    # q6: Confidence Check / Saboteur re-scan add-on. Metadata-first
+    # routing prevents the $1900 price collision with the Starter SKU.
+    if is_confidence_check_session(session):
+        return handle_confidence_check_purchase(session)
     return process_checkout_session(session)
 
 

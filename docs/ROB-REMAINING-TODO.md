@@ -366,3 +366,11 @@ If using a different analytics tool, replace the script tag in every `landing/*.
 
 
 *When §1–4 are checked off, you’re in outreach mode — not “one more site tweak” mode.*
+
+## Confidence Check / Saboteur re-scan add-on (q6)
+
+- [ ] **Confidence Check / Saboteur re-scan add-on (q6)** - three setup tasks below.
+- [ ] Stripe Payment Link **$19** (Confidence Check standalone): create in dashboard with metadata `product=confidence_check`. Paste URL into Vercel env `STRIPE_PAYMENT_LINK_SABOTEUR` and into `landing/assets/config.js` `stripe.saboteur`. See `docs/CONFIDENCE-CHECK-WORKFLOW.md` §2.
+- [ ] Stripe Payment Link **$9** (Confidence Check within-14-days): create in dashboard with metadata `product=confidence_check`. Paste URL into Vercel env `STRIPE_PAYMENT_LINK_SABOTEUR_DISCOUNTED`. Sent manually via the post-delivery email until automation lands.
+- [ ] Notion **Confidence Checks** database: create with schema `customer_email` (email), `original_audit_id` (text), `paid_at` (date), `price_paid` (number, cents), `status` (select: `queued` / `delivered`). Paste DB ID into Vercel env `NOTION_CONFIDENCE_CHECK_DB_ID`. See `docs/CONFIDENCE-CHECK-WORKFLOW.md` §3.
+
