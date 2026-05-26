@@ -57,7 +57,7 @@ Please read before submitting
 
 • Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
 
-• For Full Package ($29) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+• For Scale Up Package ($49) and Pro Package ($99) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
 
 • We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
 <<< PASTE END
@@ -178,6 +178,7 @@ Bolt
 Base44
 Replit
 v0
+Webflow
 Other
 <<< PASTE END
 
@@ -198,8 +199,9 @@ We'll match against Stripe — this confirms what you expect.
 
 Options — MUST match exactly (logic uses this text):
 >>> PASTE START
-Starter Package ($9)
-Full Package ($29)
+Starter Package ($19)
+Scale Up Package ($49)
+Pro Package ($99)
 <<< PASTE END
 
 
@@ -225,7 +227,10 @@ No — skip the cross-user check
 <<< PASTE END
 
 INSTRUCTION — Conditional logic:
-  Show this question WHEN "Which tier did you purchase?" IS "Full Package ($29)"
+  Show this question WHEN "Which tier did you purchase?" IS "Scale Up Package ($49)"
+  OR "Which tier did you purchase?" IS "Pro Package ($99)"
+  (Q9-Q11 now apply to BOTH Scale Up AND Pro — both tiers include the 2-test-account
+  cross-user data check. Previously this only fired for Full Package.)
 
 
 ================================================================================
@@ -289,7 +294,9 @@ We'll put this in your one-page user guide so people know how to reach you.
 <<< PASTE END
 
 INSTRUCTION — Conditional logic:
-  Show WHEN "Which tier did you purchase?" IS "Full Package ($29)"
+  Show WHEN "Which tier did you purchase?" IS "Scale Up Package ($49)"
+  OR "Which tier did you purchase?" IS "Pro Package ($99)"
+  (Q12 applies to BOTH Scale Up AND Pro — both deliver a Quick Start Guide PDF.)
 
 
 ================================================================================
@@ -361,8 +368,9 @@ Thanks — you're in.
 
 We'll start your checkup within a few hours of this submission.
 
-• Starter Package: report within 48 hours (usually within 24)
-• Full Package: report within 24 hours (usually within 12)
+• Starter Package ($19): report within 48 hours (usually 24)
+• Scale Up Package ($49): report within 24 hours (usually 12)
+• Pro Package ($99): report within 24 hours (usually 12), plus integrations review and 30-minute Loom walkthrough
 
 Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
 
@@ -392,19 +400,27 @@ Include: all answers in the email
 CONDITIONAL LOGIC CHEAT SHEET (set in Tally per question, not pasted)
 ================================================================================
 
-Question 9 and 12:  show when Question 8 = Full Package ($29)
+Question 9 and 12:  show when Question 8 = Scale Up Package ($49)
+                    OR Question 8 = Pro Package ($99)
 
 Question 10 and 11: show when Question 9 = Yes — I'll provide two test accounts
 
 In Tally: open question → Logic → Add condition
+
+NOTE (May 2026 price bump + Pro tier): Q9-Q12 now fire for both Scale Up AND
+Pro buyers — both tiers include the 2-test-account cross-user data check.
+This used to be Full Package only. If you build the form with a `/logic` block
+(per the QKOX1A approach in ROB-REMAINING-TODO.md §1), you'll need two IF
+branches per rule, one for each tier.
 
 
 ================================================================================
 TEST BEFORE GO LIVE
 ================================================================================
 
-- Pick Starter Package ($9): questions 9-12 should NOT appear
-- Pick Full Package ($29): questions 9-12 should appear
+- Pick Starter Package ($19): questions 9-12 should NOT appear
+- Pick Scale Up Package ($49): questions 9-12 should appear
+- Pick Pro Package ($99): questions 9-12 should appear
 - Pick "Yes — I'll provide two test accounts": questions 10-11 appear
 - Checkbox 15 must be checked to submit
 - You receive email at hello@launchlook.app with full answers

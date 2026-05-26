@@ -4,7 +4,7 @@ Please read before submitting
 
 • Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
 
-• For Full Package ($29) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+• For Scale Up Package ($49) and Pro Package ($99) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
 
 • We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
 
@@ -48,8 +48,9 @@ Which tier did you purchase?
 
 We'll match against Stripe — this confirms what you expect.
 
-Starter Package ($9)
-Full Package ($29)
+Starter Package ($19)
+Scale Up Package ($49)
+Pro Package ($99)
 
 Can we use test accounts?
 
@@ -95,8 +96,9 @@ Thanks — you're in.
 
 We'll start your checkup within a few hours of this submission.
 
-• Starter Package: report within 24 hours
-• Full Package: report within 12 hours
+• Starter Package ($19): report within 48 hours (usually 24)
+• Scale Up Package ($49): report within 24 hours (usually 12)
+• Pro Package ($99): report within 24 hours (usually 12), plus integrations review and 30-minute Loom walkthrough
 
 Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
 

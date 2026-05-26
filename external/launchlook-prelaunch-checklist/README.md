@@ -1,18 +1,16 @@
 # The Pre-Launch Checkup for Vibe-Coded Apps
 
-**Try LaunchLook first:** [grab 3 free findings](https://launchlook.app/#hero) on your live URL — a real person reads your app and emails you the top 3 issues within 24 hours. No credit card.
+**Start here:** [Essential checklist (~20 min, plain English)](https://launchlook.app/checklist) on LaunchLook (a paid Scale Up or Pro deliverable; the free 3-finding audit is the public lead).
 
-This repo is the **community DIY extended checklist**: extra items, optional technical checks, and room to contribute. Same spirit as the LaunchLook checkup: what users notice before strangers show up.
+This repo is the **extended** version: extra items, optional technical checks, and room to contribute. Same spirit: what users notice before strangers show up.
 
 Maintained by [LaunchLook](https://launchlook.app). Free to copy, fork, share.
-
-The polished, in-app comprehensive checklist on launchlook.app is included with the Scale Up ($49) and Pro ($99) packages. This GitHub list is the public DIY companion.
 
 ---
 
 ## How to use this checklist
 
-1. (Recommended) Drop your URL on [launchlook.app](https://launchlook.app/#hero) for 3 free findings from a real person.
+1. Do the **[essential checklist](https://launchlook.app/checklist)** first if you haven’t already.
 2. Open your app in a normal browser (not the platform preview).
 3. For each item below: mark pass, issue, or unsure.
 4. Issues become your fix list. Unsure items are worth a paid second opinion.
@@ -79,7 +77,7 @@ This list focuses on what your *users* will notice, not deep security. For secur
 - [ ] Signed-out visitors cannot open dashboard/settings and see real content
 - [ ] Non-admin accounts cannot access admin-only areas
 
-## Optional: Technical checks (developers or LaunchLook Scale Up / Pro)
+## Optional: Technical checks (developers or LaunchLook Scale Up / Pro Package)
 
 Skip this block if you're not technical — or hire help.
 
@@ -114,13 +112,11 @@ Skip this block if you're not technical — or hire help.
 
 ## Want help running this?
 
-Drop your URL on [launchlook.app](https://launchlook.app/#hero) and a real person will email you 3 free findings within 24 hours — no credit card.
+[LaunchLook](https://launchlook.app) runs the checklist for you and returns a prioritized report with copy-paste fix prompts.
 
-For the full prioritized pass with paste-ready fix prompts:
-
-- **Starter $19** — the 10 most important findings, ranked, with fix prompts, within 48h (usually 24)
-- **Scale Up $49** — up to 30 findings + cross-user data check + Quick Start Guide + the polished comprehensive checklist as a token-gated companion, within 24h (usually 12)
-- **Pro $99** — up to 40 findings + integrations review + Loom walkthrough + handoff doc + comprehensive checklist, within 24h (usually 12)
+- **Starter Package $19** — the 10 things to fix first, 48h (usually 24)  
+- **Scale Up Package $49** — up to 30 findings, user data isolation check (2 test accounts), Quick Start Guide PDF, 24h (usually 12)  
+- **Pro Package $99** — everything in Scale Up, up to 40 findings, integrations review, 30-min Loom walkthrough, Handoff Report PDF, 24h (usually 12)  
 
 ---
 

@@ -14,7 +14,7 @@ Please read before submitting
 
 Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
 
-For Full Package ($29) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+For Scale Up Package ($49) and Pro Package ($99) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
 
 We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
 
@@ -32,17 +32,17 @@ Then add these questions in order:
 
 6. Long text, required. Title: What's the main thing they do in your app? Description: The one thing your app is for. The main workflow.
 
-7. Multiple choice, single select, required. Title: Which platform built it? Options exactly: Lovable, Bolt, Base44, Replit, v0, Other
+7. Multiple choice, single select, required. Title: Which platform built it? Options exactly: Lovable, Bolt, Base44, Replit, v0, Webflow, Other
 
-8. Multiple choice, single select, required. Title: Which tier did you purchase? Description: We'll match against Stripe — this confirms what you expect. Options exactly: Starter Package ($9), Full Package ($29)
+8. Multiple choice, single select, required. Title: Which tier did you purchase? Description: We'll match against Stripe — this confirms what you expect. Options exactly: Starter Package ($19), Scale Up Package ($49), Pro Package ($99)
 
-9. Multiple choice, single select, required when visible. Title: Can we use test accounts? Description: The cross-user check needs two signed-in sessions. We can sign up fresh test accounts ourselves if you prefer — we delete them after the audit. Options exactly: Yes — I'll provide two test accounts, I'll create test accounts using my own signup flow — you provision them, No — skip the cross-user check. Show only when question 8 answer is Full Package ($29)
+9. Multiple choice, single select, required when visible. Title: Can we use test accounts? Description: The cross-user check needs two signed-in sessions. We can sign up fresh test accounts ourselves if you prefer — we delete them after the audit. Options exactly: Yes — I'll provide two test accounts, I'll create test accounts using my own signup flow — you provision them, No — skip the cross-user check. Show only when question 8 answer is Scale Up Package ($49) OR Pro Package ($99)
 
 10. Long text, required when visible. Title: Test account 1 — email and password. Description: We'll only use these for the audit. Credentials are deleted within 24 hours of delivery. Placeholder: Email: ... / Password: ... Show only when question 9 answer is Yes — I'll provide two test accounts
 
 11. Long text, required when visible. Title: Test account 2 — email and password. Description: We'll only use these for the audit. Credentials are deleted within 24 hours of delivery. Placeholder: Email: ... / Password: ... Same visibility as question 10
 
-12. Email, required when visible. Title: Your support email (for the Quick Start Guide). Description: We'll put this in your one-page user guide so people know how to reach you. Show only when question 8 answer is Full Package ($29)
+12. Email, required when visible. Title: Your support email (for the Quick Start Guide). Description: We'll put this in your one-page user guide so people know how to reach you. Show only when question 8 answer is Scale Up Package ($49) OR Pro Package ($99)
 
 13. Long text, optional. Title: Anything specific you want us to check? Description: Anything broken you're worried about? Optional. Placeholder: I'm not sure the booking page works on mobile...
 
@@ -56,8 +56,9 @@ Thanks — you're in.
 
 We'll start your checkup within a few hours of this submission.
 
-Starter Package: report within 48 hours (usually within 24)
-Full Package: report within 24 hours (usually within 12)
+Starter Package ($19): report within 48 hours (usually 24)
+Scale Up Package ($49): report within 24 hours (usually 12)
+Pro Package ($99): report within 24 hours (usually 12), plus integrations review and 30-minute Loom walkthrough
 
 Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
 
@@ -67,7 +68,7 @@ Questions: hello@launchlook.app
 --- END COPY ---
 
 After AI generates the form:
-1. Open each multiple-choice question and confirm option text matches EXACTLY (especially Full Package ($29))
+1. Open each multiple-choice question and confirm option text matches EXACTLY (especially Scale Up Package ($49) and Pro Package ($99))
 2. Re-add conditional logic on questions 9-12 if AI missed it
 3. Test Starter vs Full paths
 4. Settings → Notifications → email hello@launchlook.app on submit

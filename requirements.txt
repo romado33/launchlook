@@ -20,3 +20,6 @@ resend>=2.30,<3.0
 
 # Loads RESEND_API_KEY etc. from .env
 python-dotenv>=1.0,<2.0
+
+# Image processing (used by screenshot capture + verified-badge generation)
+Pillow>=10.0,<12.0
