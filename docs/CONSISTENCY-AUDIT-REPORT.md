@@ -1,6 +1,6 @@
 # LaunchLook Internal Consistency Audit
 
-Generated: 2026-05-26 14:24 UTC by `scripts/consistency_check.py` (q-final-audit worker)
+Generated: 2026-05-26 14:57 UTC by `scripts/consistency_check.py` (q-final-audit worker)
 
 
 Canonical truth sources audited against:
@@ -16,7 +16,7 @@ Canonical truth sources audited against:
 |---|---|---|---|
 | Stale tier names + finding caps | 0 | 0 | 0 |
 | Stale prices | 0 | 0 | 0 |
-| Forbidden vocabulary | 13 | 0 | 13 |
+| Forbidden vocabulary | 11 | 0 | 11 |
 | Customer-facing em-dashes | 0 | 0 | 0 |
 | Persona typos | 0 | 0 | 0 |
 | Stale internal category names | 0 | 0 | 0 |
@@ -38,14 +38,12 @@ None remaining.
 
 None remaining.
 
-### Forbidden vocab still on customer surfaces (13 instances)
+### Forbidden vocab still on customer surfaces (11 instances)
 
 | File | Line | Context | Suggested replacement |
 |---|---|---|---|
 | `landing/checklist.html` | 98 | <p class="mt-4 text-sm text-muted">This is what <em>visitors</em> notice. Not a code review or security audit.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
-| `landing/index.html` | 111 | <p class="text-muted text-sm mt-1">Desktop and phone-sized layout, key flows, trust pages. Not a code audit or security pentest.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
-| `landing/index.html` | 145 | ...ility check, not a full security audit.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
-| `landing/index.html` | 526 | Built by a single founder who's tired of "AI scanner" tools that dump 100 findings. Every audit gets a 5-minute human review before it reaches you. | Per q3 settle, 'AI-powered audit + founder review' is the canonical positioning. Verify this usage is anti-pattern framing (talking about competitor tools), not self-description. |
+| `landing/index.html` | 195 | ...ess checkup, not a full security audit.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
 | `landing/terms.html` | 34 | <h2 class="font-serif text-xl mt-10 mb-3">Not a security audit</h2> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
 | `landing/terms.html` | 35 | ...ibility check, not a full security audit. The Pro Package integrations review covers configuration of St... | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
 | `landing/verify-scope.html` | 65 | <li>Not a security audit. We do not pen-test, fuzz, or test for OWASP top 10.</li> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |

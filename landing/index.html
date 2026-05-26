@@ -42,7 +42,7 @@
       <nav class="flex items-center gap-5 text-sm text-muted">
         <a href="#hero" class="hover:text-ink">Free audit</a>
         <a href="#pricing" class="hover:text-ink">Pricing</a>
-        <a href="#faq" class="hover:text-ink">FAQ</a>
+        <a href="/faq" class="hover:text-ink">FAQ</a>
         <a href="/webflow" class="hover:text-ink">Webflow</a>
       </nav>
     </div>
@@ -83,78 +83,62 @@
     <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>A real person reads your live app, then we email you 3 plain-English findings.</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No code repo access. Your live URL is enough.</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No jargon. No <code class="text-xs bg-white/80 px-1 py-0.5 rounded">SEC-001</code> codes to Google.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No jargon. Plain English you can act on.</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Upgrade to <strong class="text-ink">Starter ($19)</strong> for all 10 issues. Starter findings build on your free 3 (no rehash).</span></li>
     </ul>
     <p class="mt-5 text-sm text-muted">Delivered within 48 hours (usually 24) · 7-day full refund if it's not useful.</p>
     </div>
   </section>
 
-  <!-- How it works -->
-  <section class="bg-surface-tint border-y border-line">
+  <!--
+    What you get (merged section: How it works + sample preview + what we catch).
+    Per the Heavy restructure: 10 sections collapsed to 5, no redundancy. Demo
+    video placeholder anchored at the top; per SIMPLICITY-GUARDRAILS section 2.8
+    it's the primary "what is this?" surface once recorded.
+  -->
+  <section id="sample" class="bg-surface-tint border-y border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner">
-      <p class="section-label">Process</p>
+      <p class="section-label">What you get</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-6">How it works</h2>
-      <ol class="space-y-6">
+      <h2 class="font-serif text-2xl sm:text-3xl mb-4">A 60-second walk through your app, then a PDF you can act on.</h2>
+      <p class="text-muted leading-relaxed max-w-prose">Three steps, one PDF, prompts your AI builder can act on. No dashboards, no logins, no monthly plan.</p>
+
+      <!-- TODO(gap4): replace with Loom embed when Rob records the 60-second demo -->
+      <div class="mt-7 rounded-xl border border-dashed border-line bg-white/60 px-5 py-6 sm:px-6 sm:py-7 max-w-prose">
+        <p class="text-xs font-medium text-muted uppercase tracking-widest">Demo video</p>
+        <p class="font-serif text-lg text-ink mt-2">A 60-second walkthrough is coming soon.</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">Rob is recording a short demo that opens a sample app, points at the things we'd flag, and shows the PDF you'd receive. Until then, the sample report below covers the same ground.</p>
+      </div>
+
+      <!-- 3-step process -->
+      <ol class="mt-9 space-y-6">
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">1</span>
           <div>
-            <p class="font-medium">Pay &amp; send your URL</p>
-            <p class="text-muted text-sm mt-1">Short intake: what the app does, which builder you use, staging or production link.</p>
+            <p class="font-medium">Submit your URL</p>
+            <p class="text-muted text-sm mt-1">Short intake: app URL, builder (Lovable, Bolt, v0, Cursor, or similar), one-line description. No code access, no GitHub.</p>
           </div>
         </li>
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">2</span>
           <div>
-            <p class="font-medium">We walk through like a stranger would</p>
-            <p class="text-muted text-sm mt-1">Desktop and phone-sized layout, key flows, trust pages. Not a code audit or security pentest.</p>
+            <p class="font-medium">AI scans, Rob reviews</p>
+            <p class="text-muted text-sm mt-1">We capture every screen on desktop and phone width, then Rob personally reads every finding, drops the false positives, and tightens the language so only things you should actually fix make it into the PDF.</p>
           </div>
         </li>
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">3</span>
           <div>
-            <p class="font-medium">You get your checkup report</p>
-            <p class="text-muted text-sm mt-1">Your Main Report and Quick Start Guide arrive as two PDFs by email. No Notion, no login, no extra account. Prioritized findings, screenshots, and fix prompts for your builder (Lovable, Bolt, v0, Cursor, or similar).</p>
+            <p class="font-medium">Get your PDF and paste-ready fix prompts</p>
+            <p class="text-muted text-sm mt-1">Your Main Report and Quick Start Guide arrive as two PDFs by email. Findings ranked by impact, screenshots, and prompts you paste straight into your AI builder.</p>
           </div>
         </li>
       </ol>
-    </div>
-  </section>
 
-  <!-- What you get -->
-  <section class="bg-paper">
-    <div class="max-w-3xl mx-auto px-6 section-inner section-inner-tight">
-      <p class="section-label">Scope</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-6">What we catch</h2>
-      <ul class="space-y-3">
-        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
-          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
-          <span><strong class="text-ink font-medium">Embarrassing polish</strong>: dead CTAs, broken links, layout breaks on phone width, dev leftovers on your public URL.</span>
-        </li>
-        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
-          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
-          <span><strong class="text-ink font-medium">Leftover placeholders</strong>: "Your Company Name," lorem ipsum, default Lovable/Bolt copy, fake email addresses still showing.</span>
-        </li>
-        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
-          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
-          <span><strong class="text-ink font-medium">Trust signals and legal pages</strong>: missing privacy/terms, generic meta, anything that screams “not finished.”</span>
-        </li>
-      </ul>
-      <p class="mt-6 text-sm text-muted">On <strong class="text-ink">Scale Up Package ($49)</strong> and <strong class="text-ink">Pro Package ($99)</strong> we also check whether signed-in users can see each other's data (you provide two temporary test accounts). Test logins are used only during the review and deleted within 24 hours. This is a basic visibility check, not a full security audit.</p>
-    </div>
-  </section>
-
-  <!-- Sample -->
-  <section id="sample" class="bg-surface-warm border-y border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner">
-      <p class="section-label">Preview</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-4">See what you get</h2>
-      <p class="text-muted text-sm mb-6 max-w-prose">Real reports include screenshots, severity labels, and copy-paste fix prompts. No jargon, no fear-mongering.</p>
-      <div class="rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
-        <p class="font-serif text-lg mb-1">LaunchLook: Starter Package report (anonymized)</p>
+      <!-- Sample preview, the visual anchor -->
+      <div class="mt-10 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+        <p class="text-xs font-medium text-accent uppercase tracking-widest">Sample report (anonymized)</p>
+        <p class="font-serif text-lg mt-2 mb-1">LaunchLook: Starter Package report</p>
         <p class="text-sm text-muted mb-5">🟡 Needs a few fixes before sharing publicly · 5 findings shown (Starter shows the 10 most impactful)</p>
         <ul class="space-y-2 text-sm text-muted">
           <li>🔴 Dev login bypass still visible on /auth</li>
@@ -163,122 +147,87 @@
         </ul>
         <a href="/sample" class="launchlook-btn launchlook-btn-secondary mt-5">Read full sample report</a>
       </div>
+
+      <!-- What we catch (consolidated bullets, pulled from the strongest items in the prior What we catch + How it works descriptions) -->
+      <h3 class="font-serif text-xl mt-12 mb-4">What we catch</h3>
+      <ul class="grid sm:grid-cols-2 gap-3 text-sm">
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Dead buttons and broken links</strong> on your live site.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Layout breaks at phone width</strong> (text overlap, hidden CTAs, broken nav).</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Leftover placeholders</strong>: "Your Company Name," lorem ipsum, default Lovable/Bolt copy.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Missing privacy and terms pages</strong>, plus other trust gaps a stranger would clock instantly.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Fake-looking testimonials</strong> and default "John Doe" team cards still on the live page.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Dev tools and test data</strong> accidentally visible on production.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Generic meta and social previews</strong> that look unfinished when someone shares your link.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Cross-user data leaks</strong> where signed-in users can see each other's data (Scale Up and Pro, with 2 test accounts).</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Obvious visible risks</strong> like exposed access keys or public admin routes (Scale Up and Pro).</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="text-accent font-semibold" aria-hidden="true">✓</span>
+          <span><strong class="text-ink font-medium">Integration misconfig</strong> across Stripe, login, email, and analytics setup (Pro only).</span>
+        </li>
+      </ul>
+      <p class="mt-6 text-sm text-muted max-w-prose">Test logins are used only during the review and deleted within 24 hours of delivery. This is a launch-readiness checkup, not a full security audit.</p>
     </div>
   </section>
 
-  <!-- Trust -->
-  <section class="bg-paper">
-    <div class="max-w-3xl mx-auto px-6 section-inner">
-      <p class="section-label">Trust</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-4">Who's behind this</h2>
-      <div class="rounded-xl border border-line bg-surface-tint px-5 py-5 sm:px-6 sm:py-6 max-w-prose">
-      <p class="text-muted leading-relaxed">
-        I'm <strong class="text-ink">Rob</strong>, a technical writer who's shipped products and documentation for years. Every LaunchLook checkup is reviewed by me manually. We don't need access to your codebase, only a URL (and optional temporary test accounts for Scale Up Package).
-      </p>
-      <p class="text-muted leading-relaxed mt-4">
-        Built for non-technical founders using vibe-coded tools, including Lovable, Bolt, Base44, Replit, v0, Cursor, and others. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
-      </p>
-      <p data-launchlook-linkedin-wrap class="mt-4 hidden">
-        <a data-launchlook-linkedin href="#" class="launchlook-btn launchlook-btn-secondary">Connect on LinkedIn</a>
-      </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Social proof (early) -->
-  <section class="bg-paper border-b border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner-tight">
-      <p class="section-label">Proof</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-4">What founders get</h2>
-      <p class="text-sm text-muted mb-4 max-w-prose">We're early. No fake testimonials. After your checkup, we'll ask (optional) for a one-line quote we can share on LinkedIn.</p>
-      <div class="flex flex-wrap gap-3 mb-6">
-        <a href="/sample" class="launchlook-btn launchlook-btn-secondary">View sample report</a>
-        <a href="#hero" class="launchlook-btn launchlook-btn-secondary">Get 3 free findings</a>
-      </div>
-      <div class="grid sm:grid-cols-2 gap-4 text-sm">
-        <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
-          <p class="text-ink font-medium">Prioritized, paste-ready fixes</p>
-          <p class="mt-2">Severity labels + copy-paste prompts for your builder. Not a wall of jargon.</p>
-        </blockquote>
-        <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
-          <p class="text-ink font-medium">Built for vibe-coded launches</p>
-          <p class="mt-2">Placeholders, trust pages, phone layout, and “would I send this link today?”</p>
-        </blockquote>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why founders pick us -->
+  <!--
+    Why us vs scanners: 3 contrast bullets. Reduced from the prior 5-row
+    comparison table per the Heavy restructure (the strongest 3 from that
+    table: founder review, plain English, paste-ready fix prompts).
+  -->
   <section class="bg-paper border-b border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner">
       <p class="section-label">Different by design</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-3">Why founders pick LaunchLook over auto-scanners</h2>
-      <p class="text-muted text-sm mb-6 max-w-prose">There are plenty of tools that fire 100+ checks at your app and dump the results into a dashboard. We do something smaller on purpose: fewer findings, written like a friend would write them.</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-4">Why founders pick LaunchLook over auto-scanners</h2>
+      <p class="text-muted leading-relaxed max-w-prose mb-8">Auto-scanners fire 100+ checks at your app and dump everything they found into a dashboard. We do something smaller on purpose.</p>
 
-      <div class="hidden sm:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-surface-tint text-left">
-              <th class="px-4 py-3 font-medium text-ink">What you get from LaunchLook</th>
-              <th class="px-4 py-3 font-medium text-muted">What you usually get elsewhere</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-line">
-            <tr>
-              <td class="px-4 py-3 align-top text-ink">A real person walks through your live app like a first-time visitor</td>
-              <td class="px-4 py-3 align-top text-muted">An auto-scanner runs 100+ checks and shows you everything it found</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-ink">The few things that actually matter, ranked, in plain English</td>
-              <td class="px-4 py-3 align-top text-muted">Pages of severity codes (<code class="text-xs bg-surface-tint px-1 py-0.5 rounded">SEC-001</code>, <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">QUA-014</code>) you have to Google one by one</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-ink">Just your public URL. No GitHub, no code access, no monthly plan.</td>
-              <td class="px-4 py-3 align-top text-muted">Connect a repo, paste an access key, sign up for an ongoing subscription</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-ink">Each finding has a paste-ready fix prompt for your builder</td>
-              <td class="px-4 py-3 align-top text-muted">Technical write-ups your AI builder can't act on directly</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-ink">A one-page Quick Start Guide you can hand to your first users</td>
-              <td class="px-4 py-3 align-top text-muted">Nothing. That's not what scanners do.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ul class="space-y-4">
+        <li class="rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
+          <p class="font-serif text-lg text-ink">Founder-curated, personally reviewed</p>
+          <p class="text-muted text-sm mt-2 leading-relaxed">Every finding gets read by Rob before delivery. False positives get dropped, wording that doesn't land gets cut, and only the things you should actually fix make it into the final PDF. <span class="text-muted/80">Auto-scanners ship the raw dump, false positives included.</span></p>
+        </li>
+        <li class="rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
+          <p class="font-serif text-lg text-ink">Plain-English findings, not cryptic codes</p>
+          <p class="text-muted text-sm mt-2 leading-relaxed">Every finding reads like a friend wrote it. The 10 to 40 things that actually matter, ranked by impact, written so a non-technical founder can act on them. <span class="text-muted/80">Elsewhere: pages of severity codes you'd have to Google one by one.</span></p>
+        </li>
+        <li class="rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
+          <p class="font-serif text-lg text-ink">Paste-ready fix prompts for your builder</p>
+          <p class="text-muted text-sm mt-2 leading-relaxed">Each finding ships with a copy-paste prompt written for Lovable, Bolt, v0, Cursor, or whichever AI builder you used. Paste it in, get the fix back. <span class="text-muted/80">Elsewhere: technical write-ups your AI builder can't act on directly.</span></p>
+        </li>
+      </ul>
 
-      <div class="sm:hidden space-y-4">
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook</p>
-          <p class="text-sm text-ink">A real person walks through your live app like a first-time visitor</p>
-          <p class="mt-2 text-xs text-muted">Elsewhere: an auto-scanner runs 100+ checks and shows you everything it found</p>
-        </div>
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook</p>
-          <p class="text-sm text-ink">The few things that actually matter, ranked, in plain English</p>
-          <p class="mt-2 text-xs text-muted">Elsewhere: pages of severity codes (<code class="text-xs bg-surface-tint px-1 py-0.5 rounded">SEC-001</code>) you have to Google</p>
-        </div>
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook</p>
-          <p class="text-sm text-ink">Just your public URL. No GitHub, no code access, no monthly plan.</p>
-          <p class="mt-2 text-xs text-muted">Elsewhere: connect a repo, paste an access key, sign up for a subscription</p>
-        </div>
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook</p>
-          <p class="text-sm text-ink">A one-page Quick Start Guide you can hand to your first users</p>
-          <p class="mt-2 text-xs text-muted">Elsewhere: nothing. That's not what scanners do.</p>
-        </div>
-      </div>
-
-      <p class="mt-5 text-sm text-muted max-w-prose">Want a deep technical security scan too? Run an auto-scanner alongside ours. They catch different things. We're the human pass that tells you what your first 10 users will actually notice.</p>
+      <p class="mt-6 text-sm text-muted max-w-prose">Want a deep technical security scan too? Run an auto-scanner alongside ours. They catch different things. We're the human pass that tells you what your first 10 users will actually notice.</p>
     </div>
   </section>
 
-  <!-- Pricing -->
+  <!-- Pricing + add-ons (merged into one section per the Heavy restructure) -->
   <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner">
       <p class="section-label">Pricing</p>
@@ -286,7 +235,7 @@
       <h2 class="font-serif text-2xl sm:text-3xl mb-2">Three options. Same human review.</h2>
       <p class="text-muted mb-4">Pick depth. Not a different quality of care.</p>
       <p class="text-sm text-muted mb-8 max-w-prose rounded-lg border border-line bg-white/80 px-4 py-3">
-        Works with any vibe-coded web app (Lovable, Bolt, Base44, Replit, v0, Cursor, and others). AI-powered analysis with founder-curated quality. No code repo access required. Pay → intake form → shareable report with fix prompts (no Notion account needed). Full refund within 7 days if the report isn't useful.
+        Works with any vibe-coded web app (Lovable, Bolt, Base44, Replit, v0, Cursor, and others). AI-powered analysis with founder-curated quality. No code repo access required. Pay &rarr; intake form &rarr; shareable report with fix prompts (no Notion account needed). Full refund within 7 days if the report isn't useful.
       </p>
 
       <div class="grid md:grid-cols-3 gap-5">
@@ -330,14 +279,14 @@
           <h3 class="font-serif text-xl">Pro Package</h3>
           <p class="font-serif text-4xl mt-2">$99</p>
           <p class="text-sm text-accent mt-1 font-medium uppercase tracking-widest">Deep audit + integrations</p>
-          <p class="mt-4 text-sm text-muted leading-relaxed">Everything in Scale Up, plus up to <strong>40 findings</strong>, a full review of your operational integrations (Stripe / auth / email / analytics setup: what's wired right and what'll bite you later), and a 30-minute Loom walkthrough where a founder walks you through the report and answers your questions on camera.</p>
+          <p class="mt-4 text-sm text-muted leading-relaxed">Everything in Scale Up, plus up to <strong>40 findings</strong>, a full review of your operational integrations (Stripe / login / email / analytics setup: what's wired right and what'll bite you later), and a 30-minute Loom walkthrough where a founder walks you through the report and answers your questions on camera.</p>
           <ul class="mt-4 space-y-2.5 text-sm flex-1">
             <li>Everything in Scale Up Package</li>
             <li>Up to <strong>40</strong> findings across every category</li>
-            <li><strong>Integrations review</strong> (Stripe, auth, email, analytics setup)</li>
+            <li><strong>Integrations review</strong> (Stripe, login, email, analytics setup)</li>
             <li><strong>30-min Loom walkthrough</strong> with a founder</li>
             <li>Auto-create GitHub issues for every finding (optional)</li>
-            <li><strong>Handoff Report (PDF)</strong> -- your audit framed for the developer you hire next: plain-English findings, technical fix prompts, plus an architecture-level code-review section</li>
+            <li><strong>Handoff Report (PDF)</strong>: your audit framed for the developer you hire next. Plain-English findings paired with technical fix prompts and an architecture-level code-review section.</li>
             <li>Delivered within <strong>24 hours</strong> (usually within 12)</li>
             <li>Includes <strong>LaunchLook Verified badge</strong>, valid 180 days*</li>
           </ul>
@@ -352,161 +301,46 @@
         Reviewed for visible launch issues. Not a security certification.
       </p>
 
-      <div class="mt-12 hidden md:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-surface-tint text-left">
-              <th class="px-4 py-3 font-medium text-muted"></th>
-              <th class="px-4 py-3 font-medium text-ink">Starter ($19)</th>
-              <th class="px-4 py-3 font-medium text-ink">Scale Up ($49)</th>
-              <th class="px-4 py-3 font-medium text-ink">Pro ($99)</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-line">
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">Approach</td>
-              <td class="px-4 py-3 align-top text-ink font-medium">The 10 things to fix first</td>
-              <td class="px-4 py-3 align-top text-ink font-medium">Ready for real users</td>
-              <td class="px-4 py-3 align-top text-ink font-medium">Deep audit + integrations review</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">Findings</td>
-              <td class="px-4 py-3 align-top text-ink">The 10 most important</td>
-              <td class="px-4 py-3 align-top text-ink">Up to 30 across all categories</td>
-              <td class="px-4 py-3 align-top text-ink">Up to 40 across all categories</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">AI + founder-curated</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">User data isolation</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-ink">✓ (2 test accounts)</td>
-              <td class="px-4 py-3 align-top text-ink">✓ (2 test accounts)</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">Quick Start Guide PDF</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">Comprehensive checklist (DIY companion)</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">Integrations review (Stripe / auth / email / analytics setup)</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">30-min Loom walkthrough</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-muted">-</td>
-              <td class="px-4 py-3 align-top text-ink">✓</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 align-top text-muted">Delivery</td>
-              <td class="px-4 py-3 align-top text-ink">Within <strong>48h</strong> (usually 24)</td>
-              <td class="px-4 py-3 align-top text-ink">Within <strong>24h</strong> (usually 12)</td>
-              <td class="px-4 py-3 align-top text-ink">Within <strong>24h</strong> (usually 12)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="mt-8 md:hidden space-y-4">
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Starter ($19)</p>
-          <p class="text-sm text-ink font-medium">The 10 things to fix first</p>
-          <ul class="mt-2 space-y-1 text-xs text-muted">
-            <li>Findings: the 10 most important</li>
-            <li>AI + founder-curated: ✓</li>
-            <li>User data isolation: -</li>
-            <li>Quick Start Guide PDF: -</li>
-            <li>Pre-launch checklist: -</li>
-            <li>Integrations review: -</li>
-            <li>Loom walkthrough: -</li>
-            <li>Delivery: within 48h (usually 24)</li>
-          </ul>
+      <!-- One-off add-ons (merged in from the prior standalone section per the Heavy restructure; styled distinctly so they don't compete with the tier cards above) -->
+      <div class="mt-12">
+        <p class="text-xs font-medium text-muted uppercase tracking-widest">One-off add-ons</p>
+        <h3 class="font-serif text-xl mt-2 mb-4">Add-ons (any paid tier)</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="addon-card rounded-xl border border-line bg-paper p-5 shadow-sm shadow-ink/5">
+            <h4 class="font-serif text-lg mb-2">Send in The Saboteur</h4>
+            <p class="addon-tagline text-muted text-sm leading-relaxed mb-3">
+              Re-scan after you've applied your fixes. We'll confirm what's resolved and flag anything new that broke along the way.
+            </p>
+            <p class="addon-price text-sm text-ink mb-4">
+              <strong>$19</strong> standalone &middot; <strong>$9</strong> within 14 days of your last audit
+            </p>
+            <a href="#" data-launchlook-stripe="saboteur" class="launchlook-btn launchlook-btn-secondary plausible-event-name=RescanAddOn">
+              Send in The Saboteur
+            </a>
+          </div>
+          <div class="addon-card rounded-xl border border-line bg-paper p-5 shadow-sm shadow-ink/5">
+            <h4 class="font-serif text-lg mb-2">Handoff Report</h4>
+            <p class="addon-tagline text-muted text-sm leading-relaxed mb-3">
+              A separate report formatted for the developer you hire to fix things. Plain-English findings paired with technical fix prompts and an architecture-level code-review section.
+            </p>
+            <p class="addon-price text-sm text-ink mb-4">
+              <strong>$99</strong> add-on for Starter or Scale Up &middot; free with Pro
+            </p>
+            <a href="#" data-launchlook-stripe="handoff_report" class="launchlook-btn launchlook-btn-secondary plausible-event-name=HandoffReportAddOn">
+              Add the Handoff Report
+            </a>
+            <p class="text-xs text-muted mt-3">Already on Pro? It's included in your delivery, no purchase needed.</p>
+          </div>
         </div>
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Scale Up ($49)</p>
-          <p class="text-sm text-ink font-medium">Ready for real users</p>
-          <ul class="mt-2 space-y-1 text-xs text-muted">
-            <li>Findings: up to 30 across all categories</li>
-            <li>AI + founder-curated: ✓</li>
-            <li>User data isolation: ✓ (2 test accounts)</li>
-            <li>Quick Start Guide PDF: ✓</li>
-            <li>Pre-launch checklist: ✓ (token-gated DIY companion)</li>
-            <li>Integrations review: -</li>
-            <li>Loom walkthrough: -</li>
-            <li>Delivery: within 24h (usually 12)</li>
-          </ul>
-        </div>
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
-          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Pro ($99)</p>
-          <p class="text-sm text-ink font-medium">Deep audit + integrations review</p>
-          <ul class="mt-2 space-y-1 text-xs text-muted">
-            <li>Findings: up to 40 across all categories</li>
-            <li>AI + founder-curated: ✓</li>
-            <li>User data isolation: ✓ (2 test accounts)</li>
-            <li>Quick Start Guide PDF: ✓</li>
-            <li>Pre-launch checklist: ✓ (token-gated DIY companion)</li>
-            <li>Integrations review (Stripe / auth / email / analytics): ✓</li>
-            <li>30-min Loom walkthrough: ✓</li>
-            <li>Delivery: within 24h (usually 12)</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Add-ons (lives BELOW the main pricing grid per SIMPLICITY-GUARDRAILS §2.6 — complement, not competing offer) -->
-  <section class="add-ons bg-paper border-b border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner-tight">
-      <p class="section-label">One-off add-ons</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h3 class="font-serif text-2xl mb-4">One-off add-ons</h3>
-      <div class="addon-card rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5 max-w-prose">
-        <h4 class="font-serif text-xl mb-2">Send in The Saboteur</h4>
-        <p class="addon-tagline text-muted text-sm leading-relaxed mb-3">
-          Re-scan after you've applied your fixes. We'll confirm what's resolved and flag anything new that broke along the way.
-        </p>
-        <p class="addon-price text-sm text-ink mb-4">
-          <strong>$19</strong> standalone &middot; <strong>$9</strong> within 14 days of your last audit
-        </p>
-        <a href="#" data-launchlook-stripe="saboteur" class="launchlook-btn launchlook-btn-secondary plausible-event-name=RescanAddOn">
-          Send in The Saboteur
-        </a>
-      </div>
-      <div class="addon-card rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5 max-w-prose mt-4">
-        <h4 class="font-serif text-xl mb-2">Handoff Report</h4>
-        <p class="addon-tagline text-muted text-sm leading-relaxed mb-3">
-          A separate report formatted for the developer you hire to fix things. Plain English, copy-paste fix prompts, recommended order. Saves them an hour and saves you a price quote.
-        </p>
-        <p class="addon-price text-sm text-ink mb-4">
-          <strong>$99</strong> add-on for Starter or Scale Up &middot; free with Pro
-        </p>
-        <a href="#" data-launchlook-stripe="handoff_report" class="launchlook-btn launchlook-btn-secondary plausible-event-name=HandoffReportAddOn">
-          Add the Handoff Report
-        </a>
-        <p class="text-xs text-muted mt-3">Already on Pro? It's included in your delivery -- no purchase needed.</p>
       </div>
     </div>
   </section>
 
   <!--
-    Made by Rob (q5+q13): a small mid-page founder section. Per
-    SIMPLICITY-GUARDRAILS section 2.5 (founder section stays small, not a
-    hero) and section 3 (plain English, no corporate vocabulary).
+    Founder section (merged per the Heavy restructure: combines the prior
+    "Who's behind this" Trust block and the small mid-page founder card into
+    one). Per SIMPLICITY-GUARDRAILS section 2.9 (2 to 3 sentences, photo,
+    never a hero) and section 6 (no em-dashes, plain English).
     TODO: swap placeholder photo at landing/images/rob.jpg with a real
     headshot (tracked in docs/ROB-REMAINING-TODO.md).
   -->
@@ -523,79 +357,15 @@
         <div class="founder-text max-w-prose">
           <h3 class="font-serif text-xl mb-2">Made by Rob</h3>
           <p class="text-muted leading-relaxed text-sm">
-            Built by a single founder who's tired of "AI scanner" tools that dump 100 findings. Every audit gets a 5-minute human review before it reaches you.
+            I've spent 15+ years in IT: analytics, implementation, and automation. I built LaunchLook because I kept watching non-technical founders ship vibe-coded apps that broke in ways no checklist or scanner would catch.
           </p>
           <p class="text-muted leading-relaxed text-sm mt-3">
-            Based in Canada. Reply to any email and that's me on the other end.
+            Every report is AI-drafted and personally reviewed by me before it reaches you. <strong class="text-ink font-medium">Full refund within 7 days</strong> if it isn't useful. Reply to any email and that's me on the other end.
+          </p>
+          <p data-launchlook-linkedin-wrap class="mt-4 hidden">
+            <a data-launchlook-linkedin href="#" class="launchlook-btn launchlook-btn-secondary">Connect on LinkedIn</a>
           </p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="bg-paper">
-    <div class="max-w-3xl mx-auto px-6 section-inner">
-      <p class="section-label">Questions</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl mb-6">FAQ</h2>
-      <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">What's the difference between Starter, Scale Up, and Pro?<span class="text-muted text-lg">+</span></summary>
-          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
-            <p><strong class="text-ink">Starter ($19)</strong> covers the 10 things a first-time visitor would notice and need fixed before launch, ranked by impact. Best for: founders within a week of launching who want fast targeted fixes.</p>
-            <p><strong class="text-ink">Scale Up ($49)</strong> is the full audit (up to 30 findings across every category), plus a user data isolation check using 2 test accounts to verify users can't see each other's data, plus a Quick Start Guide PDF you can give your users. Best for: founders 1–4 weeks out who want thorough coverage including the user data isolation check.</p>
-            <p><strong class="text-ink">Pro ($99)</strong> is the deep audit (everything in Scale Up, plus up to 40 findings), a review of your operational integrations (Stripe, auth, email, analytics setup) to catch infrastructure gaps that aren't visible from the app itself, and a 30-minute Loom walkthrough where a founder walks you through the report and answers your questions. Best for: founders who want maximum confidence before paid traffic or investor demos.</p>
-          </div>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps. Also v0, Cursor-built apps, and others. If your builder outputs a shareable link, we can usually review it.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Is this only for mobile apps?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">No. We review <strong>web apps</strong> built with any vibe-coding tool (Lovable, Bolt, v0, Cursor, etc.). “Phone check” means we load your URL at mobile width in the browser, not the App Store.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">What do you need from me?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Your public or staging URL, a one-line description, and your builder. For Scale Up Package ($49) and Pro Package ($99), two temporary test accounts so we can check data isolation. Pro Package also asks a couple of questions about your integrations (Stripe / auth / email / analytics) so we can review them.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Do you need access to my code or GitHub?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">No. We only need your public URL (and for Scale Up / Pro Package, two temporary test accounts). We never ask for GitHub access, your codebase, your builder login, or any API keys. If a tool ever asks for those things just to spot broken UI, be wary.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How is this different from a security scanner?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">We focus on what visitors <em>see</em>: broken UI, placeholders, trust pages. For deep security, use something like <a href="https://vibeappscanner.com" class="underline hover:text-ink" rel="noopener noreferrer">VAS</a>. Use both if you can.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Lovable already has SEO review. Why this?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">SEO tools help Google. We help the friend you send the link to: dead buttons, dev tools on prod, missing legal pages, fake-looking reviews.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How are you different from PageLens AI?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Both scan your live site and surface findings. We're built for vibe coders shipping with Lovable / Cursor / Bolt; PageLens is built for SEO-focused marketers. <a href="/vs-pagelens" class="underline hover:text-ink">Full comparison &rarr;</a></p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Staging URLs OK?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Yes if they're reachable on the internet (Lovable preview, Vercel staging, etc.). localhost won't work.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How do I know my data is safe?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">We only access your app through the public URL and any temporary test accounts you provide. We don't request code access, database access, or API keys. Credentials are submitted through the intake form only and deleted within <strong class="text-ink">24 hours</strong> of delivery. See our <a href="/privacy" class="underline hover:text-ink">privacy policy</a>.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Can I share my report publicly?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Refer a founder?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or send them straight to <strong class="text-ink"><a href="https://launchlook.app/#hero" class="underline hover:text-ink">launchlook.app</a></strong> for their own 3 free findings.</p>
-        </details>
       </div>
     </div>
   </section>
@@ -624,6 +394,8 @@
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
         <li><a href="#hero" class="hover:text-ink">Free 3-finding audit</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
         <li><a href="#testers-cast" class="hover:text-ink">Meet the cast</a></li>

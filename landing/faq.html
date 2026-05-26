@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LaunchLook FAQ: pre-launch checkup for vibe-coded apps</title>
+  <meta name="description" content="LaunchLook FAQ. Tier differences, supported platforms, what we need from you, data handling, refunds, and how the checkup actually works. Plain English, founder-curated." />
+
+  <meta property="og:title" content="LaunchLook FAQ" />
+  <meta property="og:description" content="Tier differences, supported platforms, data handling, refunds. Everything you might ask before booking a pre-launch checkup." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://launchlook.app/faq" />
+  <meta property="og:image" content="https://launchlook.app/images/og.png" />
+  <link rel="canonical" href="https://launchlook.app/faq" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
+  <meta name="twitter:title" content="LaunchLook FAQ" />
+  <meta name="twitter:description" content="Tier differences, supported platforms, data handling, refunds." />
+
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script src="/assets/tailwind-brand.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS section 2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header class="border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
+        <img src="/images/logo-icon.svg" alt="" width="22" height="22" class="shrink-0" aria-hidden="true" />
+        <span>LaunchLook</span>
+      </a>
+      <nav class="flex items-center gap-5 text-sm text-muted">
+        <a href="/#hero" class="hover:text-ink">Free audit</a>
+        <a href="/#pricing" class="hover:text-ink">Pricing</a>
+        <a href="/faq" class="hover:text-ink text-ink">FAQ</a>
+        <a href="/webflow" class="hover:text-ink">Webflow</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page intro -->
+  <section class="relative overflow-hidden border-b border-line">
+    <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
+    <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-10 sm:pt-20 sm:pb-12">
+      <p class="text-xs font-medium text-accent uppercase tracking-widest">Questions</p>
+      <h1 class="font-serif text-4xl sm:text-[2.5rem] leading-[1.1] tracking-tight mt-4">
+        Frequently Asked Questions
+      </h1>
+      <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
+        Everything buyers usually ask before booking a checkup. If your question isn't here, email
+        <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
+        and we'll answer (and probably add it to this page).
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ list -->
+  <section class="bg-paper">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What's the difference between Starter, Scale Up, and Pro?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p><strong class="text-ink">Starter ($19)</strong> covers the 10 things a first-time visitor would notice and need fixed before launch, ranked by impact. Best for: founders within a week of launching who want fast targeted fixes.</p>
+            <p><strong class="text-ink">Scale Up ($49)</strong> is the full audit (up to 30 findings across every category), plus a user data isolation check using 2 test accounts to verify users can't see each other's data, plus a Quick Start Guide PDF you can give your users. Best for: founders 1&ndash;4 weeks out who want thorough coverage including the user data isolation check.</p>
+            <p><strong class="text-ink">Pro ($99)</strong> is the deep audit (everything in Scale Up, plus up to 40 findings), a review of your operational integrations (Stripe, auth, email, analytics setup) to catch infrastructure gaps that aren't visible from the app itself, and a 30-minute Loom walkthrough where a founder walks you through the report and answers your questions. Best for: founders who want maximum confidence before paid traffic or investor demos.</p>
+          </div>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps. Also v0, Cursor-built apps, and others. If your builder outputs a shareable link, we can usually review it.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Is this only for mobile apps?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No. We review <strong>web apps</strong> built with any vibe-coding tool (Lovable, Bolt, v0, Cursor, etc.). &ldquo;Phone check&rdquo; means we load your URL at mobile width in the browser, not the App Store.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What do you need from me?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Your public or staging URL, a one-line description, and your builder. For Scale Up Package ($49) and Pro Package ($99), two temporary test accounts so we can check data isolation. Pro Package also asks a couple of questions about your integrations (Stripe / auth / email / analytics) so we can review them.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Do you need access to my code or GitHub?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No. We only need your public URL (and for Scale Up / Pro Package, two temporary test accounts). We never ask for GitHub access, your codebase, your builder login, or any access keys. If a tool ever asks for those things just to spot broken UI, be wary.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How is this different from a security scanner?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">We focus on what visitors <em>see</em>: broken UI, placeholders, trust pages. For deep security, use something like <a href="https://vibeappscanner.com" class="underline hover:text-ink" rel="noopener noreferrer">VAS</a>. Use both if you can.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Lovable already has SEO review. Why this?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">SEO tools help Google. We help the friend you send the link to: dead buttons, dev tools on prod, missing legal pages, fake-looking reviews.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How are you different from PageLens AI?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Both scan your live site and surface findings. We're built for vibe coders shipping with Lovable / Cursor / Bolt; PageLens is built for SEO-focused marketers. <a href="/vs-pagelens" class="underline hover:text-ink">Full comparison &rarr;</a></p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Staging URLs OK?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes if they're reachable on the internet (Lovable preview, Vercel staging, etc.). localhost won't work.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How do I know my data is safe?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">We only access your app through the public URL and any temporary test accounts you provide. We don't request code access, database access, or access keys. Credentials are submitted through the intake form only and deleted within <strong class="text-ink">24 hours</strong> of delivery. See our <a href="/privacy" class="underline hover:text-ink">privacy policy</a>.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Can I share my report publicly?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Refer a founder?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or send them straight to <strong class="text-ink"><a href="https://launchlook.app/#hero" class="underline hover:text-ink">launchlook.app</a></strong> for their own 3 free findings.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back-to-home CTA -->
+  <section class="bg-ink text-paper border-t border-ink">
+    <div class="max-w-3xl mx-auto px-6 section-inner text-center">
+      <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready to start?</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mt-3">Try the free 3-finding audit</h2>
+      <p class="text-paper/75 mt-2 text-sm">Send your URL. Get 3 plain-English findings within 24 hours. No credit card.</p>
+      <a href="/#hero" class="launchlook-btn launchlook-btn-accent mt-6">
+        Get my free 3 findings
+      </a>
+    </div>
+  </section>
+
+  <footer class="border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="/#hero" class="hover:text-ink">Free 3-finding audit</a></li>
+        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
+        <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-ink">Terms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
+</body>
+</html>
