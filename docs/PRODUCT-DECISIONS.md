@@ -155,6 +155,7 @@ When you change anything in this file:
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
 | 2026-05-26 | q3b shipped: AI-sounding copy detection, Scale-Ready audit (Scale Up+), Compliance-Lite finding categories added to the data-driven taxonomy in `scripts/ai_audit/finding_categories.yaml`. Buyer-facing names per `SIMPLICITY-GUARDRAILS.md` §6: "copy that sounds AI-written," "growth-readiness checks," "common legal must-haves." Internal names (Scale-Ready, Compliance-Lite, AI-sounding copy detection) stay inside dev docs and the YAML's `display_name_internal` field only. |
+| 2026-05-26 | vs-pagelens comparison page shipped at `/vs-pagelens`. SEO + FAQ destination only, not in main nav. Inherits §2.7 (no nav link). One FAQ entry added to `/` and `/webflow` per §2.7 + §6 (neutral, no SaaS-speak). |
 
 ---
 

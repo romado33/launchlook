@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LaunchLook vs. PageLens AI: Which audit tool should I use?</title>
+  <meta name="description" content="A factual comparison of LaunchLook and PageLens AI. Both run pre-launch scans on your live site. They are built for different buyers and surface different things. Here is when each one fits." />
+
+  <meta property="og:title" content="LaunchLook vs. PageLens AI: Which audit tool should I use?" />
+  <meta property="og:description" content="A neutral, factual side-by-side. PageLens is built for SEO marketers. LaunchLook is built for vibe coders shipping with Lovable, Cursor, and Bolt." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://launchlook.app/vs-pagelens" />
+  <meta property="og:image" content="https://launchlook.app/images/og.png" />
+  <link rel="canonical" href="https://launchlook.app/vs-pagelens" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
+  <meta name="twitter:title" content="LaunchLook vs. PageLens AI" />
+  <meta name="twitter:description" content="Neutral side-by-side: who each one fits, where they overlap, where they differ." />
+
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script src="/assets/tailwind-brand.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header class="border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
+        <img src="/images/logo-icon.svg" alt="" width="22" height="22" class="shrink-0" aria-hidden="true" />
+        <span>LaunchLook</span>
+      </a>
+      <nav class="flex items-center gap-5 text-sm text-muted">
+        <a href="/#pricing" class="hover:text-ink">Pricing</a>
+        <a href="/#faq" class="hover:text-ink">FAQ</a>
+        <a href="/checklist" class="hover:text-ink">Free checklist</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-line">
+    <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
+    <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
+      <p class="text-xs font-medium text-accent uppercase tracking-widest">Side-by-side comparison</p>
+      <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
+        LaunchLook vs. PageLens AI
+      </h1>
+      <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
+        Both scan your live site and surface findings. The difference is what they are built to catch, and who they are built for.
+      </p>
+      <p class="mt-4 text-muted leading-relaxed max-w-prose">
+        This page is the canonical answer to "which one should I use?" If you already know about both tools and want a factual side-by-side, you are in the right place. If you have never heard of PageLens, this page is not for you (see the <a href="/" class="underline hover:text-ink">main landing</a> or the <a href="/checklist" class="underline hover:text-ink">free checklist</a> instead).
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
+        <a href="/#pricing" class="launchlook-btn launchlook-btn-primary">See LaunchLook pricing</a>
+        <a href="https://www.pagelensai.com" rel="noopener noreferrer" target="_blank" class="launchlook-btn launchlook-btn-secondary">Visit PageLens AI</a>
+      </div>
+      <p class="mt-5 text-sm text-muted">Last updated May 2026. Pricing and feature details for PageLens are summarized from their public site and may change.</p>
+    </div>
+  </section>
+
+  <!-- Quick verdict -->
+  <section class="bg-surface-tint border-y border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Short answer</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-4">Which one fits which person</h2>
+      <div class="grid sm:grid-cols-2 gap-4 text-sm">
+        <div class="rounded-lg border border-line bg-white p-5 shadow-sm shadow-ink/5">
+          <p class="text-ink font-medium">Use PageLens AI if</p>
+          <ul class="mt-2 space-y-1.5 text-muted leading-relaxed">
+            <li>You are an SEO-focused marketer.</li>
+            <li>You want recurring weekly or monthly scans.</li>
+            <li>You live in dashboards and SEO scorecards.</li>
+            <li>You want a subscription that tracks site changes over time.</li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-5 shadow-sm shadow-ink/5">
+          <p class="text-ink font-medium">Use LaunchLook if</p>
+          <ul class="mt-2 space-y-1.5 text-muted leading-relaxed">
+            <li>You shipped with Lovable, Cursor, Bolt, v0, or Replit last week.</li>
+            <li>You want a one-off pre-launch checkup, not a subscription.</li>
+            <li>You want plain-English findings with paste-ready fix prompts.</li>
+            <li>You want a real person reviewing every finding before it ships.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison table -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Side-by-side</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-3">Feature-by-feature comparison</h2>
+      <p class="text-muted text-sm mb-6 max-w-prose">Both tools are real and shipped. Both serve their audiences well. The differences below are factual, not editorial.</p>
+
+      <!-- Desktop / tablet table -->
+      <div class="hidden sm:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-surface-tint text-left">
+              <th class="px-4 py-3 font-medium text-muted"></th>
+              <th class="px-4 py-3 font-medium text-ink">LaunchLook</th>
+              <th class="px-4 py-3 font-medium text-ink">PageLens AI</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Built for</td>
+              <td class="px-4 py-3 align-top text-ink">Vibe coders and non-technical site builders</td>
+              <td class="px-4 py-3 align-top text-muted">SEO-focused marketers</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Findings format</td>
+              <td class="px-4 py-3 align-top text-ink">Plain-English findings with paste-ready fix prompts for Cursor, Lovable, and Bolt</td>
+              <td class="px-4 py-3 align-top text-muted">SEO scorecards and Markdown export</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Free tier</td>
+              <td class="px-4 py-3 align-top text-ink">3 free findings, no credit card</td>
+              <td class="px-4 py-3 align-top text-muted">Limited free scan</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Starting price</td>
+              <td class="px-4 py-3 align-top text-ink">$19 one-time (Starter)</td>
+              <td class="px-4 py-3 align-top text-muted">Subscription</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Security checks</td>
+              <td class="px-4 py-3 align-top text-ink">Yes (visible-only checks: exposed credentials, public admin routes, missing security headers)</td>
+              <td class="px-4 py-3 align-top text-muted">SEO-focused, limited security signals</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Mobile audit</td>
+              <td class="px-4 py-3 align-top text-ink">Yes</td>
+              <td class="px-4 py-3 align-top text-muted">Yes</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Persona-driven findings</td>
+              <td class="px-4 py-3 align-top text-ink">Yes (7 tester personas)</td>
+              <td class="px-4 py-3 align-top text-muted">No</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Webflow-specific fixes</td>
+              <td class="px-4 py-3 align-top text-ink">Yes (dedicated platform appendix)</td>
+              <td class="px-4 py-3 align-top text-muted">Generic</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">One-off vs. subscription</td>
+              <td class="px-4 py-3 align-top text-ink">One-off audits, no lock-in</td>
+              <td class="px-4 py-3 align-top text-muted">Monthly subscription</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Turnaround</td>
+              <td class="px-4 py-3 align-top text-ink">24 to 48 hours, with founder review</td>
+              <td class="px-4 py-3 align-top text-muted">Instant, no human review step</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-muted">Human in the loop</td>
+              <td class="px-4 py-3 align-top text-ink">Yes (every finding reviewed by a founder before delivery)</td>
+              <td class="px-4 py-3 align-top text-muted">No (software-only delivery)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile stacked cards -->
+      <div class="sm:hidden space-y-4">
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Built for</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> vibe coders and non-technical site builders</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> SEO-focused marketers</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Findings format</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> plain-English with paste-ready fix prompts for Cursor, Lovable, and Bolt</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> SEO scorecards and Markdown export</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Free tier</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> 3 free findings, no credit card</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> limited free scan</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Starting price</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> $19 one-time</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> subscription</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Security checks</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> yes (visible-only checks for exposed credentials, public admin routes, missing security headers)</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> SEO-focused, limited security signals</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Mobile audit</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> yes</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> yes</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Persona-driven findings</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> yes (7 tester personas)</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> no</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Webflow-specific fixes</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> yes (dedicated platform appendix)</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> generic</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">One-off vs. subscription</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> one-off audits, no lock-in</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> monthly subscription</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Turnaround</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> 24 to 48 hours with founder review</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> instant, no human review step</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Human in the loop</p>
+          <p class="text-sm text-ink"><strong>LaunchLook:</strong> yes (every finding reviewed by a founder)</p>
+          <p class="mt-1.5 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> no (software-only delivery)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honest trade-offs -->
+  <section class="bg-surface-warm border-y border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Honest trade-offs</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-3">When PageLens is the better choice</h2>
+      <p class="text-muted text-sm mb-6 max-w-prose">No tool fits everyone. Here is where PageLens beats LaunchLook on its strengths.</p>
+
+      <ul class="space-y-4">
+        <li class="rounded-lg border border-line bg-white px-5 py-4 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <p class="text-ink font-medium">If you need ongoing weekly SEO monitoring, PageLens is purpose-built for that.</p>
+          <p class="mt-1.5 text-sm">LaunchLook is not a subscription, and we do not track SERP movements over time. PageLens has a Weekly Monitor for exactly that workflow.</p>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-5 py-4 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <p class="text-ink font-medium">If you have a marketing team that lives in dashboards, PageLens fits that workflow better.</p>
+          <p class="mt-1.5 text-sm">Recurring scorecards, trend lines, and a dashboard view are PageLens's home turf. Our deliverable is a PDF you read once and act on.</p>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-5 py-4 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <p class="text-ink font-medium">If you want an instant scan with no waiting, PageLens delivers in seconds.</p>
+          <p class="mt-1.5 text-sm">LaunchLook takes 24 to 48 hours because a real person reviews every finding before it ships. If you need an answer in the next 60 seconds, PageLens is faster.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Why LaunchLook is different -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Where LaunchLook fits</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-3">Why LaunchLook is different</h2>
+      <p class="text-muted text-sm mb-6 max-w-prose">Both tools share a category. The audience is different, and so is the deliverable.</p>
+
+      <div class="space-y-5 text-muted leading-relaxed max-w-prose">
+        <p>
+          <strong class="text-ink">Built for the vibe coder, not the marketing team.</strong> Our buyer launched a site with Lovable, Cursor, or Bolt last week and wants to know "would I be embarrassed if a stranger opened this link today?" That is a different question from "how does my site rank for keyword X."
+        </p>
+        <p>
+          <strong class="text-ink">Every finding has a paste-ready fix prompt.</strong> You copy the prompt, drop it back into your AI builder, and the fix lands. No translation step, no Google-the-error-code step. That is the entire point.
+        </p>
+        <p>
+          <strong class="text-ink">We catch the embarrassing visible stuff, not just SEO scores.</strong> Broken CTAs. Dead links. Exposed keys on the live URL. Sketchy footer text that still says "Your Company Name." Placeholder copy left over from the template. SEO scorecards do not surface these.
+        </p>
+        <p>
+          <strong class="text-ink">One-off pricing, no monthly lock-in.</strong> $19 Starter, $49 Scale Up, $99 Pro. You pay once, you get a checkup, you move on. We do not auto-renew, and we do not charge you to look at your site again next month.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing summary -->
+  <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Pricing</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-2">LaunchLook pricing at a glance</h2>
+      <p class="text-muted mb-6">One-off pricing. Same human curation on every paid tier. You are picking depth, not quality of care.</p>
+
+      <div class="grid sm:grid-cols-3 gap-5">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
+          <h3 class="font-serif text-xl">Starter</h3>
+          <p class="font-serif text-4xl mt-2">$19</p>
+          <p class="text-sm text-muted mt-1 leading-snug"><em>Can I share this without embarrassment?</em></p>
+          <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Up to <strong>10</strong> prioritized findings</li>
+            <li>Desktop + phone layout check</li>
+            <li>Plain-English copy-paste fix prompts</li>
+            <li>Delivered within 48h (usually 24h)</li>
+          </ul>
+        </div>
+
+        <div class="rounded-xl border-2 border-accent bg-white p-6 flex flex-col relative shadow-sm">
+          <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Most popular</div>
+          <h3 class="font-serif text-xl">Scale Up</h3>
+          <p class="font-serif text-4xl mt-2">$49</p>
+          <p class="text-sm text-muted mt-1 leading-snug"><em>Can I invite real users without trust or auth problems?</em></p>
+          <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Everything in Starter, plus:</li>
+            <li>Up to <strong>30</strong> findings (deeper pass)</li>
+            <li>User data isolation check (2 test accounts)</li>
+            <li>Obvious visible risks (exposed credentials, public admin routes)</li>
+          </ul>
+        </div>
+
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
+          <h3 class="font-serif text-xl">Pro</h3>
+          <p class="font-serif text-4xl mt-2">$99</p>
+          <p class="text-sm text-muted mt-1 leading-snug"><em>Am I ready to take real money and hand off to a developer?</em></p>
+          <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Everything in Scale Up, plus:</li>
+            <li>Up to <strong>40</strong> findings (full pass)</li>
+            <li>Short Loom walkthrough of the top issues</li>
+            <li>Developer-ready handoff doc</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="mt-8 text-sm text-muted max-w-prose">
+        Want to try LaunchLook without paying? The <a href="/" class="underline hover:text-ink font-medium">main landing</a> includes a free 3-finding audit. No credit card, no signup, just your live URL.
+      </p>
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <a href="/#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=StarterCheckout">See full LaunchLook pricing</a>
+        <a href="/" class="launchlook-btn launchlook-btn-secondary">Get the free 3-finding audit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="bg-paper">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Questions</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-6">Comparison FAQ</h2>
+      <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
+        <details class="py-4" open>
+          <summary class="flex justify-between items-center font-medium text-sm">Should I use both?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes, they solve different problems. PageLens is purpose-built for ongoing SEO monitoring (recurring scans, dashboards, trend tracking). LaunchLook is purpose-built for the one-time pre-launch checkup (broken CTAs, placeholder copy, trust gaps, mobile breakage, plus paste-ready fix prompts you drop into your AI builder). Most buyers use one or the other based on which job they need done; some use both at different points in the lifecycle.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Why isn't this comparison in your main navigation?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Because most of our customers don't know PageLens. This page is for the ones who do. We would rather earn buyers on our own strengths than by knocking competitors. The page exists for SEO and for the FAQ. It does not live in our main nav, our hero, or our pricing cards.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How fast can I get a report from LaunchLook?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">24 to 48 hours, with a real human (Rob, the founder) reviewing every finding before delivery. Most reports go out in 24. PageLens is faster (instant), but that is because there is no human review. The trade-off is real, and we are explicit about it.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Is this comparison sponsored or biased?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No sponsorship. We wrote this because buyers occasionally ask us "how is LaunchLook different from PageLens?" and we wanted one canonical answer. Pricing and feature details for PageLens were summarized from their public site as of May 2026 and may change. If anything here is wrong or out of date, email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> and we will fix it.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What does "vibe coder" mean here?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Someone who built a working web app using an AI builder like Lovable, Bolt, Base44, Replit, v0, or Cursor, often without a deep coding background. The site works. They want to know if it is ready for real users. That is who LaunchLook is built for.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-ink text-paper border-t border-ink">
+    <div class="max-w-3xl mx-auto px-6 section-inner text-center">
+      <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mt-3">Start with the free 3-finding audit.</h2>
+      <p class="text-paper/75 mt-2 text-sm">No credit card, no signup. Just your live URL.</p>
+      <a href="/" class="launchlook-btn launchlook-btn-accent mt-6">
+        Go to LaunchLook
+      </a>
+    </div>
+  </section>
+
+  <footer class="border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/" class="hover:text-ink">Main landing</a></li>
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
+        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
+        <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-ink">Terms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
+</body>
+</html>

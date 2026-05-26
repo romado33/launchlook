@@ -67,6 +67,7 @@ Stripe Payment Link **success URL** (dashboard): `https://launchlook.app/thanks`
 | `/` | `index.html` (vibe-coder SKU) |
 | `/webflow` | `webflow.html` (Webflow SKU — parallel landing page) |
 | `/checklist` | `checklist.html` |
+| `/vs-pagelens` | `vs-pagelens.html` (SEO + FAQ destination, not in main nav per `SIMPLICITY-GUARDRAILS.md` §2.7) |
 | `/privacy` | `privacy.html` |
 | `/terms` | `terms.html` |
 | `/thanks` | `thanks.html` (shared by both SKUs; copy is platform-agnostic) |
