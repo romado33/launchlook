@@ -131,8 +131,8 @@
 
       <p class="mt-8 text-sm text-muted"><a href="/r/jane-sparkle-marketplace.html" class="underline hover:text-ink">See an anonymized sample report &rarr;</a></p>
 
-      <!-- What we catch (reduced from 10 to the 5 highest-impact items per deep-trim spec) -->
-      <h3 class="font-serif text-xl mt-8 mb-4">What we catch</h3>
+      <!-- Examples of things we catch (heading renamed 2026-05-26 from 'What we catch' so the 5-bullet list reads as illustrative, not exhaustive. The full audit can return up to 10/30/40 findings depending on tier per docs/PRODUCT-DECISIONS.md s1.) -->
+      <h3 class="font-serif text-xl mt-12 mb-4">Examples of things we catch</h3>
       <ul class="grid sm:grid-cols-2 gap-3 text-sm">
         <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
           <span class="text-accent font-semibold" aria-hidden="true">✓</span>
@@ -158,17 +158,17 @@
       <p class="mt-6 text-sm text-muted max-w-prose">Test logins are used only during the review and deleted within 24 hours. This is a launch-readiness checkup, not a full security audit.</p>
 
       <!-- Different from auto-scanners (merged in from prior standalone Why-us section per 6->4 restructure: dropped the "Different by design" eyebrow + long intro and the closing "Want a deep technical security scan too?" paragraph; landed directly on the 3 contrast bullets) -->
-      <h3 class="font-serif text-xl mt-8 mb-6">Different from auto-scanners</h3>
+      <h3 class="font-serif text-xl mt-12 mb-6">Different from auto-scanners</h3>
       <ul class="space-y-4">
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
+        <li class="rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
           <p class="font-serif text-lg text-ink">Founder-curated, personally reviewed</p>
           <p class="text-muted text-sm mt-2 leading-relaxed">Every finding gets read by a human before delivery. False positives get dropped, wording that doesn't land gets cut, and only the things you should actually fix make it into the final PDF. <span class="text-muted/80">Auto-scanners ship the raw dump, false positives included.</span></p>
         </li>
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
+        <li class="rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
           <p class="font-serif text-lg text-ink">Plain-English findings, not cryptic codes</p>
           <p class="text-muted text-sm mt-2 leading-relaxed">Every finding reads like a friend wrote it. The 10 to 40 things that actually matter, ranked by impact, written so a non-technical founder can act on them. <span class="text-muted/80">Elsewhere: pages of severity codes you'd have to Google one by one.</span></p>
         </li>
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
+        <li class="rounded-xl border border-line bg-white p-5 sm:p-6 shadow-sm shadow-ink/5">
           <p class="font-serif text-lg text-ink">Paste-ready fix prompts for your builder</p>
           <p class="text-muted text-sm mt-2 leading-relaxed">Each finding ships with a copy-paste prompt written for Lovable, Bolt, v0, Cursor, or whichever AI builder you used. Paste it in, get the fix back. <span class="text-muted/80">Elsewhere: technical write-ups your AI builder can't act on directly.</span></p>
         </li>
@@ -185,7 +185,7 @@
       <p class="text-muted mb-2">Pick depth. Not a different quality of care.</p>
 
       <div class="grid md:grid-cols-3 gap-5 mt-8">
-        <div class="rounded-xl border border-line bg-white p-5 flex flex-col shadow-sm shadow-ink/5">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Starter Package</h3>
           <p class="font-serif text-4xl mt-2">$19</p>
           <p class="text-sm text-accent mt-1 font-medium uppercase tracking-widest">The 10 things to fix first</p>
@@ -200,7 +200,7 @@
           </a>
         </div>
 
-        <div class="rounded-xl border-2 border-accent bg-white p-5 flex flex-col relative shadow-sm">
+        <div class="rounded-xl border-2 border-accent bg-white p-6 flex flex-col relative shadow-sm">
           <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Most popular</div>
           <h3 class="font-serif text-xl">Scale Up Package</h3>
           <p class="font-serif text-4xl mt-2">$49</p>
@@ -216,7 +216,7 @@
           </a>
         </div>
 
-        <div class="rounded-xl border border-line bg-white p-5 flex flex-col shadow-sm shadow-ink/5">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Pro Package</h3>
           <p class="font-serif text-4xl mt-2">$99</p>
           <p class="text-sm text-accent mt-1 font-medium uppercase tracking-widest">Deep audit + integrations</p>
@@ -279,7 +279,7 @@
   </section>
 
   <footer class="border-t border-line">
-    <div class="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
         <p class="font-serif text-ink">LaunchLook</p>
         <p class="mt-1">One last look before you launch.</p>
