@@ -59,8 +59,8 @@ That's the only number that matters right now. Three paying strangers proves the
 ### Reality check: what proven from research
 
 - **Demand is real and self-initiated.** The Lovable Discord already builds free peer tools (Testers Helping Testers) and reaches for Claude + MCP. Nobody in those communities is currently selling a paid, structured, plain-English pre-launch pass. The wedge is open.
-- **Competing positioning to avoid:** "AI scanner," "security audit," "QA platform," "peer testing." You are **the curated, human, fast-turnaround, fix-prompt-included once-over** (Starter within 48h, Full within 24h — usually faster).
-- **Best wedge sentence:** *"A 10-minute pre-launch pass — what a stranger would notice in the first 30 seconds, in plain English, with copy-paste fix prompts for your builder."*
+- **Competing positioning to avoid:** "raw AI scanner that dumps 100 findings," "security audit," "QA platform," "peer testing." You are **the AI-powered scan with founder-curated quality, fix-prompt-included once-over**.
+- **Best wedge sentence:** *"A 10-minute pre-launch pass: AI scans every screen, I personally review every finding before it reaches you. Plain English, with copy-paste fix prompts for your builder."*
 
 ---
 
@@ -131,7 +131,7 @@ Every pitch below is ready to paste. Bracketed `{TOKENS}` are personalization va
 This is the cleanest single-paragraph pitch. Use it in DMs, short forum replies, and as the body of cold emails.
 
 ```
-I'm testing LaunchLook — a $9 pre-launch checkup for apps built with Lovable, Bolt, Replit, v0, Cursor, etc. You send your live URL, and I send back the 5–7 things a real first user would notice: broken buttons, placeholder text, trust gaps, mobile issues, confusing flows, plus paste-ready prompts to fix them in your builder. I'm looking for a few early users this week and will refund it if it's not useful.
+I'm testing LaunchLook: a $9 pre-launch checkup for apps built with Lovable, Bolt, Replit, v0, Cursor, etc. You send your live URL. AI scans every screen and drafts findings, then I personally review and curate every one before it reaches you. You get back the 5 things a real first user would notice: broken buttons, placeholder text, trust gaps, mobile issues, confusing flows, plus paste-ready prompts to fix them in your builder. I'm looking for a few early users this week and will refund it if it's not useful.
 ```
 
 Use it when: you want one paragraph that explains the offer, signals "early / honest," and includes the risk reversal (refund).
@@ -143,11 +143,11 @@ Use it when: you want one paragraph that explains the offer, signals "early / ho
 Use in `r/vibecoding`, `r/SideProject`, `r/lovable`, `r/Replit`, `r/nextjs`, Indie Hackers, or any forum that allows multi-paragraph posts. Lead with the free offer; soft-mention the paid product only at the end (or not at all on Reddit).
 
 ```
-Offering free 10-minute pre-launch checkups this week — Lovable / Bolt / Base44 / v0 / Cursor
+Offering free 10-minute pre-launch checkups this week: Lovable / Bolt / Base44 / v0 / Cursor
 
 I'm a technical writer (15 years) who's been spending time looking at vibe-coded apps that are almost-but-not-quite ready to share with real users. There's a pattern: the app works fine for the founder, but a stranger opening the link spots three or four things in the first minute that the founder stopped seeing weeks ago.
 
-Reply with your public URL (staging links are fine — just not localhost) and I'll send back 2–3 specific things in plain English. No security jargon, no pentest, no "you need to refactor your auth layer." Just the stuff a first-time visitor will notice — dead buttons, placeholder text, broken trust pages, mobile layout problems.
+Reply with your public URL (staging links are fine, just not localhost) and I'll send back 2 to 3 specific things in plain English. AI helps me scan every screen at desktop and mobile sizes; I personally review every finding before sending it. No security jargon, no pentest, no "you need to refactor your auth layer." Just the stuff a first-time visitor will notice: dead buttons, placeholder text, broken trust pages, mobile layout problems.
 
 What I'll look at (about 10 minutes per app):
 - Does anything on the homepage scream "this is unfinished"?
@@ -159,7 +159,7 @@ What I won't do: deep security, code review, anything that needs your repo.
 
 I'll do as many as I can fit in this week. First come first served.
 
-(If you want the long version with screenshots and copy-paste fix prompts for your builder, I do that as a paid service — but please don't pay for what I'm offering free here. Reply with your URL and let's start there.)
+(If you want the long version with screenshots and copy-paste fix prompts for your builder, I do that as a paid service. Please don't pay for what I'm offering free here. Reply with your URL and let's start there.)
 ```
 
 ---
@@ -171,9 +171,9 @@ For chat-style channels where walls of text die. Keep it ≤ 5 lines.
 ```
 Offering a free 10-min "would I send this link today?" pass on vibe-coded apps this week.
 
-Drop your public URL (staging OK) and I'll reply with 2–3 specific things a first-time visitor would notice — dead buttons, placeholder copy, mobile layout, trust pages. Plain English, no security jargon.
+Drop your public URL (staging OK) and I'll reply with 2 to 3 specific things a first-time visitor would notice: dead buttons, placeholder copy, mobile layout, trust pages. AI helps me scan, but I personally review every finding before sending. Plain English, no security jargon.
 
-Not a code review or pentest. Just URL only.
+Not a code review or pentest. URL only.
 ```
 
 ---
@@ -183,13 +183,13 @@ Not a code review or pentest. Just URL only.
 Use in any "Show HN" / "Show-and-tell" / "Feedback wanted" thread. **Substitute your real findings before posting.**
 
 ```
-Just clicked through {APP_NAME} like a first-time visitor (desktop + phone width). A few things I noticed:
+Just ran {APP_NAME} through our pre-launch pass (AI scans every screen, I curate). A few things I noticed as a first-time visitor:
 
-1. {Specific thing #1 — what you saw, in plain English. Quote the exact button or text in quotes.}
+1. {Specific thing #1: what you saw, in plain English. Quote the exact button or text in quotes.}
 2. {Specific thing #2}
-3. {Specific thing #3 — keep it concrete and visual}
+3. {Specific thing #3: keep it concrete and visual}
 
-None of these are showstoppers, but they're the kind of stuff a stranger spots in the first 30 seconds. Happy to go deeper if useful — DM me your builder (Lovable / Bolt / v0 / etc.) and I can send copy-paste prompts to fix them.
+None of these are showstoppers, but they're the kind of stuff a stranger spots in the first 30 seconds. Happy to go deeper if useful. DM me your builder (Lovable / Bolt / v0 / etc.) and I can send copy-paste prompts to fix them.
 ```
 
 **Substitution rules:**
@@ -204,9 +204,9 @@ None of these are showstoppers, but they're the kind of stuff a stranger spots i
 Use this when you're trying to validate the wedge on Bolt / v0 / Cursor / Base44 / Replit. The framing is "I'm testing my format on your builder this week."
 
 ```
-Quick offer for {PLATFORM} builders — I'm doing free pre-launch checkups this week, specifically on {PLATFORM} apps so I can learn how your builder differs from Lovable.
+Quick offer for {PLATFORM} builders: I'm doing free pre-launch checkups this week, specifically on {PLATFORM} apps so I can learn how your builder differs from Lovable.
 
-What you get: I'll spend 10–15 minutes clicking through your live app like a first-time visitor (desktop + mobile). Reply with 2–3 specific things I'd want fixed before you share the link wider — placeholders, dead buttons, mobile layout, trust pages. Plain English, no security jargon.
+What you get: I'll spend 10 to 15 minutes on your live app. AI scans every screen at desktop and mobile, then I personally review and curate 2 to 3 specific things I'd want fixed before you share the link wider: placeholders, dead buttons, mobile layout, trust pages. Plain English, no security jargon.
 
 What I'm getting: I'm building a paste-ready fix-prompt library for {PLATFORM}, so seeing real {PLATFORM} apps helps me get the prompts right.
 
@@ -240,9 +240,9 @@ Send by DM, never in the public thread. Wait until the founder has actually read
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version — that's what LaunchLook does. $9 Starter is priority triage: the top 5 things you need to fix, ranked by impact, with copy-paste prompts you drop into {BUILDER}. $29 Full is a comprehensive audit: up to 20 findings across every category, plus a cross-user data check with two test accounts, plus a Quick Start Guide PDF for your users. One human, no scanner, no GitHub access. Delivered within 48h on Starter (usually within 24), within 24h on Full (usually within 12).
+If you want the full version, with 5 to 20 ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER}, that's what LaunchLook does ($9 Starter, $29 Full). AI scans every screen; I personally review and curate every finding before delivery. No GitHub access. 24-hour turnaround.
 
-launchlook.app — and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
+launchlook.app, and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
 ```
 
 ---
@@ -254,7 +254,7 @@ Hook + offer + soft outro. No threads in the first one — earn the follow first
 ```
 Free this week: I'll do a 10-minute "would I send this link today?" pass on your vibe-coded app.
 
-Reply or DM with your public URL. I'll send back 2–3 things a first-time visitor would actually notice — broken buttons, placeholder text, mobile layout, trust pages.
+Reply or DM with your public URL. AI scans every screen, I personally curate the findings, you get back 2 to 3 things a first-time visitor would actually notice: broken buttons, placeholder text, mobile layout, trust pages.
 
 No security stuff, no code review, just the polish layer.
 ```
@@ -268,13 +268,13 @@ If it gets engagement, follow up days later with one of the findings as a quote-
 Use weekly. Tie to one finding, link the checklist (not the homepage). Always disclose you're the founder.
 
 ```
-After clicking through a dozen pre-launch apps built with Lovable / Bolt / v0 this month, the #1 polish issue isn't broken code — it's leftover placeholders.
+After running a dozen pre-launch apps built with Lovable / Bolt / v0 through our pre-launch pass this month, the #1 polish issue isn't broken code. It's leftover placeholders.
 
 "Your Company Name" in the footer. "Hosted by …" in the metadata. "Get Started" button that goes to /undefined. The builder fills these in once and forgets them in three other places.
 
-I made a 20-minute checklist of the most common ones — free, no email required: launchlook.app/checklist
+I made a 20-minute checklist of the most common ones, free, no email required: launchlook.app/checklist
 
-(Disclosure: I run LaunchLook, a $9 pre-launch checkup for vibe-coded apps. The checklist is the free DIY version of what I do manually.)
+(Disclosure: I run LaunchLook, a $9 pre-launch checkup for vibe-coded apps. AI scans every screen, I personally review and curate every finding before delivery. The checklist is the free DIY version of what I ship.)
 ```
 
 ---
@@ -288,9 +288,9 @@ Subject: I noticed a few things about {APP_NAME} — no charge
 
 Hi {NAME},
 
-I'm Rob — I run LaunchLook, pre-launch checkups for vibe-coded web apps (Lovable, Bolt, v0, Cursor, and similar). Saw you launched {APP_NAME} on {PLATFORM} — looks promising.
+I'm Rob, I run LaunchLook: pre-launch checkups for vibe-coded web apps (Lovable, Bolt, v0, Cursor, and similar). Saw you launched {APP_NAME} on {PLATFORM}, looks promising.
 
-I was testing my report format and ran it on your app as a sample. Here's what I found:
+I ran your app through our pre-launch pass (AI scans every screen, I curate the findings) as a sample. Here's what came back:
 
 {NOTION_REPORT_LINK}
 
@@ -320,9 +320,9 @@ hello@launchlook.app
 
 | Time | What you say / show |
 |------|--------------------|
-| 0:00–0:10 | Show their app in the browser. *"Hey [name], I clicked through [app name] like a first-time visitor."* |
-| 0:10–0:35 | Show 2–3 specific issues (dead button, placeholder text, missing privacy, dev tools visible). No jargon. |
-| 0:35–0:50 | *"I run LaunchLook — a pre-launch checkup for vibe-coded apps. Plain-English report + copy-paste fix prompts for your builder."* |
+| 0:00–0:10 | Show their app in the browser. *"Hey [name], I ran [app name] through our pre-launch pass and clicked through the screenshots."* |
+| 0:10–0:35 | Show 2 to 3 specific issues (dead button, placeholder text, missing privacy, dev tools visible). No jargon. |
+| 0:35–0:50 | *"I run LaunchLook, a pre-launch checkup for vibe-coded apps. AI scans every screen, I personally curate the findings. Plain-English report plus copy-paste fix prompts for your builder."* |
 | 0:50–1:00 | CTA: *"Starter Package is $9 if you want the full list. Link: launchlook.app"* |
 
 **DM text to pair with the Loom:**
@@ -341,6 +341,7 @@ No pressure — launchlook.app if useful.
 **Loom rules:**
 - Never use the word "security" as the lead. Use polish / placeholders / sharing risks.
 - Never say "audit." Use "checkup" or "second pair of eyes."
+- Lead with what you saw, not the tooling. "AI scans every screen, I curate" is the framing for when someone asks how it works, not the opener.
 - Personalize the first line with something specific you saw.
 
 ---
@@ -350,9 +351,9 @@ No pressure — launchlook.app if useful.
 Short, specific, no link in the first message.
 
 ```
-Hey {NAME} — saw you just shipped {APP_NAME} on {PLATFORM}. Congrats.
+Hey {NAME}, saw you just shipped {APP_NAME} on {PLATFORM}. Congrats.
 
-I do quick pre-launch checkups for vibe-coded apps (no code access, just the live URL). I clicked through yours for a minute and noticed {ONE_SPECIFIC_THING}. Happy to send a quick free pass with 2–3 more if that's useful — just say the word.
+I do quick pre-launch checkups for vibe-coded apps (AI scans, founder curates, no code access, just the live URL). I clicked through yours for a minute and noticed {ONE_SPECIFIC_THING}. Happy to send a quick free pass with 2 to 3 more if that's useful, just say the word.
 ```
 
 If they reply "sure," send the free findings via DM. Then use **Variant #3.7 (soft pitch)** 24 hours after they've read it.
@@ -406,14 +407,15 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 
 | Objection | Response |
 |-----------|----------|
-| *"Isn't this just an AI scanner? I can use Claude / MCP / VibeDoctor."* | "Those help builders test from the inside. LaunchLook checks what a **cold visitor** sees in the first 30 seconds — placeholders, dead CTAs, dev tools left on prod, broken trust pages. AI scanners are noisy and speak in `SEC-001` jargon; I send you 5–7 things that actually matter, in plain English, with paste-ready fix prompts." |
+| *"Isn't this just an AI scanner? I can use Claude / MCP / VibeDoctor."* | "Honest answer: AI does the first pass. It scans every screen, finds patterns, drafts findings. Then I personally review and curate every finding before it reaches you. That's the part raw AI scanners skip. AI scanners are noisy and speak in `SEC-001` jargon; the founder review rejects the false positives, edits anything that reads off, and adds the human judgment AI tools miss. You get scanner-speed delivery with human-curated quality." |
+| *"Is the AI part going to fill my report with hallucinated issues?"* | "That's exactly why the founder review exists. I look at every AI-drafted finding against the actual screenshots before sending. If a finding isn't grounded in real evidence, it doesn't ship. Most reports end with fewer findings than the AI initially drafted; that's the curation working." |
 | *"I already know my app has issues — I don't need someone to tell me."* | "Probably true for the bugs you already see. The point is the ones you **stopped seeing** weeks ago — every founder has them. If you want, send the URL and I'll do a free 10-min pass; if it's all stuff you already knew, no harm done." |
-| *"$9 is too cheap to be any good. / $9 is too expensive for something automated."* | "It's a manual human pass, not a scanner — that's why it's $9 instead of free. And it's $9 instead of $99 because I'm just one human, no team, and I'd rather you buy it twice (Starter now, Full closer to launch) than once." |
+| *"$9 is too cheap to be any good. / $9 is too expensive for something automated."* | "It's AI-drafted, founder-curated. AI gives me scanner-speed; the founder review is what keeps the bar high. That's why it's $9 instead of free (a real human reads every finding) and $9 instead of $99 (the AI carries the volume work). Rather you buy it twice, Starter now and Full closer to launch, than once." |
 | *"Will this catch the scary security stuff?"* | "Not deep security (no pentest, no code review). I do catch obvious visible risks though — dev bypasses, exposed test controls, broken auth screens, and (Full Package only) one user seeing another user's data via cross-account checks." |
 | *"Why should I trust you?"* | "Two ways: read the [free checklist](https://launchlook.app/checklist) — that's the DIY version of what I do. Or read the [sample report](https://launchlook.app/sample) and decide if the output is worth $9. And there's a 7-day full refund if it isn't." |
 | *"Do I need to give you my GitHub / repo access?"* | "Never. Just the live URL. If your Full Package run needs to check cross-user data, you give me two temporary test accounts via the intake form. No code, no repo, no admin." |
 | *"My app is built with v0 / Cursor / Base44, not Lovable. Do you do those?"* | "Yes. The fix prompts are tailored per builder — Lovable, Bolt, v0, Cursor, Base44, Replit, and a generic one for everything else. The findings are the same; the prompt syntax differs." |
-| *"Will the report tell me anything I can't get for free?"* | "Free checklist gets you the DIY pass. What you can't get for free: a curated, ranked list written in plain English with paste-ready fix prompts — top 5 things on Starter ($9, priority triage), up to 20 on Full ($29, comprehensive audit). Full also adds a cross-user data check and a one-page Quick Start Guide PDF you can hand to your users. No competitor includes that last one." |
+| *"Will the report tell me anything I can't get for free?"* | "Free checklist gets you the DIY pass. What you can't get for free: a curated 5–7 item list ranked by severity, written in plain English with paste-ready prompts, plus (Starter+) a one-page Quick Start Guide you can hand to your users. No competitor includes that last one." |
 | Silence / no reply after 5 days | Don't follow up. Log the no-response. That's data. |
 
 ---
@@ -436,7 +438,7 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 |-------|-----|
 | Post the same copy in 5 places | Looks spammy. Mods talk. You get flagged. |
 | Say "security audit" / "pentest" / "vulnerability scan" | Different product, you can't deliver it, you'll get flagged in security-aware subs |
-| Say "AI-powered" | You're explicitly *not* — that's the selling point |
+| Say "AI-powered" without "founder-curated" | The trust premium is the human review. Always pair the two: "AI scans, I personally curate." Never bare "AI-powered." |
 | Say "Notion report" | Confuses non-Notion users; say "shareable report" |
 | Open with *"I built LaunchLook because…"* | Makes the post about you. Make it about them. |
 | Put pricing in the first line | Lead with help, not a price tag |
@@ -481,8 +483,8 @@ Pulled from the conversation; this is the version that has the best evidence beh
 | Support email | hello@launchlook.app |
 | #1 channel | Lovable Discord `#show-and-tell` |
 | #1 variant | #3.4 (reply with 3 specific findings) |
-| Forbidden words | "security audit," "pentest," "AI scanner," "Notion report" |
-| Approved words | "checkup," "second pair of eyes," "polish layer," "what a first-time visitor would notice" |
+| Forbidden words | "security audit," "pentest," "raw AI scanner," "Notion report" |
+| Approved words | "checkup," "second pair of eyes," "polish layer," "what a first-time visitor would notice," "AI-drafted founder-curated" |
 | Loom day | Monday (3/week) |
 | LinkedIn day | Wednesday (1/week) |
 | Quote-ask day | Friday |

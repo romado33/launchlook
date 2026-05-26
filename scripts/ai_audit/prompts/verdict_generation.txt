@@ -1,0 +1,35 @@
+## Verdict request
+
+Given the findings already drafted for {app_name}, produce the overall
+verdict block that goes at the top of the report.
+
+### Findings (already drafted, summary)
+
+{findings_summary}
+
+### Required output
+
+* emoji: one of "🟢", "🟡", "🔴". Choose based on the finding mix:
+    - 🔴 if any critical findings exist
+    - 🟡 if no critical but at least one high
+    - 🟢 if only medium/low (or no findings)
+* summary: a single sentence, plain English, 8-14 words. Names what the
+  customer should walk away knowing. Examples:
+    - "Needs a few fixes before sharing publicly."
+    - "Strong foundation, polish the listing pages and you're shipping."
+    - "Two critical issues to clear before the launch link goes wider."
+* narrative: 3-5 sentences. Frames the audit. Acknowledges what is
+  already working (be specific, reference at least one concrete strength
+  you saw in the evidence). Then names the top one or two issues to fix
+  first, in plain language. Closes with a forward-looking sentence on
+  pacing the rest.
+
+### Voice rules
+
+* No em-dashes. Use colons, periods, or two sentences instead.
+* No "Certainly", "Overall", "In summary". Start with substance.
+* Plain English. The customer reads this first; it sets the tone for the
+  whole report.
+* Do not repeat the same finding wording verbatim. Paraphrase.
+
+Return the structured response only.

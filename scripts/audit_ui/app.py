@@ -128,6 +128,7 @@ def create_app(
     repo_root: Path,
     prefill: dict[str, Any] | None = None,
     auto_open: bool = True,
+    review_ai: bool = False,
 ) -> Flask:
     pkg_root = Path(__file__).resolve().parent
     app = Flask(
@@ -147,6 +148,8 @@ def create_app(
     app.config["TIER_CAPS"] = discover_tier_caps(app.config["DELIVER_REPORT_PATH"])
     app.config["PREFILL"] = prefill or {}
     app.config["AUTO_OPEN"] = auto_open
+    app.config["REVIEW_AI"] = bool(review_ai)
+    app.config["FEEDBACK_DIR"] = repo_root / "data" / "ai_feedback"
 
     deliver_log = DeliverLog()
     app.config["DELIVER_LOG"] = deliver_log
@@ -169,6 +172,7 @@ def _register_routes(app: Flask) -> None:
             severities=yaml_writer.VALID_SEVERITIES,
             tiers=yaml_writer.VALID_TIERS,
             builders=yaml_writer.VALID_BUILDERS,
+            review_ai=app.config["REVIEW_AI"],
         )
 
     @app.route("/api/bootstrap")
@@ -176,12 +180,20 @@ def _register_routes(app: Flask) -> None:
         prefill = app.config["PREFILL"]
         slug = (request.args.get("slug") or prefill.get("slug") or "").strip()
         existing_draft = None
+        existing_customer = None
+        feedback_record = None
         if slug:
             existing_draft = draft_store.load_draft(app.config["DRAFTS_DIR"], slug)
+            if app.config["REVIEW_AI"]:
+                existing_customer = _load_customer_payload(app, slug)
+                feedback_record = _load_feedback(app, slug)
         return jsonify({
             "slug": slug,
             "prefill": prefill,
             "draft": existing_draft,
+            "review_ai": app.config["REVIEW_AI"],
+            "customer": existing_customer,
+            "feedback": feedback_record,
             "tier_caps": app.config["TIER_CAPS"],
             "severities": list(yaml_writer.VALID_SEVERITIES),
             "tiers": list(yaml_writer.VALID_TIERS),
@@ -357,6 +369,137 @@ def _register_routes(app: Flask) -> None:
         except ValueError:
             since = 0
         return jsonify(deliver_log.snapshot(since=since))
+
+    # ---- AI review-mode endpoints -------------------------------------
+
+    @app.route("/api/feedback", methods=["POST"])
+    def api_feedback_record() -> Any:
+        """Record a single Rob action against the AI draft for a finding."""
+        data = request.get_json(silent=True) or {}
+        slug = (data.get("slug") or "").strip()
+        action = (data.get("action") or "").strip().lower()
+        try:
+            finding_idx = int(data.get("finding_idx", -1))
+        except (TypeError, ValueError):
+            finding_idx = -1
+        if not slug or finding_idx < 0:
+            return jsonify({"error": "slug and finding_idx are required"}), 400
+        if action not in {"approved", "edited", "rejected", "regenerated", "draft"}:
+            return jsonify({"error": f"unknown action {action!r}"}), 400
+
+        try:
+            from scripts.ai_audit import feedback as feedback_log  # noqa: WPS433
+        except ImportError as exc:
+            return jsonify({"error": f"ai_audit package missing: {exc}"}), 500
+
+        feedback_log.record_action(
+            app.config["REPO_ROOT"],
+            draft_store.safe_slug(slug),
+            finding_idx,
+            action,
+            ai_title=data.get("ai_title"),
+            ai_severity=data.get("ai_severity"),
+            final_title=data.get("final_title"),
+            final_severity=data.get("final_severity"),
+        )
+        return jsonify({"ok": True})
+
+    @app.route("/api/feedback/finalize", methods=["POST"])
+    def api_feedback_finalize() -> Any:
+        """Mark all un-reviewed findings as approved and stamp reviewed_at."""
+        data = request.get_json(silent=True) or {}
+        slug = (data.get("slug") or "").strip()
+        if not slug:
+            return jsonify({"error": "slug is required"}), 400
+        final_findings = data.get("final_findings") or []
+        try:
+            from scripts.ai_audit import feedback as feedback_log  # noqa: WPS433
+        except ImportError as exc:
+            return jsonify({"error": f"ai_audit package missing: {exc}"}), 500
+        feedback_log.finalize(
+            app.config["REPO_ROOT"],
+            draft_store.safe_slug(slug),
+            final_findings=final_findings,
+        )
+        return jsonify({"ok": True})
+
+    @app.route("/api/regenerate-finding", methods=["POST"])
+    def api_regenerate_finding() -> Any:
+        """Ask the LLM to redraft a single finding for the current customer.
+
+        Body::
+          {
+            "slug":     "jane-smith",
+            "finding":  { ...current dict... },
+            "customer": { ...current customer dict... },
+            "provider": "auto"
+          }
+        Returns the replacement finding dict.
+        """
+        data = request.get_json(silent=True) or {}
+        slug = (data.get("slug") or "").strip()
+        finding = data.get("finding") or {}
+        customer = data.get("customer") or {}
+        provider = (data.get("provider") or "auto").strip().lower()
+        if not slug:
+            return jsonify({"error": "slug is required"}), 400
+
+        try:
+            from scripts.ai_audit import pipeline as ai_pipeline  # noqa: WPS433
+        except ImportError as exc:
+            return jsonify({"error": f"ai_audit package missing: {exc}"}), 500
+
+        try:
+            ctx = ai_pipeline.context_from_kwargs(
+                slug=draft_store.safe_slug(slug),
+                url=customer.get("app_url") or "https://example.com",
+                tier=customer.get("tier") or "Starter Package",
+                builder=customer.get("builder") or "Lovable",
+                first_name=customer.get("first_name") or "",
+                last_name=customer.get("last_name") or "",
+                email=customer.get("email") or "",
+                app_name=customer.get("app_name") or "",
+            )
+        except SystemExit as exc:
+            return jsonify({"error": str(exc) or "invalid customer fields"}), 400
+
+        try:
+            new_finding = ai_pipeline.regenerate_finding(
+                ctx,
+                existing_finding=finding,
+                provider=provider,
+            )
+        except Exception as exc:  # noqa: BLE001
+            return jsonify({"error": f"regeneration failed: {exc}"}), 500
+
+        return jsonify({"ok": True, "finding": new_finding})
+
+
+# ---------------------------------------------------------------------------
+# Helpers for review-mode bootstrap
+# ---------------------------------------------------------------------------
+
+
+def _load_customer_payload(app: Flask, slug: str) -> dict[str, Any] | None:
+    """Load customers/<slug>.yaml into the form-payload shape (if present)."""
+    target = app.config["CUSTOMERS_DIR"] / f"{draft_store.safe_slug(slug)}.yaml"
+    if not target.exists():
+        return None
+    try:
+        text = target.read_text(encoding="utf-8")
+        payload = yaml_writer.yaml_to_form(text)
+        return {"payload": payload, "yaml": text, "path": target.name}
+    except Exception:
+        return None
+
+
+def _load_feedback(app: Flask, slug: str) -> dict[str, Any] | None:
+    try:
+        from scripts.ai_audit import feedback as feedback_log  # noqa: WPS433
+    except ImportError:
+        return None
+    data = feedback_log.load(app.config["REPO_ROOT"], draft_store.safe_slug(slug))
+    return data or None
 
 
 # ---------------------------------------------------------------------------

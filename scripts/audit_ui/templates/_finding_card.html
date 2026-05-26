@@ -1,6 +1,7 @@
-<div class="finding-card" data-finding>
+<div class="finding-card" data-finding data-review-status="draft">
   <div class="finding-card__header">
     <span class="finding-card__index" data-finding-index>1</span>
+    <span class="finding-card__review-badge" data-review-badge hidden></span>
     <select class="finding-card__severity" data-field="severity" aria-label="Severity">
       <option value="">Severity…</option>
       <option value="critical">Critical</option>
@@ -15,7 +16,12 @@
       placeholder="Finding title (e.g. Dev login bypass visible to everyone)"
       autocomplete="off"
     />
-    <button type="button" class="btn-icon" data-action="remove-finding" aria-label="Remove finding" title="Remove finding">×</button>
+    <div class="finding-card__review-actions" data-review-actions hidden>
+      <button type="button" class="btn-review btn-review--approve" data-action="approve-finding" title="Approve finding as-is" aria-label="Approve">✓</button>
+      <button type="button" class="btn-review btn-review--regen" data-action="regenerate-finding" title="Ask the AI to redraft this finding" aria-label="Regenerate">🔄</button>
+      <button type="button" class="btn-review btn-review--reject" data-action="reject-finding" title="Reject and remove this finding" aria-label="Reject">×</button>
+    </div>
+    <button type="button" class="btn-icon" data-action="remove-finding" data-non-review aria-label="Remove finding" title="Remove finding">×</button>
   </div>
 
   <div class="finding-card__body">

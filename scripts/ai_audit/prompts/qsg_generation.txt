@@ -1,0 +1,53 @@
+## Quick Start Guide request (Full Package only)
+
+After auditing {app_name}, produce a one-page Quick Start Guide for the
+customer's first users. This ships as the second PDF (alongside the Main
+Report) and lives at the customer's discretion: they often link it from
+onboarding emails or hand it to early beta testers.
+
+### Audience
+
+A first-time user of {app_name}, opening it cold. They have not used
+similar apps before. Plain language, no jargon, no insider references.
+
+### Tone
+
+Same plain-English LaunchLook voice as the audit:
+
+* No em-dashes. No "amazing" / "seamless" / "delightful".
+* No "Welcome to your journey" filler. Get to the steps.
+* Imperative: "Tap Sign Up", not "You can sign up".
+* Short. The full QSG fits on one printed page (5-7 steps, ~80 words each).
+
+### Inputs
+
+* App name: {app_name}
+* App URL: {app_url}
+* Builder: {builder}
+* What we saw in the audit (screenshots + HTML extracts): same evidence you
+  used for findings. Use it to ground the steps in real flows that appear
+  to work.
+
+### Required structure
+
+* title: "{app_name}, Getting Started" (or close. Plain.)
+* intro: 2-3 sentences. What the app is, who it's for, what this guide
+  helps them do in the first five minutes.
+* steps: 4-7 steps. Each has:
+    - title (short, imperative: "Create your account")
+    - body (1-3 sentences, concrete, references what the user actually
+      sees on the page)
+* footer_note: 1-2 sentences. How to get help, plus the customer's real
+  support email if you can infer it from the HTML / intake. Otherwise a
+  generic "Reply to your delivery email" works.
+
+### Rules
+
+* Only describe flows you saw working in the audit. If signup looked
+  broken, do NOT include a "Sign up" step. Pivot to a flow that did work.
+* Do not reference findings or the audit. The QSG is for end users, not
+  for the founder. It should read as if produced by the customer.
+* No filler. No "Congratulations on choosing X". Start with action.
+* Same em-dash, AI-tell, and marketing-speak rules as the audit.
+
+Return the structured response only. No preamble.

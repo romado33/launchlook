@@ -1,0 +1,70 @@
+## Audit request
+
+You are reviewing a single customer's live web app and drafting up to
+{max_findings} findings for the {tier}.
+
+### Customer
+
+* Name: {customer_name}
+* App: {app_name}
+* URL: {app_url}
+* Builder: {builder}
+* Intake notes: {intake_notes}
+
+### Tier guidance
+
+{tier_guidance}
+
+### Evidence you have
+
+1. Screenshots: {n_screenshots} PNGs attached as vision inputs. Each is
+   labelled `[viewport] /route`. Desktop is 1440x900. Mobile is 390x844.
+   The mobile shot is what shows on a phone. The desktop shot is what
+   shows on a laptop.
+
+2. Prescreener regex hits: a list of pattern matches from
+   findings_library/findings.csv. These are CANDIDATES, not confirmed
+   findings. You decide whether to keep, merge, or reject each. False
+   positives are expected. Pattern hits without screenshot or HTML
+   evidence should be dropped.
+
+3. Cleaned HTML extracts for each page that returned 200. Scripts and
+   styles are stripped. You see visible text + key attributes (link
+   hrefs, button text, alt text, meta tags). Routes that 404'd are also
+   listed as evidence.
+
+### Findings library context
+
+The 38 most common pre-launch issues are below as a reference. Use these
+to ground your severity calibration and fix-prompt style. Do not feel
+obligated to use one; do feel obligated to NOT invent a finding category
+that doesn't match the library's spirit.
+
+{findings_library}
+
+### Prescreener hits
+
+{prescreener_hits}
+
+### HTML extracts
+
+{html_extracts}
+
+### Page status summary
+
+{page_status_summary}
+
+### Your task
+
+Produce up to {max_findings} findings as a structured response, sorted by
+severity (critical, high, medium, low). Each finding follows the schema
+defined by the tool / response_format. Apply the voice, severity, and
+grounding rules from the system prompt.
+
+Quality bar before you return:
+* Did you quote at least one specific label / phrase / route per finding?
+* Is each fix_prompt a directive (not advice), and tailored to {builder}?
+* Are there zero em-dashes in any field?
+* Is every severity placement defensible against the system-prompt definitions?
+
+Return the structured response only. No preamble.

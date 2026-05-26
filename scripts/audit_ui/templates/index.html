@@ -6,12 +6,12 @@
   <title>LaunchLook · Audit UI</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
-<body class="theme-dark">
+<body class="theme-dark{% if review_ai %} mode-review-ai{% endif %}">
   <header class="topbar">
     <div class="topbar__brand">
       <span class="topbar__logo" aria-hidden="true">●</span>
       <strong>LaunchLook</strong>
-      <span class="topbar__subtitle">Audit UI</span>
+      <span class="topbar__subtitle">{% if review_ai %}AI review{% else %}Audit UI{% endif %}</span>
     </div>
     <div class="topbar__meta">
       <span class="topbar__slug" data-slug-display>(no slug)</span>
@@ -19,6 +19,22 @@
       <button type="button" class="btn btn-ghost" data-action="open-customer">Open existing customer…</button>
     </div>
   </header>
+
+  {% if review_ai %}
+  <div class="ai-banner" data-ai-banner>
+    <div class="ai-banner__icon" aria-hidden="true">◆</div>
+    <div class="ai-banner__body">
+      <p class="ai-banner__title">AI-generated draft. Review and approve each finding before shipping.</p>
+      <p class="ai-banner__hint">
+        Approve, edit, regenerate, or reject each finding. The
+        <strong>Approve all remaining &amp; ship</strong> button at the bottom
+        marks everything still in <em>draft</em> as approved and triggers PDF
+        delivery in one step.
+      </p>
+    </div>
+    <div class="ai-banner__stats" data-ai-banner-stats>0 / 0 reviewed</div>
+  </div>
+  {% endif %}
 
   <main class="layout">
     <form id="audit-form" class="form" autocomplete="off" novalidate>
@@ -231,7 +247,13 @@
     <div class="actionbar__buttons">
       <button type="button" class="btn btn-ghost" data-action="save-draft">Save draft</button>
       <button type="button" class="btn btn-primary" data-action="generate-yaml">Generate YAML</button>
+      {% if review_ai %}
+      <button type="button" class="btn btn-success" data-action="approve-all-ship" title="Mark all un-reviewed findings as approved and trigger PDF delivery">
+        ✓ Approve all remaining &amp; ship
+      </button>
+      {% else %}
       <button type="button" class="btn btn-success" data-action="deliver-send">Save + send PDFs</button>
+      {% endif %}
     </div>
   </footer>
 
@@ -275,6 +297,7 @@
       severities: {{ severities | tojson }},
       tiers: {{ tiers | tojson }},
       builders: {{ builders | tojson }},
+      review_ai: {{ (review_ai | tojson) if review_ai is defined else 'false' }},
     };
   </script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>

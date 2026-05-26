@@ -1,8 +1,8 @@
 # LaunchLook
 
-A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. $9 to start.
+A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. AI drafts the audit, a founder personally reviews and curates every finding before delivery. $9 to start.
 
-> **Status**: pre-launch. Zero paying customers yet. Manual delivery is intentional — automation is gated on customer milestones (see `docs/03-build-queue.md`).
+> **Status**: pre-launch. Zero paying customers yet. AI-first delivery shipped (`scripts/ai_audit.py`), with founder spot-check via `scripts/audit_ui.py --review-ai` before each report goes out. See `docs/AI-AUDIT-PIPELINE.md`.
 
 **Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)  
 **Build Tally intake (manual):** [`docs/TALLY-INTAKE-PASTE.txt`](docs/TALLY-INTAKE-PASTE.txt)  

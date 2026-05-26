@@ -1,0 +1,13 @@
+# LaunchLook AI audit pipeline (scripts/ai_audit.py).
+#
+# Install once:
+#   pip install -r requirements-ai.txt
+#
+# Self-contained on purpose: does NOT modify requirements.txt /
+# requirements-automation.txt / requirements-ui.txt / api/requirements.txt.
+# Rob runs the AI pipeline locally; the Vercel landing build is unaffected.
+
+anthropic>=0.40.0
+openai>=1.50.0
+beautifulsoup4>=4.12.0
+playwright>=1.40.0

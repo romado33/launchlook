@@ -34,6 +34,10 @@
     deliverPollTimer: null,
     deliverOffset: 0,
     pendingScreenshotUploads: 0,
+    reviewAi: !!window.AUDIT_UI_BOOTSTRAP?.review_ai,
+    reviewStatus: [],   // per-finding-index: "draft" | "approved" | "edited" | "rejected"
+    aiBaseline: [],     // per-finding-index: snapshot of AI title/severity at load
+    regenInFlight: new Set(),
   };
 
   function blankPayload() {
@@ -87,6 +91,7 @@
       return;
     }
     if (bootstrap.tier_caps) state.tierCaps = bootstrap.tier_caps;
+    state.reviewAi = !!bootstrap.review_ai;
 
     if (bootstrap.prefill && Object.keys(bootstrap.prefill).length) {
       applyPrefill(bootstrap.prefill);
@@ -99,7 +104,14 @@
     }
     updateSlugDisplay();
 
-    if (bootstrap.draft && bootstrap.draft.payload) {
+    // Review mode: prefer the existing customer YAML over a stale draft.
+    if (state.reviewAi && bootstrap.customer && bootstrap.customer.payload) {
+      state.payload = mergePayload(blankPayload(), bootstrap.customer.payload);
+      initializeReviewBaseline(bootstrap.feedback);
+      writePayloadToForm();
+      showYamlPreview(bootstrap.customer.yaml || "");
+      setStatus(`Loaded AI draft → customers/${state.slug}.yaml`, "success");
+    } else if (bootstrap.draft && bootstrap.draft.payload) {
       offerDraftRestore(bootstrap.draft);
     } else {
       writePayloadToForm();
@@ -107,9 +119,32 @@
 
     refreshFindingsCounter();
     refreshQsgVisibility();
-    setStatus("Ready.", "");
+    refreshReviewBanner();
+    if (!state.reviewAi) setStatus("Ready.", "");
 
     state.autosaveHeartbeat = setInterval(autosaveNow, 30000);
+  }
+
+  function initializeReviewBaseline(feedback) {
+    const findings = state.payload.findings || [];
+    state.aiBaseline = findings.map((f) => ({
+      title: f.title || "",
+      severity: f.severity || "",
+    }));
+    state.reviewStatus = findings.map(() => "draft");
+
+    // Replay any previously-recorded actions so a re-opened review keeps
+    // its "✓ approved" highlights across page reloads.
+    if (feedback && Array.isArray(feedback.actions)) {
+      feedback.actions.forEach((entry) => {
+        const idx = entry.finding_idx;
+        if (typeof idx !== "number" || idx < 0 || idx >= state.reviewStatus.length) return;
+        const action = (entry.action || "draft").toLowerCase();
+        if (action === "approved" || action === "edited" || action === "rejected") {
+          state.reviewStatus[idx] = action;
+        }
+      });
+    }
   }
 
   function applyPrefill(prefill) {
@@ -228,6 +263,18 @@
       case "deliver-send":
         generateYaml({ andDeliver: true });
         break;
+      case "approve-finding":
+        approveFinding(action.closest("[data-finding]"));
+        break;
+      case "reject-finding":
+        rejectFinding(action.closest("[data-finding]"));
+        break;
+      case "regenerate-finding":
+        regenerateFinding(action.closest("[data-finding]"));
+        break;
+      case "approve-all-ship":
+        approveAllAndShip();
+        break;
       case "open-customer":
         openCustomerModal();
         break;
@@ -257,6 +304,9 @@
         card.dataset.severity = el.value;
       } else if (key in finding) {
         finding[key] = el.value;
+      }
+      if (state.reviewAi && (key === "title" || key === "severity")) {
+        markEditedIfChanged(idx);
       }
       return true;
     }
@@ -319,8 +369,11 @@
       return;
     }
     state.payload.findings.push(initial || newFinding());
+    state.aiBaseline.push({ title: "", severity: "" });
+    state.reviewStatus.push("draft");
     renderFindings();
     refreshFindingsCounter();
+    refreshReviewBanner();
     scheduleAutosave();
   }
 
@@ -329,17 +382,31 @@
     const idx = parseInt(card.dataset.findingIndex, 10);
     if (Number.isNaN(idx)) return;
     state.payload.findings.splice(idx, 1);
+    if (state.aiBaseline.length > idx) state.aiBaseline.splice(idx, 1);
+    if (state.reviewStatus.length > idx) state.reviewStatus.splice(idx, 1);
     renderFindings();
     refreshFindingsCounter();
+    refreshReviewBanner();
     scheduleAutosave();
   }
 
   function sortAndRenderFindings() {
-    state.payload.findings.sort((a, b) => {
-      const ao = SEVERITY_ORDER[a.severity] ?? 99;
-      const bo = SEVERITY_ORDER[b.severity] ?? 99;
+    // When sorting we also keep aiBaseline / reviewStatus aligned with the
+    // re-ordered findings, so each card's "edited vs AI" comparison and
+    // review badge follow it.
+    const tagged = state.payload.findings.map((f, idx) => ({
+      finding: f,
+      baseline: state.aiBaseline[idx] || { title: f.title || "", severity: f.severity || "" },
+      status: state.reviewStatus[idx] || "draft",
+    }));
+    tagged.sort((a, b) => {
+      const ao = SEVERITY_ORDER[a.finding.severity] ?? 99;
+      const bo = SEVERITY_ORDER[b.finding.severity] ?? 99;
       return ao - bo;
     });
+    state.payload.findings = tagged.map((t) => t.finding);
+    state.aiBaseline = tagged.map((t) => t.baseline);
+    state.reviewStatus = tagged.map((t) => t.status);
     renderFindings();
   }
 
@@ -373,8 +440,38 @@
         if (previewName) previewName.textContent = finding.screenshot_path;
       }
 
+      applyReviewVisuals(node, idx);
       list.appendChild(node);
     });
+  }
+
+  function applyReviewVisuals(card, idx) {
+    const reviewActions = card.querySelector("[data-review-actions]");
+    const legacyRemove = card.querySelector('[data-action="remove-finding"][data-non-review]');
+    const badge = card.querySelector("[data-review-badge]");
+
+    if (state.reviewAi) {
+      if (reviewActions) reviewActions.hidden = false;
+      if (legacyRemove) legacyRemove.hidden = true;
+      const status = state.reviewStatus[idx] || "draft";
+      card.dataset.reviewStatus = status;
+      if (badge) {
+        badge.hidden = status === "draft";
+        if (status === "approved") badge.textContent = "✓ approved";
+        else if (status === "edited") badge.textContent = "✎ edited";
+        else if (status === "rejected") badge.textContent = "× rejected";
+        else badge.textContent = "";
+      }
+      if (state.regenInFlight.has(idx)) {
+        card.classList.add("is-regenerating");
+      } else {
+        card.classList.remove("is-regenerating");
+      }
+    } else {
+      if (reviewActions) reviewActions.hidden = true;
+      if (legacyRemove) legacyRemove.hidden = false;
+      if (badge) badge.hidden = true;
+    }
   }
 
   function refreshFindingsCounter() {
@@ -895,6 +992,197 @@
     if (kind === "error") el.classList.add("is-error");
     if (kind === "success") el.classList.add("is-success");
     el.textContent = msg;
+  }
+
+  // ---------------------------------------------------------------------
+  // AI review mode
+  // ---------------------------------------------------------------------
+
+  function approveFinding(card) {
+    if (!card || !state.reviewAi) return;
+    const idx = parseInt(card.dataset.findingIndex, 10);
+    if (Number.isNaN(idx)) return;
+    state.reviewStatus[idx] = "approved";
+    card.dataset.reviewStatus = "approved";
+    applyReviewVisuals(card, idx);
+    postFeedback({ finding_idx: idx, action: "approved" }, idx);
+    refreshReviewBanner();
+  }
+
+  function rejectFinding(card) {
+    if (!card || !state.reviewAi) return;
+    const idx = parseInt(card.dataset.findingIndex, 10);
+    if (Number.isNaN(idx)) return;
+    const finding = state.payload.findings[idx];
+    if (!finding) return;
+    const title = finding.title ? `"${finding.title}"` : "this finding";
+    if (!confirm(`Reject and remove ${title}? This deletes it from the YAML.`)) return;
+
+    postFeedback({ finding_idx: idx, action: "rejected", ai_title: finding.title || "" }, idx);
+
+    state.payload.findings.splice(idx, 1);
+    if (state.aiBaseline.length > idx) state.aiBaseline.splice(idx, 1);
+    if (state.reviewStatus.length > idx) state.reviewStatus.splice(idx, 1);
+    renderFindings();
+    refreshFindingsCounter();
+    refreshReviewBanner();
+    scheduleAutosave();
+    setStatus(`Rejected: ${title}.`, "success");
+  }
+
+  async function regenerateFinding(card) {
+    if (!card || !state.reviewAi) return;
+    const idx = parseInt(card.dataset.findingIndex, 10);
+    if (Number.isNaN(idx)) return;
+    const finding = state.payload.findings[idx];
+    if (!finding) return;
+
+    state.regenInFlight.add(idx);
+    applyReviewVisuals(card, idx);
+    setStatus(`Regenerating finding ${idx + 1}…`, "");
+
+    try {
+      const resp = await fetch("/api/regenerate-finding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: state.slug,
+          finding: finding,
+          customer: state.payload.customer,
+          provider: "auto",
+        }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.ok) {
+        setStatus("Regenerate failed: " + (data.error || resp.statusText), "error");
+        return;
+      }
+      const replacement = data.finding || {};
+      Object.assign(finding, {
+        severity: replacement.severity || finding.severity,
+        title: replacement.title || finding.title,
+        what_we_saw: replacement.what_we_saw || finding.what_we_saw,
+        why_it_matters: replacement.why_it_matters || finding.why_it_matters,
+        screenshot_caption: replacement.screenshot_caption || finding.screenshot_caption,
+        fix_prompt: replacement.fix_prompt || finding.fix_prompt,
+      });
+      state.aiBaseline[idx] = { title: finding.title, severity: finding.severity };
+      state.reviewStatus[idx] = "draft";
+      postFeedback({ finding_idx: idx, action: "regenerated" }, idx);
+      renderFindings();
+      refreshReviewBanner();
+      setStatus(`Regenerated finding ${idx + 1}.`, "success");
+    } catch (err) {
+      setStatus("Regenerate failed: " + err.message, "error");
+    } finally {
+      state.regenInFlight.delete(idx);
+      const refreshedCard = $(`[data-finding][data-finding-index="${idx}"]`);
+      if (refreshedCard) applyReviewVisuals(refreshedCard, idx);
+    }
+  }
+
+  function markEditedIfChanged(idx) {
+    const finding = state.payload.findings[idx];
+    const baseline = state.aiBaseline[idx];
+    if (!finding || !baseline) return;
+    const titleChanged = (finding.title || "") !== (baseline.title || "");
+    const sevChanged = (finding.severity || "") !== (baseline.severity || "");
+    const current = state.reviewStatus[idx] || "draft";
+    if ((titleChanged || sevChanged) && current !== "rejected") {
+      if (current !== "edited") {
+        state.reviewStatus[idx] = "edited";
+        postFeedback({
+          finding_idx: idx,
+          action: "edited",
+          ai_title: baseline.title,
+          ai_severity: baseline.severity,
+          final_title: finding.title,
+          final_severity: finding.severity,
+        }, idx);
+      }
+      const card = $(`[data-finding][data-finding-index="${idx}"]`);
+      if (card) applyReviewVisuals(card, idx);
+      refreshReviewBanner();
+    }
+  }
+
+  async function postFeedback(body, idx) {
+    if (!state.reviewAi || !state.slug) return;
+    const finding = state.payload.findings[idx];
+    const enriched = {
+      slug: state.slug,
+      ai_title: state.aiBaseline[idx]?.title,
+      ai_severity: state.aiBaseline[idx]?.severity,
+      final_title: finding?.title,
+      final_severity: finding?.severity,
+      ...body,
+    };
+    try {
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enriched),
+      });
+    } catch (err) {
+      // non-fatal: feedback is best-effort
+      console.warn("feedback post failed", err);
+    }
+  }
+
+  function refreshReviewBanner() {
+    if (!state.reviewAi) return;
+    const stats = $("[data-ai-banner-stats]");
+    if (!stats) return;
+    const total = state.payload.findings.length;
+    const reviewed = state.reviewStatus.filter((s) => s === "approved" || s === "edited").length;
+    stats.textContent = `${reviewed} / ${total} reviewed`;
+    stats.classList.toggle("is-complete", total > 0 && reviewed === total);
+  }
+
+  async function approveAllAndShip() {
+    if (!state.reviewAi) return;
+    if (!state.slug) {
+      setStatus("Slug is required before shipping.", "error");
+      return;
+    }
+    if (!state.payload.findings.length) {
+      setStatus("No findings to ship.", "error");
+      return;
+    }
+    const unreviewed = state.reviewStatus
+      .map((s, i) => (s === "draft" ? i : -1))
+      .filter((i) => i >= 0);
+    if (unreviewed.length) {
+      const ok = confirm(
+        `Mark ${unreviewed.length} un-reviewed finding(s) as approved and send the PDFs?`
+      );
+      if (!ok) return;
+    } else {
+      const ok = confirm("Send the Main Report and Quick Start Guide PDFs to the customer now?");
+      if (!ok) return;
+    }
+    unreviewed.forEach((i) => {
+      state.reviewStatus[i] = "approved";
+      const card = $(`[data-finding][data-finding-index="${i}"]`);
+      if (card) applyReviewVisuals(card, i);
+    });
+    refreshReviewBanner();
+
+    try {
+      await fetch("/api/feedback/finalize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: state.slug,
+          final_findings: state.payload.findings,
+        }),
+      });
+    } catch (err) {
+      console.warn("feedback finalize failed", err);
+    }
+
+    // Use the existing generate-yaml-and-deliver pipeline (with --send).
+    await generateYaml({ andDeliver: true });
   }
 
 })();

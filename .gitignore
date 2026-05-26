@@ -57,6 +57,9 @@ screenshots/*
 drafts/*
 !drafts/.gitkeep
 
+# AI audit feedback data (per-customer)
+data/ai_feedback/
+
 # Playwright
 test-results/
 playwright-report/

@@ -1,0 +1,356 @@
+# AI audit pipeline
+
+**Last updated:** May 25, 2026
+**Owner:** Rob
+**Status:** Live as of this commit. The foundational shift from
+manual-writing to AI-drafted + founder-curated audits.
+
+The pipeline drops per-audit time from ~2 hours of hand-written findings
+to ~15 minutes of spot-checking. The customer-facing deliverable
+(`output/reports/{slug}/main-report.pdf` + `quick-start-guide.pdf`) is
+completely unchanged. Only the path to get there is different.
+
+---
+
+## Architecture
+
+```
+            ┌──────────────────────────────────────────────────────┐
+Customer    │                                                      │
+URL  ─────► │  scripts/ai_audit.py                                 │
+            │                                                      │
+            │  1. Capture     scripts/capture_screenshots.py       │
+            │     desktop + mobile PNGs                            │
+            │     → output/customers/{slug}/screenshots/*.png      │
+            │                                                      │
+            │  2. Prescreen   scripts/prescreen_findings.py        │
+            │     38 regex patterns from findings.csv              │
+            │     → list[hit{finding,page,matches}]                │
+            │                                                      │
+            │  3. HTML        scripts/ai_audit/html_extract.py     │
+            │     Playwright + BeautifulSoup, scripts stripped     │
+            │     → list[page{title,meta,text,buttons,links}]      │
+            │                                                      │
+            │  4. LLM         scripts/ai_audit/llm_client.py       │
+            │     Claude (vision + tool-use) or GPT (vision +      │
+            │     json_schema). Sends screenshots + prescreen      │
+            │     hits + HTML extracts + findings.csv reference    │
+            │     + the system prompt (prompts/system.txt).        │
+            │     Receives structured findings, verdict, QSG.      │
+            │                                                      │
+            │  5. YAML        scripts/audit_ui/yaml_writer.py      │
+            │     Same emitter audit_ui uses, so the file          │
+            │     round-trips cleanly back through audit_ui        │
+            │     and deliver_report.py.                           │
+            │     → customers/{slug}.yaml                          │
+            │                                                      │
+            └──────────────────────────────────────────────────────┘
+                            │
+                            ▼
+            ┌──────────────────────────────────────────────────────┐
+            │  scripts/audit_ui.py --review-ai                     │
+            │                                                      │
+            │  Loads customers/{slug}.yaml in "review mode".       │
+            │  Per finding: Approve, Edit, Regenerate, Reject.    │
+            │  Tracks every action in                              │
+            │  data/ai_feedback/{slug}.json. "Approve all          │
+            │  remaining & ship" rolls into deliver_report.py.     │
+            └──────────────────────────────────────────────────────┘
+                            │
+                            ▼
+            ┌──────────────────────────────────────────────────────┐
+            │  scripts/deliver_report.py                           │
+            │  Same PDF + Resend pipeline as before. Unchanged.    │
+            └──────────────────────────────────────────────────────┘
+```
+
+---
+
+## Setup (one-time)
+
+```powershell
+# Windows
+pip install -r requirements-ai.txt
+playwright install chromium  # already done if you've run capture_screenshots
+```
+
+Then add ONE of these to `.env`:
+
+```dotenv
+# Preferred (better at structured output + vision in our benchmarks)
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Or fallback
+OPENAI_API_KEY=sk-proj-...
+```
+
+`.env` is gitignored. Without a key set, the CLI exits with a clear
+error. Use `--provider stub` to dry-run the wiring without an LLM.
+
+Optional model overrides:
+
+```dotenv
+LAUNCHLOOK_CLAUDE_MODEL=claude-sonnet-4-5-20250929
+LAUNCHLOOK_GPT_MODEL=gpt-4o
+```
+
+The client also tries known good fallbacks (`claude-3-5-sonnet-20241022`,
+`gpt-4o-mini`) if the configured model 404s.
+
+---
+
+## Running it
+
+### Starter Package, Claude (default)
+
+```powershell
+python scripts/ai_audit.py `
+    --slug jane-smith `
+    --url https://jane.lovable.app `
+    --tier "Starter Package" `
+    --builder Lovable `
+    --name "Jane Smith" `
+    --email jane@example.com `
+    --app-name "Sparkle"
+```
+
+### Full Package, GPT-4o explicitly
+
+```powershell
+python scripts/ai_audit.py `
+    --slug acme-pro `
+    --url https://acme.bolt.host `
+    --tier "Full Package" `
+    --builder Bolt `
+    --name "Pat Acme" `
+    --email pat@acme.test `
+    --app-name "Acme Pro" `
+    --provider gpt
+```
+
+### Dry-run + skip stages (smoke testing)
+
+```powershell
+python scripts/ai_audit.py `
+    --slug ai-test --url https://example.com `
+    --tier "Starter Package" --builder Lovable `
+    --name "Test" --email test@test.com --app-name "TestApp" `
+    --provider stub --dry-run --skip-capture --skip-prescreen
+```
+
+`--provider stub` produces deterministic placeholder findings from
+whatever the prescreener returned (or a single placeholder if the
+prescreener was skipped). Useful for smoke tests and CI.
+
+### After the YAML lands
+
+```powershell
+# 1. Spot-check in the UI (browser opens automatically)
+python scripts/audit_ui.py --slug jane-smith --review-ai
+
+# 2. In the UI: Approve / Edit / Regenerate / Reject each finding,
+#    then click "✓ Approve all remaining & ship" in the footer.
+
+# 3. Or, if you prefer the CLI, render PDFs without sending:
+python scripts/deliver_report.py --customer customers/jane-smith.yaml --no-open
+
+# 4. Or ship them via Resend:
+python scripts/deliver_report.py --customer customers/jane-smith.yaml --send
+```
+
+---
+
+## Prompt iteration
+
+Every prompt lives in `scripts/ai_audit/prompts/`. Iterate on these
+without code changes:
+
+| File | Purpose |
+|------|---------|
+| `system.txt` | Voice, severity definitions, fix-prompt rules, few-shot examples, forbidden patterns. The big one. |
+| `finding_generation.txt` | User-prompt template: customer context, tier guidance, screenshot count, prescreener hits, HTML extracts, findings library reference. |
+| `qsg_generation.txt` | User-prompt template for Quick Start Guide (Full Package only). |
+| `verdict_generation.txt` | User-prompt template for the emoji + summary + narrative. |
+
+The python templates use `str.format(...)`, so prompt placeholders use
+`{var}` syntax. If you add a new placeholder, also add the matching
+keyword in `scripts/ai_audit/pipeline.py` (`build_finding_user_prompt`,
+`build_qsg_user_prompt`, or `build_verdict_user_prompt`).
+
+**When iterating on the system prompt**, the highest-leverage things to
+tune (in order):
+
+1. The severity definitions (Rob's edits cluster around severity drift).
+2. The forbidden-patterns section (em-dashes especially).
+3. The few-shot examples (replace with your best real audits as you ship
+   more customers).
+4. The fix-prompt-by-builder section (refine per platform).
+
+---
+
+## Quality feedback loop
+
+Every AI-drafted audit logs to `data/ai_feedback/{slug}.json` (gitignored).
+Each record captures:
+
+* When the AI generated the draft (`ai_generated_at`).
+* Provider + model used.
+* When Rob finished review (`reviewed_at`).
+* Per-finding actions: `approved` / `edited` / `rejected` /
+  `regenerated`, with the AI's original title/severity for diffing.
+
+Read aggregated stats:
+
+```powershell
+python scripts/ai_audit/feedback_summary.py
+# or filter to recent drafts
+python scripts/ai_audit/feedback_summary.py --since 2026-05-01
+```
+
+The summary prints:
+* Drafts reviewed, total findings, provider mix.
+* Approve % (no edits), edit %, reject %, average regen rate.
+* Severity drift (`high→medium` etc).
+* Most-rejected titles (top 10) → prompt patterns to add to the
+  "Do not generate findings like this" section.
+* Edited title pairs (AI → final) → tone hints for system.txt.
+
+Use this every 5-10 customers to refine the prompts. The first round of
+real data will probably show:
+* AI calibrates severity too high (Rob bumps `critical→high`).
+* AI invents fix prompts referencing files it didn't see (banned by
+  system.txt but watch for drift).
+* AI uses em-dashes despite the prohibition (re-emphasize in system.txt).
+
+---
+
+## Cost expectations (approximate)
+
+Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):
+
+| Provider | Model | Approx input / output tokens | Approx cost |
+|----------|-------|------------------------------|-------------|
+| Claude   | `claude-sonnet-4-5-20250929` | ~25k in / ~3k out (3-shot + 8 images) | **$0.10 to $0.25** |
+| Claude   | `claude-opus-4-5-20250929` | ~25k in / ~3k out | ~$0.50 to $1.20 |
+| GPT      | `gpt-4o` | ~22k in / ~3k out (8 images) | **$0.08 to $0.20** |
+| GPT      | `gpt-4o-mini` | ~22k in / ~3k out | ~$0.03 to $0.08 |
+| GPT      | `gpt-5-mini` (if available) | similar to 4o-mini | ~$0.04 to $0.10 |
+
+Full Package adds a second LLM call (the QSG generator with ~4
+screenshots and a smaller HTML payload), roughly **+50%** on the
+Starter base.
+
+At $9 Starter / $29 Full, AI cost is roughly **1 to 3% of revenue**.
+That leaves the founder's 15-minute review (the real cost) as the
+bottleneck, which is exactly where the strategy wanted it.
+
+If the LLM bill creeps up, the levers (in order) are:
+* Reduce the number of screenshots sent (currently 8 max).
+* Drop the findings.csv reference from the user prompt (~1k tokens).
+* Cap HTML text extraction lower (`TEXT_CAP` in `html_extract.py`).
+
+---
+
+## Adding a new builder
+
+The fix-prompt voice differs per builder (Lovable speaks
+natural-language, v0 wants component paths, etc). To add a new platform:
+
+1. `scripts/audit_ui/yaml_writer.py` → add to `VALID_BUILDERS`.
+2. `scripts/audit_ui.py` → add to the `--builder` choices.
+3. `scripts/ai_audit/prompts/system.txt` → add a paragraph under
+   "FIX PROMPT TONE BY BUILDER" describing the new platform's
+   conventions.
+4. Update the landing page (`landing/index.html`) and the outreach
+   playbook (`docs/OUTREACH-PLAYBOOK.md`) if the new builder needs
+   surface mention.
+
+No code changes in `llm_client.py` or `pipeline.py` are required.
+
+---
+
+## Review UI (`audit_ui.py --review-ai`)
+
+`--review-ai` flips the audit UI from data-entry mode into spot-check
+mode. The changes:
+
+* A banner at the top: "AI-generated draft. Review and approve each
+  finding before shipping."
+* Each finding card shows Approve, Regenerate, and Reject buttons
+  at the top right. Editing any field marks the finding as `edited`.
+* A `{n} / {total} reviewed` counter in the banner tracks progress.
+* The sticky footer's deliver button becomes "✓ Approve all remaining
+  & ship" (confirms, then runs the same generate-yaml + deliver-with-
+  --send flow).
+* Every Rob action POSTs to `/api/feedback`, which writes to
+  `data/ai_feedback/{slug}.json`.
+* "Regenerate" POSTs to `/api/regenerate-finding`, which calls
+  `scripts.ai_audit.pipeline.regenerate_finding` with a hint to produce
+  a different finding. Returns the replacement dict; the UI swaps it
+  in place and resets that finding's state to `draft`.
+
+---
+
+## Troubleshooting
+
+### "ERROR: no LLM API key found"
+
+Add `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` to `.env`. Or pass
+`--provider stub` to dry-run.
+
+### "Claude returned no tool_use block"
+
+Anthropic occasionally returns text rather than the requested tool
+call. The client retries through model fallbacks. If all fail, the
+process exits and the YAML is not written. Re-run with `--provider gpt`
+as the immediate workaround.
+
+### Rate limits (429)
+
+Both providers backoff differently. The pipeline does not currently
+auto-retry rate limits (it's a one-customer-per-run script). If you
+hit a 429, wait 60 seconds and rerun. We can add retry/backoff if it
+becomes a real issue at scale.
+
+### "Vision input too large"
+
+Caps live in `pipeline.collect_screenshots(max_shots=8)` and
+`html_extract.TEXT_CAP = 6000`. Lower either if a particularly
+large customer trips the per-request token limit.
+
+### AI hallucinates findings unrelated to the screenshots
+
+This is the founder review's job to catch. When it happens:
+1. Reject the finding in the UI (logs to feedback).
+2. Run `feedback_summary.py` to see if the same hallucinated title
+   appears across customers.
+3. If yes, add an explicit "do not generate findings like X" line to
+   `prompts/system.txt`'s "Forbidden patterns" section.
+
+### "AI uses em-dashes again"
+
+The system prompt explicitly forbids em-dashes (they're Rob's #1 AI-
+tell). If the model regresses, strengthen the language in
+`prompts/system.txt`'s tone section. Last resort: add a regex pass at
+the end of `pipeline.run()` that replaces em-dashes with colons before
+YAML emission.
+
+### Founder review caught nothing: should I trust it more?
+
+For the first 20 customers, no. The current calibration was tuned
+against Rob's example YAMLs. Real data from `feedback_summary.py`
+should drive the next round of prompt edits. Trust grows with measured
+approval rates.
+
+---
+
+## Related docs
+
+* `docs/MANUAL-REVIEW-WORKFLOW.md`: the previous (pre-AI) workflow,
+  kept for reference.
+* `docs/DELIVERY-PIPELINE.md`: what happens after the YAML lands
+  (PDF render, Resend email).
+* `docs/06-findings-library.md`: the 38 patterns the prescreener
+  matches against and the LLM uses as calibration.
+* `scripts/ai_audit/prompts/system.txt`: the prompt itself. Read it
+  before iterating.
