@@ -2,6 +2,10 @@
 
 Generated: 2026-05-26 12:01 UTC by `scripts/consistency_check.py` (q-final-audit worker)
 
+> **Post-audit regression caught and fixed (2026-05-26, branch `fix/q4-checklist-demote-regression`):**
+> q4 (commit `032c4af`) was reported as completed but only the nav link in `landing/index.html` had actually been updated. The hero CTA, the "Not ready to pay?" section, the social-proof checklist button, the referral FAQ copy, the footer link, and parallel surfaces in `landing/webflow.html`, `landing/vs-pagelens.html`, `landing/README.md`, the customer-facing templates in `templates/`, the external GitHub repo at `external/launchlook-prelaunch-checklist/`, and the operator playbooks in `docs/SHARE-AND-REVIEWS.md` + `docs/OUTREACH-PLAYBOOK.md` all still treated the comprehensive checklist as the free lead magnet. This commit (`fix(landing): complete q4 demote-checklist migration`) finishes the migration: the free 3-finding audit is now the only free lead magnet, the comprehensive checklist is consistently positioned as a Scale Up + Pro paid deliverable (already token-gated by q4's `landing/data/checklist_tokens.json`), and the Scale Up + Pro tier cards now explicitly list the comprehensive checklist as included. The community DIY GitHub repo at `external/launchlook-prelaunch-checklist/` remains a free public artifact, reframed as a "community DIY companion" so it doesn't conflict with the paid on-site deliverable. `rg -in "free checklist" landing/` now returns zero matches; the suite is green at 124/124. Counts after rebase on q-deferred-cleanup are 31 issues / 13 needs-review (down from this report's 32 because the removed Free preview pricing card dropped one stale tier name flag; the 13 remaining are the scope-statement and competitor-framing strings q-deferred-cleanup intentionally left below).
+> Like q-deferred-cleanup's section, this note will be wiped on the next `scripts/consistency_check.py` run; the canonical record lives in this commit's message and in `docs/ROB-REMAINING-TODO.md`.
+
 
 Canonical truth sources audited against:
 - `docs/SIMPLICITY-GUARDRAILS.md` section 6 (forbidden vocab, em-dash rule)
@@ -41,8 +45,8 @@ Swapped per the canonical map in `scripts/ai_audit/finding_categories.yaml` (the
 | `landing/index.html:312` | `<li>Cross-user data check (2 test accounts)</li>` (Scale Up bullet) | `<li>User data isolation (2 test accounts)</li>` |
 | `landing/index.html:377` | `<td>Cross-user data check</td>` (comparison table row) | `<td>User data isolation</td>` |
 | `landing/index.html:417` | `<li>Cross-user data check: -</li>` (mobile Starter card) | `<li>User data isolation: -</li>` |
-| `landing/index.html:430` | `<li>Cross-user data check: ✓ (2 test accounts)</li>` (mobile Scale Up card) | `<li>User data isolation: ✓ (2 test accounts)</li>` |
-| `landing/index.html:443` | `<li>Cross-user data check: ✓ (2 test accounts)</li>` (mobile Pro card) | `<li>User data isolation: ✓ (2 test accounts)</li>` |
+| `landing/index.html:430` | `<li>Cross-user data check: Γ£ô (2 test accounts)</li>` (mobile Scale Up card) | `<li>User data isolation: Γ£ô (2 test accounts)</li>` |
+| `landing/index.html:443` | `<li>Cross-user data check: Γ£ô (2 test accounts)</li>` (mobile Pro card) | `<li>User data isolation: Γ£ô (2 test accounts)</li>` |
 | `landing/index.html:517` | FAQ Scale Up paragraph: "a cross-user data check using 2 test accounts ... including the cross-user security check" | "a user data isolation check using 2 test accounts ... including the user data isolation check" |
 | `landing/vs-pagelens.html:147` | `<td>Mobile audit</td>` (comparison table row) | `<td>Mobile layout issues</td>` |
 | `landing/vs-pagelens.html:208` | `<p>Mobile audit</p>` (mobile card heading) | `<p>Mobile layout issues</p>` |

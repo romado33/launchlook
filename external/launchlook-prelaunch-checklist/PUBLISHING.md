@@ -16,7 +16,7 @@ git commit -m "Initial checklist v1"
 # Create the public repo on GitHub
 gh repo create launchlook-prelaunch-checklist \
   --public \
-  --description "A free pre-launch checklist for vibe-coded apps (Lovable / Bolt / Base44 / Replit)." \
+  --description "A free community DIY pre-launch checklist for vibe-coded apps (Lovable / Bolt / Base44 / Replit). For a real-person 3-finding audit, see launchlook.app." \
   --source . \
   --push
 ```
@@ -51,7 +51,7 @@ When you change one, change the others. Otherwise the public version drifts from
 
 ## Why a separate repo?
 
-- The free checklist is the top-of-funnel content. It should be discoverable on GitHub independently of the product.
+- This community DIY checklist is top-of-funnel SEO content. It should be discoverable on GitHub independently of the product. (The polished, in-app comprehensive checklist on launchlook.app is now a token-gated Scale Up + Pro deliverable — see q4 in the canonical roadmap.)
 - Keeping it separate means anyone can star/fork/contribute without touching internal LaunchLook stuff.
 - It also lets you point to a stable URL: `github.com/{your-handle}/launchlook-prelaunch-checklist`.
 

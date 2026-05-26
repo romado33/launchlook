@@ -92,7 +92,7 @@ The order below is signal-to-effort for your first 5–10 customers. **Discord f
 
 - **Base44 community** — small but builder-focused; check Discord or built-in showcase. Watch for live URLs.
 - **v0 community** — Vercel-hosted; watch the v0.dev showcase and `r/nextjs`.
-- **Cursor community** — Discord + cursor.com/forum. Less direct-fit (Cursor users are more technical), but free checklist link can land.
+- **Cursor community** — Discord + cursor.com/forum. Less direct-fit (Cursor users are more technical), but the free 3-finding audit link can land.
 - **Product Hunt** — AI tools filter, this week's launches. Mostly useful for prospecting (find pre-launch founders to DM), not for posting.
 - **Founder communities** (MicroConf, Tiny Seed, On Deck, Indie Worldwide) — Tier 3 unless you're already a member. Cold join doesn't work here.
 
@@ -242,7 +242,7 @@ Glad the {SPECIFIC_THING} catch was useful.
 
 If you want the full version, with 5 to 20 ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER}, that's what LaunchLook does ($9 Starter, $29 Full). AI scans every screen; I personally review and curate every finding before delivery. No GitHub access. 24-hour turnaround.
 
-launchlook.app, and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
+launchlook.app — or drop your URL on the home page for 3 free findings from a real person (24-hour turnaround, no credit card). No pressure either way.
 ```
 
 ---
@@ -265,16 +265,16 @@ If it gets engagement, follow up days later with one of the findings as a quote-
 
 ### 3.9 — LinkedIn build-in-public post
 
-Use weekly. Tie to one finding, link the checklist (not the homepage). Always disclose you're the founder.
+Use weekly. Tie to one finding, link the free 3-finding audit form (not the pricing page). Always disclose you're the founder.
 
 ```
 After running a dozen pre-launch apps built with Lovable / Bolt / v0 through our pre-launch pass this month, the #1 polish issue isn't broken code. It's leftover placeholders.
 
 "Your Company Name" in the footer. "Hosted by …" in the metadata. "Get Started" button that goes to /undefined. The builder fills these in once and forgets them in three other places.
 
-I made a 20-minute checklist of the most common ones, free, no email required: launchlook.app/checklist
+Drop your live URL at launchlook.app and a real person will email you back 3 free findings within 24 hours. No credit card.
 
-(Disclosure: I run LaunchLook, a $9 pre-launch checkup for vibe-coded apps. AI scans every screen, I personally review and curate every finding before delivery. The checklist is the free DIY version of what I ship.)
+(Disclosure: I run LaunchLook, a $19 pre-launch checkup for vibe-coded apps. AI scans every screen, I personally review and curate every finding before delivery. The free 3-finding audit is a stripped-down version of the paid Starter.)
 ```
 
 ---
@@ -323,7 +323,7 @@ hello@launchlook.app
 | 0:00–0:10 | Show their app in the browser. *"Hey [name], I ran [app name] through our pre-launch pass and clicked through the screenshots."* |
 | 0:10–0:35 | Show 2 to 3 specific issues (dead button, placeholder text, missing privacy, dev tools visible). No jargon. |
 | 0:35–0:50 | *"I run LaunchLook, a pre-launch checkup for vibe-coded apps. AI scans every screen, I personally curate the findings. Plain-English report plus copy-paste fix prompts for your builder."* |
-| 0:50–1:00 | CTA: *"Starter Package is $9 if you want the full list. Link: launchlook.app"* |
+| 0:50–1:00 | CTA: *"Starter Package is $19 if you want the full list. Link: launchlook.app"* |
 
 **DM text to pair with the Loom:**
 
@@ -331,9 +331,9 @@ hello@launchlook.app
 Hey [name] — I recorded a 60-sec walkthrough of [app] before you share it wider.
 [LOOM LINK]
 
-I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $9 (Starter Package) with fix prompts you paste into [Lovable/Bolt/etc].
+I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $19 (Starter Package) with fix prompts you paste into [Lovable/Bolt/etc].
 
-Free checklist (~20 min): launchlook.app/checklist
+Or drop your URL on launchlook.app for 3 free findings from a real person — 24-hour turnaround, no credit card.
 
 No pressure — launchlook.app if useful.
 ```
@@ -413,10 +413,10 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 | *"I already know my app has issues — I don't need someone to tell me."* | "Probably true for the bugs you already see. The point is the ones you **stopped seeing** weeks ago — every founder has them. If you want, send the URL and I'll do a free 10-min pass; if it's all stuff you already knew, no harm done." |
 | *"$9 is too cheap to be any good. / $9 is too expensive for something automated."* | "It's AI-drafted, founder-curated. AI gives me scanner-speed; the founder review is what keeps the bar high. That's why it's $9 instead of free (a real human reads every finding) and $9 instead of $99 (the AI carries the volume work). Rather you buy it twice, Starter now and Full closer to launch, than once." |
 | *"Will this catch the scary security stuff?"* | "Not deep security (no pentest, no code review). I do catch obvious visible risks though — dev bypasses, exposed test controls, broken auth screens, and (Full Package only) one user seeing another user's data via cross-account checks." |
-| *"Why should I trust you?"* | "Two ways: read the [free checklist](https://launchlook.app/checklist) — that's the DIY version of what I do. Or read the [sample report](https://launchlook.app/sample) and decide if the output is worth $9. And there's a 7-day full refund if it isn't." |
+| *"Why should I trust you?"* | "Two ways: drop your URL on [launchlook.app](https://launchlook.app/#hero) for a free 3-finding audit — that's a stripped-down sample of what a paid checkup looks like. Or read the [sample report](https://launchlook.app/sample) and decide if the output is worth $19. And there's a 7-day full refund if it isn't." |
 | *"Do I need to give you my GitHub / repo access?"* | "Never. Just the live URL. If your Full Package run needs to check cross-user data, you give me two temporary test accounts via the intake form. No code, no repo, no admin." |
 | *"My app is built with v0 / Cursor / Base44, not Lovable. Do you do those?"* | "Yes. The fix prompts are tailored per builder — Lovable, Bolt, v0, Cursor, Base44, Replit, and a generic one for everything else. The findings are the same; the prompt syntax differs." |
-| *"Will the report tell me anything I can't get for free?"* | "Free checklist gets you the DIY pass. What you can't get for free: a curated 5–7 item list ranked by severity, written in plain English with paste-ready prompts, plus (Starter+) a one-page Quick Start Guide you can hand to your users. No competitor includes that last one." |
+| *"Will the report tell me anything I can't get for free?"* | "The free 3-finding audit gives you the top 3 a real person would flag. What you can't get for free: the full ranked list (10 to 40 items) with paste-ready prompts, plus (Starter+) a one-page Quick Start Guide you can hand to your users. No competitor includes that last one." |
 | Silence / no reply after 5 days | Don't follow up. Log the no-response. That's data. |
 
 ---
@@ -428,7 +428,7 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 - ✅ **Personalize the first line.** Mention something specific you saw or something the prospect said.
 - ✅ **Vary the wording per community.** Same offer; different framing per channel.
 - ✅ **Engage in threads before posting your own.** 3 helpful comments → then 1 post.
-- ✅ **Lead with real free value.** A 10-min free pass or the checklist link, never the pricing page.
+- ✅ **Lead with real free value.** A 10-min free pass or the free 3-finding audit link (`launchlook.app/#hero`), never the pricing page.
 - ✅ **Disclose your role honestly.** "I run LaunchLook" — never "a friend of mine runs..."
 - ✅ **Reply within 2 hours** to anyone who drops a URL.
 - ✅ **Use the exact visible label in quotes** when describing a finding (`"Get Started"`, not "the CTA").
@@ -565,7 +565,7 @@ Keep Webflow outreach separated in the tracker so you can compare reply rates to
 | Item | Value |
 |------|-------|
 | Primary goal | 30 messages → 3 paying ($9) strangers |
-| Site to share warm | https://launchlook.app/checklist (free), then https://launchlook.app |
+| Site to share warm | https://launchlook.app/#hero (free 3-finding audit), then https://launchlook.app |
 | Sample report (for skeptics) | https://launchlook.app/sample |
 | Support email | hello@launchlook.app |
 | #1 channel | Lovable Discord `#show-and-tell` |

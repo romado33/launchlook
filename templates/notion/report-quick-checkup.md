@@ -115,7 +115,7 @@ After you fix things, click through the app yourself like a new visitor. Want a 
 
 ## Share this checkup (optional)
 
-**Send a founder friend the free checklist:** https://launchlook.app/checklist
+**Send a founder friend for 3 free findings:** https://launchlook.app/#hero
 
 **One-line you can post** (edit as you like):
 > Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. launchlook.app

@@ -45,8 +45,8 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="relative overflow-hidden border-b border-line">
+  <!-- Hero (free 3-finding audit is the primary lead magnet per PRODUCT-DECISIONS section 1) -->
+  <section id="hero" class="relative overflow-hidden border-b border-line">
     <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
     <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
     <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
@@ -57,16 +57,31 @@
     <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
       Send your app URL. A real person walks through it and sends back a shareable report: screenshots, the fixes that actually matter, and prompts you can paste straight into your AI builder.
     </p>
-    <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
-      <a href="#pricing" class="launchlook-btn launchlook-btn-primary">Get Starter Package ($19)</a>
+    <form data-free-audit-form action="/api/free-audit" method="POST" class="mt-7 max-w-xl rounded-2xl border border-line bg-white px-5 py-5 sm:px-6 sm:py-6 shadow-sm shadow-ink/5">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <label class="block">
+          <span class="text-xs font-medium text-muted">Where should we look?</span>
+          <input type="url" name="url" placeholder="https://your-site.com" required autocomplete="url" inputmode="url" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
+        </label>
+        <label class="block">
+          <span class="text-xs font-medium text-muted">Where do we send your findings?</span>
+          <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
+        </label>
+      </div>
+      <button type="submit" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-4 plausible-event-name=FreeAuditSignup">Get my free 3 findings</button>
+      <p data-free-audit-status class="mt-3 text-sm text-muted hidden" role="status" aria-live="polite"></p>
+      <p class="mt-3 text-xs text-muted">We&rsquo;ll send your top 3 launch issues within 24 hours. Free, no credit card. One email per submission, no newsletter.</p>
+    </form>
+
+    <div class="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-secondary">Want all 10? See Starter ($19)</a>
       <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
-      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist (~20 min)</a>
     </div>
     <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>A real person reads your live app, not a scanner</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No GitHub or code access, just your URL</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Plain English. No <code class="text-xs bg-white/80 px-1 py-0.5 rounded">SEC-001</code> codes to Google.</span></li>
-      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span><strong class="text-ink font-medium">Quick Start Guide PDF</strong> for your first users (Full Package)</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>A real person reads your live app, then we email you 3 plain-English findings.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No code repo access. Your live URL is enough.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>No jargon. No <code class="text-xs bg-white/80 px-1 py-0.5 rounded">SEC-001</code> codes to Google.</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Upgrade to <strong class="text-ink">Starter ($19)</strong> for all 10 issues. Starter findings build on your free 3 (no rehash).</span></li>
     </ul>
     <p class="mt-5 text-sm text-muted">Delivered within 48 hours (usually 24) · 7-day full refund if it's not useful.</p>
     </div>
@@ -168,18 +183,6 @@
     </div>
   </section>
 
-  <!-- Free checklist -->
-  <section class="bg-surface-warm border-y border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner-tight flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <p class="section-label">Free</p>
-        <h2 class="font-serif text-xl mt-1">Not ready to pay? Run the checklist yourself.</h2>
-        <p class="text-sm text-muted mt-2 max-w-prose">Plain-English, ~20 minutes. What visitors notice before you share your link. Share <code class="text-xs bg-white/80 px-1 py-0.5 rounded">launchlook.app/checklist</code> with a founder friend.</p>
-      </div>
-      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary shrink-0">Open free checklist</a>
-    </div>
-  </section>
-
   <!-- Social proof (early) -->
   <section class="bg-paper border-b border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner-tight">
@@ -189,7 +192,7 @@
       <p class="text-sm text-muted mb-4 max-w-prose">We're early. No fake testimonials. After your checkup, we'll ask (optional) for a one-line quote we can share on LinkedIn.</p>
       <div class="flex flex-wrap gap-3 mb-6">
         <a href="/sample" class="launchlook-btn launchlook-btn-secondary">View sample report</a>
-        <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist</a>
+        <a href="#hero" class="launchlook-btn launchlook-btn-secondary">Get 3 free findings</a>
       </div>
       <div class="grid sm:grid-cols-2 gap-4 text-sm">
         <blockquote class="rounded-lg border border-line bg-white p-4 text-muted leading-relaxed">
@@ -311,6 +314,7 @@
             <li>Up to <strong>30</strong> findings across every category</li>
             <li>User data isolation (2 test accounts)</li>
             <li><strong>Quick Start Guide PDF</strong> for your users</li>
+            <li><strong>Comprehensive checklist</strong> (token-gated DIY companion)</li>
             <li>Delivered within <strong>24 hours</strong> (usually within 12)</li>
             <li>Includes <strong>LaunchLook Verified badge</strong>, valid 90 days*</li>
           </ul>
@@ -386,6 +390,12 @@
               <td class="px-4 py-3 align-top text-ink">✓</td>
             </tr>
             <tr>
+              <td class="px-4 py-3 align-top text-muted">Comprehensive checklist (DIY companion)</td>
+              <td class="px-4 py-3 align-top text-muted">-</td>
+              <td class="px-4 py-3 align-top text-ink">✓</td>
+              <td class="px-4 py-3 align-top text-ink">✓</td>
+            </tr>
+            <tr>
               <td class="px-4 py-3 align-top text-muted">Integrations review (Stripe / auth / email / analytics setup)</td>
               <td class="px-4 py-3 align-top text-muted">-</td>
               <td class="px-4 py-3 align-top text-muted">-</td>
@@ -416,6 +426,7 @@
             <li>AI + founder-curated: ✓</li>
             <li>User data isolation: -</li>
             <li>Quick Start Guide PDF: -</li>
+            <li>Pre-launch checklist: -</li>
             <li>Integrations review: -</li>
             <li>Loom walkthrough: -</li>
             <li>Delivery: within 48h (usually 24)</li>
@@ -429,6 +440,7 @@
             <li>AI + founder-curated: ✓</li>
             <li>User data isolation: ✓ (2 test accounts)</li>
             <li>Quick Start Guide PDF: ✓</li>
+            <li>Pre-launch checklist: ✓ (token-gated DIY companion)</li>
             <li>Integrations review: -</li>
             <li>Loom walkthrough: -</li>
             <li>Delivery: within 24h (usually 12)</li>
@@ -442,6 +454,7 @@
             <li>AI + founder-curated: ✓</li>
             <li>User data isolation: ✓ (2 test accounts)</li>
             <li>Quick Start Guide PDF: ✓</li>
+            <li>Pre-launch checklist: ✓ (token-gated DIY companion)</li>
             <li>Integrations review (Stripe / auth / email / analytics): ✓</li>
             <li>30-min Loom walkthrough: ✓</li>
             <li>Delivery: within 24h (usually 12)</li>
@@ -564,7 +577,7 @@
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refer a founder?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or share the <a href="/checklist" class="underline hover:text-ink">free checklist</a> link: <strong class="text-ink">launchlook.app/checklist</strong>.</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or send them straight to <strong class="text-ink"><a href="https://launchlook.app/#hero" class="underline hover:text-ink">launchlook.app</a></strong> for their own 3 free findings.</p>
         </details>
       </div>
     </div>
@@ -592,7 +605,7 @@
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
+        <li><a href="#hero" class="hover:text-ink">Free 3-finding audit</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
@@ -628,5 +641,6 @@
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
+  <script src="/assets/free-audit.js" defer></script>
 </body>
 </html>

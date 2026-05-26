@@ -108,7 +108,7 @@ Questions or want a re-check after fixes? **hello@launchlook.app**
 
 ## Share this checkup (optional)
 
-**Free checklist for friends:** https://launchlook.app/checklist
+**Send a friend for 3 free findings:** https://launchlook.app/#hero
 
 **One-line post** (edit as you like):
 > Full LaunchLook pass on {APP_NAME} before launch — plain English + fix prompts for {PLATFORM}. launchlook.app
