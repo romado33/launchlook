@@ -153,3 +153,21 @@ When you change anything in this file:
 | Date | Change |
 |---|---|
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
+| 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
+
+---
+
+## §10 Analytics goals tracked
+
+Conversion measurement via Plausible (privacy-friendly, no cookie banner needed per `SIMPLICITY-GUARDRAILS.md` §2). Goals:
+
+- `FreeAuditSignup` — free 3-finding audit form submission
+- `StarterCheckout` — Starter $19 button click
+- `ScaleUpCheckout` — Scale Up $49 button click
+- `ProCheckout` — Pro $99 button click
+- `IntakeFormStart` — Tally intake form opened
+- `RescanAddOn` — Confidence Check re-scan CTA click
+
+Page views auto-tracked: `/`, `/webflow`, `/sample`, `/checklist`, `/thanks`, `/privacy`, `/terms`, `/vs-pagelens` (when live).
+
+Funnel of interest: page view → free audit → Starter checkout → Scale Up upsell.

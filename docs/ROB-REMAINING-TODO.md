@@ -252,6 +252,26 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 
 ---
 
+## Plausible analytics setup
+
+The Plausible script is installed across all landing pages. To activate:
+
+1. Sign up at https://plausible.io (or self-host)
+2. Add `launchlook.app` as a site
+3. Configure goals in Plausible dashboard (must match these exact names):
+   - FreeAuditSignup
+   - StarterCheckout
+   - ScaleUpCheckout
+   - ProCheckout
+   - IntakeFormStart
+   - RescanAddOn
+4. Optionally add `launchlook.app/webflow` as a goal-only filter for Webflow-specific funnel measurement
+5. Verify data flowing by visiting a landing page in incognito and watching the Plausible realtime view
+
+If using a different analytics tool, replace the script tag in every `landing/*.html` file. No other code depends on Plausible.
+
+---
+
 ## Quick reference
 
 | Item | Value |

@@ -13,6 +13,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 <body class="bg-paper text-ink font-sans antialiased">
   <header class="border-b border-line">
@@ -104,7 +107,7 @@
 
     <p class="mt-10 text-sm text-muted"><strong class="text-ink">Starter ($19):</strong> shows the 7 most important findings (priority triage). <strong class="text-ink">Full ($49):</strong> up to 25 findings across all categories plus a cross-user data check with two test accounts (we sign in as user A, then user B, and confirm A can't see B's data), plus a Quick Start Guide PDF for your users. <strong class="text-ink">Pro ($99):</strong> up to 40 findings, plus an integrations review (Stripe / auth / email / analytics setup), plus a 30-minute Loom walkthrough where a founder walks you through the report on camera.</p>
 
-    <a href="/#pricing" class="launchlook-btn launchlook-btn-primary mt-8">Get Starter Package ($19)</a>
+    <a href="/#pricing" class="launchlook-btn launchlook-btn-primary mt-8 plausible-event-name=StarterCheckout">Get Starter Package ($19)</a>
   </article>
 
   <footer class="border-t border-line">

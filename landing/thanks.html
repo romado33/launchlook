@@ -12,6 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 <body class="bg-paper text-ink font-sans antialiased">
   <header class="border-b border-line">
@@ -48,7 +51,7 @@
         id="intake-cta"
         href="#"
         data-launchlook-intake
-        class="launchlook-btn launchlook-btn-primary"
+        class="launchlook-btn launchlook-btn-primary plausible-event-name=IntakeFormStart"
       >
         Complete intake form
       </a>
