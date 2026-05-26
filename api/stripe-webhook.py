@@ -387,11 +387,11 @@ def handle_reverify_purchase(session: dict[str, Any]) -> dict[str, Any]:
                 "window as your original tier (Starter 30 days, Scale Up 90, Pro 180).\n\n"
                 "Reply to this email if the slug above is wrong or if your live "
                 "URL has changed since the original audit.\n\n"
-                "Rob\n"
+                "LaunchLook\n"
             )
             resend.Emails.send(
                 {
-                    "from": f"Rob at LaunchLook <{from_email}>",
+                    "from": f"LaunchLook <{from_email}>",
                     "to": [email],
                     "subject": subject,
                     "text": body_text,

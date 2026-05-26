@@ -2,7 +2,7 @@ Subject: I noticed a few things about {APP_NAME} — no charge
 
 Hi {NAME},
 
-I'm Rob — I run LaunchLook, pre-launch checkups for vibe-coded web apps (Lovable, Bolt, v0, Cursor, and similar). Saw you launched {APP_NAME} on {PLATFORM} — looks promising.
+I'm with the LaunchLook team — we run pre-launch checkups for vibe-coded web apps (Lovable, Bolt, v0, Cursor, and similar). Saw you launched {APP_NAME} on {PLATFORM} — looks promising.
 
 I was testing my report format and ran it on your app as a sample. Here's what I found:
 
@@ -16,7 +16,7 @@ No charge — would love your honest feedback on whether this is useful. Even on
 
 Either way, thanks for letting me poke around. Good luck with the launch.
 
-— Rob
+— LaunchLook
 hello@launchlook.app
 
 ---

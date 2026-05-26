@@ -646,9 +646,11 @@ EM_DASH_LINE_COMMENT_OPEN = ("//",)
 
 
 def _is_signature_em_dash(line: str) -> bool:
-    # Per SIMPLICITY-GUARDRAILS section 5.2, '-- Rob' (em-dash + Rob) at the
-    # end of an email is the only exception.
-    return bool(re.match(r"^\s*\u2014\s*Rob\b", line))
+    # Per SIMPLICITY-GUARDRAILS section 5.2, the email signature line
+    # (em-dash + sender) at the end of an email is the only exception.
+    # Sender label is "LaunchLook" after the May 2026 anonymization pass
+    # (was "Rob" prior to it).
+    return bool(re.match(r"^\s*\u2014\s*LaunchLook\b", line))
 
 
 def _is_placeholder_em_dash(line: str) -> bool:
@@ -982,7 +984,7 @@ def scan_stripe_pricing() -> list[Issue]:
     Also verifies metadata-discriminated routing exists for the q6 Confidence
     Check ($19 + product=confidence_check, $9 + product=confidence_check), the
     q17 badge re-verification ($9 + product=reverify), and the q18 Handoff
-    Report add-on ($49 + product=handoff_report).
+    Report add-on ($99 + product=handoff_report).
     """
     issues: list[Issue] = []
     webhook = ROOT / "api" / "stripe-webhook.py"

@@ -160,7 +160,7 @@ def send_email(to: str, subject: str, body: str, dry_run: bool = False) -> None:
     admin_email = os.getenv("ADMIN_EMAIL")
 
     payload = {
-        "from": f"Rob at LaunchLook <{from_email}>",
+        "from": f"LaunchLook <{from_email}>",
         "to": [to],
         "subject": subject,
         "text": body,

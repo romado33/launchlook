@@ -348,12 +348,12 @@ def _send_confirmation_email(*, to: str, audit_url: str) -> None:
         f"I'll walk through it on desktop and phone like a first-time visitor and email you the three highest-impact things to fix within 24 hours. "
         f"No login, no portal -- just one email back.\n\n"
         f"If you want all 10 findings sooner, Starter ($19) covers the full pass: {STARTER_URL}\n\n"
-        f"-- Rob\n"
+        f"-- LaunchLook\n"
         f"hello@launchlook.app\n"
     )
 
     payload: dict[str, Any] = {
-        "from": f"Rob at LaunchLook <{from_email}>",
+        "from": f"LaunchLook <{from_email}>",
         "to": [to],
         "subject": subject,
         "text": text_body,
@@ -392,12 +392,12 @@ def _send_upsell_email(
         f"If you've already worked through those three, Starter ($19) picks up where the free audit left off "
         f"(same plain-English style, 10 findings instead of 3, no rehash): {STARTER_URL}\n\n"
         f"Or wait until {available_str} to run the free check again.\n\n"
-        f"-- Rob\n"
+        f"-- LaunchLook\n"
         f"hello@launchlook.app\n"
     )
 
     payload: dict[str, Any] = {
-        "from": f"Rob at LaunchLook <{from_email}>",
+        "from": f"LaunchLook <{from_email}>",
         "to": [to],
         "subject": subject,
         "text": text_body,

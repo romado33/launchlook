@@ -546,7 +546,7 @@ def send_via_resend(
         )
 
     payload: dict[str, Any] = {
-        "from": f"Rob at LaunchLook <{from_email}>",
+        "from": f"LaunchLook <{from_email}>",
         "to": [to_email],
         "subject": subject,
         "html": html_body,
