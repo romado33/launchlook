@@ -202,6 +202,16 @@ STALE_TIER_AUTO_FIXES: tuple[tuple[str, str, str], ...] = (
         "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
     ),
     (
+        "everything in Full,",
+        "everything in Scale Up,",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
+        "Full / Pro Package",
+        "Scale Up / Pro Package",
+        "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
+    ),
+    (
         "Starter, Full, and Pro",
         "Starter, Scale Up, and Pro",
         "Renamed Full to Scale Up per PRODUCT-DECISIONS section 1.",
