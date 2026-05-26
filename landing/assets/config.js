@@ -20,13 +20,22 @@ window.LAUNCHLOOK_CONFIG = {
   // endpoint on this plan).
   tallyThanksUrl: "https://launchlook.app/thanks",
   stripe: {
-    // Starter and Scale Up still point at the pre-bump $9 / $29 CAD Payment
-    // Links. The May 2026 price-bump worker is responsible for the $19 / $49
-    // USD replacements (see docs/MANUAL-TASKS-PRICE-BUMP.md). Rob: leave
-    // these alone until the new tier Payment Links exist and you can swap
-    // both at once.
-    starter: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
-    scaleup: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
+    // Starter Package $19 USD main-tier Payment Link (created 2026-05-26).
+    // Stripe Product prod_UaZvTiEzXRtvkT / Price price_1TbOlzBxCiPye3m0bd7mDaLj.
+    // Metadata: product=starter_package, tier=starter. Webhook routes via
+    // CENTS_TO_TIER (1900 -> Starter Package) since none of the add-on
+    // metadata gates (handoff_report / reverify / confidence_check) match.
+    starter: "https://buy.stripe.com/28EdR81OlbU00p51u83cc08",
+    // Scale Up Package $49 USD main-tier Payment Link (created 2026-05-26).
+    // Stripe Product prod_UaZvI1jMiz3qQq / Price price_1TbOm0BxCiPye3m0mbEUxjcU.
+    // Metadata: product=scale_up_package, tier=scale_up. Webhook routes via
+    // CENTS_TO_TIER (4900 -> Scale Up Package). The metadata.product value
+    // is "scale_up_package", NOT "handoff_report", so is_handoff_report_session
+    // returns False and the $49 add-on collision is avoided.
+    scaleup: "https://buy.stripe.com/7sY4gy0KhaPWfjZa0E3cc09",
+    // Legacy CAD Payment Links (prod_UZ48FKGhAH3ANB, prod_UZ49fFi5Clxxgk)
+    // remain active in Stripe for historical receipt continuity but are no
+    // longer wired to any customer surface.
     // Pro Package $99 USD Payment Link (created 2026-05-26).
     // Stripe Product prod_UaYW9iZCtYvqyw / Price price_1TbNP5BxCiPye3m0Pn5T4zFJ.
     // Metadata: product=pro_package, tier=pro.

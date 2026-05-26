@@ -40,14 +40,18 @@ approval — see **NEEDS YOUR APPROVAL** below.
 | Files touched in `b425043` (Phase 3f) | 14 (+76 / −58 lines) |
 | Items needing Rob's eyes | 4 (see below) |
 
-The **single most important "NEEDS YOUR APPROVAL"** item is:
-**[Missing $19 Starter and $49 Scale Up main-tier Payment Links](#1-create-19-starter-and-49-scale-up-main-tier-stripe-payment-links)** —
-`landing/assets/config.js` is still pointing at the pre-bump $9 CAD / $29 CAD
-links because no $19 USD Starter or $49 USD Scale Up *main-tier* product
-exists in Stripe yet. The $19 USD link that *does* exist is the Saboteur
-Confidence Check add-on (different product). Until Rob decides, the legacy
-CAD links remain wired and the homepage Buy Starter / Buy Scale Up buttons
-still produce a $9 / $29 CAD checkout. Exact curl commands are at the bottom.
+**Update 2026-05-26 (follow-up worker run):** Item 1 (the $19 Starter and
+$49 Scale Up main-tier Payment Links) is **RESOLVED** — created and wired in
+this same day's follow-up commit. See the RESOLVED block on item 1 below.
+
+The **single most important "NEEDS YOUR APPROVAL"** item is now:
+**[Rename legacy Stripe products](#2-rename-stripe-product-display-names-full-package--scale-up-package)** —
+the active legacy `LaunchLook Ship Package` ($29 CAD, `prod_UZ49fFi5Clxxgk`)
+and the duplicate `LaunchLook Starter` ($9 CAD, `prod_UZ3Y5LErQavP7u`) still
+use the pre-bump tier vocabulary in the Stripe Dashboard. Their Payment Links
+are no longer wired to any customer surface (the homepage now uses the new
+USD links), but the display names will show on historical and any test-mode
+receipts. Rob's call whether to rename in-place — low blast radius either way.
 
 Snapshot canvas (`~/.cursor/projects/.../canvases/launchlook-todo-snapshot.canvas.tsx`)
 should be refreshed after Rob reviews this file; the Stripe inventory and
@@ -435,7 +439,22 @@ These are the items the worker chose not to auto-execute. Each has the
 exact command Rob can run (or paste in `_create_stripe.py` style script)
 to land it.
 
-### 1. Create $19 Starter and $49 Scale Up main-tier Stripe Payment Links
+### 1. Create $19 Starter and $49 Scale Up main-tier Stripe Payment Links ✅ RESOLVED 2026-05-26
+
+**RESOLVED 2026-05-26:** Created during follow-up worker run.
+
+- Starter Package $19 USD: Product `prod_UaZvTiEzXRtvkT`, Price `price_1TbOlzBxCiPye3m0bd7mDaLj`, Payment Link `plink_1TbOm0BxCiPye3m0HNfr4Owj`, URL `https://buy.stripe.com/28EdR81OlbU00p51u83cc08`
+- Scale Up Package $49 USD: Product `prod_UaZvI1jMiz3qQq`, Price `price_1TbOm0BxCiPye3m0mbEUxjcU`, Payment Link `plink_1TbOm1BxCiPye3m0cyr1D58d`, URL `https://buy.stripe.com/7sY4gy0KhaPWfjZa0E3cc09`
+
+Both wired into `landing/assets/config.js`. Webhook routes via `CENTS_TO_TIER` (`1900` → Starter Package, `4900` → Scale Up Package). Add-on metadata checks (`is_handoff_report_session`, `is_confidence_check_session`, `is_reverify_session`) intercept Handoff Report / Confidence Check / Verify **before** the cents fallback, so no collision between the new $49 Scale Up tier and the $49 Handoff Report add-on — the new Scale Up Payment Link carries `metadata.product=scale_up_package` (not `handoff_report`), so the Handoff gate returns False and the session falls through to the cents-based routing in `process_checkout_session`.
+
+Legacy CAD products (`prod_UZ48FKGhAH3ANB` Starter, `prod_UZ49fFi5Clxxgk` Ship/Scale Up) and their Payment Links (`plink_1TZw0hBxCiPye3m03wX4DRU7`, `plink_1TZw1PBxCiPye3m0yYrf1RJC`) remain active in Stripe for historical receipts but are no longer wired to any customer surface.
+
+Both new URLs verified `HTTP 200` via `curl.exe -s -o nul -w "%{http_code}"` immediately after creation.
+
+---
+
+The original (A)/(B) prompt and curl commands are kept below for the historical record.
 
 `landing/assets/config.js` still points `stripe.starter` and `stripe.scaleup`
 at the pre-bump $9 / $29 CAD Payment Links because **no main-tier $19 or $49

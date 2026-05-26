@@ -32,7 +32,22 @@ API credentials used were the values already in `.env` (`RESEND_API_KEY`, `STRIP
 
 ## What's waiting for your approval (executable from chat with one "yes")
 
-### Stripe — currency mismatch on existing Starter + Scale Up tiers (highest priority)
+### Stripe — currency mismatch on existing Starter + Scale Up tiers (highest priority) ✅ RESOLVED 2026-05-26
+
+**RESOLVED 2026-05-26:** Created the missing USD main-tier products during the follow-up worker run.
+
+- Starter Package $19 USD: Product `prod_UaZvTiEzXRtvkT`, Price `price_1TbOlzBxCiPye3m0bd7mDaLj`, Payment Link `plink_1TbOm0BxCiPye3m0HNfr4Owj`, URL `https://buy.stripe.com/28EdR81OlbU00p51u83cc08`
+- Scale Up Package $49 USD: Product `prod_UaZvI1jMiz3qQq`, Price `price_1TbOm0BxCiPye3m0mbEUxjcU`, Payment Link `plink_1TbOm1BxCiPye3m0cyr1D58d`, URL `https://buy.stripe.com/7sY4gy0KhaPWfjZa0E3cc09`
+
+Both Payment Links verified `HTTP 200`. `landing/assets/config.js` `stripe.starter` and `stripe.scaleup` now point at the new USD links. Existing CAD products (`prod_UZ48FKGhAH3ANB`, `prod_UZ49fFi5Clxxgk`) and CAD Payment Links left in place per the no-modify rule — they remain active in Stripe so historical receipts stay intact, but they are no longer wired to any customer surface.
+
+Webhook routing confirmed correct: `api/stripe-webhook.py` `process_event()` calls `is_handoff_report_session` / `is_reverify_session` / `is_confidence_check_session` (all `metadata.product`-discriminated) **before** falling through to `process_checkout_session`, which routes via `CENTS_TO_TIER` (`1900` → "Starter Package", `4900` → "Scale Up Package"). The new $49 Scale Up Payment Link carries `metadata.product=scale_up_package`, so the Handoff Report gate returns False — no collision.
+
+Reminder: the Notion `Customers` DB still needs `Scale Up Package` added to the `Tier` select (see Notion section below). Until then, the webhook will write the tier text but Notion silently drops the unknown option.
+
+---
+
+The original (no-action) description is kept below for the historical record.
 
 **Why this needs review.** Existing Starter and Scale Up Payment Links charge in **CAD** at $9 / $29. The five new add-ons I just created all charge in **USD**. The landing page (`landing/index.html`) advertises Starter at $19 and Scale Up at $49 in plain "$" notation, which most US buyers will read as USD. A US buyer clicking "Get Starter Package ($19)" is currently charged **$9 CAD** (≈ $6.50 USD), which is below the advertised price; they're undercharged, but the receipt currency will confuse them. Once anyone in the EU or UK ever clicks through, the same mismatch becomes a refund vector.
 
