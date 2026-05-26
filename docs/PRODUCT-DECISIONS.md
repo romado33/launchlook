@@ -156,6 +156,7 @@ When you change anything in this file:
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
 | 2026-05-26 | q3b shipped: AI-sounding copy detection, Scale-Ready audit (Scale Up+), Compliance-Lite finding categories added to the data-driven taxonomy in `scripts/ai_audit/finding_categories.yaml`. Buyer-facing names per `SIMPLICITY-GUARDRAILS.md` §6: "copy that sounds AI-written," "growth-readiness checks," "common legal must-haves." Internal names (Scale-Ready, Compliance-Lite, AI-sounding copy detection) stay inside dev docs and the YAML's `display_name_internal` field only. |
 | 2026-05-26 | vs-pagelens comparison page shipped at `/vs-pagelens`. SEO + FAQ destination only, not in main nav. Inherits §2.7 (no nav link). One FAQ entry added to `/` and `/webflow` per §2.7 + §6 (neutral, no SaaS-speak). |
+| 2026-05-26 | q19 shipped: GitHub integration for Pro tier (opt-in, manually triggered by Rob, never auto-runs from delivery pipeline). One issue per finding tagged with the persona that caught it; optional PR summary comment when the audit was triggered against a PR. Customer surfaces touched: one bullet in the Pro tier card on `landing/index.html` + `landing/webflow.html`, and one conditional paragraph in the post-purchase delivery email per `SIMPLICITY-GUARDRAILS.md` §2.5 (integrations invisible on the main landing). Library: `scripts/github_integration.py`. CLI: `scripts/github_push.py`. Full setup + failure-recovery docs at `docs/GITHUB-INTEGRATION.md`. |
 
 ---
 

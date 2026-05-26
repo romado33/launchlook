@@ -269,6 +269,15 @@ manual until volume justifies automation. Daily ritual:
   every 2 to 3 days instead of daily, OR drop the cap to 3 (matching
   the deliverable) and skip the prescreener entirely. Numbers and
   levers live in `docs/AI-AUDIT-PIPELINE.md`.
+- [ ] **When first Pro customer opts in to GitHub integration:** ask
+  them for their repo URL + a fine-grained PAT with `Issues: read+write`
+  scope on that single repo (30-day expiry). Add a `github:` block to
+  `customers/<slug>.yaml` (`repo` + `token_env`, optionally
+  `commit_sha` and `pr_number`). Export the PAT as
+  `<CUSTOMER_SLUG>_GITHUB_PAT` in your shell. Always dry-run first:
+  `python scripts/github_push.py --customer customers/<slug>.yaml --dry-run`.
+  Full playbook in `docs/GITHUB-INTEGRATION.md`. Never auto-runs from
+  the delivery pipeline; you trigger it by hand after spot-checking.
 
 ---
 

@@ -13,6 +13,12 @@ If anything in the report isn't clear, or you want a re-scan after fixes, just r
 Thanks for trying LaunchLook.
 Rob
 
+{% if customer.tier == "Pro Package" %}
+---
+Optional: Want these findings as GitHub issues?
+If your project is on GitHub, reply with your repo URL (and a commit SHA if you want them tied to a specific point in history) and we'll create one issue per finding, tagged with the persona that caught it.
+
+{% endif %}
 ---
 LaunchLook · launchlook.app · prepared {{ delivered_at }}
 Confidential. Prepared for {{ customer.first_name }} only.

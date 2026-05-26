@@ -565,6 +565,22 @@ datastore once volume justifies the complexity (no fixed trigger yet).
 
 ## Related docs
 
+## GitHub integration (Pro tier opt-in)
+
+Pro Package customers can opt into having their findings auto-created
+as GitHub issues on their repo, with optional PR comment. The
+integration is **opt-in, manually triggered by Rob**, and never
+auto-runs from `deliver_report.py`. The delivery script only logs a
+one-line reminder when a Pro customer has a `github:` block in their
+YAML. Full setup + invocation + failure-recovery docs at
+`docs/GITHUB-INTEGRATION.md`. Library lives at
+`scripts/github_integration.py`; the thin CLI is
+`scripts/github_push.py`.
+
+---
+
+## Related docs
+
 * `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 3-finding
   hook -- queue triage, manual pipeline run, dedup write-back, abuse
   watch.
@@ -572,6 +588,8 @@ datastore once volume justifies the complexity (no fixed trigger yet).
   kept for reference.
 * `docs/DELIVERY-PIPELINE.md`: what happens after the YAML lands
   (PDF render, Resend email).
+* `docs/GITHUB-INTEGRATION.md`: the Pro-only, opt-in, manually-
+  triggered post-delivery step that turns findings into GitHub issues.
 * `docs/06-findings-library.md`: the 38 patterns the prescreener
   matches against and the LLM uses as calibration.
 * `scripts/ai_audit/prompts/system.txt`: the prompt itself. Read it

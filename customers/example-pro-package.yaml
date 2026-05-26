@@ -28,6 +28,16 @@ customer:
   tier: Pro Package          # Starter (cap 10) | Scale Up (cap 30) | Pro (cap 40)
   builder: Lovable           # used in the fix-prompt headers
 
+# Only for customers who opted into GitHub integration (Pro tier add-on,
+# opt-in, manually triggered by Rob via `python scripts/github_push.py`).
+# Drop the entire block for customers who did not opt in. See
+# docs/GITHUB-INTEGRATION.md for the setup steps.
+github:
+  repo: "https://github.com/jane-sparkle/main-site"  # https only, github.com only
+  commit_sha: "abc123def"                            # optional, ties issues to a point in history
+  pr_number: 42                                      # optional, triggers add_pr_comment if present
+  token_env: "JANE_SPARKLE_GITHUB_PAT"               # env var holding the customer's fine-grained PAT
+
 verdict:
   label: Do not invite real users yet
   emoji: "🔴"

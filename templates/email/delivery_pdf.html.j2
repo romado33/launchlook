@@ -51,6 +51,13 @@
               <p style="margin:0 0 4px; color:#1F1B16;">Thanks for trying LaunchLook.</p>
               <p style="margin:0; color:#1F1B16;">Rob</p>
 
+              {% if customer.tier == "Pro Package" %}
+              <p style="border-top: 1px solid #ddd; padding-top: 16px; margin-top: 24px; color:#1F1B16;">
+                <strong>Optional: Want these findings as GitHub issues?</strong><br />
+                If your project is on GitHub, reply with your repo URL (and a commit SHA if you want them tied to a specific point in history) and we'll create one issue per finding, tagged with the persona that caught it.
+              </p>
+              {% endif %}
+
               <hr style="border:0; border-top:1px solid #E7E0D6; margin:24px 0 16px;" />
 
               <p style="margin:0; font-size:12px; color:#6B6359;">

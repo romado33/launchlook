@@ -377,6 +377,16 @@ def main() -> int:
     print(f"→ Findings:  {len(data['findings'])}")
     print(f"→ Output:    {out_dir.relative_to(REPO_ROOT)}")
 
+    # Pro tier GitHub integration reminder. Never auto-runs: Rob has to
+    # invoke scripts/github_push.py manually after reviewing the YAML.
+    # See docs/GITHUB-INTEGRATION.md.
+    if customer["tier"] == "Pro Package" and isinstance(data.get("github"), dict) and data["github"].get("repo"):
+        print(
+            "→ GitHub integration available for this customer. "
+            f"Run: `python scripts/github_push.py --customer {args.customer}` "
+            "after manual review."
+        )
+
     main_html = render_main_report_html(env, data, delivered_at, args.qsg_link)
     html_to_pdf(main_html, main_pdf, customer["first_name"])
     print(f"  ✓ wrote {main_pdf.name} ({main_pdf.stat().st_size / 1024:.1f} KB)")
