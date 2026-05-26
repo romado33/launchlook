@@ -22,6 +22,13 @@ window.LAUNCHLOOK_CONFIG = {
     // docs/CONFIDENCE-CHECK-WORKFLOW.md.
     saboteur: "",
     saboteurDiscounted: "",
+    // LaunchLook Verified badge $9 re-verification (q17). Payment Link
+    // metadata MUST include product=reverify so the webhook routes to
+    // handle_reverify_purchase. Optional metadata customer_slug (or the
+    // session client_reference_id) lets Rob look up the badge directly.
+    // Empty until Rob creates the link; the verify page falls back to a
+    // mailto in the meantime. See docs/VERIFIED-BADGE-WORKFLOW.md.
+    reverify: "",
   },
   githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
   linkedinUrl: "https://www.linkedin.com/in/rob-dods/",

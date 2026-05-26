@@ -183,6 +183,57 @@ def build_jinja_env():
     )
 
 
+# ---------------------------------------------------------------------------
+# Verified badge context (q17)
+# ---------------------------------------------------------------------------
+
+# Validity windows mirrored from scripts/generate_verified_badge.py so that
+# the embed snippet in delivered emails / report PDFs surfaces the same
+# expiry the badge JSON does. Keep these two maps in sync.
+VERIFIED_BADGE_TIER_DAYS = {
+    "Starter Package": 30,
+    "Full Package": 90,
+    "Scale Up Package": 90,
+    "Pro Package": 180,
+}
+VERIFIED_BADGE_DOMAIN = "launchlook.app"
+
+
+def _verified_badge_context(customer: dict[str, Any]) -> dict[str, Any] | None:
+    """Build the `verified_badge` context dict for delivery templates.
+
+    Mirrors the slug + validity window logic in
+    `scripts/generate_verified_badge.py` so that the embed snippet baked
+    into the delivery email / report PDF references the same URLs the
+    actual badge generator will write under `landing/images/badges/{slug}/`.
+    Returns `None` for tiers without a badge (defensive; we currently
+    issue one for every paid tier).
+    """
+    tier = (customer.get("tier") or "").strip()
+    validity_days = VERIFIED_BADGE_TIER_DAYS.get(tier)
+    if not validity_days:
+        return None
+
+    raw_slug = customer.get("slug") or customer.get("customer_slug") or ""
+    if not raw_slug:
+        raw_slug = slugify(customer.get("first_name", ""), customer.get("app_name", ""))
+    slug = slugify(raw_slug)
+
+    builder = (customer.get("builder") or "").strip().lower()
+    is_webflow = builder.startswith("webflow")
+
+    base = f"https://{VERIFIED_BADGE_DOMAIN}"
+    return {
+        "customer_slug": slug,
+        "tier": tier,
+        "validity_days": validity_days,
+        "verify_url": f"{base}/verify?slug={slug}",
+        "badge_url_light": f"{base}/images/badges/{slug}/light.svg",
+        "badge_url_dark": f"{base}/images/badges/{slug}/dark.svg",
+        "is_webflow": is_webflow,
+    }
+
+
 def render_main_report_html(env, data: dict[str, Any], delivered_at: str, qsg_link: str | None) -> str:
     customer = dict(data["customer"])
     customer["url_redacted_or_shown"] = display_url(
@@ -197,6 +248,7 @@ def render_main_report_html(env, data: dict[str, Any], delivered_at: str, qsg_li
         passed_checks=data.get("passed_checks", []) or [],
         delivered_at=delivered_at,
         qsg_link=qsg_link,
+        verified_badge=_verified_badge_context(customer),
     )
 
 
@@ -275,6 +327,7 @@ def render_email_bodies(env, data: dict[str, Any], delivered_at: str) -> tuple[s
         "customer": customer,
         "n_findings": n_findings,
         "delivered_at": delivered_at,
+        "verified_badge": _verified_badge_context(customer),
     }
     return subject, html_tpl.render(**ctx), text_tpl.render(**ctx)
 

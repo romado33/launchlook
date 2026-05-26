@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What LaunchLook Verified means (and doesn't)</title>
+  <meta name="description" content="The honest scope of the LaunchLook Verified badge. What we checked, what we did not, and why visitors should still find the badge useful." />
+
+  <link rel="canonical" href="https://launchlook.app/verify-scope" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script src="/assets/tailwind-brand.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS section 2). -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header class="border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-5">
+      <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
+        <img src="/images/logo-icon.svg" alt="" width="22" height="22" class="shrink-0" aria-hidden="true" />
+        <span>LaunchLook</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-14 sm:py-20">
+
+    <p class="section-label">Honest scope</p>
+    <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+    <h1 class="font-serif text-3xl sm:text-4xl">What LaunchLook Verified means</h1>
+    <p class="mt-4 text-muted leading-relaxed max-w-prose">
+      Short version: a real person walked through the site and ran our usual checks.
+      Long version below. Read it before drawing strong conclusions either way.
+    </p>
+
+    <section class="mt-10 space-y-5">
+      <h2 class="font-serif text-2xl">What Verified means</h2>
+      <p class="text-muted leading-relaxed">
+        We ran our checkup on this site within the last 30, 90, or 180 days
+        (the exact window depends on the tier the operator paid for; see the
+        badge page or the pricing list). No exposed credentials were visible in
+        the HTML we read, broken CTAs were noted and flagged as present at audit
+        time, and the mobile layout was passable at common breakpoints.
+      </p>
+      <p class="text-muted leading-relaxed">
+        That checkup is a human pass over what a first-time visitor would see and
+        touch. Findings include polish, trust pages, broken links, dead CTAs,
+        leftover dev tools, layout issues at phone width, and a small set of
+        visibility-only security checks (admin routes loading without a login,
+        API keys visible in page source, that sort of thing).
+      </p>
+    </section>
+
+    <section class="mt-10 space-y-5">
+      <h2 class="font-serif text-2xl">What Verified does NOT mean</h2>
+      <ul class="space-y-3 text-muted leading-relaxed list-disc pl-5">
+        <li>Not a security audit. We do not pen-test, fuzz, or test for OWASP top 10.</li>
+        <li>Not an accessibility statement. We run a baseline check, not a full conformance review.</li>
+        <li>Not a promise that future changes will not break things. Sites change after the badge is issued.</li>
+        <li>Not a code review. We never see the codebase.</li>
+        <li>Not a financial, legal, or medical sign-off for anything the operator does on the site.</li>
+      </ul>
+      <p class="text-muted leading-relaxed">
+        If you need any of the above, the badge is the wrong primitive. Look for a
+        real pen-test firm, a real accessibility specialist, or the relevant
+        regulator in your country.
+      </p>
+    </section>
+
+    <section class="mt-10 space-y-5">
+      <h2 class="font-serif text-2xl">Why it's still useful</h2>
+      <p class="text-muted leading-relaxed">
+        Site visitors can see the badge and know the operator cared enough to get
+        a third-party once-over before going live. That reduces the "is this a
+        scam?" friction new visitors feel when they land on an unfamiliar site,
+        especially for vibe-coded apps where the polish-to-stakes ratio is high.
+      </p>
+      <p class="text-muted leading-relaxed">
+        The badge is a small social signal, not a stamp of approval from an
+        authority. We tell visitors exactly that, here and on every verification
+        page.
+      </p>
+    </section>
+
+    <section class="mt-10 space-y-5">
+      <h2 class="font-serif text-2xl">Validity windows</h2>
+      <p class="text-muted leading-relaxed">
+        The window matches the tier the operator paid for. After the window
+        closes, the badge stops verifying as current and a re-check is needed.
+      </p>
+      <ul class="space-y-2 text-muted leading-relaxed list-disc pl-5">
+        <li><strong class="text-ink">Starter Package ($19):</strong> 30 days.</li>
+        <li><strong class="text-ink">Scale Up Package ($49):</strong> 90 days.</li>
+        <li><strong class="text-ink">Pro Package ($99):</strong> 180 days.</li>
+      </ul>
+      <p class="text-muted leading-relaxed">
+        Re-verification is $9 for sites with an active or recently expired
+        badge. The re-check runs the same playbook against the live site,
+        notes what changed, and reissues a fresh badge for the same window.
+      </p>
+    </section>
+
+    <section class="mt-10 space-y-5">
+      <h2 class="font-serif text-2xl">Questions a thoughtful visitor might still ask</h2>
+      <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Can the operator forge a badge?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">
+            They could embed an image that looks like ours, but the link target points to <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/verify?slug=...</code>.
+            Click the badge. If our verification page does not recognize the slug or shows it as expired, the badge is not current.
+          </p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What if the site changed since the audit?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">
+            The badge stays valid for the window listed above. Operators are encouraged to re-check after meaningful changes; the $9 re-verification exists for exactly that.
+          </p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Why no fancy seal?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">
+            Because LaunchLook is a one-person checkup, not a standards body. A fancy seal would over-promise. A small monochrome badge says what it says: a human took a look.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <p class="mt-12 text-sm text-muted max-w-prose">
+      Questions about the scope or a specific badge? Email
+      <a href="mailto:hello@launchlook.app" class="underline hover:text-ink">hello@launchlook.app</a>
+      and Rob will reply.
+    </p>
+
+  </main>
+
+  <footer class="border-t border-line mt-8">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/" class="hover:text-ink">Home</a></li>
+        <li><a href="/#pricing" class="hover:text-ink">Pricing</a></li>
+        <li><a href="/verify" class="hover:text-ink">Verify a badge</a></li>
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
+</body>
+</html>

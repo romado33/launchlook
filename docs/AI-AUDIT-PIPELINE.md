@@ -15,53 +15,53 @@ completely unchanged. Only the path to get there is different.
 ## Architecture
 
 ```
-            ┌──────────────────────────────────────────────────────┐
-Customer    │                                                      │
-URL  ─────► │  scripts/ai_audit.py                                 │
-            │                                                      │
-            │  1. Capture     scripts/capture_screenshots.py       │
-            │     desktop + mobile PNGs                            │
-            │     → output/customers/{slug}/screenshots/*.png      │
-            │                                                      │
-            │  2. Prescreen   scripts/prescreen_findings.py        │
-            │     38 regex patterns from findings.csv              │
-            │     → list[hit{finding,page,matches}]                │
-            │                                                      │
-            │  3. HTML        scripts/ai_audit/html_extract.py     │
-            │     Playwright + BeautifulSoup, scripts stripped     │
-            │     → list[page{title,meta,text,buttons,links}]      │
-            │                                                      │
-            │  4. LLM         scripts/ai_audit/llm_client.py       │
-            │     Claude (vision + tool-use) or GPT (vision +      │
-            │     json_schema). Sends screenshots + prescreen      │
-            │     hits + HTML extracts + findings.csv reference    │
-            │     + the system prompt (prompts/system.txt).        │
-            │     Receives structured findings, verdict, QSG.      │
-            │                                                      │
-            │  5. YAML        scripts/audit_ui/yaml_writer.py      │
-            │     Same emitter audit_ui uses, so the file          │
-            │     round-trips cleanly back through audit_ui        │
-            │     and deliver_report.py.                           │
-            │     → customers/{slug}.yaml                          │
-            │                                                      │
-            └──────────────────────────────────────────────────────┘
-                            │
-                            ▼
-            ┌──────────────────────────────────────────────────────┐
-            │  scripts/audit_ui.py --review-ai                     │
-            │                                                      │
-            │  Loads customers/{slug}.yaml in "review mode".       │
-            │  Per finding: Approve, Edit, Regenerate, Reject.    │
-            │  Tracks every action in                              │
-            │  data/ai_feedback/{slug}.json. "Approve all          │
-            │  remaining & ship" rolls into deliver_report.py.     │
-            └──────────────────────────────────────────────────────┘
-                            │
-                            ▼
-            ┌──────────────────────────────────────────────────────┐
-            │  scripts/deliver_report.py                           │
-            │  Same PDF + Resend pipeline as before. Unchanged.    │
-            └──────────────────────────────────────────────────────┘
+            â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+Customer    â”‚                                                      â”‚
+URL  â”€â”€â”€â”€â”€â–º â”‚  scripts/ai_audit.py                                 â”‚
+            â”‚                                                      â”‚
+            â”‚  1. Capture     scripts/capture_screenshots.py       â”‚
+            â”‚     desktop + mobile PNGs                            â”‚
+            â”‚     â†’ output/customers/{slug}/screenshots/*.png      â”‚
+            â”‚                                                      â”‚
+            â”‚  2. Prescreen   scripts/prescreen_findings.py        â”‚
+            â”‚     38 regex patterns from findings.csv              â”‚
+            â”‚     â†’ list[hit{finding,page,matches}]                â”‚
+            â”‚                                                      â”‚
+            â”‚  3. HTML        scripts/ai_audit/html_extract.py     â”‚
+            â”‚     Playwright + BeautifulSoup, scripts stripped     â”‚
+            â”‚     â†’ list[page{title,meta,text,buttons,links}]      â”‚
+            â”‚                                                      â”‚
+            â”‚  4. LLM         scripts/ai_audit/llm_client.py       â”‚
+            â”‚     Claude (vision + tool-use) or GPT (vision +      â”‚
+            â”‚     json_schema). Sends screenshots + prescreen      â”‚
+            â”‚     hits + HTML extracts + findings.csv reference    â”‚
+            â”‚     + the system prompt (prompts/system.txt).        â”‚
+            â”‚     Receives structured findings, verdict, QSG.      â”‚
+            â”‚                                                      â”‚
+            â”‚  5. YAML        scripts/audit_ui/yaml_writer.py      â”‚
+            â”‚     Same emitter audit_ui uses, so the file          â”‚
+            â”‚     round-trips cleanly back through audit_ui        â”‚
+            â”‚     and deliver_report.py.                           â”‚
+            â”‚     â†’ customers/{slug}.yaml                          â”‚
+            â”‚                                                      â”‚
+            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                            â”‚
+                            â–¼
+            â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+            â”‚  scripts/audit_ui.py --review-ai                     â”‚
+            â”‚                                                      â”‚
+            â”‚  Loads customers/{slug}.yaml in "review mode".       â”‚
+            â”‚  Per finding: Approve, Edit, Regenerate, Reject.    â”‚
+            â”‚  Tracks every action in                              â”‚
+            â”‚  data/ai_feedback/{slug}.json. "Approve all          â”‚
+            â”‚  remaining & ship" rolls into deliver_report.py.     â”‚
+            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                            â”‚
+                            â–¼
+            â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+            â”‚  scripts/deliver_report.py                           â”‚
+            â”‚  Same PDF + Resend pipeline as before. Unchanged.    â”‚
+            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
@@ -143,7 +143,7 @@ python scripts/ai_audit.py `
 
 The Pro Package prompt extends the Full Package guidance with a
 dedicated integrations review (Stripe / auth / email / analytics).
-Findings are still emitted in the standard `findings` list — there is
+Findings are still emitted in the standard `findings` list â€” there is
 no separate `integrations_review` YAML key. Prefix integrations-flavored
 finding titles with `Integrations:` so they group visibly in the PDF
 (see `customers/example-pro-package.yaml` for the canonical pattern).
@@ -171,7 +171,7 @@ prescreener was skipped). Useful for smoke tests and CI.
 python scripts/audit_ui.py --slug jane-smith --review-ai
 
 # 2. In the UI: Approve / Edit / Regenerate / Reject each finding,
-#    then click "✓ Approve all remaining & ship" in the footer.
+#    then click "âœ“ Approve all remaining & ship" in the footer.
 
 # 3. Or, if you prefer the CLI, render PDFs without sending:
 python scripts/deliver_report.py --customer customers/jane-smith.yaml --no-open
@@ -232,14 +232,14 @@ python scripts/ai_audit/feedback_summary.py --since 2026-05-01
 The summary prints:
 * Drafts reviewed, total findings, provider mix.
 * Approve % (no edits), edit %, reject %, average regen rate.
-* Severity drift (`high→medium` etc).
-* Most-rejected titles (top 10) → prompt patterns to add to the
+* Severity drift (`highâ†’medium` etc).
+* Most-rejected titles (top 10) â†’ prompt patterns to add to the
   "Do not generate findings like this" section.
-* Edited title pairs (AI → final) → tone hints for system.txt.
+* Edited title pairs (AI â†’ final) â†’ tone hints for system.txt.
 
 Use this every 5-10 customers to refine the prompts. The first round of
 real data will probably show:
-* AI calibrates severity too high (Rob bumps `critical→high`).
+* AI calibrates severity too high (Rob bumps `criticalâ†’high`).
 * AI invents fix prompts referencing files it didn't see (banned by
   system.txt but watch for drift).
 * AI uses em-dashes despite the prohibition (re-emphasize in system.txt).
@@ -259,7 +259,7 @@ client does not need extra arguments.
 Read the log with `python scripts/ai_costs_report.py`. The full
 docs are at `docs/AI-COST-MONITORING.md`.
 
-Cost data is internal-only per `SIMPLICITY-GUARDRAILS.md` §6 - it
+Cost data is internal-only per `SIMPLICITY-GUARDRAILS.md` Â§6 - it
 never crosses into a customer-facing surface.
 
 ---
@@ -299,9 +299,9 @@ If the LLM bill creeps up, the levers (in order) are:
 The fix-prompt voice differs per builder (Lovable speaks
 natural-language, v0 wants component paths, etc). To add a new platform:
 
-1. `scripts/audit_ui/yaml_writer.py` → add to `VALID_BUILDERS`.
-2. `scripts/audit_ui.py` → add to the `--builder` choices.
-3. `scripts/ai_audit/prompts/system.txt` → add a paragraph under
+1. `scripts/audit_ui/yaml_writer.py` â†’ add to `VALID_BUILDERS`.
+2. `scripts/audit_ui.py` â†’ add to the `--builder` choices.
+3. `scripts/ai_audit/prompts/system.txt` â†’ add a paragraph under
    "FIX PROMPT TONE BY BUILDER" describing the new platform's
    conventions.
 4. Update the landing page (`landing/index.html`) and the outreach
@@ -322,7 +322,7 @@ mode. The changes:
 * Each finding card shows Approve, Regenerate, and Reject buttons
   at the top right. Editing any field marks the finding as `edited`.
 * A `{n} / {total} reviewed` counter in the banner tracks progress.
-* The sticky footer's deliver button becomes "✓ Approve all remaining
+* The sticky footer's deliver button becomes "âœ“ Approve all remaining
   & ship" (confirms, then runs the same generate-yaml + deliver-with-
   --send flow).
 * Every Rob action POSTs to `/api/feedback`, which writes to
@@ -396,12 +396,12 @@ runtime and renders `{{ categories_list }}` into `system.txt`
 then `render_categories_for_prompt(..., tier=tier)`). To add or retire
 a category, edit the YAML; do not hardcode category language in the
 prompt. Buyer-facing display names are governed by
-`docs/SIMPLICITY-GUARDRAILS.md` §6 (no internal taxonomy on customer
+`docs/SIMPLICITY-GUARDRAILS.md` Â§6 (no internal taxonomy on customer
 surfaces).
 
 The `tier_min` field gates visibility: a category is excluded from the
 prompt for any tier below its `tier_min`. The tier rank order is
-`Starter Package` (1) → `Scale Up Package` (2) → `Pro Package` (3).
+`Starter Package` (1) â†’ `Scale Up Package` (2) â†’ `Pro Package` (3).
 Free tier audits cap at 3 findings total across all categories and
 are filtered after generation, not at the category-list step.
 
@@ -409,19 +409,19 @@ Active category IDs (as of q14+q16, May 26 2026):
 
 | ID | Buyer-facing display name | Tester | tier_min | Source |
 |---|---|---|---|---|
-| `trust_gaps` | trust signals & legal pages | The Skeptic | — | llm |
-| `broken_ctas_links` | broken buttons & dead links | The Klutz | — | llm |
-| `mobile_layout` | mobile layout issues | The Phone-First Friend | — | llm |
-| `copy_clarity` | confusing or placeholder text | The Tourist | — | llm |
-| `dev_artifacts` | dev tools and test data on the live site | The Klutz | — | llm |
-| `security_lite` | obvious visible risks | The Snoop | — | external (Snoop) |
+| `trust_gaps` | trust signals & legal pages | The Skeptic | â€” | llm |
+| `broken_ctas_links` | broken buttons & dead links | The Klutz | â€” | llm |
+| `mobile_layout` | mobile layout issues | The Phone-First Friend | â€” | llm |
+| `copy_clarity` | confusing or placeholder text | The Tourist | â€” | llm |
+| `dev_artifacts` | dev tools and test data on the live site | The Klutz | â€” | llm |
+| `security_lite` | obvious visible risks | The Snoop | â€” | external (Snoop) |
 | `cross_user_data` | user data isolation | The Snoop | Scale Up Package | llm |
-| `ai_sounding_copy` | copy that sounds AI-written | The Tourist | — | llm |
+| `ai_sounding_copy` | copy that sounds AI-written | The Tourist | â€” | llm |
 | `scale_ready_audit` | growth-readiness checks | The Snoop | Scale Up Package | llm |
-| `compliance_lite` | common legal must-haves | The Skeptic | — | llm |
-| `performance_speed` | performance & speed | The Phone-First Friend | — | external (PSI) |
-| `accessibility_checks` | accessibility checks | The Phone-First Friend | — | external (axe-core) |
-| `form_submit_smoke` | form & signup flows | The Stranger Who Tried to Sign Up | — | external (form_smoke_test) |
+| `compliance_lite` | common legal must-haves | The Skeptic | â€” | llm |
+| `performance_speed` | performance & speed | The Phone-First Friend | â€” | external (PSI) |
+| `accessibility_checks` | accessibility checks | The Phone-First Friend | â€” | external (axe-core) |
+| `form_submit_smoke` | form & signup flows | The Stranger Who Tried to Sign Up | â€” | external (form_smoke_test) |
 
 When you add a new category, also list it here (ID + buyer-facing
 display name + tester + `tier_min` if any + source) so the canonical
@@ -429,12 +429,12 @@ list stays a one-stop read.
 
 ---
 
-## Free → Starter deduplication
+## Free â†’ Starter deduplication
 
 When a buyer used the free 3-finding hook and then upgrades to Starter
 for the same email + URL within 90 days, the paid pipeline MUST surface
 **10 NEW findings**, excluding the prior 3. This is non-negotiable per
-`docs/PRODUCT-DECISIONS.md` §2: the Free → Starter conversion is the
+`docs/PRODUCT-DECISIONS.md` Â§2: the Free â†’ Starter conversion is the
 funnel's most fragile moment; re-reading the free preview would burn it.
 
 ### How it works in the pipeline
@@ -477,7 +477,7 @@ Tests live in `tests/test_dedup.py` (3 main cases + 6 edge cases).
 
 ### Customer-visible boundary
 
-Per `docs/SIMPLICITY-GUARDRAILS.md` §6 the dedup mechanism never
+Per `docs/SIMPLICITY-GUARDRAILS.md` Â§6 the dedup mechanism never
 crosses into customer copy. If a customer asks, the answer is "your
 Starter findings build on your free preview." Never "deduplication,"
 "fingerprints," "exclude block," or "collision retry."
@@ -485,7 +485,7 @@ Starter findings build on your free preview." Never "deduplication,"
 ### Why we chose Notion over a separate datastore
 
 The Notion free-audit DB is the same surface Rob already opens to
-clear the queue (per `docs/FREE-AUDIT-WORKFLOW.md` §3). Storing the
+clear the queue (per `docs/FREE-AUDIT-WORKFLOW.md` Â§3). Storing the
 fingerprints there means: one place to manage abuse, dedup, status,
 and delivery state. A future worker can move this to a real datastore
 once volume justifies the complexity (no fixed trigger yet).
@@ -540,7 +540,7 @@ Findings are tier-capped inside `translate_to_findings`:
 | Scale Up Package | up to 3 (one per metric) |
 | Pro Package | full breakdown |
 
-Fix prompts are pre-generated per (metric × platform) and live in
+Fix prompts are pre-generated per (metric Ã— platform) and live in
 `_FIX_PROMPT_LIBRARY` inside `performance_speed.py`. Supported
 builders: Lovable, Bolt, v0, Cursor, Webflow, plus a generic
 fallback. We never ask the LLM to draft these prompts: deterministic
@@ -575,7 +575,7 @@ buyer-facing display name for the whole category is
 "accessibility checks".
 
 Findings are tier-capped (1 / 3 / all) the same way as performance &
-speed. Fix prompts are pre-generated per (bucket × platform); the
+speed. Fix prompts are pre-generated per (bucket Ã— platform); the
 same builder set as `performance_speed.py` (Lovable, Bolt, v0, Cursor,
 Webflow, generic).
 
@@ -621,7 +621,7 @@ runner is conservative about what it touches:
   id, name, action URL, parent class list, or field names match the
   payment-token list (`stripe`, `paypal`, `card_number`, `cvv`,
   `checkout`, `billing`, etc.) gets a finding ("We saw your checkout
-  form but didn't submit it — we don't want to accidentally place a
+  form but didn't submit it â€” we don't want to accidentally place a
   real order") but never a fill / submit.
 * **Destructive-label forms are skipped.** Submit buttons reading
   `Delete`, `Cancel subscription`, `Unsubscribe me`, `Close my
@@ -675,7 +675,7 @@ don't get to claim "your forms work" if we never submitted them.
 
 ### Builder-specific fix prompts
 
-Fix prompts are pre-generated per `(failure type × platform)` in the
+Fix prompts are pre-generated per `(failure type Ã— platform)` in the
 `_FIX_PROMPT_LIBRARY` inside `form_smoke_test.py`. The supported
 builders mirror q14 + q16: Lovable, Bolt, v0, Cursor, Webflow, plus
 a generic fallback. We never ask the LLM to draft these prompts.
@@ -716,10 +716,41 @@ inside the PDF after purchase.
 
 ---
 
+## Verified badge generation (post-delivery)
+
+q17 added a small "LaunchLook Verified" badge that ships with every
+paid tier. The badge is **not** part of the audit pipeline itself - it
+is a post-delivery step Rob runs once the report has been emailed and
+the customer has signed off (or after the 7-day refund window, if Rob
+prefers to wait).
+
+The flow:
+
+1. Rob receives the Stripe checkout event (already routed via
+   `api/stripe-webhook.py`).
+2. Rob runs `python scripts/ai_audit.py --customer customers/{slug}.yaml`
+   to produce the YAML + PDFs as usual.
+3. **New step**: Rob runs `python scripts/generate_verified_badge.py
+   --customer customers/{slug}.yaml` to mint the badge assets and the
+   `verify.json` record. Output paths:
+   * `landing/images/badges/{slug}/light.svg` + `.png`
+   * `landing/images/badges/{slug}/dark.svg` + `.png`
+   * `landing/data/verified/{slug}.json`
+4. Vercel deploy picks these up on the next push. The delivery email
+   / report PDF already reference the same URLs, so once the assets
+   land on prod the customer's embed snippet is live.
+
+For `` badge re-verifications, the same script is run with
+`--re-verify`. See `docs/VERIFIED-BADGE-WORKFLOW.md` for the full
+runbook, including the operator guardrail that prevents a misfired
+`` re-verify from issuing a badge to a customer who never had one.
+
+---
+
 ## Related docs
 
 * `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 3-finding
-  hook — queue triage, manual pipeline run, dedup write-back, abuse
+  hook â€” queue triage, manual pipeline run, dedup write-back, abuse
   watch.
 * `docs/MANUAL-REVIEW-WORKFLOW.md`: the previous (pre-AI) workflow,
   kept for reference.
@@ -731,3 +762,15 @@ inside the PDF after purchase.
   matches against and the LLM uses as calibration.
 * `scripts/ai_audit/prompts/system.txt`: the prompt itself. Read it
   before iterating.
+
+## Handoff Report (Pro tier + $99 add-on)
+
+After the main audit YAML is generated, an optional pass produces a Handoff Report: a separate Markdown + PDF deliverable formatted for the developer the customer hires next. It reuses the same findings, verdict and passed_checks the main report does -- nothing is re-audited.
+
+Three short LLM calls generate the narrative pieces:
+
+1. `handoff_context_paragraph.txt` -> one plain-English paragraph describing the site, the builder, the customer, and what shape it's in.
+2. `handoff_recommended_order.txt` -> a short numbered list of fixes in the order an experienced developer would tackle them.
+3. `handoff_code_review_notes.txt` -> Pro tier only; 3 to 5 architecture or integration concerns that aren't surface findings.
+
+Entry point: `scripts.ai_audit.pipeline.run_handoff_report(...)`. Delivered via `scripts/deliver_report.py --handoff-report`. The report is gated by paid tier (free on Pro, paid add-on on Starter and Scale Up); the Pro-only code-review section is gated inside the template by the `tier == "Pro Package"` check.

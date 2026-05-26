@@ -1,0 +1,9 @@
+{
+  "customer_slug": "jane-sparkle-marketplace",
+  "verified_at": "2026-05-26",
+  "tier": "Starter Package",
+  "expires_at": "2026-06-25",
+  "issued_by": "LaunchLook",
+  "customer_url": "https://sparkle.lovable.app",
+  "checksum": "sha256:39e440a7dff4ef8b5fcb6745c23dc329804f3ee6fc87aeffd35a64f3aeb1f7f5"
+}

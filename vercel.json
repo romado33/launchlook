@@ -35,6 +35,8 @@
     { "source": "/sample", "destination": "/sample.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/webflow", "destination": "/webflow.html" }
+    { "source": "/webflow", "destination": "/webflow.html" },
+    { "source": "/verify", "destination": "/verify.html" },
+    { "source": "/verify-scope", "destination": "/verify-scope.html" }
   ]
 }
