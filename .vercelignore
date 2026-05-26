@@ -1,0 +1,58 @@
+# Vercel deploy ignore — what NOT to upload to Vercel.
+#
+# The Vercel site = static landing/ (built by scripts/copy-landing-for-vercel.mjs)
+#                 + Python serverless functions in api/ (deps in api/requirements.txt).
+# Everything else here is local-dev tooling and not needed for the deploy.
+
+# === Critical: keep Vercel's uv sync away from the root project ===
+# pyproject.toml + root requirements.txt declare heavy deps (playwright, resend,
+# jinja2) for the local PDF delivery pipeline. Vercel does not need any of these
+# for the lightweight webhook functions, and trying to install them breaks the
+# function packaging step. Functions install only api/requirements.txt instead.
+pyproject.toml
+/requirements.txt
+/requirements-automation.txt
+/requirements-ui.txt
+
+# === Local-dev directories not needed in the deploy ===
+docs/
+customers/
+findings_library/
+external/
+tests/
+output/
+data/
+drafts/
+screenshots/
+templates/
+prompts/
+
+# Shared lib/ is only used by local scripts, not the api/ functions
+lib/
+
+# === Local Python scripts (none run on Vercel) ===
+scripts/audit_ui/
+scripts/audit_ui.py
+scripts/*.py
+
+# === Sensitive files (env vars come from the Vercel platform) ===
+.env
+.env.local
+.env.example
+
+# === Build artifacts (generated fresh on each deploy) ===
+dist/
+
+# === Caches ===
+__pycache__/
+*.pyc
+*.pyo
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# === IDE / OS ===
+.vscode/
+.cursor/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,20 @@
+# LaunchLook — Vercel serverless function dependencies.
+#
+# Vercel auto-detects this file when packaging api/*.py functions and
+# installs ONLY these dependencies for the function runtime. Kept
+# intentionally minimal: no playwright, no jinja2, no resend — those
+# live in the local-only PDF delivery pipeline (../requirements.txt).
+#
+# If you add a new api/ function that needs additional packages, add
+# them here and re-deploy.
+
+# Stripe webhook signature verification (api/stripe-webhook.py).
+stripe>=10.0,<13.0
+
+# Notion DB upserts (api/tally-webhook.py + api/stripe-webhook.py via _lib).
+notion-client>=2.2,<3.0
+
+# Local .env loading via api/_lib/env.py. On Vercel, env vars come from
+# the platform settings, so dotenv silently no-ops — but the import
+# must succeed in _lib/env.py for the functions to start.
+python-dotenv>=1.0,<2.0
