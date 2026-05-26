@@ -14,26 +14,37 @@ Flow per task spec:
     3. Validate URL (http/https only, hostname resolvable, NOT localhost or
        private RFC1918 / link-local / loopback).
     4. Validate email (simple regex).
-    5. Upsert to Notion as status="queued" with email, url, request_timestamp,
-       ip, source page, platform, finding_fingerprints (empty for now;
-       scripts/ai_audit/dedup.py populates it once the offline pipeline
-       generates the 3 findings -- see docs/FREE-AUDIT-WORKFLOW.md).
-    6. Fire-and-forget confirmation email via Resend REST (urllib, no SDK)
+    5. Dedupe gate: scripts/ai_audit/free_audit_lookup.recent_delivery() looks
+       up the most recent prior row for the same email + same hostname inside
+       the 30-day window (docs/FREE-AUDIT-WORKFLOW.md section 3). When a row
+       exists we return the Starter upsell response instead of queueing a
+       second free audit, and send a short founder-voice upsell email in
+       place of the queue-confirmation email.
+    6. Otherwise upsert to Notion as status="queued" with email, url,
+       request_timestamp, ip, source page, platform, finding_fingerprints
+       (empty for now; scripts/ai_audit/dedup.py + free_audit_lookup.py
+       populate the fingerprints once the offline pipeline generates the
+       3 findings -- see docs/FREE-AUDIT-WORKFLOW.md).
+    7. Fire-and-forget confirmation email via Resend REST (urllib, no SDK)
        so api/requirements.txt stays minimal.
-    7. Respond JSON {status:"queued"|"duplicate", message:"..."} to the
-       browser. landing/assets/free-audit.js intercepts the form submit and
-       redirects to /thanks-free-audit; if JS is off the native POST goes
-       through and the handler returns a 303 to the same page.
+    8. Respond JSON {status:"queued"|"duplicate", message:"..."} to the
+       browser. landing/assets/free-audit.js intercepts the form submit
+       and redirects to /thanks-free-audit on either; if JS is off the
+       native POST goes through and the handler returns a 303 to the
+       same page.
 
 Response shapes:
     200 {"status":"queued","message":"..."}             happy path
-    200 {"status":"duplicate","message":"..."}          recent request for same email+URL
+    200 {"status":"duplicate","message":"...","upsell":{"date":"...",
+        "available_again":"...","starter_url":"..."}}  recent request for same email+host
     400 {"status":"error","message":"..."}              invalid input
     429 {"status":"error","message":"..."}              rate limited
     500 {"status":"error","message":"..."}              Notion / config failure
 
 No customer-visible jargon: messages are plain English per
-docs/SIMPLICITY-GUARDRAILS.md sections 2.1, 3.1, 6.
+docs/SIMPLICITY-GUARDRAILS.md sections 2.1, 3.1, 5, 6. The upsell copy
+avoids em-dashes per section 6 and signs the email as "-- Rob"
+per section 5.2.
 """
 
 from __future__ import annotations
@@ -56,6 +67,17 @@ from urllib.parse import parse_qs, urlparse
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _lib.env import optional_env, require_env  # noqa: E402
+
+# Repo-root import so the serverless function can reach the shared
+# Notion lookup helper that owns the dedupe contract. Vercel bundles
+# the repo at /var/task; this matches what scripts/ai_audit imports
+# expect when ai_audit pipeline modules are loaded.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from scripts.ai_audit.free_audit_lookup import (  # noqa: E402
+    DEFAULT_RECENT_DELIVERY_DAYS,
+    recent_delivery,
+)
 
 # notion_helpers does the heavy lifting for the Customers DB; for the
 # free-audit DB we use the bare client directly because the schema differs.
@@ -87,6 +109,13 @@ ERR_RATE_IP = "A few free audits have already gone in from your network today. T
 ERR_GENERIC = (
     "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
 )
+
+# Where the upsell email + JSON response point. Mirrors the existing
+# free-audit confirmation email so the Plausible StarterCheckout goal
+# still fires from the same /#pricing button (which carries the
+# data-launchlook-stripe="starter" attribute landing/assets/apply-config.js
+# wires up to the real Stripe URL).
+STARTER_URL = "https://launchlook.app/#pricing"
 
 
 def validate_email(value: str) -> str | None:
@@ -150,6 +179,21 @@ def validate_url(value: str) -> str | None:
 
 
 # ---------------------------------------------------------------------------
+# Date helper
+# ---------------------------------------------------------------------------
+
+
+def _format_date(value: datetime) -> str:
+    """Plain-English date string ("May 26, 2026").
+
+    ``strftime("%-d")`` is POSIX-only and ``"%#d"`` is Windows-only; build
+    the day manually so the customer-facing copy stays portable between
+    Vercel (Linux) and Rob's local dev machine.
+    """
+    return f"{value.strftime('%B')} {value.day}, {value.year}"
+
+
+# ---------------------------------------------------------------------------
 # Notion: free-audit DB helpers
 # ---------------------------------------------------------------------------
 
@@ -158,7 +202,8 @@ def validate_url(value: str) -> str | None:
 #   Email       "Email"     email
 #   URL         "URL"       url
 #   IP          "IP"        rich_text
-#   Status      "Status"    select       (queued / processed / abuse / skipped)
+#   Status      "Status"    select       (queued / processed / delivered /
+#                                         skipped / abuse)
 #   Source      "Source"    select       (index / webflow / api)
 #   Platform    "Platform"  select       (vibe-coder / webflow)
 #   Fingerprints "Finding Fingerprints"  rich_text  (semicolon-separated hashes,
@@ -247,80 +292,20 @@ def _count_recent_requests_by_ip(
     )
 
 
-def _find_duplicate(
-    client: Client, ds_id: str, email: str, url: str, since: datetime
-) -> dict | None:
-    """Same email + same hostname within the window -> treat as duplicate."""
-    host = (urlparse(url).hostname or "").lower()
-    if not host:
-        return None
-    try:
-        resp = client.data_sources.query(
-            data_source_id=ds_id,
-            filter={
-                "and": [
-                    {"property": "Email", "email": {"equals": email}},
-                    {
-                        "timestamp": "created_time",
-                        "created_time": {"on_or_after": since.isoformat()},
-                    },
-                ]
-            },
-            page_size=20,
-            sorts=[{"timestamp": "created_time", "direction": "descending"}],
-        )
-    except APIResponseError as exc:
-        raise RuntimeError(f"Notion query failed: {exc}") from exc
-    for row in resp.get("results", []):
-        if row.get("archived") or row.get("in_trash"):
-            continue
-        props = row.get("properties", {})
-        existing = (props.get("URL") or {}).get("url") or ""
-        if existing and (urlparse(existing).hostname or "").lower() == host:
-            return row
-    return None
-
-
 # ---------------------------------------------------------------------------
-# Confirmation email (Resend REST)
+# Confirmation + upsell emails (Resend REST)
 # ---------------------------------------------------------------------------
 
 
-# Plain-English founder voice per SIMPLICITY-GUARDRAILS section 5.1 and 6.
-# Single short paragraph, no "AI-powered" framing, no platform branding,
-# signs as "-- Rob" per section 5.2.
-def _send_confirmation_email(*, to: str, audit_url: str) -> None:
+def _post_resend_email(*, payload: dict[str, Any], context: str) -> None:
+    """POST an email payload to Resend; log + swallow failures."""
     api_key = optional_env("RESEND_API_KEY")
     if not api_key:
         print(
-            "[free-audit] WARN: RESEND_API_KEY missing; skipping confirmation email",
+            f"[free-audit] WARN: RESEND_API_KEY missing; skipping {context} email",
             file=sys.stderr,
         )
         return
-    from_email = optional_env("FROM_EMAIL", "hello@launchlook.app")
-    admin_email = optional_env("ADMIN_EMAIL")
-
-    host = urlparse(audit_url).hostname or audit_url
-    subject = f"Got it -- your 3 findings for {host} are queued"
-    text_body = (
-        f"Hi,\n\n"
-        f"Got your request for a free 3-finding audit on {audit_url}. "
-        f"I'll walk through it on desktop and phone like a first-time visitor and email you the three highest-impact things to fix within 24 hours. "
-        f"No login, no portal -- just one email back.\n\n"
-        f"If you want all 10 findings sooner, Starter ($19) covers the full pass: https://launchlook.app/#pricing\n\n"
-        f"-- Rob\n"
-        f"hello@launchlook.app\n"
-    )
-
-    payload: dict[str, Any] = {
-        "from": f"Rob at LaunchLook <{from_email}>",
-        "to": [to],
-        "subject": subject,
-        "text": text_body,
-        "reply_to": from_email,
-    }
-    if admin_email and admin_email.lower() != to.lower():
-        payload["bcc"] = [admin_email]
 
     req = urllib.request.Request(
         "https://api.resend.com/emails",
@@ -338,11 +323,114 @@ def _send_confirmation_email(*, to: str, audit_url: str) -> None:
             resp.read()
     except urllib.error.HTTPError as exc:
         print(
-            f"[free-audit] WARN: Resend HTTP {exc.code}: {exc.read()[:200]!r}",
+            f"[free-audit] WARN: Resend HTTP {exc.code} on {context}: {exc.read()[:200]!r}",
             file=sys.stderr,
         )
     except urllib.error.URLError as exc:
-        print(f"[free-audit] WARN: Resend network error: {exc}", file=sys.stderr)
+        print(
+            f"[free-audit] WARN: Resend network error on {context}: {exc}",
+            file=sys.stderr,
+        )
+
+
+# Plain-English founder voice per SIMPLICITY-GUARDRAILS section 5.1 and 6.
+# Single short paragraph, no "AI-powered" framing, no platform branding,
+# signs as "-- Rob" per section 5.2.
+def _send_confirmation_email(*, to: str, audit_url: str) -> None:
+    from_email = optional_env("FROM_EMAIL", "hello@launchlook.app")
+    admin_email = optional_env("ADMIN_EMAIL")
+
+    host = urlparse(audit_url).hostname or audit_url
+    subject = f"Got it -- your 3 findings for {host} are queued"
+    text_body = (
+        f"Hi,\n\n"
+        f"Got your request for a free 3-finding audit on {audit_url}. "
+        f"I'll walk through it on desktop and phone like a first-time visitor and email you the three highest-impact things to fix within 24 hours. "
+        f"No login, no portal -- just one email back.\n\n"
+        f"If you want all 10 findings sooner, Starter ($19) covers the full pass: {STARTER_URL}\n\n"
+        f"-- Rob\n"
+        f"hello@launchlook.app\n"
+    )
+
+    payload: dict[str, Any] = {
+        "from": f"Rob at LaunchLook <{from_email}>",
+        "to": [to],
+        "subject": subject,
+        "text": text_body,
+        "reply_to": from_email,
+    }
+    if admin_email and admin_email.lower() != to.lower():
+        payload["bcc"] = [admin_email]
+
+    _post_resend_email(payload=payload, context="confirmation")
+
+
+# Upsell email used when ``recent_delivery`` returns a prior row -- replaces
+# the queue-confirmation so the customer sees the actual next step instead
+# of silent "already queued" copy. Plain English, founder voice, no
+# em-dashes (SIMPLICITY-GUARDRAILS section 6), signs as "-- Rob"
+# (section 5.2). Body stays well under the 150-word delivery cap (section 5.3).
+def _send_upsell_email(
+    *,
+    to: str,
+    audit_url: str,
+    prior_submitted_at: datetime,
+    available_again_at: datetime,
+) -> None:
+    from_email = optional_env("FROM_EMAIL", "hello@launchlook.app")
+    admin_email = optional_env("ADMIN_EMAIL")
+
+    host = urlparse(audit_url).hostname or audit_url
+    submitted_str = _format_date(prior_submitted_at)
+    available_str = _format_date(available_again_at)
+
+    subject = f"You already ran the free check for {host}"
+    text_body = (
+        f"Hi,\n\n"
+        f"Thanks for coming back. You ran the free check for {audit_url} on {submitted_str}. "
+        f"I keep the findings consistent for 30 days so you can re-check after fixing.\n\n"
+        f"If you've already worked through those three, Starter ($19) picks up where the free audit left off "
+        f"(same plain-English style, 10 findings instead of 3, no rehash): {STARTER_URL}\n\n"
+        f"Or wait until {available_str} to run the free check again.\n\n"
+        f"-- Rob\n"
+        f"hello@launchlook.app\n"
+    )
+
+    payload: dict[str, Any] = {
+        "from": f"Rob at LaunchLook <{from_email}>",
+        "to": [to],
+        "subject": subject,
+        "text": text_body,
+        "reply_to": from_email,
+    }
+    if admin_email and admin_email.lower() != to.lower():
+        payload["bcc"] = [admin_email]
+
+    _post_resend_email(payload=payload, context="upsell")
+
+
+# ---------------------------------------------------------------------------
+# Customer-facing copy for the JSON response.
+# ---------------------------------------------------------------------------
+
+
+def _build_upsell_message(
+    *, audit_url: str, prior_submitted_at: datetime, available_again_at: datetime
+) -> str:
+    """Plain-English upsell copy for the JSON response message field.
+
+    No em-dashes (SIMPLICITY-GUARDRAILS section 6). Single short
+    paragraph the frontend can surface as-is when JS is disabled.
+    """
+    submitted_str = _format_date(prior_submitted_at)
+    available_str = _format_date(available_again_at)
+    return (
+        f"You ran the free check for {audit_url} on {submitted_str}. "
+        f"The findings stay consistent for 30 days so you can re-check after fixing. "
+        f"If you've already worked through those three, Starter ($19) picks up where "
+        f"the free audit left off (10 findings instead of 3, no rehash): "
+        f"{STARTER_URL}. Otherwise the free check opens back up on {available_str}."
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -358,6 +446,7 @@ def process_request(
     now: datetime | None = None,
     notion_client_factory=None,
     email_sender=_send_confirmation_email,
+    upsell_sender=_send_upsell_email,
 ) -> tuple[int, dict[str, Any]]:
     """Validate + rate-limit + persist + notify. Returns (status_code, body)."""
     now = now or datetime.now(UTC)
@@ -403,19 +492,54 @@ def process_request(
     if ip_count >= 10:
         return 429, {"status": "error", "message": ERR_RATE_IP}
 
-    # ---- Duplicate detection (same email + same hostname inside the window) ----
+    # ---- 30-day dedupe gate (recent_delivery) ----
+    # Same email + same hostname inside the 30-day window returns the
+    # Starter upsell response instead of generating a second free audit.
+    # Same URL with a different email = different person -> falls through.
+    # See docs/FREE-AUDIT-WORKFLOW.md section 3.
     try:
-        duplicate = _find_duplicate(client, ds_id, email, url, since_email)
+        prior = recent_delivery(
+            url=url,
+            email=email,
+            days=DEFAULT_RECENT_DELIVERY_DAYS,
+            client=client,
+            ds_id=ds_id,
+            now=now,
+        )
     except Exception as exc:  # noqa: BLE001
-        print(f"[free-audit] WARN: duplicate query failed: {exc}", file=sys.stderr)
-        duplicate = None
-    if duplicate is not None:
+        print(f"[free-audit] WARN: recent_delivery failed: {exc}", file=sys.stderr)
+        prior = None
+
+    if prior is not None:
+        prior_submitted_at = prior.get("created_at") or now
+        available_again_at = prior.get("expires_at") or (
+            prior_submitted_at + timedelta(days=DEFAULT_RECENT_DELIVERY_DAYS)
+        )
+        prior_url = prior.get("url") or url
+        message = _build_upsell_message(
+            audit_url=prior_url,
+            prior_submitted_at=prior_submitted_at,
+            available_again_at=available_again_at,
+        )
+        # Mirror the queued path: send the customer the actual next step
+        # (best-effort; we still return 200 either way).
+        try:
+            upsell_sender(
+                to=email,
+                audit_url=prior_url,
+                prior_submitted_at=prior_submitted_at,
+                available_again_at=available_again_at,
+            )
+        except Exception as exc:  # noqa: BLE001
+            print(f"[free-audit] WARN: upsell email failed: {exc}", file=sys.stderr)
         return 200, {
             "status": "duplicate",
-            "message": (
-                "Already in the queue for this site. Check your inbox (and spam) "
-                "for the earlier confirmation; we'll deliver your 3 findings within 24 hours."
-            ),
+            "message": message,
+            "upsell": {
+                "date": _format_date(prior_submitted_at),
+                "available_again": _format_date(available_again_at),
+                "starter_url": STARTER_URL,
+            },
         }
 
     # ---- Persist ----

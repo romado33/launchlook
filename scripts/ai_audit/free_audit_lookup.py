@@ -15,6 +15,14 @@ swap out the storage backend. This module owns:
 * ``persist_free_audit_fingerprints(...)`` -- after the offline free-
   audit pipeline produces the 3 findings, this writes their fingerprints
   back to the same Notion row so the next paid Starter audit can dedup.
+* ``recent_delivery(url=..., email=..., days=30, ...)`` -- the
+  submission-time dedupe gate used by ``api/free-audit.py``. Returns the
+  most recent prior free-audit row (with its created timestamp, URL,
+  status, fingerprints, and summaries) for the same email + same
+  hostname inside the window, or ``None`` when no row qualifies. The
+  caller branches to the Starter upsell response instead of delivering a
+  second free audit. 30-day default matches the rule documented in
+  ``docs/FREE-AUDIT-WORKFLOW.md`` section 3.
 
 Per ``docs/SIMPLICITY-GUARDRAILS.md`` section 6 the dedup mechanism is
 never customer-visible; this module only logs and writes hashes that
@@ -43,7 +51,16 @@ PROP_FINGERPRINTS = "Finding Fingerprints"
 PROP_SUMMARIES = "Finding Summaries"  # optional rich_text; used only if present
 PROP_STATUS = "Status"
 
+# Window used by the paid Starter pipeline when it looks up the prior
+# free-audit row to exclude already-delivered findings from the new run.
 DEFAULT_WINDOW_DAYS = 90
+
+# Window used by ``recent_delivery`` at submission time. Matches the
+# Free -> Starter conversion rule in docs/FREE-AUDIT-WORKFLOW.md section
+# 3: a same-email + same-host submission inside 30 days of the last
+# delivery returns the upsell response, not a second free audit.
+DEFAULT_RECENT_DELIVERY_DAYS = 30
+
 FINGERPRINT_SEPARATOR = ";"
 
 
@@ -93,6 +110,34 @@ def _rich_text_value(prop: dict[str, Any] | None) -> str:
     return "".join(p.get("plain_text") or "" for p in parts)
 
 
+def _select_value(prop: dict[str, Any] | None) -> str:
+    """Pull the name out of a Notion select property; empty when unset."""
+    if not prop:
+        return ""
+    select = prop.get("select") or {}
+    return (select.get("name") or "").strip()
+
+
+def _parse_created_at(value: str | None) -> datetime | None:
+    """Parse a Notion ISO-8601 created_time string into an aware datetime.
+
+    Notion serializes ``created_time`` as e.g. ``"2026-05-26T14:00:00.000Z"``.
+    ``datetime.fromisoformat`` accepts the ``"+00:00"`` suffix natively but
+    not bare ``"Z"`` on every supported Python version, so we normalize.
+    """
+    if not value:
+        return None
+    try:
+        if value.endswith("Z"):
+            value = value[:-1] + "+00:00"
+        dt = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+    return dt
+
+
 def load_excluded_fingerprints(
     *,
     email: str,
@@ -107,21 +152,80 @@ def load_excluded_fingerprints(
     * Notion misconfigured or query failed -> empty tuples and None
       (logs a warning; dedup is a soft constraint).
     """
-    if not email or not url:
+    record = recent_delivery(
+        email=email,
+        url=url,
+        days=window_days,
+        now=now,
+    )
+    if record is None:
         return [], [], None
+    return (
+        list(record.get("fingerprints") or []),
+        list(record.get("summaries") or []),
+        record.get("row_id"),
+    )
+
+
+def recent_delivery(
+    *,
+    url: str,
+    email: str,
+    days: int = DEFAULT_RECENT_DELIVERY_DAYS,
+    client: Any = None,
+    ds_id: str | None = None,
+    now: datetime | None = None,
+) -> dict[str, Any] | None:
+    """Return the most recent free-audit delivery row, or ``None``.
+
+    Lookup key: same lowercase email + same lowercase URL hostname,
+    inside the last ``days`` (default 30, matching the rule in
+    ``docs/FREE-AUDIT-WORKFLOW.md`` section 3). Same URL with a different
+    email returns ``None`` -- that's a different person.
+
+    Returns a dict with::
+
+        {
+            "row_id":       Notion page id (str),
+            "created_at":   timezone-aware datetime,
+            "url":          original submitted URL (str),
+            "status":       Notion Status select name (e.g. "queued"),
+            "fingerprints": list[str]  (may be empty if not yet persisted),
+            "summaries":    list[str]  (may be empty),
+            "expires_at":   created_at + ``days`` (when the dedup closes),
+        }
+
+    Callers (``api/free-audit.py``) use this to branch to the Starter
+    upsell response instead of generating a second free audit.
+
+    ``client`` and ``ds_id`` are dependency-injection hooks so the
+    serverless function can reuse the Notion client it already built
+    (and so tests can pass a stub without touching env / network). When
+    omitted, a client is built from ``NOTION_TOKEN`` and the data-source
+    id is resolved from ``NOTION_FREE_AUDIT_DB_ID``.
+
+    All failure modes (missing env, missing dep, network error, schema
+    drift) degrade to ``None`` with a warning -- the dedup is a soft
+    constraint and must not block the form on a Notion blip.
+    """
+    if not email or not url:
+        return None
     email_norm = email.strip().lower()
     host = (urlparse(url).hostname or "").lower()
     if not host:
-        return [], [], None
+        return None
 
-    client = _get_client()
     if client is None:
-        return [], [], None
-    ds_id = _get_ds_id(client)
-    if not ds_id:
-        return [], [], None
+        client = _get_client()
+        if client is None:
+            return None
 
-    cutoff = (now or datetime.now(UTC)) - timedelta(days=window_days)
+    if ds_id is None:
+        ds_id = _get_ds_id(client)
+    if not ds_id:
+        return None
+
+    cutoff = (now or datetime.now(UTC)) - timedelta(days=days)
     try:
         resp = client.data_sources.query(
             data_source_id=ds_id,
@@ -138,8 +242,8 @@ def load_excluded_fingerprints(
             page_size=10,
         )
     except Exception as exc:  # noqa: BLE001
-        print(f"[dedup] WARN: free-audit lookup failed: {exc}", file=sys.stderr)
-        return [], [], None
+        print(f"[dedup] WARN: recent_delivery lookup failed: {exc}", file=sys.stderr)
+        return None
 
     for row in resp.get("results", []):
         if row.get("archived") or row.get("in_trash"):
@@ -151,16 +255,22 @@ def load_excluded_fingerprints(
         existing_host = (urlparse(existing_url).hostname or "").lower()
         if existing_host != host:
             continue
+        created_at = _parse_created_at(row.get("created_time"))
         raw_fp = _rich_text_value(props.get(PROP_FINGERPRINTS))
-        fingerprints = [
-            fp.strip() for fp in raw_fp.split(FINGERPRINT_SEPARATOR) if fp.strip()
-        ]
+        fps = [fp.strip() for fp in raw_fp.split(FINGERPRINT_SEPARATOR) if fp.strip()]
         raw_summaries = _rich_text_value(props.get(PROP_SUMMARIES))
-        # Summaries are optional and stored on a separate rich-text line
-        # per finding; split on newline so blank rows degrade to empty.
         summaries = [s.strip() for s in raw_summaries.split("\n") if s.strip()]
-        return fingerprints, summaries, row.get("id")
-    return [], [], None
+        expires_at = created_at + timedelta(days=days) if created_at else None
+        return {
+            "row_id": row.get("id"),
+            "created_at": created_at,
+            "url": existing_url,
+            "status": _select_value(props.get(PROP_STATUS)),
+            "fingerprints": fps,
+            "summaries": summaries,
+            "expires_at": expires_at,
+        }
+    return None
 
 
 def persist_free_audit_fingerprints(

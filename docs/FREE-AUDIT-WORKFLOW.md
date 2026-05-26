@@ -26,8 +26,8 @@ The serverless function:
 1. Rate-limits: ≤ 3 free audits per email / 30 days, ≤ 10 per IP / day
 2. Validates the URL (http/https only, no localhost, no private IP ranges)
 3. Validates the email (basic regex)
-4. Checks Notion for a recent duplicate (same email + same hostname inside the 30-day window) → returns `{status: "duplicate"}` if found
-5. Writes a new row to the free-audit Notion DB with `Status = queued`
+4. **30-day dedupe gate** (`scripts/ai_audit/free_audit_lookup.recent_delivery`): same email + same hostname inside the 30-day window returns `{status: "duplicate"}` with an upsell message + payload, and the customer receives the Starter upsell email instead of a queue-confirmation. No second row is written.
+5. Otherwise, writes a new row to the free-audit Notion DB with `Status = queued`
 6. Fires a one-line founder-voice confirmation email via Resend (best-effort; logs a warning if Resend is unavailable, customer still gets queued)
 
 Per the SIMPLICITY-GUARDRAILS, the actual AI generation does NOT auto-run on every form submit. That stays manual to manage margin + abuse risk. The daily flow is in §3 below.
@@ -53,13 +53,19 @@ Create a new Notion DB and share it with the LaunchLook integration. Set the env
 Schema lives in code at:
 
 - `api/free-audit.py` — `_build_props()` writes the first six fields
-- `scripts/ai_audit/free_audit_lookup.py` — reads `Finding Fingerprints` + `Finding Summaries`, writes them back via `persist_free_audit_fingerprints()`
+- `scripts/ai_audit/free_audit_lookup.py` — reads `Finding Fingerprints` + `Finding Summaries`, writes them back via `persist_free_audit_fingerprints()`; `recent_delivery()` reads the most recent (email, hostname, created_time) tuple for the 30-day submission-time dedupe gate.
 
 If you rename a column in Notion, update both modules in the same commit.
 
 ---
 
 ## §3 Daily flow (manual, for now)
+
+### 30-day dedupe rule (customer-facing behavior)
+
+Before Rob even sees the row, `api/free-audit.py` calls `free_audit_lookup.recent_delivery(url, email, days=30)`. A re-submission of the same URL + email inside 30 days of the last delivery returns the Starter upsell response instead of generating a second free audit; the customer receives an upsell email pointing at `https://launchlook.app/#pricing` (which carries the `data-launchlook-stripe="starter"` button so the Plausible `StarterCheckout` goal still fires). Same URL with a different email is treated as a different person and delivers normally. After 30 days the same email + URL pair counts as a fresh submission. The customer never sees the word "dedup" or "fingerprint" — only "I keep the findings consistent for 30 days so you can re-check after fixing" (no em-dashes, `SIMPLICITY-GUARDRAILS.md` §6). This is the cheapest defense against the free-tier harvest vector of repeat submissions fishing for more findings.
+
+### Queue-processing steps
 
 1. **Pull the queue.** In Notion, filter the free-audit DB by `Status = queued`, sorted ascending by created time. Aim to clear the queue within 24 hours of arrival.
 2. **Skim for abuse.** Same IP, same hostname pattern, throwaway domain, or anything that looks like a competitor scraping us → set `Status = abuse` and skip. The 10-per-IP-per-day rate limit catches most of this automatically.
@@ -105,6 +111,8 @@ hello@launchlook.app
 
 No "AI-powered," no "comprehensive," no em-dashes (§6). Dedup is never mentioned by name to the customer.
 
+For a re-submission inside 30 days (the dedupe gate in §3) the customer receives a short upsell email instead of the queue-confirmation: it names the prior submission date, points at Starter ($19), and gives the date the free check opens back up. Same founder voice, same no-em-dashes rule, signed `-- Rob`.
+
 ---
 
 ## §5 Abuse + budget watch
@@ -125,3 +133,4 @@ If you ship more than 5 free audits in a single day for two weeks straight, that
 | Date | Change |
 |---|---|
 | 2026-05-26 | q4 shipped: free-audit hero on `/` and `/webflow`, `/api/free-audit` serverless function with rate limits + Notion + Resend confirmation, `scripts/ai_audit/dedup.py` + `free_audit_lookup.py`, pipeline wiring, `/thanks-free-audit` page, token-gated `/checklist` (paid Scale Up + Pro deliverable). Cites SIMPLICITY-GUARDRAILS §2.1, §3.1, §5, §6 and PRODUCT-DECISIONS §1, §2, §7. |
+| 2026-05-26 | 30-day fingerprint dedupe gate added: `free_audit_lookup.recent_delivery()` + branch in `api/free-audit.py`. Same URL + email inside 30 days returns the Starter upsell response (no second free audit, no second row, upsell email replaces the queue confirmation). Cites SIMPLICITY-GUARDRAILS §5, §6. |
