@@ -6,7 +6,10 @@
   var cfg = window.LAUNCHLOOK_CONFIG || {};
   var stripe = cfg.stripe || {};
   var starterUrl = stripe.starter || stripe.quickCheckup || "";
-  var launchUrl = stripe.launch || stripe.launchPack || stripe.full || "";
+  // Scale Up replaces the old "launch" / "full" tier slot. Keep the legacy
+  // keys as fallbacks so older config.local.js files keep working until Rob
+  // updates them.
+  var scaleUpUrl = stripe.scaleup || stripe.scaleUp || stripe.launch || stripe.launchPack || stripe.full || "";
   var proUrl = stripe.pro || "";
 
   function $(selector) {
@@ -53,8 +56,8 @@
   }
 
   setLinkState("[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick']", safeHttpsUrl(starterUrl), "Payment link not configured");
-  setLinkState("[data-launchlook-stripe='launch'], [data-launchlook-stripe='full']", safeHttpsUrl(launchUrl), "Payment link not configured");
-  setLinkState("[data-launchlook-stripe='pro']", safeHttpsUrl(proUrl), "Payment link not configured (Pro Package — see docs/MANUAL-TASKS-PRICE-BUMP.md)");
+  setLinkState("[data-launchlook-stripe='scaleup'], [data-launchlook-stripe='launch'], [data-launchlook-stripe='full']", safeHttpsUrl(scaleUpUrl), "Payment link not configured");
+  setLinkState("[data-launchlook-stripe='pro']", safeHttpsUrl(proUrl), "Payment link not configured");
 
   var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
   if (checklistUrl) {
@@ -67,7 +70,7 @@
   function intakeMailto(email) {
     var subject = encodeURIComponent("LaunchLook intake");
     var body = encodeURIComponent(
-      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Full Package / Pro Package):\n"
+      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Scale Up Package / Pro Package):\n"
     );
     return "mailto:" + email + "?subject=" + subject + "&body=" + body;
   }

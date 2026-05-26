@@ -54,7 +54,11 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = REPO_ROOT / "output" / "dashboard.html"
 
 TIER_PRICE = {
-    "Starter Package": 9,
+    "Starter Package": 19,
+    "Scale Up Package": 49,
+    "Pro Package": 99,
+    # Retain legacy keys so a stale Notion record (pre-q3 rename) still
+    # contributes to dashboard totals at its original price point.
     "Full Package": 29,
 }
 

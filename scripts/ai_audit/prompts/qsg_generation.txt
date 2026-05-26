@@ -1,4 +1,4 @@
-## Quick Start Guide request (Full Package + Pro Package)
+## Quick Start Guide request (every paid tier)
 
 After auditing {app_name}, produce a one-page Quick Start Guide for the
 customer's first users. This ships as the second PDF (alongside the Main

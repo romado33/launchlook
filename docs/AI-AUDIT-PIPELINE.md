@@ -128,28 +128,6 @@ python scripts/ai_audit.py `
     --provider gpt
 ```
 
-### Pro Package, Claude
-
-```powershell
-python scripts/ai_audit.py `
-    --slug mira-tessera `
-    --url https://tessera.lovable.app `
-    --tier "Pro Package" `
-    --builder Lovable `
-    --name "Mira Okafor" `
-    --email mira@example.com `
-    --app-name "Tessera Boards"
-```
-
-The Pro Package prompt extends the Full Package guidance with a
-dedicated integrations review (Stripe / auth / email / analytics).
-Findings are still emitted in the standard `findings` list — there is
-no separate `integrations_review` YAML key. Prefix integrations-flavored
-finding titles with `Integrations:` so they group visibly in the PDF
-(see `customers/example-pro-package.yaml` for the canonical pattern).
-The 30-minute Loom walkthrough is a separate scheduling step, not a
-YAML field.
-
 ### Dry-run + skip stages (smoke testing)
 
 ```powershell
@@ -179,6 +157,104 @@ python scripts/deliver_report.py --customer customers/jane-smith.yaml --no-open
 # 4. Or ship them via Resend:
 python scripts/deliver_report.py --customer customers/jane-smith.yaml --send
 ```
+
+---
+
+## Adding a finding category (data-driven taxonomy)
+
+The list of categories the LLM looks for is **data-driven**. Edit
+`scripts/ai_audit/finding_categories.yaml`, do not edit the prompt:
+
+```yaml
+categories:
+  - id: trust_gaps
+    display_name_buyer: "trust signals & legal pages"
+    display_name_internal: "Trust gaps"
+    severity_default: medium
+    description_for_llm: "Missing privacy policy, terms, contact info..."
+    tester: "The Skeptic"
+  # ...
+  - id: cross_user_data
+    display_name_buyer: "user data isolation"
+    display_name_internal: "Cross-user data check"
+    severity_default: high
+    description_for_llm: "Scale Up and Pro tiers only..."
+    tester: "The Snoop"
+    tier_min: "Scale Up Package"   # gates by tier
+```
+
+At runtime, `pipeline.build_system_prompt(...)` loads this YAML, filters
+out tier-restricted categories the customer's tier doesn't reach, and
+substitutes `{{ categories_list }}` in `scripts/ai_audit/prompts/system.txt`.
+The Webflow platform-conditional appendix architecture
+(`PLATFORM_PROMPT_FILES` registry) is unchanged: per-platform
+appendices and per-category prompt content compose **additively**.
+
+To add a category:
+
+1. Append a new `- id: ...` block to `finding_categories.yaml`.
+2. Buyer-facing display name follows
+   `docs/SIMPLICITY-GUARDRAILS.md` §6 (no internal jargon, no taxonomy
+   codes; if a layperson wouldn't say it, don't put it here).
+3. If the category is generated outside the LLM (e.g. by Snoop's
+   `security_lite.py`) set `source: external` so the prompt tells the
+   model not to regenerate it.
+4. If the category should only apply at certain tiers, set `tier_min`
+   to the lowest tier that should include it.
+
+The buyer-facing display name is also what shows up in the report's
+"What's working" / "Passed checks" section
+(`templates/report/report.html.j2`). Categories with no critical / high
+finding emit a passed-check line automatically; the buyer never sees
+the internal taxonomy code.
+
+---
+
+## Snoop's security-lite checks
+
+`scripts/ai_audit/security_lite.py` runs five deterministic checks
+*before* the LLM finding-generation pass:
+
+1. HSTS header presence (HTTPS sites only)
+2. Content-Security-Policy header presence
+3. X-Frame-Options (DENY or SAMEORIGIN)
+4. X-Content-Type-Options nosniff
+5. Exposed credentials and admin-route paths in the rendered HTML
+   (AWS / Google / Stripe / Slack / private-key blocks; `/admin`,
+   `/.env`, `/.git`, `/debug`, `/dev-tools` link hrefs)
+
+Each finding is tagged `Caught by The Snoop` (per
+`docs/TESTERS-CAST.md` §7 voice rules) and rendered with the persona
+badge in the report PDF. Snoop's findings are **merged into the
+final findings list before the cap is applied**, so a critical
+exposed-credential finding can't be dropped because the LLM filled the
+cap with lower-severity items.
+
+The `security_lite` category in `finding_categories.yaml` carries
+`source: external` so the LLM is told to merge incoming findings, not
+regenerate them. When all five Snoop checks pass, the security-lite
+category appears in the report's "What's working" section as
+"obvious visible risks".
+
+---
+
+## Verdict labels (constrained vocabulary)
+
+`scripts/ai_audit/prompts/verdict_generation.txt` constrains the LLM to
+choose **exactly one** of four labels:
+
+* `Ready to share` (🟢)
+* `Safe for friends/family testing` (🟡)
+* `Needs fixes before launch` (🔴)
+* `Do not invite real users yet` (🔴)
+
+The schema in `scripts/ai_audit/llm_client.py::VERDICT_SCHEMA` enforces
+the four-value enum at the API boundary. `pipeline._normalize_verdict`
+coerces any drift (missing label, wrong casing, an extra trailing
+period) back to one of the four canonical values before the YAML is
+written, so the report template can render deterministically. The label
+becomes the hero phrase under the report title; the `summary` is the
+1-line tagline beneath it.
 
 ---
 
@@ -248,7 +324,7 @@ real data will probably show:
 
 ## Cost expectations (approximate)
 
-Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, ~7 findings):
+Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):
 
 | Provider | Model | Approx input / output tokens | Approx cost |
 |----------|-------|------------------------------|-------------|
@@ -260,14 +336,11 @@ Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, ~7 findings):
 
 Full Package adds a second LLM call (the QSG generator with ~4
 screenshots and a smaller HTML payload), roughly **+50%** on the
-Starter base. Pro Package adds the same QSG call plus a longer
-finding-generation prompt (40-cap output and the integrations-review
-guidance), roughly **+100%** on the Starter base.
+Starter base.
 
-At $19 Starter / $49 Full / $99 Pro, AI cost is roughly **1 to 2% of
-revenue** across all tiers. That leaves the founder's 15-minute review
-(the real cost on Starter / Full) and the 30-minute Loom (Pro only)
-as the bottlenecks, which is exactly where the strategy wanted it.
+At $9 Starter / $29 Full, AI cost is roughly **1 to 3% of revenue**.
+That leaves the founder's 15-minute review (the real cost) as the
+bottleneck, which is exactly where the strategy wanted it.
 
 If the LLM bill creeps up, the levers (in order) are:
 * Reduce the number of screenshots sent (currently 8 max).

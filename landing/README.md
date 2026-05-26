@@ -52,7 +52,7 @@ vercel --prod
 Edit `assets/config.js` (committed) or `config.local.js` (gitignored override):
 
 - `intakeFormUrl` — after Tally publish; paste from [`docs/TALLY-COPY-PASTE.md`](../docs/TALLY-COPY-PASTE.md)
-- `stripe.starter` / `stripe.launch` — Payment Links ($9 / $29)
+- `stripe.starter` / `stripe.scaleup` / `stripe.pro` — Payment Links ($19 / $49 / $99)
 - `supportEmail` — `hello@launchlook.app`
 - `linkedinUrl` — footer + Who's behind section
 

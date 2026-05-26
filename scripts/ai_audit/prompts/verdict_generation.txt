@@ -9,20 +9,53 @@ verdict block that goes at the top of the report.
 
 ### Required output
 
-* emoji: one of "🟢", "🟡", "🔴". Choose based on the finding mix:
-    - 🔴 if any critical findings exist
-    - 🟡 if no critical but at least one high
-    - 🟢 if only medium/low (or no findings)
-* summary: a single sentence, plain English, 8-14 words. Names what the
-  customer should walk away knowing. Examples:
-    - "Needs a few fixes before sharing publicly."
-    - "Strong foundation, polish the listing pages and you're shipping."
-    - "Two critical issues to clear before the launch link goes wider."
-* narrative: 3-5 sentences. Frames the audit. Acknowledges what is
-  already working (be specific, reference at least one concrete strength
-  you saw in the evidence). Then names the top one or two issues to fix
-  first, in plain language. Closes with a forward-looking sentence on
-  pacing the rest.
+* **label** (required, exactly one of the four below): pick the single
+  label that best fits the finding mix. These are the only acceptable
+  values:
+    - "Ready to share" — no critical issues; the customer can send the
+      live URL to a wider audience without embarrassment.
+    - "Safe for friends/family testing" — minor polish only; OK for
+      a private testing round with people who already root for them.
+    - "Needs fixes before launch" — material issues; do not launch
+      publicly until the criticals and highs are addressed.
+    - "Do not invite real users yet" — severe issues (security,
+      data isolation, broken auth, broken core flows); high risk if
+      the URL is shared.
+
+  Rough mapping (use judgment when a finding mix sits between two):
+    - 1+ critical, especially security / auth / data isolation →
+      "Do not invite real users yet"
+    - 1+ critical that's a broken-flow or trust issue → "Needs fixes
+      before launch"
+    - no critical, 2+ high → "Needs fixes before launch"
+    - no critical, 0-1 high, several medium → "Safe for friends/family
+      testing"
+    - no critical, no high (or only nits) → "Ready to share"
+
+* **emoji** (required, derived from label): "🔴" if label is
+  "Do not invite real users yet" or "Needs fixes before launch";
+  "🟡" if label is "Safe for friends/family testing"; "🟢" if label is
+  "Ready to share". The customer-facing PDF renders the label as the
+  hero phrase and uses the emoji as a small accent.
+
+* **summary** (required): a single sentence, 8-14 words, that explains
+  *why* this label was chosen in plain English. Examples that pair
+  with each label:
+    - Ready to share: "No blockers; a couple of polish items to round
+      it out."
+    - Safe for friends/family testing: "Looks solid, just clean up the
+      placeholder text before going wider."
+    - Needs fixes before launch: "Two trust-page gaps and a broken
+      booking flow to clear first."
+    - Do not invite real users yet: "Dev login bypass on the live URL
+      is the blocker."
+
+* **narrative** (required): 3-5 sentences. Acknowledge what is already
+  working (be specific, reference at least one concrete strength you
+  saw in the evidence). Then name the top one or two issues that drove
+  the label, in plain language. Close with a forward-looking sentence
+  on pacing the rest. Do not mention severities by code; talk about the
+  fix in human terms.
 
 ### Voice rules
 
@@ -31,5 +64,7 @@ verdict block that goes at the top of the report.
 * Plain English. The customer reads this first; it sets the tone for the
   whole report.
 * Do not repeat the same finding wording verbatim. Paraphrase.
+* Do not invent a fifth label. If none fit, choose the closest of the
+  four and explain in the summary.
 
 Return the structured response only.

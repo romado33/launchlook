@@ -2,9 +2,10 @@
 #
 # This is the canonical "what a Webflow audit looks like" reference for the
 # LaunchLook for Webflow SKU (parallel landing at launchlook.app/webflow).
-# Five findings, Starter Package, Webflow-flavored verdict, fix prompts in
-# Webflow Designer language (Pages / Style Manager / Form Notifications /
-# breakpoints), not generic "Tell Lovable to..." vibe-coder phrasing.
+# Five findings, Starter Package (cap 10), Webflow-flavored verdict, fix
+# prompts in Webflow Designer language (Pages / Style Manager / Form
+# Notifications / breakpoints), not generic "Tell Lovable to..." vibe-coder
+# phrasing.
 #
 # Render and preview:
 #   python scripts/deliver_report.py --customer customers/example-webflow.yaml --no-open
@@ -22,12 +23,13 @@ customer:
   app_name: Bauer Studio
   app_url: https://bauer-studio.webflow.io
   url_redacted: false        # true to print "URL redacted" in the report
-  tier: Starter Package      # "Starter Package" or "Full Package"
+  tier: Starter Package      # Starter (cap 10) | Scale Up (cap 30) | Pro (cap 40)
   builder: Webflow           # used in the fix-prompt headers (overridden by Designer voice on Webflow)
   platform: webflow          # routes the report through the Webflow appendix
 
 verdict:
-  emoji: "🟡"
+  label: Needs fixes before launch
+  emoji: "🔴"
   summary: Three quiet failures to clear before any client handoff.
   narrative: |
     Bauer Studio looks polished in Designer and at first glance on the live
@@ -175,3 +177,11 @@ findings:
       best on phone-portrait. After the change, Publish and reload the
       live URL on a real phone (or Chrome DevTools at 390px wide) to
       confirm no horizontal scrollbar appears.
+
+# Categories with no critical/high finding in this audit. Surfaces as
+# "What's working" in the rendered report.
+passed_checks:
+  - broken buttons & dead links
+  - dev tools and test data on the live site
+  - obvious visible risks
+  - trust signals & legal pages

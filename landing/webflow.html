@@ -57,7 +57,7 @@
       Built your Webflow site in Designer? Get the pre-launch checkup before your forms silently break, your noindex blocks Google, or your client finds the typo.
     </h1>
     <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
-      Send your live URL. We scan every page for the issues Webflow Designer doesn't warn you about: form submissions failing silently after the November 2024 update, accidental noindex meta tags, missing JSON-LD schema, Designer-to-live mismatches, mobile breakpoint bugs at 991/767/478. AI does the scan; a founder personally curates every finding before delivery.
+      Send your live URL. A real person walks every page on desktop and the three Webflow mobile breakpoints, then sends back a shareable PDF: form submissions, noindex tags, schema, Designer-to-live mismatches, mobile breakage. Every finding is reviewed by a founder before it ships, with paste-ready fixes in Webflow Designer language.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
       <a href="#pricing" class="launchlook-btn launchlook-btn-primary">See Webflow pricing</a>
@@ -70,7 +70,7 @@
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Fix prompts in <strong class="text-ink font-medium">Webflow Designer language</strong>, not generic dev jargon</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Sits in the price gap below the $899 human-audit floor</span></li>
     </ul>
-    <p class="mt-5 text-sm text-muted">Delivered in 24 hours · 7-day full refund if it's not useful.</p>
+    <p class="mt-5 text-sm text-muted">Delivered within 48 hours (usually 24) · 7-day full refund if the report isn't useful.</p>
     </div>
   </section>
 
@@ -91,15 +91,15 @@
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">2</span>
           <div>
-            <p class="font-medium">AI runs a full Webflow-aware pass</p>
-            <p class="text-muted text-sm mt-1">Captures every page at desktop and three Webflow mobile breakpoints (991px / 767px / 478px). Checks form submission endpoints, robots.txt, per-page noindex tags, JSON-LD schema, Designer-to-published mismatches, and the &ldquo;works in Designer, breaks live&rdquo; patterns.</p>
+            <p class="font-medium">We walk every page, every breakpoint</p>
+            <p class="text-muted text-sm mt-1">Every page captured at desktop and the three Webflow mobile breakpoints (991px / 767px / 478px). We probe every form, read your robots.txt and per-page noindex tags, check JSON-LD schema, look for Designer-to-published mismatches, and flag the &ldquo;works in Designer, breaks live&rdquo; patterns.</p>
           </div>
         </li>
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">3</span>
           <div>
             <p class="font-medium">A founder personally reviews every finding</p>
-            <p class="text-muted text-sm mt-1">AI is fast but it misses nuance. We catch the AI's blind spots, edit any wording that's off, and sign off before anything goes to you. Nothing ships without a human pass.</p>
+            <p class="text-muted text-sm mt-1">Every report is reviewed by Rob (the founder) before it ships. False positives get dropped, wording that doesn&rsquo;t land gets cut, and only the things you should actually fix make it into the final PDF.</p>
           </div>
         </li>
         <li class="flex gap-4">
@@ -157,7 +157,7 @@
       <h2 class="font-serif text-2xl mb-4">Who's behind this</h2>
       <div class="rounded-xl border border-line bg-surface-tint px-5 py-5 sm:px-6 sm:py-6 max-w-prose">
       <p class="text-muted leading-relaxed">
-        I'm <strong class="text-ink">Rob</strong>, a technical writer who's shipped products and documentation for years. AI drafts every LaunchLook checkup; I personally review and curate every finding before it reaches you. For Webflow we never ask for your Designer login, your Workspace, or your Editor access. URL only.
+        I'm <strong class="text-ink">Rob</strong>, a technical writer who's shipped products and documentation for years. Every LaunchLook checkup is reviewed by me manually before it goes out. For Webflow we never ask for your Designer login, your Workspace, or your Editor access. URL only.
       </p>
       <p class="text-muted leading-relaxed mt-4">
         Built for Webflow freelancers, agencies, and in-house teams who want the second pair of eyes before client handoff or a public launch. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
@@ -175,7 +175,7 @@
       <p class="section-label">Different by design</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-3">Why Webflow teams pick LaunchLook over the alternatives</h2>
-      <p class="text-muted text-sm mb-6 max-w-prose">Webflow QA today is either Webflow University's manual checklist (free, ~2 hours, requires you to know what to look for) or a $899&ndash;$4,800 human audit. We sit in the gap: scanner-speed delivery, founder-curated quality, $19 to start.</p>
+      <p class="text-muted text-sm mb-6 max-w-prose">Webflow QA today is either Webflow University's manual checklist (free, ~2 hours, requires you to know what to look for) or a $899&ndash;$4,800 human audit. We sit in the gap: a fast, founder-curated checkup at $19 to start.</p>
 
       <div class="hidden sm:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
         <table class="w-full text-sm">
@@ -225,29 +225,41 @@
     </div>
   </section>
 
+  <!-- Urgency moment (above pricing per SIMPLICITY-GUARDRAILS §2.2) -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-10 sm:py-12">
+      <p class="section-label">When to run one</p>
+      <div class="section-rule mt-2 mb-4" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-3">The moment matters.</h2>
+      <p class="text-muted leading-relaxed max-w-prose">
+        Before client handoff. Before the Loom you send the marketing team. Before you swap the staging URL onto the custom domain. Before the form goes live and quietly drops every lead.
+      </p>
+      <p class="text-ink mt-3 max-w-prose">Run a quick LaunchLook for Webflow checkup first.</p>
+    </div>
+  </section>
+
   <!-- Pricing -->
   <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner">
       <p class="section-label">Pricing</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl sm:text-3xl mb-2">Three tiers. Same human curation.</h2>
-      <p class="text-muted mb-4">Pick depth. Not a different quality of care.</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-2">Pick the question you actually need answered.</h2>
+      <p class="text-muted mb-4">Same human curation on every paid tier. You're picking depth, not quality of care.</p>
       <p class="text-sm text-muted mb-8 max-w-prose rounded-lg border border-line bg-white/80 px-4 py-3">
-        Works with any Webflow site (webflow.io preview subdomain or custom domain). AI drafts the audit, a founder personally curates every finding before delivery. No Designer or Workspace access required. Pay &rarr; intake form (pick &ldquo;Webflow&rdquo; as platform) &rarr; two PDFs by email. Full refund within 7 days if the report isn't useful.
+        Works with any Webflow site (webflow.io preview subdomain or custom domain). Every report is reviewed by a founder before delivery. No Designer or Workspace access required. Pay &rarr; intake form (pick &ldquo;Webflow&rdquo; as platform) &rarr; two PDFs by email. Full refund within 7 days if the report isn't useful.
       </p>
 
       <div class="grid sm:grid-cols-3 gap-5">
         <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Starter</h3>
           <p class="font-serif text-4xl mt-2">$19</p>
-          <p class="text-sm text-muted mt-1">Priority triage</p>
+          <p class="text-sm text-muted mt-1 leading-snug"><em>Can I share this without embarrassment?</em></p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
-            <li>Up to <strong>5</strong> prioritized findings</li>
-            <li>Form-submission test</li>
-            <li>noindex / robots check</li>
+            <li>Up to <strong>10</strong> prioritized findings</li>
+            <li>Form-submission test + noindex / robots check</li>
             <li>Desktop + 3 Webflow breakpoints</li>
             <li>Designer-language fix prompts</li>
-            <li>24-hour delivery</li>
+            <li>Delivered within 48h (usually 24h)</li>
           </ul>
           <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=StarterCheckout">
             Get Starter ($19)
@@ -256,28 +268,27 @@
 
         <div class="rounded-xl border-2 border-accent bg-white p-6 flex flex-col relative shadow-sm">
           <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Most popular</div>
-          <h3 class="font-serif text-xl">Launch</h3>
+          <h3 class="font-serif text-xl">Scale Up</h3>
           <p class="font-serif text-4xl mt-2">$49</p>
-          <p class="text-sm text-muted mt-1">Handoff or going public</p>
+          <p class="text-sm text-muted mt-1 leading-snug"><em>Can I invite real users without trust or auth problems?</em></p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
             <li>Everything in Starter, plus:</li>
-            <li>Up to <strong>25</strong> findings (deeper pass)</li>
+            <li>Up to <strong>30</strong> findings (deeper pass)</li>
             <li>Per-page JSON-LD schema review</li>
             <li>Designer-to-live mismatch sweep</li>
-            <li>Shareable report link</li>
-            <li>12-hour delivery</li>
+            <li>Delivered within 48h (usually 24h)</li>
           </ul>
-          <a href="#" data-launchlook-stripe="launch" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6 plausible-event-name=ScaleUpCheckout">
-            Get Launch ($49)
+          <a href="#" data-launchlook-stripe="scaleup" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6 plausible-event-name=ScaleUpCheckout">
+            Get Scale Up ($49)
           </a>
         </div>
 
         <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Pro</h3>
           <p class="font-serif text-4xl mt-2">$99</p>
-          <p class="text-sm text-muted mt-1">Agency / client handoff</p>
+          <p class="text-sm text-muted mt-1 leading-snug"><em>Am I ready to take real money and hand off to a developer?</em></p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
-            <li>Everything in Launch, plus:</li>
+            <li>Everything in Scale Up, plus:</li>
             <li>Up to <strong>40</strong> findings (full depth)</li>
             <li>Integrations review (forms, Stripe, analytics)</li>
             <li><strong>Webflow Designer walkthrough Loom</strong></li>
@@ -309,11 +320,11 @@
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Why is this so much cheaper than a Webflow Expert audit?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">AI does the scan, a founder does the curation. A human-only audit on Codeable or Webflow Experts is $899&ndash;$4,800 because every minute is billable. We use AI to capture every screen at every breakpoint, run the standard Webflow checks (forms, noindex, schema, breakpoints), and then a founder spends ~10 minutes rejecting AI false positives and tightening the language before it ships. Scanner-speed delivery, human-curated quality, sub-$100 price.</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">A human-only audit on Codeable or Webflow Experts is $899&ndash;$4,800 because every minute is billable. We capture every page at every breakpoint, run the standard Webflow checks (forms, noindex, schema, breakpoints) automatically, and then a founder reads through every finding to drop the false positives and tighten the language before it ships. Sub-$100 price, founder-reviewed quality.</p>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">What if the AI gets it wrong?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">That's exactly what the founder review catches. AI is fast but it hallucinates. Every AI-drafted finding is verified against the actual screenshots and live HTML before delivery. Findings that aren't grounded in real evidence get dropped, not shipped.</p>
+          <summary class="flex justify-between items-center font-medium text-sm">What if you flag something that isn't actually broken?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">That's what the founder review catches. Every finding is verified against the actual screenshots and live HTML before delivery. Anything that isn't grounded in real evidence gets dropped, not shipped. If a finding still doesn't match what you see, email us within 7 days for a full refund.</p>
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Will you catch the November 2024 form failure?<span class="text-muted text-lg">+</span></summary>
@@ -347,7 +358,7 @@
     <div class="max-w-3xl mx-auto px-6 section-inner text-center">
       <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
       <h2 class="font-serif text-2xl sm:text-3xl mt-3">Stop guessing if the form actually sent.</h2>
-      <p class="text-paper/75 mt-2 text-sm">Starter $19 · Launch $49 · Pro $99</p>
+      <p class="text-paper/75 mt-2 text-sm">Starter $19 · Scale Up $49 · Pro $99</p>
       <a href="#pricing" class="launchlook-btn launchlook-btn-accent mt-6">
         See pricing
       </a>

@@ -1,5 +1,5 @@
 """
-tally-webhook.py - Vercel Python serverless function.
+tally-webhook.py — Vercel Python serverless function.
 
 Receives FORM_RESPONSE events from the LaunchLook intake form (Tally) and
 upserts the corresponding row in the Notion Customers DB.
@@ -63,12 +63,19 @@ LABEL_RULES: list[tuple[re.Pattern[str], str]] = [
 
 
 # Tally option strings -> Customers DB Tier select values.
+# Includes legacy ($9 / $29) keys so old form responses still map cleanly.
 TIER_MAP = {
+    "starter package ($19)": "Starter Package",
     "starter package ($9)": "Starter Package",
     "starter": "Starter Package",
-    "full package ($29)": "Full Package",
-    "full": "Full Package",
-    "launch package": "Full Package",
+    "scale up package ($49)": "Scale Up Package",
+    "scale up": "Scale Up Package",
+    "full package ($49)": "Scale Up Package",
+    "full package ($29)": "Scale Up Package",
+    "full": "Scale Up Package",
+    "launch package": "Scale Up Package",
+    "pro package ($99)": "Pro Package",
+    "pro": "Pro Package",
 }
 
 
@@ -159,11 +166,11 @@ def _notes_from_extras(flat: dict[str, Any]) -> str:
 
 
 def _test_accounts_checkbox(flat: dict[str, Any]) -> bool:
-    """True iff Full Package + Q9 answered "Yes -- I'll provide ...".
+    """True iff Scale Up / Pro tier + Q9 answered "Yes -- I'll provide ...".
 
     Tally lower-cases option text inconsistently, so we just look for "yes".
     """
-    if flat.get("tier") != "Full Package":
+    if flat.get("tier") not in ("Scale Up Package", "Pro Package"):
         return False
     answer = (flat.get("_test_accounts_q") or "").strip().lower()
     return answer.startswith("yes")
@@ -175,7 +182,7 @@ def _test_accounts_checkbox(flat: dict[str, Any]) -> bool:
 
 
 def process_payload(payload: dict[str, Any]) -> dict[str, Any]:
-    """Pure function for unit testing - no HTTP, no env checks beyond Notion."""
+    """Pure function for unit testing — no HTTP, no env checks beyond Notion."""
     if (payload.get("eventType") or "").upper() != "FORM_RESPONSE":
         return {"status": "ignored", "reason": f"event {payload.get('eventType')!r}"}
 
@@ -200,7 +207,10 @@ def process_payload(payload: dict[str, Any]) -> dict[str, Any]:
         fields["notes"] = f"App: {flat['app_description']}\n\n{fields['notes']}".strip()
     # The schema currently has no "Test accounts provided" checkbox; signal via Notes.
     if _test_accounts_checkbox(flat):
-        fields["notes"] = f"[Full Package - test accounts provided]\n{fields['notes']}".strip()
+        fields["notes"] = (
+            f"[{flat.get('tier', 'Scale Up/Pro')} — test accounts provided]\n"
+            f"{fields['notes']}"
+        ).strip()
 
     client = get_client()
     ds_id = get_customers_ds_id(client)

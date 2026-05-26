@@ -26,7 +26,7 @@ Usage (real customer with Claude):
     python scripts/ai_audit.py \\
         --slug jane-smith \\
         --url https://jane.lovable.app \\
-        --tier "Full Package" \\
+        --tier "Scale Up Package" \\
         --builder Lovable \\
         --name "Jane Smith" \\
         --email jane@example.com \\
@@ -83,7 +83,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--slug", required=True, help="Customer slug (filename for customers/<slug>.yaml)")
     parser.add_argument("--url", required=True, help="Customer app URL (https://...)")
-    parser.add_argument("--tier", required=True, choices=["Starter Package", "Full Package"], help="Tier purchased")
+    parser.add_argument(
+        "--tier",
+        required=True,
+        choices=["Starter Package", "Scale Up Package", "Pro Package"],
+        help="Tier purchased",
+    )
     parser.add_argument("--builder", required=True, help="Builder (Lovable, Bolt, v0, Cursor, Replit, Base44, Other)")
     parser.add_argument("--name", default="", help='Customer full name (e.g. "Jane Smith")')
     parser.add_argument("--first-name", default="", dest="first_name", help="Override first name")

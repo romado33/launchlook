@@ -13,7 +13,7 @@ Usage:
     python scripts/audit_ui.py \
         --slug jane-smith \
         --url https://jane.lovable.app \
-        --tier "Full Package" \
+        --tier "Scale Up Package" \
         --name "Jane Smith" \
         --email jane@example.com \
         --app-name Sparkle \
@@ -56,7 +56,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--slug", default="", help="Customer slug (filename for customers/<slug>.yaml).")
     parser.add_argument("--url", default="", help="Customer's app URL (https://...).")
-    parser.add_argument("--tier", default="", choices=["", "Starter Package", "Full Package"], help="Tier.")
+    parser.add_argument(
+        "--tier",
+        default="",
+        choices=["", "Starter Package", "Scale Up Package", "Pro Package"],
+        help="Tier.",
+    )
     parser.add_argument("--name", default="", help='Customer name, e.g. "Jane Smith". Split into first/last by the first space.')
     parser.add_argument("--first-name", default="", help="Customer first name (overrides --name).")
     parser.add_argument("--last-name", default="", help="Customer last name (overrides --name).")

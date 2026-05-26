@@ -19,14 +19,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
+  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     .prose-list li { padding: 0.35rem 0; }
     .prose-list input[type=checkbox] { margin-right: 0.5rem; transform: translateY(2px); }
   </style>
-
-  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
-  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 
 <body class="bg-paper text-ink font-sans antialiased">
@@ -128,7 +128,7 @@
       <li><input type="checkbox" /> Signed in as person A, you cannot see person B’s private stuff (messages, files, bookings, etc.)</li>
       <li><input type="checkbox" /> When signed out, opening “dashboard” or “settings” asks you to log in. It doesn’t show someone else’s data.</li>
     </ul>
-    <p class="text-xs text-muted mt-3">Need a thorough two-account review? That’s included in <a href="/#pricing" class="underline hover:text-ink">Full Package ($49)</a> and <a href="/#pricing" class="underline hover:text-ink">Pro Package ($99)</a>.</p>
+    <p class="text-xs text-muted mt-3">Need a thorough two-account review? That’s included in <a href="/#pricing" class="underline hover:text-ink">Scale Up ($49)</a> and <a href="/#pricing" class="underline hover:text-ink">Pro ($99)</a>.</p>
 
     <!-- 7 gut -->
     <h2 class="font-serif text-2xl mt-12 mb-1">7. Gut check</h2>
@@ -137,116 +137,6 @@
       <li><input type="checkbox" /> You’d be comfortable sending this link to a friend today</li>
       <li><input type="checkbox" /> You wouldn’t be embarrassed if someone screenshotted the homepage</li>
     </ul>
-
-    <!-- Beyond the App — Launch Infrastructure -->
-    <h2 class="font-serif text-2xl mt-14 mb-1">Beyond the App — Launch Infrastructure</h2>
-    <p class="text-sm text-muted mb-4">12 categories · the operational plumbing around your app</p>
-    <p class="text-muted text-sm leading-relaxed">The 38 items above are about your app itself. These are about everything <em>around</em> the app — the operational plumbing that turns “I built something cool” into “real customers can actually buy it.” Vibe-coded founders typically overlook most of this. None of it is technically hard; it’s just easy to forget when you’ve been heads-down building.</p>
-
-    <!-- A. Payments -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Payments</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Do you have a way to take payments?</li>
-      <li><input type="checkbox" /> Are your payment links tested end-to-end (you’ve made at least one real test purchase)?</li>
-      <li><input type="checkbox" /> Does the customer receive a receipt after paying?</li>
-      <li><input type="checkbox" /> Do you have a documented refund process you’d be willing to send to a customer?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Stripe, Lemon Squeezy, Paddle, Gumroad, Polar.</p>
-
-    <!-- B. Custom domain -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Custom domain</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Is your app on your own domain (not the builder’s <code>*.lovable.app</code> / <code>*.bolt.new</code> / <code>*.vercel.app</code> subdomain)?</li>
-      <li><input type="checkbox" /> Do both <code>www.yourdomain.com</code> and <code>yourdomain.com</code> work?</li>
-      <li><input type="checkbox" /> Does HTTPS work without certificate warnings?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Cloudflare, Namecheap, Porkbun for DNS.</p>
-
-    <!-- C. Outbound email (transactional) -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Outbound email (transactional)</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Can your app actually send transactional emails (password resets, confirmations, receipts)?</li>
-      <li><input type="checkbox" /> Are your emails landing in the inbox, not spam? (Send to yourself at Gmail, Outlook, and Yahoo to check.)</li>
-      <li><input type="checkbox" /> Is the From address on your own domain (not <code>noreply@gmail.com</code> or a generic provider)?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Resend, Postmark, SendGrid, AWS SES, Loops.</p>
-
-    <!-- D. Inbound email -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Inbound email</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> If a customer emails <code>hello@yourdomain.com</code>, does it actually reach your real inbox?</li>
-      <li><input type="checkbox" /> Have you tested this from a separate email account (not the same one your forwarding sends to)?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: ImprovMX (free forwarding), Fastmail, Google Workspace, Zoho Mail.</p>
-
-    <!-- E. Customer tracking -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Customer tracking</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Do you have a single place that stores who paid, who signed up, and who churned?</li>
-      <li><input type="checkbox" /> Can you find a specific customer’s record in under 30 seconds?</li>
-      <li><input type="checkbox" /> Can you tie a payment, an intake response, and a support email back to the same customer?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Notion, Airtable, a simple spreadsheet, HubSpot Free, Pipedrive.</p>
-
-    <!-- F. Intake and forms -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Intake and forms</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> If a customer needs to send you info (intake, support, feedback), do you have a form ready?</li>
-      <li><input type="checkbox" /> Are submissions saved somewhere <em>and</em> do you get notified when one arrives?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Tally, Typeform, Google Forms, Formspree.</p>
-
-    <!-- G. Analytics -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Analytics</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Do you know how many people visit your app each day?</li>
-      <li><input type="checkbox" /> Do you know where they come from (referrer, campaign, channel)?</li>
-      <li><input type="checkbox" /> Do you know what they click and where they drop off?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Plausible, Umami, Fathom, GA4.</p>
-
-    <!-- H. Backups -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Backups</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> If your builder went down or deleted your project tomorrow, do you have a copy of your code and data?</li>
-      <li><input type="checkbox" /> When did you last verify the backup actually works (not just exists)?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: GitHub repo (most builders support this), periodic code export, deployed staging copy.</p>
-
-    <!-- I. Legal pages -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Legal pages</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Do <code>/privacy</code> and <code>/terms</code> exist and load (not 404)?</li>
-      <li><input type="checkbox" /> Are they linked from the footer on every page?</li>
-      <li><input type="checkbox" /> Do they accurately describe what data you actually collect and what you do with it?</li>
-      <li><input type="checkbox" /> Does your refund policy match what your payment provider expects?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Termly, Iubenda, manually drafted (with a “not legal advice” disclaimer).</p>
-
-    <!-- J. Branding -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Branding</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Do you have a custom logo (not the builder’s default placeholder)?</li>
-      <li><input type="checkbox" /> Do you have a custom favicon (not the builder’s default)?</li>
-      <li><input type="checkbox" /> Do you have an Open Graph image so links to your app preview nicely in iMessage, Slack, and LinkedIn?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Canva, Figma, a small commission for the logo.</p>
-
-    <!-- K. Customer support -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Customer support</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> Where do customer complaints and refund requests actually land?</li>
-      <li><input type="checkbox" /> Do you have a documented response time you can realistically hit?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Personal email, Help Scout, Crisp, Intercom — start with a personal email and upgrade later.</p>
-
-    <!-- L. Status and incident communication -->
-    <h3 class="font-serif text-lg mt-8 mb-1">Status and incident communication</h3>
-    <ul class="prose-list text-ink text-sm leading-relaxed">
-      <li><input type="checkbox" /> If your app breaks, can customers tell something is wrong (vs. silently failing)?</li>
-      <li><input type="checkbox" /> Do they have a way to report it that doesn’t require digging through your site for an email?</li>
-    </ul>
-    <p class="text-xs text-muted italic mt-2">Examples: Footer status link, a simple status page, a clearly-visible support email.</p>
 
     <h2 class="font-serif text-2xl mt-14 mb-3">What to do next</h2>
     <ul class="list-disc pl-6 text-muted space-y-2 text-sm leading-relaxed">
@@ -257,13 +147,12 @@
 
     <div class="mt-14 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
       <h3 class="font-serif text-2xl">Rather have someone run this for you?</h3>
-      <p class="mt-3 text-muted text-sm leading-relaxed">LaunchLook does the pass on your live URL and sends back a plain-English report with screenshots and copy-paste fix prompts for your builder.</p>
+      <p class="mt-3 text-muted text-sm leading-relaxed">LaunchLook walks every screen of your live URL and a founder personally reviews every finding before it ships. You get back a plain-English report with screenshots and paste-ready fix prompts for your builder.</p>
       <p class="mt-3 text-sm">
-        <strong class="text-ink">Starter Package ($19)</strong> · priority triage — the 7 most important findings to fix, within 48h (usually 24)<br />
-        <strong class="text-ink">Full Package ($49)</strong> · comprehensive audit — up to 25 findings + cross-user data check + Quick Start Guide PDF, within 24h (usually 12)<br />
-        <strong class="text-ink">Pro Package ($99)</strong> · deep audit + integrations review — up to 40 findings + everything in Full + Stripe/auth/email/analytics review + 30-min Loom walkthrough, within 24h (usually 12)
+        <strong class="text-ink">Starter ($19)</strong> · up to 10 findings, Quick Start Guide for your users<br />
+        <strong class="text-ink">Scale Up ($49)</strong> · deeper pass + user data isolation check (up to 30 findings)<br />
+        <strong class="text-ink">Pro ($99)</strong> · full audit + Loom walkthrough (up to 40 findings)
       </p>
-      <p class="mt-3 text-sm text-muted leading-relaxed">The <strong class="text-ink font-medium">Pro tier</strong> additionally reviews your launch infrastructure — payment flow, transactional email deliverability, custom domain, legal pages, branding, and the rest of the operational items above. <a href="/#pricing" class="underline hover:text-ink">See Pro pricing</a>.</p>
       <a href="/#pricing" class="launchlook-btn launchlook-btn-primary mt-5">See pricing</a>
     </div>
 

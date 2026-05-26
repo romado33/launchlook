@@ -20,9 +20,9 @@ Question structure:
 
 Notes:
     * The Tally API does not currently expose conditional logic via API.
-      Set the three visibility rules (Q9 only when Q8 = Full Package; Q10/Q11
-      only when Q9 = "Yes — I'll provide two test accounts") manually in
-      the Tally editor after creation.
+      Set the three visibility rules (Q9 only when Q8 = Scale Up Package or
+      Pro Package; Q10/Q11 only when Q9 = "Yes — I'll provide two test
+      accounts") manually in the Tally editor after creation.
     * Notification email (hello@launchlook.app) and the "after submit"
       redirect to https://tally.so/r/Y5xO5J also need to be set in the
       Tally UI (Settings → Notifications and Settings → After submit).
@@ -66,8 +66,8 @@ INTAKE_FORM = {
         "• Only submit temporary test accounts. Do not submit personal "
         "passwords, admin credentials, API keys, database credentials, real "
         "customer data, health data, children's data, or payment information.\n\n"
-        "• For Full Package ($29) only: create temporary test accounts (not real "
-        "users). Submit credentials here only — not by email.\n\n"
+        "• For Scale Up ($49) and Pro ($99) only: create temporary test accounts (not "
+        "real users). Submit credentials here only — not by email.\n\n"
         "• We delete test credentials within 24 hours of delivery. Rotate or "
         "delete test accounts after your report arrives."
     ),
@@ -142,16 +142,20 @@ INTAKE_FORM = {
             "description": "We'll match against Stripe — this confirms what you expect.",
             "type": "MULTIPLE_CHOICE",
             "required": True,
-            "options": ["Starter Package ($9)", "Full Package ($29)"],
+            "options": [
+                "Starter Package ($19)",
+                "Scale Up Package ($49)",
+                "Pro Package ($99)",
+            ],
         },
-        # Q9 — test accounts? (Full only — set conditional in Tally UI)
+        # Q9 — test accounts? (Scale Up + Pro only — set conditional in Tally UI)
         {
             "key": "test_accounts_choice",
             "title": "Can we use test accounts?",
             "description": (
-                "Full Package only. The cross-user check needs two signed-in sessions. "
-                "We can sign up fresh test accounts ourselves if you prefer — we "
-                "delete them after the audit."
+                "Scale Up and Pro only. The user-data isolation check needs two "
+                "signed-in sessions. We can sign up fresh test accounts ourselves "
+                "if you prefer — we delete them after the audit."
             ),
             "type": "MULTIPLE_CHOICE",
             "required": False,
@@ -534,7 +538,7 @@ def print_next_steps(form: dict, summary: dict) -> None:
         "    1. Settings -> Notifications -> email submissions to hello@launchlook.app",
         "    2. Settings -> After submit -> Redirect to https://tally.so/r/Y5xO5J",
         "    3. On Q10 + Q11: click block menu (the 6-dot handle) -> Hide  (makes them hidden by default)",
-        "    4. Add /logic block: IF Q8 = 'Full Package ($29)' THEN Show blocks: Q9",
+        "    4. Add /logic block: IF Q8 = 'Scale Up Package ($49)' OR 'Pro Package ($99)' THEN Show blocks: Q9",
         "    5. Add /logic block: IF Q9 = 'Yes - I will provide two test accounts' THEN Show blocks: Q10, Q11",
         f"    6. If happy, Publish -> update intakeFormUrl in landing/assets/config.js to '{public_url}'",
     ]

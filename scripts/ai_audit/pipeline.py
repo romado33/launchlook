@@ -33,11 +33,24 @@ from scripts.audit_ui import yaml_writer  # noqa: E402
 
 from . import feedback as feedback_log  # noqa: E402
 from . import html_extract, llm_client  # noqa: E402
+from . import security_lite  # noqa: E402
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
+CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
 
-DEFAULT_TIER_CAPS = {"Starter Package": 5, "Full Package": 20}
+DEFAULT_TIER_CAPS = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}
+
+# Mapping from internal verdict labels to the emoji we render. The four
+# labels are constrained by scripts/ai_audit/prompts/verdict_generation.txt
+# and visible to the customer in templates/report/report.html.j2.
+VERDICT_LABEL_EMOJI = {
+    "Ready to share": "🟢",
+    "Safe for friends/family testing": "🟡",
+    "Needs fixes before launch": "🔴",
+    "Do not invite real users yet": "🔴",
+}
+VERDICT_LABELS = tuple(VERDICT_LABEL_EMOJI.keys())
 
 # ---------------------------------------------------------------------------
 # Platform registry
@@ -117,8 +130,15 @@ class PipelineResult:
 # ---------------------------------------------------------------------------
 
 
-_TIER_CAP_PATTERN = re.compile(
-    r"cap\s*=\s*(?P<starter>\d+)\s*if\s*tier\s*==\s*['\"]Starter Package['\"]\s*else\s*(?P<full>\d+)"
+# Match the dict-lookup cap form used by deliver_report.py:
+#   cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
+# Captures every "Tier Name": <int> pair so the pipeline auto-tracks future
+# tier additions without a code edit here.
+_TIER_CAP_DICT_PATTERN = re.compile(
+    r'cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier'
+)
+_TIER_CAP_ENTRY_PATTERN = re.compile(
+    r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)'
 )
 
 
@@ -128,13 +148,74 @@ def load_tier_caps() -> dict[str, int]:
         text = DELIVER_REPORT.read_text(encoding="utf-8")
     except OSError:
         return dict(DEFAULT_TIER_CAPS)
-    match = _TIER_CAP_PATTERN.search(text)
-    if not match:
+    dict_match = _TIER_CAP_DICT_PATTERN.search(text)
+    if not dict_match:
         return dict(DEFAULT_TIER_CAPS)
-    return {
-        "Starter Package": int(match.group("starter")),
-        "Full Package": int(match.group("full")),
-    }
+    parsed: dict[str, int] = {}
+    for entry in _TIER_CAP_ENTRY_PATTERN.finditer(dict_match.group("body")):
+        parsed[entry.group("tier")] = int(entry.group("cap"))
+    return parsed or dict(DEFAULT_TIER_CAPS)
+
+
+def load_finding_categories() -> list[dict[str, Any]]:
+    """Read scripts/ai_audit/finding_categories.yaml. Falls back to []."""
+    if not CATEGORIES_YAML.exists():
+        return []
+    try:
+        import yaml  # noqa: WPS433  -- already a project dep
+    except ImportError:
+        print(
+            "[categories] WARN: PyYAML missing, prompt will skip category list",
+            file=sys.stderr,
+        )
+        return []
+    try:
+        data = yaml.safe_load(CATEGORIES_YAML.read_text(encoding="utf-8")) or {}
+    except Exception as exc:  # noqa: BLE001
+        print(
+            f"[categories] WARN: failed to parse finding_categories.yaml: {exc}",
+            file=sys.stderr,
+        )
+        return []
+    cats = data.get("categories") or []
+    return [dict(c) for c in cats if isinstance(c, dict) and c.get("id")]
+
+
+def render_categories_for_prompt(
+    categories: list[dict[str, Any]],
+    *,
+    tier: str,
+) -> str:
+    """Format finding categories for ``{categories_list}`` in system.txt.
+
+    Filters out tier-restricted categories the customer's tier doesn't
+    reach (e.g. cross-user data check on Starter Package).
+    """
+    if not categories:
+        return "(no categories registered; refer to severity rules below)"
+    tier_rank = {"Starter Package": 1, "Scale Up Package": 2, "Pro Package": 3}
+    customer_rank = tier_rank.get(tier, 1)
+    blocks: list[str] = []
+    for cat in categories:
+        min_tier = cat.get("tier_min")
+        if min_tier and customer_rank < tier_rank.get(min_tier, 0):
+            continue
+        cid = cat.get("id", "?")
+        display = cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
+        sev = cat.get("severity_default", "medium")
+        desc = (cat.get("description_for_llm") or "").strip()
+        source = cat.get("source", "llm")
+        tester = cat.get("tester", "")
+        marker = " [external; merge, do not regenerate]" if source == "external" else ""
+        header = f"- **{display}** (id: {cid}, severity_default: {sev}, tester: {tester}){marker}"
+        body_lines = [header]
+        if desc:
+            for line in desc.split("\n"):
+                line = line.rstrip()
+                if line:
+                    body_lines.append(f"    {line}")
+        blocks.append("\n".join(body_lines))
+    return "\n".join(blocks)
 
 
 def load_findings_library() -> list[dict[str, Any]]:
@@ -341,19 +422,31 @@ def _read_prompt(name: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def build_system_prompt(platform: str = DEFAULT_PLATFORM) -> str:
+def build_system_prompt(
+    platform: str = DEFAULT_PLATFORM,
+    *,
+    tier: str = "Starter Package",
+) -> str:
     """Return the system prompt layered with any platform-specific appendix.
 
-    The base ``system.txt`` is always loaded. If the platform has a
-    registered appendix (see ``PLATFORM_PROMPT_FILES``), its contents are
-    appended below a clear divider. This keeps the base prompt untouched
-    while letting platform-specific voice / finding categories slot in.
+    The base ``system.txt`` is always loaded and templated with the
+    active finding categories (loaded from
+    ``scripts/ai_audit/finding_categories.yaml``). If the platform has a
+    registered appendix (see ``PLATFORM_PROMPT_FILES``), its contents
+    are appended below a clear divider. The two layers compose
+    additively:
 
-    Adding a new platform appendix later (e.g. security-lite, Snoop
-    persona) is intentionally a *new file + one-line registration*, never
-    a rewrite of the base.
+    * **Categories** are data-driven; future workers add a category by
+      editing the YAML, not by rewriting the prompt.
+    * **Platform appendices** layer on top to swap fix-prompt voice
+      (Lovable, Bolt, v0, Cursor, Replit, Webflow Designer).
     """
     base = _read_prompt("system.txt")
+
+    categories = load_finding_categories()
+    categories_block = render_categories_for_prompt(categories, tier=tier)
+    base = base.replace("{{ categories_list }}", categories_block)
+
     platform = normalize_platform(platform)
     appendix_file = PLATFORM_PROMPT_FILES.get(platform)
     if not appendix_file:
@@ -439,15 +532,24 @@ def _maybe_append_webflow_checks(prompt: str, platform: str) -> str:
 def _tier_guidance(tier: str, cap: int) -> str:
     if tier == "Starter Package":
         return (
-            f"Starter Package is priority triage. Return at most {cap} findings, "
-            "the most important things a first-time visitor would notice. Skew "
-            "toward criticals and highs. If the app is clean, return fewer."
+            f"Starter Package surfaces the most impactful pre-launch issues. "
+            f"Return at most {cap} findings: the things a first-time visitor "
+            "would notice within the first minute. Skew toward criticals and "
+            "highs. If the app is clean, return fewer."
+        )
+    if tier == "Scale Up Package":
+        return (
+            f"Scale Up Package is the deeper pass. Return up to {cap} findings "
+            "spanning trust, polish, mobile, security-lite, and broken "
+            "functionality. Includes the cross-user data isolation check. "
+            "Include lower-severity polish items the customer paid extra for. "
+            "Still drop any finding you cannot ground in real evidence."
         )
     return (
-        f"Full Package is the deeper pass. Return up to {cap} findings spanning "
-        "trust, polish, mobile, and broken functionality. Include the lower-"
-        "severity polish items the customer paid extra for. Still drop any "
-        "finding you cannot ground in real evidence."
+        f"Pro Package is the deepest pass. Return up to {cap} findings across "
+        "every category, plus an integrations review (auth, payments, email, "
+        "analytics) for misconfiguration. Drop any finding you cannot ground "
+        "in real evidence."
     )
 
 
@@ -509,24 +611,130 @@ def build_qsg_user_prompt(
 
 
 def _default_verdict(findings: list[dict[str, Any]], app_name: str) -> dict[str, Any]:
+    """Heuristic fallback when the LLM verdict call fails.
+
+    Picks one of the four canonical labels in
+    ``scripts/ai_audit/prompts/verdict_generation.txt`` based on the
+    finding mix. The label is the customer-facing hero phrase; the
+    emoji is a small accent.
+    """
     has_critical = any((f.get("severity") or "").lower() == "critical" for f in findings)
-    has_high = any((f.get("severity") or "").lower() == "high" for f in findings)
-    emoji = "🔴" if has_critical else ("🟡" if has_high else "🟢")
-    if has_critical:
-        summary = "Two or more critical issues to clear before sharing publicly."
-    elif has_high:
-        summary = "Needs a few fixes before sharing publicly."
+    high_count = sum(1 for f in findings if (f.get("severity") or "").lower() == "high")
+    has_security = any(
+        (f.get("category") or "") == security_lite.CATEGORY_ID
+        and (f.get("severity") or "").lower() in {"critical", "high"}
+        for f in findings
+    )
+
+    if has_security or has_critical and high_count >= 1:
+        label = "Do not invite real users yet"
+        summary = "Critical safety or auth issues to clear before any real users."
+    elif has_critical:
+        label = "Needs fixes before launch"
+        summary = "One critical blocker to fix before sharing the URL more widely."
+    elif high_count >= 2:
+        label = "Needs fixes before launch"
+        summary = "Multiple high-impact issues to clear before going public."
+    elif high_count == 1:
+        label = "Safe for friends/family testing"
+        summary = "Looks workable; clean up the high-impact item before going wider."
     else:
-        summary = "Ready to share, just a couple of polish items."
+        label = "Ready to share"
+        summary = "No blockers; a couple of polish items to round it out."
+
     return {
-        "emoji": emoji,
+        "emoji": VERDICT_LABEL_EMOJI[label],
+        "label": label,
         "summary": summary,
         "narrative": (
-            f"{app_name} is in reasonable shape. The findings below are sorted "
-            f"by severity. Fix anything marked critical before sharing the URL "
-            f"more widely, then work down the list as time allows."
+            f"{app_name} is in reasonable shape. The findings below are "
+            "sorted by severity. Fix anything marked critical before sharing "
+            "the URL more widely, then work down the list as time allows."
         ),
     }
+
+
+def _normalize_verdict(verdict: dict[str, Any]) -> dict[str, Any]:
+    """Coerce an LLM verdict dict to the canonical 4-label vocabulary.
+
+    The schema constrains ``label`` to one of the four allowed values,
+    but we still defend against drift (missing label, wrong casing, an
+    extra trailing period) so the report template can render
+    deterministically.
+    """
+    out = dict(verdict or {})
+    raw_label = (out.get("label") or "").strip()
+    canonical = ""
+    for option in VERDICT_LABELS:
+        if raw_label.lower().rstrip(".") == option.lower():
+            canonical = option
+            break
+    if not canonical:
+        # Fall back to the closest match by emoji if the label is missing.
+        emoji = (out.get("emoji") or "").strip()
+        if emoji == "🟢":
+            canonical = "Ready to share"
+        elif emoji == "🟡":
+            canonical = "Safe for friends/family testing"
+        elif emoji == "🔴":
+            canonical = "Needs fixes before launch"
+        else:
+            canonical = "Safe for friends/family testing"
+    out["label"] = canonical
+    out["emoji"] = VERDICT_LABEL_EMOJI[canonical]
+    return out
+
+
+def compute_passed_checks(
+    *,
+    findings: list[dict[str, Any]],
+    snoop_passed_ids: list[str],
+    categories: list[dict[str, Any]],
+    tier: str,
+) -> list[str]:
+    """Build the customer-facing "What's working" list.
+
+    A category passes when it has no Critical/High finding in the final
+    list (Snoop's externally-passed checks short-circuit the security-lite
+    category to "passing" when none of its findings landed). We emit the
+    plain-English buyer name for each passing category, capped at 8 lines
+    so the report stays scannable per SIMPLICITY-GUARDRAILS §3.7.
+    """
+    if not categories:
+        return []
+
+    tier_rank = {"Starter Package": 1, "Scale Up Package": 2, "Pro Package": 3}
+    customer_rank = tier_rank.get(tier, 1)
+
+    blocking = {"critical", "high", "medium"}
+
+    by_category: dict[str, list[dict[str, Any]]] = {}
+    for f in findings:
+        cid = (f.get("category") or "").strip()
+        if cid:
+            by_category.setdefault(cid, []).append(f)
+
+    passed: list[str] = []
+    for cat in categories:
+        cid = cat.get("id")
+        min_tier = cat.get("tier_min")
+        if min_tier and customer_rank < tier_rank.get(min_tier, 0):
+            continue
+        cat_findings = by_category.get(cid, [])
+        has_blocker = any(
+            (f.get("severity") or "").lower() in blocking for f in cat_findings
+        )
+        if has_blocker:
+            continue
+        # Security-lite also has to actually run cleanly (not just be
+        # absent from findings because the LLM didn't tag anything with
+        # this category).
+        if cid == security_lite.CATEGORY_ID:
+            if not snoop_passed_ids:
+                continue
+        display = cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
+        passed.append(display.strip().rstrip("."))
+    return passed[:8]
 
 
 # ---------------------------------------------------------------------------
@@ -574,6 +782,24 @@ def run(
         print(f"[html] WARN: extraction failed: {exc}", file=sys.stderr)
         pages = []
 
+    # ---- 3b. Snoop's security-lite checks (per docs/TESTERS-CAST.md) ----
+    # Runs after the HTML extract (so cred-leak checks can scan the
+    # rendered HTML) and before the LLM call. Any findings here are
+    # merged into the LLM output below. Failures of individual checks
+    # are non-fatal: pipeline still produces a YAML.
+    try:
+        snoop = security_lite.run_security_lite(
+            base_url=customer_ctx.url,
+            pages=pages,
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[security-lite] WARN: skipped: {exc}", file=sys.stderr)
+        snoop = {"findings": [], "passed_check_ids": [], "failed_check_ids": []}
+    print(
+        f"[security-lite] {len(snoop['findings'])} finding(s); "
+        f"passed: {snoop['passed_check_ids']}; failed: {snoop['failed_check_ids']}"
+    )
+
     # ---- 4. Screenshots for vision ----
     screenshots = collect_screenshots(customer_ctx.slug)
     print(f"[vision] {len(screenshots)} screenshot(s) ready for LLM")
@@ -588,7 +814,7 @@ def run(
     print(f"[llm] provider={client.name} model={client.model}")
 
     library = load_findings_library()
-    system_prompt = build_system_prompt(customer_ctx.platform)
+    system_prompt = build_system_prompt(customer_ctx.platform, tier=customer_ctx.tier)
 
     finding_prompt = build_finding_user_prompt(
         customer_ctx,
@@ -607,8 +833,16 @@ def run(
         max_findings=cap,
     )
 
+    # Merge Snoop's pre-generated security-lite findings before the cap is
+    # applied so a critical exposed credential isn't dropped because the
+    # LLM filled the cap with lower-severity items.
+    snoop_findings = list(snoop.get("findings") or [])
+    if snoop_findings:
+        findings = snoop_findings + list(findings or [])
+        print(f"[merge] +{len(snoop_findings)} Snoop finding(s) merged")
+
     findings = yaml_writer.sort_findings(findings)[:cap]
-    print(f"[llm] generated {len(findings)} finding(s)")
+    print(f"[llm] {len(findings)} finding(s) after merge + cap")
 
     # ---- 6. Verdict ----
     verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
@@ -623,9 +857,12 @@ def run(
         print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
         verdict = _default_verdict(findings, customer_ctx.app_name)
 
-    # ---- 7. QSG (Full Package only) ----
+    # Constrain to the four canonical labels regardless of LLM drift.
+    verdict = _normalize_verdict(verdict)
+
+    # ---- 7. QSG (every paid tier per PRODUCT-DECISIONS.md §8) ----
     qsg = None
-    if customer_ctx.tier == "Full Package":
+    if customer_ctx.tier in ("Starter Package", "Scale Up Package", "Pro Package"):
         qsg_prompt = build_qsg_user_prompt(customer_ctx, pages=pages)
         try:
             qsg = client.generate_qsg(
@@ -637,6 +874,14 @@ def run(
             print(f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty", file=sys.stderr)
 
     # ---- 8. Payload + YAML ----
+    categories = load_finding_categories()
+    passed_checks = compute_passed_checks(
+        findings=findings,
+        snoop_passed_ids=list(snoop.get("passed_check_ids") or []),
+        categories=categories,
+        tier=customer_ctx.tier,
+    )
+
     payload: dict[str, Any] = {
         "customer": {
             "first_name": customer_ctx.first_name,
@@ -651,6 +896,7 @@ def run(
         },
         "verdict": verdict,
         "findings": findings,
+        "passed_checks": passed_checks,
     }
     if qsg and qsg.get("steps"):
         payload["quick_start_guide"] = qsg
@@ -738,7 +984,7 @@ def regenerate_finding(
     }
     client = llm_client.build_client(provider=provider, stub_context=stub_context)
 
-    system_prompt = build_system_prompt(customer_ctx.platform)
+    system_prompt = build_system_prompt(customer_ctx.platform, tier=customer_ctx.tier)
     base = build_finding_user_prompt(
         customer_ctx,
         cap=1,
@@ -791,8 +1037,10 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         sys.exit("ERROR: --url must start with http:// or https://")
 
     tier = (kwargs.get("tier") or "").strip()
-    if tier not in {"Starter Package", "Full Package"}:
-        sys.exit("ERROR: --tier must be 'Starter Package' or 'Full Package'")
+    if tier not in {"Starter Package", "Scale Up Package", "Pro Package"}:
+        sys.exit(
+            "ERROR: --tier must be 'Starter Package', 'Scale Up Package', or 'Pro Package'"
+        )
 
     builder = (kwargs.get("builder") or "").strip() or "Lovable"
     platform = normalize_platform(kwargs.get("platform"))

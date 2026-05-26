@@ -42,10 +42,17 @@ from . import draft_store, deliver_runner, yaml_writer
 # ---------------------------------------------------------------------------
 
 
-_DEFAULT_TIER_CAPS = {"Starter Package": 5, "Full Package": 20}
+_DEFAULT_TIER_CAPS = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}
 
-_TIER_CAP_PATTERN = re.compile(
-    r"cap\s*=\s*(?P<starter>\d+)\s*if\s*tier\s*==\s*['\"]Starter Package['\"]\s*else\s*(?P<full>\d+)"
+# Match the dict-lookup cap form used by deliver_report.py:
+#   cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
+# Captures every "Tier Name": <int> pair so the UI auto-tracks future tier
+# additions (e.g. Pro Package) without a code edit here.
+_TIER_CAP_DICT_PATTERN = re.compile(
+    r'cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier'
+)
+_TIER_CAP_ENTRY_PATTERN = re.compile(
+    r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)'
 )
 
 
@@ -59,13 +66,13 @@ def discover_tier_caps(deliver_report_path: Path) -> dict[str, int]:
         text = deliver_report_path.read_text(encoding="utf-8")
     except OSError:
         return dict(_DEFAULT_TIER_CAPS)
-    match = _TIER_CAP_PATTERN.search(text)
-    if not match:
+    dict_match = _TIER_CAP_DICT_PATTERN.search(text)
+    if not dict_match:
         return dict(_DEFAULT_TIER_CAPS)
-    return {
-        "Starter Package": int(match.group("starter")),
-        "Full Package": int(match.group("full")),
-    }
+    parsed: dict[str, int] = {}
+    for entry in _TIER_CAP_ENTRY_PATTERN.finditer(dict_match.group("body")):
+        parsed[entry.group("tier")] = int(entry.group("cap"))
+    return parsed or dict(_DEFAULT_TIER_CAPS)
 
 
 # ---------------------------------------------------------------------------
@@ -580,12 +587,17 @@ def _validate_payload(payload: dict[str, Any], tier_caps: dict[str, int]) -> lis
         if sev and sev not in yaml_writer.VALID_SEVERITIES:
             errors.append({"field": f"findings[{i}].severity", "message": f"Finding {i + 1}: severity must be one of {', '.join(yaml_writer.VALID_SEVERITIES)}."})
 
-    if tier == "Full Package":
+    # QSG is part of every paid tier's deliverable per PRODUCT-DECISIONS.md §8,
+    # but the form only hard-enforces it on Scale Up + Pro (the deeper tiers
+    # where it's a marketing promise). For Starter, the QSG card is shown so
+    # Rob can fill it in, but the audit can still ship without one if the
+    # customer's app is too thin to write a useful guide for.
+    if tier in ("Scale Up Package", "Pro Package"):
         qsg = payload.get("quick_start_guide") or {}
         if not (qsg.get("title") or "").strip():
-            errors.append({"field": "qsg.title", "message": "Quick Start Guide title is required for Full Package."})
+            errors.append({"field": "qsg.title", "message": f"Quick Start Guide title is required for {tier}."})
         if not (qsg.get("intro") or "").strip():
-            errors.append({"field": "qsg.intro", "message": "Quick Start Guide intro is required for Full Package."})
+            errors.append({"field": "qsg.intro", "message": f"Quick Start Guide intro is required for {tier}."})
         steps = qsg.get("steps") or []
         non_empty_steps = [s for s in steps if isinstance(s, dict) and ((s.get("title") or "").strip() or (s.get("body") or "").strip())]
         if not non_empty_steps:

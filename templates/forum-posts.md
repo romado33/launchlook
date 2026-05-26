@@ -96,7 +96,7 @@ Send by DM (never in the public thread). Wait until the founder has actually rea
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version — that's what LaunchLook does. $19 Starter is priority triage: the top 7 things you need to fix, ranked by impact, with copy-paste prompts you drop into {BUILDER}. $49 Full is a comprehensive audit: up to 25 findings across every category, plus a cross-user data check with two test accounts, plus a Quick Start Guide PDF for your users. $99 Pro adds an integrations review (Stripe / auth / email / analytics setup) and a 30-minute Loom walkthrough — for founders going to investor demos or paid traffic. AI drafts every finding, I review them all before delivery. No scanner, no GitHub access. Within 48h on Starter (usually 24), within 24h on Full and Pro (usually 12).
+If you want the full version — ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER} — that's what LaunchLook does ($19 Starter, $49 Scale Up, $99 Pro). Founder-reviewed, no scanner, no GitHub access. Within 48 hours, usually 24.
 
 launchlook.app — and there's a free DIY checklist at launchlook.app/checklist if you want to keep going on your own. No pressure either way.
 ```

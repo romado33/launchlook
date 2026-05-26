@@ -27,7 +27,7 @@
 
   const state = {
     slug: "",
-    tierCaps: window.AUDIT_UI_BOOTSTRAP?.tier_caps || { "Starter Package": 5, "Full Package": 20 },
+    tierCaps: window.AUDIT_UI_BOOTSTRAP?.tier_caps || { "Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40 },
     payload: blankPayload(),
     autosaveTimer: null,
     autosaveHeartbeat: null,
@@ -501,8 +501,13 @@
   function refreshQsgVisibility() {
     const qsgCard = $('[data-section="qsg"]');
     if (!qsgCard) return;
-    const isFull = state.payload.customer.tier === "Full Package";
-    qsgCard.hidden = !isFull;
+    const tier = state.payload.customer.tier;
+    const showQsg = (
+      tier === "Starter Package" ||
+      tier === "Scale Up Package" ||
+      tier === "Pro Package"
+    );
+    qsgCard.hidden = !showQsg;
     refreshFindingsCounter();
   }
 

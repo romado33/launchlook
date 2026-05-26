@@ -116,8 +116,20 @@ AUDIT_SCHEMA: dict[str, Any] = {
 VERDICT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
-    "required": ["emoji", "summary", "narrative"],
+    # ``label`` is the canonical 4-value vocabulary documented in
+    # scripts/ai_audit/prompts/verdict_generation.txt. Pipeline normalizes
+    # any drift back to one of these four before the YAML is written.
+    "required": ["label", "emoji", "summary", "narrative"],
     "properties": {
+        "label": {
+            "type": "string",
+            "enum": [
+                "Ready to share",
+                "Safe for friends/family testing",
+                "Needs fixes before launch",
+                "Do not invite real users yet",
+            ],
+        },
         "emoji": {"type": "string", "enum": ["🟢", "🟡", "🔴"]},
         "summary": {"type": "string"},
         "narrative": {"type": "string"},
@@ -181,7 +193,12 @@ class LLMClient(ABC):
         system_prompt: str,
         user_prompt: str,
     ) -> dict[str, Any]:
-        """Return ``{emoji, summary, narrative}``."""
+        """Return ``{label, emoji, summary, narrative}``.
+
+        ``label`` is one of the four canonical values declared in
+        ``VERDICT_SCHEMA``; the pipeline normalizes any drift before
+        the YAML is written.
+        """
 
     @abstractmethod
     def generate_qsg(
@@ -375,10 +392,11 @@ class ClaudeClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=[],
             tool_name="record_audit_verdict",
-            tool_description="Record the verdict emoji, summary, and narrative.",
+            tool_description="Record the verdict label, emoji, summary, and narrative.",
             input_schema=VERDICT_SCHEMA,
         )
         return {
+            "label": (payload.get("label") or "").strip(),
             "emoji": payload.get("emoji", "🟡"),
             "summary": (payload.get("summary") or "").strip(),
             "narrative": (payload.get("narrative") or "").strip(),
@@ -534,6 +552,7 @@ class GPTClient(LLMClient):
             schema=VERDICT_SCHEMA,
         )
         return {
+            "label": (payload.get("label") or "").strip(),
             "emoji": payload.get("emoji", "🟡"),
             "summary": (payload.get("summary") or "").strip(),
             "narrative": (payload.get("narrative") or "").strip(),
@@ -670,6 +689,7 @@ class StubClient(LLMClient):
 
     def generate_verdict(self, *, system_prompt: str, user_prompt: str) -> dict[str, Any]:
         return {
+            "label": "Safe for friends/family testing",
             "emoji": "🟡",
             "summary": "Stub verdict; rerun with a real LLM key to get a curated narrative.",
             "narrative": (

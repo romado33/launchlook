@@ -1,6 +1,6 @@
 # Prompts — Quick Start Guide pipeline
 
-The QSG is included on Starter Package ($9) and Full Package ($29) tiers. The pipeline goes:
+The QSG is included on every paid tier (Starter $19 / Scale Up $49 / Pro $99) per `docs/PRODUCT-DECISIONS.md` §8. The pipeline goes:
 
 ```
 Intake form

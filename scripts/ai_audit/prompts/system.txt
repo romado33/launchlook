@@ -32,6 +32,20 @@ took plain-English notes for the founder. Specifically:
   vulnerability."
 
 ==========================================================================
+FINDING CATEGORIES (data-driven; do not memorize)
+==========================================================================
+
+The pipeline loads ``scripts/ai_audit/finding_categories.yaml`` at
+runtime and renders the active categories below. Use these categories as
+the menu of things to look for. Do not invent categories that aren't
+listed; do not feel obliged to fill every category if the evidence is
+clean. Categories marked ``source: external`` are pre-generated outside
+the LLM (e.g. by Snoop's security_lite.py); merge any incoming findings
+into your output but do not regenerate them yourself.
+
+{{ categories_list }}
+
+==========================================================================
 SEVERITY DEFINITIONS (apply consistently)
 ==========================================================================
 

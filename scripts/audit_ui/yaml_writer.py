@@ -32,7 +32,7 @@ import yaml
 
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3}
 VALID_SEVERITIES = ("critical", "high", "medium", "low")
-VALID_TIERS = ("Starter Package", "Full Package")
+VALID_TIERS = ("Starter Package", "Scale Up Package", "Pro Package")
 VALID_BUILDERS = ("Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Webflow", "Other")
 VALID_PLATFORMS = ("vibe-coder", "webflow")
 DEFAULT_PLATFORM = "vibe-coder"
@@ -95,7 +95,14 @@ def form_to_yaml(payload: dict[str, Any]) -> str:
             if i != len(findings) - 1:
                 lines.append("")
 
-    if customer.get("tier") == "Full Package":
+    passed = _clean_passed_checks(payload.get("passed_checks", []))
+    if passed:
+        lines.append("")
+        lines.append("passed_checks:")
+        for entry in passed:
+            lines.append(f"  - {_format_scalar(entry)}")
+
+    if customer.get("tier") in ("Starter Package", "Scale Up Package", "Pro Package"):
         qsg = _clean_qsg(payload.get("quick_start_guide", {}))
         if qsg:
             lines.append("")
@@ -128,7 +135,7 @@ _CUSTOMER_KEYS = (
     "platform",
 )
 
-_VERDICT_KEYS = ("emoji", "summary", "narrative")
+_VERDICT_KEYS = ("label", "emoji", "summary", "narrative")
 
 _FINDING_KEYS = (
     "severity",
@@ -138,6 +145,10 @@ _FINDING_KEYS = (
     "screenshot_path",
     "screenshot_caption",
     "fix_prompt",
+    # Optional persona tag (e.g. "Caught by The Snoop") — stays in YAML so
+    # the report template can render the badge. Internal-only fields like
+    # ``category`` / ``check_id`` are intentionally dropped by the cleaner.
+    "tag",
 )
 
 _QSG_KEYS = ("title", "intro", "steps", "footer_note")
@@ -194,6 +205,19 @@ def _clean_findings(raw: list[Any]) -> list[dict[str, Any]]:
                 cleaned[key] = val
         if cleaned.get("severity") and cleaned.get("title"):
             out.append(cleaned)
+    return out
+
+
+def _clean_passed_checks(raw: Any) -> list[str]:
+    """Drop empty/non-string entries; trim whitespace; preserve order."""
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for entry in raw:
+        if isinstance(entry, str):
+            cleaned = entry.strip()
+            if cleaned:
+                out.append(cleaned)
     return out
 
 
@@ -358,6 +382,11 @@ def yaml_to_form(text: str) -> dict[str, Any]:
     verdict = data.get("verdict") or {}
     findings = data.get("findings") or []
     qsg = data.get("quick_start_guide") or {}
+    passed_checks = [
+        s.strip()
+        for s in (data.get("passed_checks") or [])
+        if isinstance(s, str) and s.strip()
+    ]
 
     payload = {
         "customer": {
@@ -372,6 +401,7 @@ def yaml_to_form(text: str) -> dict[str, Any]:
             "platform": customer.get("platform") or DEFAULT_PLATFORM,
         },
         "verdict": {
+            "label": verdict.get("label", "") or "",
             "emoji": verdict.get("emoji", "") or "",
             "summary": verdict.get("summary", "") or "",
             "narrative": verdict.get("narrative", "") or "",
@@ -385,10 +415,12 @@ def yaml_to_form(text: str) -> dict[str, Any]:
                 "screenshot_path": f.get("screenshot_path", "") or "",
                 "screenshot_caption": f.get("screenshot_caption", "") or "",
                 "fix_prompt": f.get("fix_prompt", "") or "",
+                "tag": f.get("tag", "") or "",
             }
             for f in findings
             if isinstance(f, dict)
         ],
+        "passed_checks": passed_checks,
         "quick_start_guide": {
             "title": qsg.get("title", "") or "",
             "intro": qsg.get("intro", "") or "",

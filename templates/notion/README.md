@@ -11,9 +11,10 @@ Files Rob imports into Notion to set up the **LaunchLook Ops** workspace (BL-03)
    - `Customers` — import `customers-db.csv`
    - `Outreach Tracker` — import `outreach-db.csv`
    - `Findings Library` — import `../../findings_library/findings.csv`
-3. Create a top-level page called **Report Templates**. Inside it, create two sub-pages from the templates in this folder:
+3. Create a top-level page called **Report Templates**. Inside it, create sub-pages from the templates in this folder:
    - `Template — Starter Package` (from `report-quick-checkup.md`)
-   - `Template — Full Package` (from `report-launch-pack.md`)
+   - `Template — Scale Up Package` (from `report-launch-pack.md`, the historical name was "Full Package")
+   - `Template — Pro Package` (from `report-launch-pack.md` extended with the integrations / Loom sections)
    - *(Optional, advanced)* `Template — Polish add-on` (from `report-polish.md`) — only if you start offering a paid follow-up tier; not part of the current MVP.
 4. Create a page called **Crawler Wishlist** (from `crawler-wishlist.md`).
 5. Mark each report template page as a **Notion Template** so duplicating is one click per customer.
@@ -39,7 +40,7 @@ Notion natively supports Markdown import on page creation:
 | Email | Email | |
 | App URL | URL | |
 | Platform | Select | Lovable / Bolt / Base44 / Replit / v0 / Cursor / Webflow / Other (drives whether the row routes to the vibe-coder or Webflow audit pipeline) |
-| Tier | Select | Starter Package / Full Package (legacy: Quick Checkup, Launch Pack, Polish) |
+| Tier | Select | Starter Package / Scale Up Package / Pro Package (legacy values still in DB: Full Package, Quick Checkup, Launch Pack, Polish) |
 | Payment Date | Date | |
 | Intake Received | Checkbox | |
 | Delivery Due | Date | Formula: Payment Date + tier turnaround (Starter 24h, Full 12h) |

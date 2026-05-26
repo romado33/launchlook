@@ -10,7 +10,7 @@ A few notes:
 - Written in plain English — you don't need to be technical to understand the findings.
 - The findings are ranked by severity. Start at the top.
 - Every finding has a copy-paste fix prompt for {PLATFORM}. Just paste them in and let your builder fix it.
-- Starter Package and Full Package include a Quick Start Guide in your report.
+- Every paid tier (Starter, Scale Up, Pro) includes a Quick Start Guide in your report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 
 ---
@@ -22,7 +22,7 @@ Optional — helps us a ton (pick any, no pressure):
 2. **Share the checklist** — Forward https://launchlook.app/checklist to a founder friend who's about to share their link.
 
 3. **Copy-paste post** (edit as you like):
-   "Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. Worth the $9. launchlook.app"
+   "Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. Worth the $19. launchlook.app"
 
 Your referral code (in the report): **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you on a follow-up.
 

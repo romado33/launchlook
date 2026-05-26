@@ -251,18 +251,18 @@ def main() -> int:
         fails.append("read-back")
 
     # 8. Update
-    print("\n8. Update Tier: Starter Package -> Full Package")
+    print("\n8. Update Tier: Starter Package -> Scale Up Package")
     try:
         notion.pages.update(
             page_id=page_id,
             properties={
-                "Tier": {"select": {"name": "Full Package"}},
+                "Tier": {"select": {"name": "Scale Up Package"}},
                 "Status": {"select": {"name": "In progress"}},
             },
         )
         page = notion.pages.retrieve(page_id=page_id)
         new_tier = page["properties"]["Tier"]["select"]["name"]
-        if new_tier == "Full Package":
+        if new_tier == "Scale Up Package":
             out(PASS, f"updated Tier -> {new_tier}")
         else:
             out(FAIL, f"update did not stick: Tier={new_tier}")

@@ -35,9 +35,9 @@
 
     <div class="mt-8 rounded-lg border border-line bg-white p-6 sm:p-8">
       <p class="font-medium">Overall verdict</p>
-      <p class="mt-2 text-muted">🟡 Needs a few fixes before sharing publicly</p>
-      <p class="mt-4 text-sm text-muted leading-relaxed">Polished at first glance: custom branding, booking, search, auth. Dev-only features still visible on the live URL, and the main booking flow dead-ends. Fix critical items before sharing outside your test circle.</p>
-      <p class="mt-4 text-sm"><strong class="text-ink">5 findings</strong> below, sorted by severity. This is a <strong class="text-ink">Starter Package</strong> sample: priority triage of the most important things to fix before strangers see your app (Starter caps at 7 findings; this example came in well under). The Full Package ($49) is a comprehensive audit — up to 25 findings across all categories plus a cross-user data check. Pro Package ($99) goes up to 40 findings + an integrations review (Stripe / auth / email / analytics) + a 30-minute Loom walkthrough. Written in plain English. Technical wording only in the fix prompts you paste into your builder. Real reports include actual screenshots.</p>
+      <p class="mt-2 text-ink"><strong>Safe for friends/family testing</strong></p>
+      <p class="mt-2 text-sm text-muted leading-relaxed">Polished at first glance: custom branding, booking, search, auth. Dev-only features still visible on the live URL, and the main booking flow dead-ends. Fix the critical items before inviting strangers in.</p>
+      <p class="mt-4 text-sm"><strong class="text-ink">6 findings shown</strong> below, sorted by severity. Starter surfaces the 10 most impactful pre-launch issues; Scale Up goes deeper (up to 30 findings) and adds a user-data isolation check; Pro covers up to 40 findings with a Loom walkthrough. Every report is reviewed by a founder before it ships. Written in plain English. Technical wording only in the fix prompts you paste into your builder. Real reports include actual screenshots.</p>
     </div>
 
     <h2 class="font-serif text-xl mt-10 mb-4">🔴 Critical</h2>
@@ -105,7 +105,16 @@
       </section>
     </div>
 
-    <p class="mt-10 text-sm text-muted"><strong class="text-ink">Starter ($19):</strong> shows the 7 most important findings (priority triage). <strong class="text-ink">Full ($49):</strong> up to 25 findings across all categories plus a cross-user data check with two test accounts (we sign in as user A, then user B, and confirm A can't see B's data), plus a Quick Start Guide PDF for your users. <strong class="text-ink">Pro ($99):</strong> up to 40 findings, plus an integrations review (Stripe / auth / email / analytics setup), plus a 30-minute Loom walkthrough where a founder walks you through the report on camera.</p>
+    <h2 class="font-serif text-xl mt-10 mb-4">🟡 Medium</h2>
+    <div class="space-y-6">
+      <section class="rounded-lg border border-line bg-white p-5">
+        <h3 class="font-medium">Cards show 4.5 stars with (0) reviews</h3>
+        <p class="text-sm text-muted mt-2 leading-relaxed"><strong class="text-ink">What we saw:</strong> Listing cards display "<strong class="text-ink">4.5 (0)</strong>" (a numeric rating with zero reviews).</p>
+        <p class="text-sm text-muted mt-2"><strong class="text-ink">Why it matters:</strong> Looks like fake or seeded data, which kills trust on a marketplace.</p>
+      </section>
+    </div>
+
+    <p class="mt-10 text-sm text-muted">Every paid tier includes a one-page <strong class="text-ink">Quick Start Guide</strong> for your users: plain-English instructions you can hand to your first visitors. <strong class="text-ink">Scale Up ($49)</strong> and <strong class="text-ink">Pro ($99)</strong> add a user data isolation check with two test accounts (we sign in as user A, then user B, and confirm A can't see B's data).</p>
 
     <a href="/#pricing" class="launchlook-btn launchlook-btn-primary mt-8 plausible-event-name=StarterCheckout">Get Starter Package ($19)</a>
   </article>

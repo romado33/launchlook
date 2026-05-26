@@ -1,9 +1,11 @@
 # Example Pro Package customer file for scripts/deliver_report.py.
 #
-# Pro Package extends Full with:
-#   * Cap raised to 40 findings (this example uses 14 — depth, not volume)
+# Pro Package extends Scale Up with:
+#   * Cap raised to 40 findings (this example uses 14 to show depth, not volume)
 #   * Operational integrations review (Stripe / auth / email / analytics)
-#   * 30-minute Loom walkthrough (scheduled separately by email after delivery)
+#   * Recorded Loom walkthrough (5 to 10 minutes, scheduled separately by email
+#     after delivery)
+#   * Handoff Report PDF (technical context the main report deliberately strips)
 #
 # The integrations findings are emitted as regular findings in the standard
 # `findings` list with titles prefixed "Integrations:" so they group visibly
@@ -23,12 +25,13 @@ customer:
   app_name: Tessera Boards
   app_url: https://tessera.lovable.app
   url_redacted: false        # true to print "URL redacted" in the report
-  tier: Pro Package          # Starter Package (cap 7) | Full Package (cap 25) | Pro Package (cap 40)
+  tier: Pro Package          # Starter (cap 10) | Scale Up (cap 30) | Pro (cap 40)
   builder: Lovable           # used in the fix-prompt headers
 
 verdict:
-  emoji: "🟡"
-  summary: Polished surface, but the integrations have a few sharp edges before paid traffic.
+  label: Do not invite real users yet
+  emoji: "🔴"
+  summary: Dev login bypass and a cross-user data leak need to clear before any real traffic.
   narrative: |
     Tessera Boards looks ready at a glance: clean Kanban layout, working sign-up,
     Stripe checkout that actually completes, and mobile screens that don't break.
@@ -159,8 +162,8 @@ findings:
       Anyone who guesses or shares a board ID can read another customer's
       private boards. The IDs aren't easily guessable, but a former
       collaborator who leaves a team would still have the URLs in their
-      history. This is the cross-user leak Pro Package specifically tests
-      for.
+      history. This is the cross-user leak Scale Up and Pro tiers
+      specifically test for.
     fix_prompt: |
       Add a server-side membership check at the top of the boards lookup
       route. In Supabase, the simplest approach is a row-level security
@@ -307,6 +310,12 @@ findings:
       test patterns. Easier and more durable: add an `is_internal`
       boolean to the users table, set it for all team members, and
       filter on it in the activity query.
+
+# Categories with no critical/high finding in this audit (Pro depth: 14 findings).
+# Surfaces as "What's working" in the rendered report.
+passed_checks:
+  - confusing or placeholder text
+  - obvious visible risks
 
 quick_start_guide:
   title: Tessera Boards, Getting Started

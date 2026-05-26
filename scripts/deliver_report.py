@@ -60,7 +60,7 @@ EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
 OUTPUT_ROOT = REPO_ROOT / "output" / "reports"
 
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
-VALID_TIERS = {"Starter Package", "Full Package"}
+VALID_TIERS = {"Starter Package", "Scale Up Package", "Pro Package"}
 VALID_PLATFORMS = {"vibe-coder", "webflow"}
 DEFAULT_PLATFORM = "vibe-coder"
 
@@ -122,7 +122,7 @@ def validate(data: dict[str, Any]) -> None:
         if not f.get("title"):
             sys.exit(f"ERROR: findings[{i}].title is required")
 
-    cap = 7 if tier == "Starter Package" else 20
+    cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
     if len(findings) > cap:
         print(
             f"WARN: {tier} caps at {cap} findings, this YAML has {len(findings)}.",
@@ -189,6 +189,7 @@ def render_main_report_html(env, data: dict[str, Any], delivered_at: str, qsg_li
         customer=customer,
         verdict=data["verdict"],
         findings=data["findings"],
+        passed_checks=data.get("passed_checks", []) or [],
         delivered_at=delivered_at,
         qsg_link=qsg_link,
     )

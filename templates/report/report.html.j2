@@ -130,9 +130,21 @@
       font-family: 'Fraunces', Georgia, serif;
       font-size: 14pt;
       line-height: 1.3;
-      margin: 0 0 8pt;
+      margin: 0 0 4pt;
       color: var(--ink);
       font-weight: 500;
+    }
+
+    .verdict-emoji {
+      margin-right: 4pt;
+      font-size: 13pt;
+    }
+
+    .verdict-tagline {
+      font-size: 10.5pt;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 8pt;
     }
 
     .verdict-narrative {
@@ -308,6 +320,64 @@
     .finding.medium   { border-left: 3px solid var(--medium); }
     .finding.low      { border-left: 3px solid var(--low); }
 
+    /* ---------- Persona tag (e.g. "Caught by The Snoop") ---------- */
+    .persona-tag {
+      display: inline-block;
+      margin-left: 6pt;
+      padding: 1pt 6pt;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: var(--surface-tint);
+      border-radius: 3pt;
+      vertical-align: middle;
+    }
+
+    /* ---------- Passed checks ("What's working") ---------- */
+    .passed-checks {
+      margin: 16pt 0 6pt;
+      padding: 12pt 14pt;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--low);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .passed-checks h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 13pt;
+      margin: 0 0 6pt;
+      color: var(--ink);
+    }
+
+    .passed-checks ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .passed-checks li {
+      font-size: 10pt;
+      color: var(--ink);
+      padding: 2pt 0;
+    }
+
+    .passed-checks li::before {
+      content: "✓ ";
+      color: var(--low);
+      font-weight: 600;
+      margin-right: 4pt;
+    }
+
+    .passed-checks .intro {
+      font-size: 9.5pt;
+      color: var(--muted);
+      margin: 0 0 6pt;
+    }
+
     /* ---------- Page footer (rendered by Playwright via pdf options) ---------- */
     /* We rely on Playwright's headerTemplate / footerTemplate to print the
        running footer. The template here just provides the visible content. */
@@ -328,7 +398,17 @@
 
     <section class="verdict">
       <p class="verdict-label">Overall verdict</p>
+      {% if verdict.label %}
+      <p class="verdict-summary">
+        <span class="verdict-emoji" aria-hidden="true">{{ verdict.emoji }}</span>
+        {{ verdict.label }}
+      </p>
+      {% if verdict.summary %}
+      <p class="verdict-tagline">{{ verdict.summary }}</p>
+      {% endif %}
+      {% else %}
       <p class="verdict-summary">{{ verdict.emoji }} {{ verdict.summary }}</p>
+      {% endif %}
       {% if verdict.narrative %}
       <p class="verdict-narrative">{{ verdict.narrative }}</p>
       {% endif %}
@@ -363,7 +443,10 @@
           <article class="finding {{ sev_key }}">
             <div class="finding-head">
               <span class="finding-num">FINDING {{ "%02d"|format(ns.idx) }}</span>
-              <h3 class="finding-title">{{ f.title }}</h3>
+              <h3 class="finding-title">
+                {{ f.title }}
+                {%- if f.tag %} <span class="persona-tag">{{ f.tag }}</span>{% endif %}
+              </h3>
             </div>
 
             {% if f.what_we_saw %}
@@ -399,6 +482,18 @@
         {% endfor %}
       {% endif %}
     {% endfor %}
+
+    {% if passed_checks %}
+    <section class="passed-checks">
+      <h2>What's working</h2>
+      <p class="intro">No critical or high-severity issues turned up in these areas.</p>
+      <ul>
+        {% for item in passed_checks %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
 
     <section class="closing">
       <p>
