@@ -18,4 +18,4 @@ The companion CLI lives at ``scripts/ai_audit.py``.
 
 from __future__ import annotations
 
-__all__ = ["pipeline", "llm_client", "html_extract", "feedback"]
+__all__ = ["pipeline", "llm_client", "html_extract", "feedback", "cost_tracker"]

@@ -33,6 +33,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Iterable
 
+from . import cost_tracker
+
 
 # ---------------------------------------------------------------------------
 # Default model names (override via env var)
@@ -327,6 +329,7 @@ class ClaudeClient(LLMClient):
         tool_name: str,
         tool_description: str,
         input_schema: dict[str, Any],
+        call_type: str = "other",
     ) -> dict[str, Any]:
         tool = {
             "name": tool_name,
@@ -339,14 +342,22 @@ class ClaudeClient(LLMClient):
         candidates = [self.model] + [m for m in DEFAULT_CLAUDE_FALLBACKS if m != self.model]
         for candidate in candidates:
             try:
-                resp = self._client.messages.create(
-                    model=candidate,
-                    max_tokens=8000,
-                    system=system_prompt,
-                    messages=[{"role": "user", "content": content_blocks}],
-                    tools=[tool],
-                    tool_choice={"type": "tool", "name": tool_name},
-                )
+                with cost_tracker.track_call(call_type) as _tracker:
+                    resp = self._client.messages.create(
+                        model=candidate,
+                        max_tokens=8000,
+                        system=system_prompt,
+                        messages=[{"role": "user", "content": content_blocks}],
+                        tools=[tool],
+                        tool_choice={"type": "tool", "name": tool_name},
+                    )
+                    _usage = getattr(resp, "usage", None)
+                    if _usage is not None:
+                        _tracker.set_usage(
+                            candidate,
+                            int(getattr(_usage, "input_tokens", 0) or 0),
+                            int(getattr(_usage, "output_tokens", 0) or 0),
+                        )
                 self.model = candidate
                 for block in resp.content:
                     if getattr(block, "type", None) == "tool_use" and getattr(block, "name", None) == tool_name:
@@ -376,6 +387,7 @@ class ClaudeClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=screenshots,
             tool_name="record_audit_findings",
+            call_type="finding_generation",
             tool_description=(
                 "Record the draft audit findings as a structured list. "
                 f"At most {max_findings} findings, sorted critical→low."
@@ -392,6 +404,7 @@ class ClaudeClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=[],
             tool_name="record_audit_verdict",
+            call_type="verdict_generation",
             tool_description="Record the verdict label, emoji, summary, and narrative.",
             input_schema=VERDICT_SCHEMA,
         )
@@ -414,6 +427,7 @@ class ClaudeClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=screenshots,
             tool_name="record_quick_start_guide",
+            call_type="qsg_generation",
             tool_description="Record the one-page Quick Start Guide for end users.",
             input_schema=QSG_SCHEMA,
         )
@@ -469,6 +483,7 @@ class GPTClient(LLMClient):
         screenshots: list[tuple[str, Path]],
         schema_name: str,
         schema: dict[str, Any],
+        call_type: str = "other",
     ) -> dict[str, Any]:
         user_content = self._build_user_content(user_prompt, screenshots)
         messages = [
@@ -480,19 +495,27 @@ class GPTClient(LLMClient):
         candidates = [self.model] + [m for m in DEFAULT_GPT_FALLBACKS if m != self.model]
         for candidate in candidates:
             try:
-                resp = self._client.chat.completions.create(
-                    model=candidate,
-                    messages=messages,
-                    response_format={
-                        "type": "json_schema",
-                        "json_schema": {
-                            "name": schema_name,
-                            "schema": schema,
-                            "strict": True,
+                with cost_tracker.track_call(call_type) as _tracker:
+                    resp = self._client.chat.completions.create(
+                        model=candidate,
+                        messages=messages,
+                        response_format={
+                            "type": "json_schema",
+                            "json_schema": {
+                                "name": schema_name,
+                                "schema": schema,
+                                "strict": True,
+                            },
                         },
-                    },
-                    max_completion_tokens=8000,
-                )
+                        max_completion_tokens=8000,
+                    )
+                    _usage = getattr(resp, "usage", None)
+                    if _usage is not None:
+                        _tracker.set_usage(
+                            candidate,
+                            int(getattr(_usage, "prompt_tokens", 0) or 0),
+                            int(getattr(_usage, "completion_tokens", 0) or 0),
+                        )
                 self.model = candidate
                 raw = resp.choices[0].message.content or "{}"
                 return json.loads(raw)
@@ -537,6 +560,7 @@ class GPTClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=screenshots,
             schema_name="audit_findings",
+            call_type="finding_generation",
             schema=AUDIT_SCHEMA,
         )
         return _coerce_findings_payload(payload)[:max_findings]
@@ -549,6 +573,7 @@ class GPTClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=[],
             schema_name="audit_verdict",
+            call_type="verdict_generation",
             schema=VERDICT_SCHEMA,
         )
         return {
@@ -570,6 +595,7 @@ class GPTClient(LLMClient):
             user_prompt=user_prompt,
             screenshots=screenshots,
             schema_name="quick_start_guide",
+            call_type="qsg_generation",
             schema=QSG_SCHEMA,
         )
         return _normalize_qsg(payload)
@@ -596,6 +622,16 @@ def _normalize_qsg(payload: dict[str, Any]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 # Stub client (offline)
 # ---------------------------------------------------------------------------
+
+
+
+def _stub_token_estimate(system_prompt: str, user_prompt: str) -> int:
+    """Rough char/4 estimate for the stub provider's cost log row."""
+    return max(1, (len(system_prompt) + len(user_prompt)) // 4)
+
+
+def _stub_output_estimate(approx_chars: int) -> int:
+    return max(1, approx_chars // 4)
 
 
 class StubClient(LLMClient):
@@ -626,6 +662,9 @@ class StubClient(LLMClient):
         screenshots: list[tuple[str, Path]],
         max_findings: int,
     ) -> list[dict[str, Any]]:
+        with cost_tracker.track_call("finding_generation") as _t:
+            _t.set_usage(self.model, _stub_token_estimate(system_prompt, user_prompt),
+                         _stub_output_estimate(max_findings * 180))
         sev_map = {
             "Critical": "critical",
             "High": "high",
@@ -688,6 +727,9 @@ class StubClient(LLMClient):
         return out[:max_findings]
 
     def generate_verdict(self, *, system_prompt: str, user_prompt: str) -> dict[str, Any]:
+        with cost_tracker.track_call("verdict_generation") as _t:
+            _t.set_usage(self.model, _stub_token_estimate(system_prompt, user_prompt),
+                         _stub_output_estimate(200))
         return {
             "label": "Safe for friends/family testing",
             "emoji": "🟡",
@@ -707,6 +749,9 @@ class StubClient(LLMClient):
         user_prompt: str,
         screenshots: list[tuple[str, Path]],
     ) -> dict[str, Any]:
+        with cost_tracker.track_call("qsg_generation") as _t:
+            _t.set_usage(self.model, _stub_token_estimate(system_prompt, user_prompt),
+                         _stub_output_estimate(600))
         return {
             "title": f"{self._app_name}, Getting Started",
             "intro": (

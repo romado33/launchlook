@@ -60,6 +60,10 @@ drafts/*
 # AI audit feedback data (per-customer)
 data/ai_feedback/
 
+# AI cost log (per-customer slug + token counts; internal-only per
+# docs/SIMPLICITY-GUARDRAILS.md §6 and docs/AI-COST-MONITORING.md)
+data/ai_costs/*.jsonl
+
 # Playwright
 test-results/
 playwright-report/

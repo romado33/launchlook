@@ -161,6 +161,7 @@ Guide: [`CUSTOMER-TRACKING.md`](CUSTOMER-TRACKING.md)
 - [ ] After each Stripe payment: `customers_track.py add ...`
 - [ ] After intake: `mark-intake` · after report: `mark-delivered`
 - [ ] Weekly: `customers_track.py stats` (progress toward 8 and **10** paying)
+- [ ] **Weekly: AI margin check** — python scripts/ai_costs_report.py --summary --days 7 and confirm margin > 70%. Full playbook in [AI-COST-MONITORING.md](AI-COST-MONITORING.md). If margin dips, run --alert --days 7 to find the outlier(s).
 - [ ] At **10 paying**: read [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) → `acknowledge-milestone-10` → start BL-14/15
 
 ### 6. Notion ops workspace

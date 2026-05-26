@@ -322,6 +322,24 @@ real data will probably show:
 
 ---
 
+## Cost tracking (every call is logged)
+
+Every Anthropic / OpenAI call the pipeline makes is wrapped with
+`scripts/ai_audit/cost_tracker.track_call(...)` and gets one JSON line
+appended to `data/ai_costs/<YYYY-MM-DD>.jsonl` (gitignored). The line
+records customer slug, tier, model, call type, token counts, latency,
+and computed USD cost. The `pipeline.run(...)` body wraps the LLM
+stages in `cost_tracker.customer_context(slug, tier)` so the LLM
+client does not need extra arguments.
+
+Read the log with `python scripts/ai_costs_report.py`. The full
+docs are at `docs/AI-COST-MONITORING.md`.
+
+Cost data is internal-only per `SIMPLICITY-GUARDRAILS.md` A6 - it
+never crosses into a customer-facing surface.
+
+---
+
 ## Cost expectations (approximate)
 
 Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):

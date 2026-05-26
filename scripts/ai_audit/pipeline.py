@@ -31,6 +31,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.audit_ui import yaml_writer  # noqa: E402
 
+from . import cost_tracker  # noqa: E402
 from . import feedback as feedback_log  # noqa: E402
 from . import html_extract, llm_client  # noqa: E402
 from . import security_lite  # noqa: E402
@@ -826,50 +827,52 @@ def run(
     )
     finding_prompt = _maybe_append_webflow_checks(finding_prompt, customer_ctx.platform)
 
-    findings = client.generate_findings(
-        system_prompt=system_prompt,
-        user_prompt=finding_prompt,
-        screenshots=screenshots,
-        max_findings=cap,
-    )
-
-    # Merge Snoop's pre-generated security-lite findings before the cap is
-    # applied so a critical exposed credential isn't dropped because the
-    # LLM filled the cap with lower-severity items.
-    snoop_findings = list(snoop.get("findings") or [])
-    if snoop_findings:
-        findings = snoop_findings + list(findings or [])
-        print(f"[merge] +{len(snoop_findings)} Snoop finding(s) merged")
-
-    findings = yaml_writer.sort_findings(findings)[:cap]
-    print(f"[llm] {len(findings)} finding(s) after merge + cap")
-
-    # ---- 6. Verdict ----
-    verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
-    try:
-        verdict = client.generate_verdict(
+    with cost_tracker.customer_context(customer_ctx.slug, customer_ctx.tier):
+        findings = client.generate_findings(
             system_prompt=system_prompt,
-            user_prompt=verdict_prompt,
+            user_prompt=finding_prompt,
+            screenshots=screenshots,
+            max_findings=cap,
         )
-        if not verdict.get("summary") or not verdict.get("narrative"):
-            raise RuntimeError("verdict missing summary or narrative")
-    except Exception as exc:  # noqa: BLE001
-        print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
-        verdict = _default_verdict(findings, customer_ctx.app_name)
 
-    # Constrain to the four canonical labels regardless of LLM drift.
-    verdict = _normalize_verdict(verdict)
+        # Merge Snoop's pre-generated security-lite findings before the cap is
+        # applied so a critical exposed credential isn't dropped because the
+        # LLM filled the cap with lower-severity items.
+        snoop_findings = list(snoop.get("findings") or [])
+        if snoop_findings:
+            findings = snoop_findings + list(findings or [])
+            print(f"[merge] +{len(snoop_findings)} Snoop finding(s) merged")
+
+        findings = yaml_writer.sort_findings(findings)[:cap]
+        print(f"[llm] {len(findings)} finding(s) after merge + cap")
+
+        # ---- 6. Verdict ----
+        verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
+        try:
+            verdict = client.generate_verdict(
+                system_prompt=system_prompt,
+                user_prompt=verdict_prompt,
+            )
+            if not verdict.get("summary") or not verdict.get("narrative"):
+                raise RuntimeError("verdict missing summary or narrative")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
+            verdict = _default_verdict(findings, customer_ctx.app_name)
+
+        # Constrain to the four canonical labels regardless of LLM drift.
+        verdict = _normalize_verdict(verdict)
 
     # ---- 7. QSG (every paid tier per PRODUCT-DECISIONS.md §8) ----
     qsg = None
     if customer_ctx.tier in ("Starter Package", "Scale Up Package", "Pro Package"):
         qsg_prompt = build_qsg_user_prompt(customer_ctx, pages=pages)
         try:
-            qsg = client.generate_qsg(
-                system_prompt=system_prompt,
-                user_prompt=qsg_prompt,
-                screenshots=screenshots[:4],   # fewer images for the QSG call
-            )
+            with cost_tracker.customer_context(customer_ctx.slug, customer_ctx.tier):
+                qsg = client.generate_qsg(
+                    system_prompt=system_prompt,
+                    user_prompt=qsg_prompt,
+                    screenshots=screenshots[:4],   # fewer images for the QSG call
+                )
         except Exception as exc:  # noqa: BLE001
             print(f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty", file=sys.stderr)
 
@@ -1004,11 +1007,12 @@ def regenerate_finding(
         "same issue with sharper wording. Apply the same voice rules."
     )
 
-    finding = client.regenerate_finding(
-        system_prompt=system_prompt,
-        user_prompt=base + regen_hint,
-        screenshots=screenshots,
-    )
+    with cost_tracker.customer_context(customer_ctx.slug, customer_ctx.tier):
+        finding = client.regenerate_finding(
+            system_prompt=system_prompt,
+            user_prompt=base + regen_hint,
+            screenshots=screenshots,
+        )
     return finding
 
 
