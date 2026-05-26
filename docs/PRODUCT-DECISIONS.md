@@ -155,12 +155,13 @@ When you change anything in this file:
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
 | 2026-05-26 | Handoff Report add-on dropped from $99 → $49 (autonomous batch worker). Anchoring math: Scale Up $49 + Handoff $49 = $98, sits just below Pro $99, intentional upsell ladder. Old bundle was $148 (above Pro), so the add-on never sold. New Stripe Payment Link `plink_1TbNP9BxCiPye3m0c5A1DNfq` (URL `https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06`) wired into `landing/assets/config.js` `stripe.handoff`. Webhook routing was already metadata-first (`product=handoff_report`); the `HANDOFF_REPORT_CENTS_TO_LABEL` dict gained a `4900` entry. Landing copy, FAQ, deliver_report.py, share_report.py, and consistency_check.py all updated to read `$49`. |
+| 2026-05-26 | Plausible account creation **deferred** (Option C). Tracker script + 7 event-name CSS classes stay on every landing page. No account currently owns `launchlook.app` on Plausible, so events POST and get silently dropped — zero cost, zero harm, zero data collected. Trigger to revisit: ≥10 paying customers or noticeable traffic without obvious conversion. Activation steps documented in `docs/ROB-REMAINING-TODO.md` §Plausible analytics setup. Alternative is to strip the tracker entirely and switch to Vercel Analytics; that path is also documented. |
 
 ---
 
 ## §10 Analytics goals tracked
 
-Conversion measurement via Plausible (privacy-friendly, no cookie banner needed per `SIMPLICITY-GUARDRAILS.md` §2). Goals:
+Conversion measurement via Plausible (privacy-friendly, no cookie banner needed per `SIMPLICITY-GUARDRAILS.md` §2). Goals wired into the code as CSS classes on every relevant CTA:
 
 - `FreeAuditSignup` — free 3-finding audit form submission
 - `StarterCheckout` — Starter $19 button click
@@ -168,6 +169,9 @@ Conversion measurement via Plausible (privacy-friendly, no cookie banner needed 
 - `ProCheckout` — Pro $99 button click
 - `IntakeFormStart` — Tally intake form opened
 - `RescanAddOn` — Confidence Check re-scan CTA click
+- `HandoffReportAddOn` — Handoff Report $49 add-on CTA click
+
+**Status (2026-05-26):** Plausible account creation is deferred (changelog row above). The CSS classes still fire events to `plausible.io/api/event` on every load/click, but no account owns the site yet, so those events are dropped. The code is "Plausible-ready" — flipping it on later requires only dashboard config, no code changes.
 
 Page views auto-tracked: `/`, `/webflow`, `/sample`, `/checklist`, `/thanks`, `/privacy`, `/terms`, `/vs-pagelens` (when live).
 

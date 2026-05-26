@@ -274,23 +274,31 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 
 ---
 
-## Plausible analytics setup
+## Plausible analytics setup — **DEFERRED** (2026-05-26)
 
-The Plausible script is installed across all landing pages. To activate:
+**Decision:** Leave the Plausible tracker installed on all landing pages but defer signing up for an account / creating goal events until there's a real reason to look at conversion data (e.g. ≥10 paying customers, or noticeable traffic without obvious conversion).
 
-1. Sign up at https://plausible.io (or self-host)
+**Current state:**
+- Tracker script (`<script data-domain="launchlook.app" src="plausible.io/js/script.tagged-events.js">`) is on `index.html`, `webflow.html`, `faq.html`, `vs-pagelens.html`, `checklist.html`, `sample.html`, `verify.html`, `verify-scope.html`, `thanks.html`, `thanks-free-audit.html`, `r.html`, `r/*.html`.
+- Event-name CSS classes (`StarterCheckout`, `ScaleUpCheckout`, `ProCheckout`, `IntakeFormStart`, `RescanAddOn`, `HandoffReportAddOn`, `FreeAuditSignup`) are wired into every CTA — these fire `/api/event` POSTs to plausible.io every time someone loads a page or clicks a button.
+- **No account currently owns `launchlook.app`** on Plausible's side, so those events are silently dropped. No data is being collected.
+
+**To activate later (~5 min total):**
+
+1. Sign up at https://plausible.io (free 30-day trial, $9/mo annual after)
 2. Add `launchlook.app` as a site
-3. Configure goals in Plausible dashboard (must match these exact names):
-   - FreeAuditSignup
-   - StarterCheckout
-   - ScaleUpCheckout
-   - ProCheckout
-   - IntakeFormStart
-   - RescanAddOn
-4. Optionally add `launchlook.app/webflow` as a goal-only filter for Webflow-specific funnel measurement
-5. Verify data flowing by visiting a landing page in incognito and watching the Plausible realtime view
+3. Configure goals in dashboard with these **exact** names (case-sensitive, already wired in code):
+   - `FreeAuditSignup`
+   - `StarterCheckout`
+   - `ScaleUpCheckout`
+   - `ProCheckout`
+   - `IntakeFormStart`
+   - `RescanAddOn`
+   - `HandoffReportAddOn`
+4. Optionally add `launchlook.app/webflow` as a page-view goal for Webflow funnel measurement
+5. Verify data flowing by visiting a landing page in incognito + watching Plausible realtime view
 
-If using a different analytics tool, replace the script tag in every `landing/*.html` file. No other code depends on Plausible.
+**Alternative — strip Plausible entirely:** if you decide you'd rather use Vercel Analytics (built-in, free) or nothing, remove the `<script>` tag from every `landing/*.html` and the `https://plausible.io` entry from the CSP allowlist in `landing/vercel.json`. No other code depends on Plausible. Search-replace pattern: `<script defer data-domain="launchlook.app".*plausible.*</script>` → delete the line.
 
 ---
 
