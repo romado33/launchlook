@@ -10,6 +10,10 @@ window.LAUNCHLOOK_CONFIG = {
   stripe: {
     starter: "https://buy.stripe.com/8x200i8cJ0bigo3fkY3cc01",
     launch: "https://buy.stripe.com/cNi7sK3Wtgag9ZFc8M3cc02",
+    // Pro Package payment link pending — Rob to create in Stripe ($99).
+    // See docs/MANUAL-TASKS-PRICE-BUMP.md. Until then the Pro CTA renders
+    // as disabled ("Payment link not configured").
+    pro: "",
   },
   githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
   linkedinUrl: "https://www.linkedin.com/in/rob-dods/",

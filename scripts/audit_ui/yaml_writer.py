@@ -32,7 +32,7 @@ import yaml
 
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3}
 VALID_SEVERITIES = ("critical", "high", "medium", "low")
-VALID_TIERS = ("Starter Package", "Full Package")
+VALID_TIERS = ("Starter Package", "Full Package", "Pro Package")
 VALID_BUILDERS = ("Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Other")
 
 
@@ -93,7 +93,7 @@ def form_to_yaml(payload: dict[str, Any]) -> str:
             if i != len(findings) - 1:
                 lines.append("")
 
-    if customer.get("tier") == "Full Package":
+    if customer.get("tier") in ("Full Package", "Pro Package"):
         qsg = _clean_qsg(payload.get("quick_start_guide", {}))
         if qsg:
             lines.append("")

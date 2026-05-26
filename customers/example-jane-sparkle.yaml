@@ -14,8 +14,10 @@ customer:
   app_name: Sparkle Marketplace
   app_url: https://sparkle.lovable.app
   url_redacted: false        # true to print "URL redacted" in the report
-  tier: Starter Package      # "Starter Package" or "Full Package"
+  tier: Starter Package      # Starter Package (cap 7) | Full Package (cap 25) | Pro Package (cap 40)
   builder: Lovable           # used in the fix-prompt headers
+# Note: Starter caps at 7 findings (was 5). This example intentionally stays
+# at 5 to demonstrate "well under the cap" — every finding earns its place.
 
 verdict:
   emoji: "🟡"

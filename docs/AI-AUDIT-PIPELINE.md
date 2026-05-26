@@ -128,6 +128,28 @@ python scripts/ai_audit.py `
     --provider gpt
 ```
 
+### Pro Package, Claude
+
+```powershell
+python scripts/ai_audit.py `
+    --slug mira-tessera `
+    --url https://tessera.lovable.app `
+    --tier "Pro Package" `
+    --builder Lovable `
+    --name "Mira Okafor" `
+    --email mira@example.com `
+    --app-name "Tessera Boards"
+```
+
+The Pro Package prompt extends the Full Package guidance with a
+dedicated integrations review (Stripe / auth / email / analytics).
+Findings are still emitted in the standard `findings` list — there is
+no separate `integrations_review` YAML key. Prefix integrations-flavored
+finding titles with `Integrations:` so they group visibly in the PDF
+(see `customers/example-pro-package.yaml` for the canonical pattern).
+The 30-minute Loom walkthrough is a separate scheduling step, not a
+YAML field.
+
 ### Dry-run + skip stages (smoke testing)
 
 ```powershell
@@ -226,7 +248,7 @@ real data will probably show:
 
 ## Cost expectations (approximate)
 
-Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):
+Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, ~7 findings):
 
 | Provider | Model | Approx input / output tokens | Approx cost |
 |----------|-------|------------------------------|-------------|
@@ -238,11 +260,14 @@ Per audit (Starter Package, ~8 screenshots, 5 HTML extracts, 5 findings):
 
 Full Package adds a second LLM call (the QSG generator with ~4
 screenshots and a smaller HTML payload), roughly **+50%** on the
-Starter base.
+Starter base. Pro Package adds the same QSG call plus a longer
+finding-generation prompt (40-cap output and the integrations-review
+guidance), roughly **+100%** on the Starter base.
 
-At $9 Starter / $29 Full, AI cost is roughly **1 to 3% of revenue**.
-That leaves the founder's 15-minute review (the real cost) as the
-bottleneck, which is exactly where the strategy wanted it.
+At $19 Starter / $49 Full / $99 Pro, AI cost is roughly **1 to 2% of
+revenue** across all tiers. That leaves the founder's 15-minute review
+(the real cost on Starter / Full) and the 30-minute Loom (Pro only)
+as the bottlenecks, which is exactly where the strategy wanted it.
 
 If the LLM bill creeps up, the levers (in order) are:
 * Reduce the number of screenshots sent (currently 8 max).

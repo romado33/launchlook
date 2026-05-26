@@ -11,9 +11,10 @@ Files Rob imports into Notion to set up the **LaunchLook Ops** workspace (BL-03)
    - `Customers` — import `customers-db.csv`
    - `Outreach Tracker` — import `outreach-db.csv`
    - `Findings Library` — import `../../findings_library/findings.csv`
-3. Create a top-level page called **Report Templates**. Inside it, create two sub-pages from the templates in this folder:
-   - `Template — Starter Package` (from `report-quick-checkup.md`)
-   - `Template — Full Package` (from `report-launch-pack.md`)
+3. Create a top-level page called **Report Templates**. Inside it, create three sub-pages from the templates in this folder:
+   - `Template — Starter Package ($19)` (from `report-quick-checkup.md`)
+   - `Template — Full Package ($49)` (from `report-launch-pack.md`)
+   - `Template — Pro Package ($99)` (extend `report-launch-pack.md` with: an "Integrations review" section listing Stripe / auth / email / analytics findings, plus a "Loom walkthrough scheduling" sidebar block. Pro reuses the QSG section from Full.)
    - *(Optional, advanced)* `Template — Polish add-on` (from `report-polish.md`) — only if you start offering a paid follow-up tier; not part of the current MVP.
 4. Create a page called **Crawler Wishlist** (from `crawler-wishlist.md`).
 5. Mark each report template page as a **Notion Template** so duplicating is one click per customer.
@@ -38,10 +39,10 @@ Notion natively supports Markdown import on page creation:
 | Name | Title | The row title |
 | Email | Email | |
 | App URL | URL | |
-| Tier | Select | Starter Package / Full Package (legacy: Quick Checkup, Launch Pack, Polish) |
+| Tier | Select | Starter Package ($19) / Full Package ($49) / Pro Package ($99). Legacy options: Quick Checkup, Launch Pack, Polish — keep for historical rows |
 | Payment Date | Date | |
 | Intake Received | Checkbox | |
-| Delivery Due | Date | Formula: Intake Submission Date + tier SLA (Starter 48h, Full 24h — internal target 24h/12h) |
+| Delivery Due | Date | Formula: Intake Submission Date + tier SLA (Starter 48h, Full + Pro 24h — internal target 24h/12h) |
 | Delivered | Checkbox | |
 | Follow-up Sent | Checkbox | Day-3 automation flips this |
 | Feedback Received | Text | |

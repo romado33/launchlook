@@ -42,10 +42,15 @@ from . import draft_store, deliver_runner, yaml_writer
 # ---------------------------------------------------------------------------
 
 
-_DEFAULT_TIER_CAPS = {"Starter Package": 5, "Full Package": 20}
+_DEFAULT_TIER_CAPS = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}
 
+# Matches the dict-lookup form in deliver_report.validate(), e.g.
+#   cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
 _TIER_CAP_PATTERN = re.compile(
-    r"cap\s*=\s*(?P<starter>\d+)\s*if\s*tier\s*==\s*['\"]Starter Package['\"]\s*else\s*(?P<full>\d+)"
+    r"cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\s*\(\s*tier\s*,",
+)
+_TIER_CAP_ENTRY = re.compile(
+    r"['\"](?P<name>[^'\"]+)['\"]\s*:\s*(?P<cap>\d+)"
 )
 
 
@@ -62,10 +67,10 @@ def discover_tier_caps(deliver_report_path: Path) -> dict[str, int]:
     match = _TIER_CAP_PATTERN.search(text)
     if not match:
         return dict(_DEFAULT_TIER_CAPS)
-    return {
-        "Starter Package": int(match.group("starter")),
-        "Full Package": int(match.group("full")),
-    }
+    caps: dict[str, int] = {}
+    for entry in _TIER_CAP_ENTRY.finditer(match.group("body")):
+        caps[entry.group("name")] = int(entry.group("cap"))
+    return caps or dict(_DEFAULT_TIER_CAPS)
 
 
 # ---------------------------------------------------------------------------
@@ -568,12 +573,13 @@ def _validate_payload(payload: dict[str, Any], tier_caps: dict[str, int]) -> lis
         if sev and sev not in yaml_writer.VALID_SEVERITIES:
             errors.append({"field": f"findings[{i}].severity", "message": f"Finding {i + 1}: severity must be one of {', '.join(yaml_writer.VALID_SEVERITIES)}."})
 
-    if tier == "Full Package":
+    if tier in ("Full Package", "Pro Package"):
         qsg = payload.get("quick_start_guide") or {}
+        tier_label = tier
         if not (qsg.get("title") or "").strip():
-            errors.append({"field": "qsg.title", "message": "Quick Start Guide title is required for Full Package."})
+            errors.append({"field": "qsg.title", "message": f"Quick Start Guide title is required for {tier_label}."})
         if not (qsg.get("intro") or "").strip():
-            errors.append({"field": "qsg.intro", "message": "Quick Start Guide intro is required for Full Package."})
+            errors.append({"field": "qsg.intro", "message": f"Quick Start Guide intro is required for {tier_label}."})
         steps = qsg.get("steps") or []
         non_empty_steps = [s for s in steps if isinstance(s, dict) and ((s.get("title") or "").strip() or (s.get("body") or "").strip())]
         if not non_empty_steps:

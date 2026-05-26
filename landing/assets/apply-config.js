@@ -7,6 +7,7 @@
   var stripe = cfg.stripe || {};
   var starterUrl = stripe.starter || stripe.quickCheckup || "";
   var launchUrl = stripe.launch || stripe.launchPack || stripe.full || "";
+  var proUrl = stripe.pro || "";
 
   function $(selector) {
     return document.querySelectorAll(selector);
@@ -53,6 +54,7 @@
 
   setLinkState("[data-launchlook-stripe='starter'], [data-launchlook-stripe='quick']", safeHttpsUrl(starterUrl), "Payment link not configured");
   setLinkState("[data-launchlook-stripe='launch'], [data-launchlook-stripe='full']", safeHttpsUrl(launchUrl), "Payment link not configured");
+  setLinkState("[data-launchlook-stripe='pro']", safeHttpsUrl(proUrl), "Payment link not configured (Pro Package — see docs/MANUAL-TASKS-PRICE-BUMP.md)");
 
   var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
   if (checklistUrl) {
@@ -65,7 +67,7 @@
   function intakeMailto(email) {
     var subject = encodeURIComponent("LaunchLook intake");
     var body = encodeURIComponent(
-      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Full Package):\n"
+      "App URL:\n\nOne-line description:\n\nBuilder (Lovable, Bolt, v0, Cursor, etc.):\n\nTier purchased (Starter Package / Full Package / Pro Package):\n"
     );
     return "mailto:" + email + "?subject=" + subject + "&body=" + body;
   }

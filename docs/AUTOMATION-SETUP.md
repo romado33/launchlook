@@ -38,6 +38,16 @@ Already wired for the PDF worker. If you ever lose the key:
 2. Endpoint URL: `https://launchlook.app/api/stripe-webhook`
 3. Events to send: select **`checkout.session.completed`** (and only that)
 4. Click **Add endpoint**, then on the endpoint detail page click **Reveal** under "Signing secret". Copy the value (starts `whsec_...`).
+
+> **Tier inference (after the May 2026 price bump):** the webhook resolves
+> `amount_total` to a tier via the dict in `api/stripe-webhook.py`:
+> `1900 → Starter Package`, `4900 → Full Package`, `9900 → Pro Package`.
+> Legacy amounts (`900 → Starter`, `2900 → Full`) still resolve via a
+> backward-compat fallback so any in-flight test transactions don't break.
+> The fallback path logs a warning and stamps the Notion row's Notes with
+> a "verify the Stripe price was updated" hint, so you'll see those rows
+> stand out in the dashboard.
+
 5. Save it locally: append `STRIPE_WEBHOOK_SECRET=whsec_...` to `.env`
 6. Save it on Vercel: Project -> Settings -> Environment Variables -> add `STRIPE_WEBHOOK_SECRET` for **Production**, **Preview**, and **Development**.
 7. Test by clicking **Send test webhook** in Stripe's UI, then check the function logs in Vercel. A success looks like `{"status": "created" | "updated", ...}`. A signature failure returns 400.

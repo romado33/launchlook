@@ -37,7 +37,7 @@ from . import html_extract, llm_client  # noqa: E402
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 
-DEFAULT_TIER_CAPS = {"Starter Package": 5, "Full Package": 20}
+DEFAULT_TIER_CAPS = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}
 
 DELIVER_REPORT = REPO_ROOT / "scripts" / "deliver_report.py"
 FINDINGS_CSV = REPO_ROOT / "findings_library" / "findings.csv"
@@ -82,8 +82,13 @@ class PipelineResult:
 # ---------------------------------------------------------------------------
 
 
+# Matches the dict-lookup form in deliver_report.validate(), e.g.
+#   cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
 _TIER_CAP_PATTERN = re.compile(
-    r"cap\s*=\s*(?P<starter>\d+)\s*if\s*tier\s*==\s*['\"]Starter Package['\"]\s*else\s*(?P<full>\d+)"
+    r"cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\s*\(\s*tier\s*,",
+)
+_TIER_CAP_ENTRY = re.compile(
+    r"['\"](?P<name>[^'\"]+)['\"]\s*:\s*(?P<cap>\d+)"
 )
 
 
@@ -96,10 +101,10 @@ def load_tier_caps() -> dict[str, int]:
     match = _TIER_CAP_PATTERN.search(text)
     if not match:
         return dict(DEFAULT_TIER_CAPS)
-    return {
-        "Starter Package": int(match.group("starter")),
-        "Full Package": int(match.group("full")),
-    }
+    caps: dict[str, int] = {}
+    for entry in _TIER_CAP_ENTRY.finditer(match.group("body")):
+        caps[entry.group("name")] = int(entry.group("cap"))
+    return caps or dict(DEFAULT_TIER_CAPS)
 
 
 def load_findings_library() -> list[dict[str, Any]]:
@@ -313,6 +318,17 @@ def _tier_guidance(tier: str, cap: int) -> str:
             "the most important things a first-time visitor would notice. Skew "
             "toward criticals and highs. If the app is clean, return fewer."
         )
+    if tier == "Pro Package":
+        return (
+            f"Pro Package is the deepest pass we offer. Return up to {cap} findings "
+            "spanning trust, polish, mobile, broken functionality, AND a dedicated "
+            "review of the customer's operational integrations (Stripe / auth / "
+            "email / analytics setup) — flag misconfiguration, missing webhooks, "
+            "leaked test keys on the public surface, redirect URLs that point at "
+            "localhost, broken from-addresses, double-counted analytics events, "
+            "etc. Include lower-severity polish items the customer paid extra "
+            "for. Still drop any finding you cannot ground in real evidence."
+        )
     return (
         f"Full Package is the deeper pass. Return up to {cap} findings spanning "
         "trust, polish, mobile, and broken functionality. Include the lower-"
@@ -415,7 +431,7 @@ def run(
 ) -> PipelineResult:
     """Run the full pipeline. Returns the result (YAML text + payload)."""
     tier_caps = load_tier_caps()
-    cap = max_findings or tier_caps.get(customer_ctx.tier, 7)
+    cap = max_findings or tier_caps.get(customer_ctx.tier, 25)
     print(f"[pipeline] tier={customer_ctx.tier!r} cap={cap} provider={provider!r}")
 
     # ---- 1. Capture ----
@@ -492,9 +508,9 @@ def run(
         print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
         verdict = _default_verdict(findings, customer_ctx.app_name)
 
-    # ---- 7. QSG (Full Package only) ----
+    # ---- 7. QSG (Full Package + Pro Package) ----
     qsg = None
-    if customer_ctx.tier == "Full Package":
+    if customer_ctx.tier in ("Full Package", "Pro Package"):
         qsg_prompt = build_qsg_user_prompt(customer_ctx, pages=pages)
         try:
             qsg = client.generate_qsg(
@@ -658,8 +674,8 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         sys.exit("ERROR: --url must start with http:// or https://")
 
     tier = (kwargs.get("tier") or "").strip()
-    if tier not in {"Starter Package", "Full Package"}:
-        sys.exit("ERROR: --tier must be 'Starter Package' or 'Full Package'")
+    if tier not in {"Starter Package", "Full Package", "Pro Package"}:
+        sys.exit("ERROR: --tier must be 'Starter Package', 'Full Package', or 'Pro Package'")
 
     builder = (kwargs.get("builder") or "").strip() or "Lovable"
 

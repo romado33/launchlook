@@ -60,7 +60,7 @@ EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
 OUTPUT_ROOT = REPO_ROOT / "output" / "reports"
 
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
-VALID_TIERS = {"Starter Package", "Full Package"}
+VALID_TIERS = {"Starter Package", "Full Package", "Pro Package"}
 
 
 # ---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ def validate(data: dict[str, Any]) -> None:
         if not f.get("title"):
             sys.exit(f"ERROR: findings[{i}].title is required")
 
-    cap = 5 if tier == "Starter Package" else 20
+    cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
     if len(findings) > cap:
         print(
             f"WARN: {tier} caps at {cap} findings, this YAML has {len(findings)}.",

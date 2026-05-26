@@ -37,21 +37,28 @@ customer data never enters git.
 
 The YAML has four top-level sections:
 
-- `customer` – first name, email, app name, app URL, tier (`Starter Package`
-  or `Full Package`), and `builder` (Lovable, Bolt, etc.). Set
-  `url_redacted: true` to print "URL redacted" instead of the live URL in
-  the PDF.
+- `customer` – first name, email, app name, app URL, tier (`Starter Package`,
+  `Full Package`, or `Pro Package`), and `builder` (Lovable, Bolt, etc.).
+  Set `url_redacted: true` to print "URL redacted" instead of the live URL
+  in the PDF.
 - `verdict` – emoji, one-line summary, and a multi-line narrative paragraph.
 - `findings` – a list. Each item needs a `severity` (`critical`, `high`,
   `medium`, `low`), `title`, `what_we_saw`, `why_it_matters`, optional
   `screenshot_caption`, and a `fix_prompt` (paste-ready prompt for the
   builder).
 - `quick_start_guide` – `title`, `intro`, an ordered list of `steps`
-  (`title` + `body`), and an optional `footer_note`.
+  (`title` + `body`), and an optional `footer_note`. Required for Full
+  Package and Pro Package.
 
-Findings cap: 5 for Starter Package (priority triage — the 5 most important
-findings), 20 for Full Package (comprehensive audit). The script warns if
-you exceed the cap but still renders.
+Findings caps:
+
+| Tier | Cap | Approach |
+|---|---|---|
+| Starter Package ($19) | **7** | Priority triage — the 7 most important fixes |
+| Full Package ($49) | **25** | Comprehensive audit + cross-user data check |
+| Pro Package ($99) | **40** | Deep audit + integrations review + 30-min Loom walkthrough |
+
+The script warns if you exceed the cap but still renders.
 
 ## 2. Render and preview (dry-run)
 
@@ -135,8 +142,9 @@ points back to https://resend.com/api-keys.
 - `ERROR: playwright not installed` after `pip install -r requirements.txt`:
   also run `playwright install chromium` once, which downloads the bundled
   browser (~150 MB).
-- `ERROR: customer.tier must be one of...`: only `Starter Package` and
-  `Full Package` are accepted, matching the Stripe / Notion tier names.
+- `ERROR: customer.tier must be one of...`: only `Starter Package`,
+  `Full Package`, and `Pro Package` are accepted, matching the Stripe /
+  Notion tier names.
 - PDFs render but fonts look generic: the templates load Fraunces and Inter
   from Google Fonts at render time. If the network is offline, fall back
   fonts (Georgia, system sans) take over. That's fine for previews.

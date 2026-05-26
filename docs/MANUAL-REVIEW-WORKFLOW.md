@@ -97,7 +97,7 @@ This:
 | --- | --- | --- |
 | `--slug` | Filename for `customers/<slug>.yaml` | `jane-smith` |
 | `--url` | Customer's live app URL | `https://jane.lovable.app` |
-| `--tier` | `Starter Package` or `Full Package` | `"Full Package"` |
+| `--tier` | `Starter Package`, `Full Package`, or `Pro Package` | `"Full Package"` |
 | `--name` | Full name (split into first/last by first space) | `"Jane Smith"` |
 | `--first-name` | First name (overrides `--name`) | `Jane` |
 | `--last-name` | Last name (overrides `--name`) | `Smith` |
@@ -129,9 +129,10 @@ Workflow inside the form:
    - **Fix prompt:** paste-ready instructions the customer can drop
      into Lovable / Bolt / v0 / etc.
 3. The finding counter near "+ Add finding" shows
-   `N / cap findings`. Cap is **5 for Starter Package**, **20 for Full
-   Package** (read live from `scripts/deliver_report.py`, so any
-   future cap change auto-propagates here)
+   `N / cap findings`. Cap is **7 for Starter Package**, **25 for Full
+   Package**, **40 for Pro Package** (read live from
+   `scripts/deliver_report.py`, so any future cap change auto-propagates
+   here)
 4. Findings auto-sort by severity (critical → high → medium → low)
    when you generate YAML, but the live preview also shows current
    sort order
@@ -141,8 +142,11 @@ Workflow inside the form:
 
 [UI screenshot here — finding card expanded]
 
-For **Full Package** customers, fill in the **Quick Start Guide**
-section too: title + intro + at least one step + optional footer note.
+For **Full Package** and **Pro Package** customers, fill in the
+**Quick Start Guide** section too: title + intro + at least one step +
+optional footer note. Pro Package customers also expect a 30-minute
+Loom walkthrough — schedule that separately by email after the report
+lands; it isn't a YAML field.
 
 ## 6. Click "Save + send PDFs" when done
 
@@ -177,7 +181,7 @@ code 0 means success.
 | `drafts/<slug>.json` | Auto-saved form draft. Gitignored. |
 | `screenshots/<slug>/finding-N.png` | Uploaded screenshots, named by finding index. Gitignored. |
 | `output/reports/<slug>/main-report.pdf` | The delivered Main Report. |
-| `output/reports/<slug>/quick-start-guide.pdf` | The delivered QSG (Full Package only). |
+| `output/reports/<slug>/quick-start-guide.pdf` | The delivered QSG (Full Package + Pro Package). |
 
 After delivery, mark the Notion row as `Delivered` (this is currently
 manual — the followup script picks up from there).
@@ -225,7 +229,7 @@ value. Fields:
 - Verdict: summary, narrative
 - Findings: at least 1, each with severity / title / what_we_saw /
   why_it_matters / fix_prompt
-- Full Package only: QSG title, intro, at least 1 step
+- Full Package + Pro Package only: QSG title, intro, at least 1 step
 
 URL must start with `http://` or `https://`. Email must contain `@`.
 

@@ -9,8 +9,10 @@ Security:
     (Stripe-Signature) against STRIPE_WEBHOOK_SECRET. Invalid signature -> 400.
 
 Tier mapping (amount in cents):
-    900  -> Starter Package
-    2900 -> Full Package
+    1900 -> Starter Package
+    4900 -> Full Package
+    9900 -> Pro Package
+    Legacy fallback (in-flight test transactions): 900 -> Starter, 2900 -> Full
     other amounts are stored verbatim with status "Paid" and a Notes hint.
 
 Return shape:
@@ -48,15 +50,36 @@ except ImportError:
 
 
 CENTS_TO_TIER = {
+    1900: "Starter Package",
+    4900: "Full Package",
+    9900: "Pro Package",
+}
+
+# Legacy amounts kept for backward compatibility with any in-flight test
+# transactions that were created before the May 2026 price bump. We log
+# a warning when one of these matches so we know to chase the receipt.
+LEGACY_CENTS_TO_TIER = {
     900: "Starter Package",
     2900: "Full Package",
 }
 
 
-def cents_to_tier(amount_cents: int | None) -> str | None:
+def cents_to_tier(amount_cents: int | None) -> tuple[str | None, bool]:
+    """Resolve an amount in cents to a tier name.
+
+    Returns ``(tier, is_legacy)`` so the caller can log a warning when an
+    old (pre-price-bump) amount is observed.
+    """
     if amount_cents is None:
-        return None
-    return CENTS_TO_TIER.get(int(amount_cents))
+        return None, False
+    cents = int(amount_cents)
+    tier = CENTS_TO_TIER.get(cents)
+    if tier:
+        return tier, False
+    legacy = LEGACY_CENTS_TO_TIER.get(cents)
+    if legacy:
+        return legacy, True
+    return None, False
 
 
 # ---------------------------------------------------------------------------
@@ -73,7 +96,15 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
 
     amount_cents = session.get("amount_total")
     amount_dollars = round((amount_cents or 0) / 100, 2)
-    tier = cents_to_tier(amount_cents)
+    tier, is_legacy_amount = cents_to_tier(amount_cents)
+    if is_legacy_amount:
+        print(
+            f"[stripe-webhook] WARN: legacy amount {amount_cents} cents detected "
+            f"for session {session.get('id')!r}; mapped to {tier!r} via fallback. "
+            "Update Stripe products to the new price tiers (1900/4900/9900) "
+            "ASAP — this fallback is for in-flight test transactions only.",
+            file=sys.stderr,
+        )
     session_id = session.get("id") or ""
 
     client = get_client()
@@ -101,6 +132,11 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
     ]
     if not tier:
         notes_lines.append(f"Tier could not be inferred from amount ({amount_cents} cents).")
+    elif is_legacy_amount:
+        notes_lines.append(
+            f"Legacy amount ({amount_cents} cents) — mapped to {tier} via fallback. "
+            "Verify the Stripe price was updated."
+        )
 
     fields: dict[str, Any] = {
         "email": email,

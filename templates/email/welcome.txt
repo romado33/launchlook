@@ -7,7 +7,7 @@ Thanks for trusting LaunchLook with {APP_NAME}. I'll have your checkup ready in 
 Please fill out the short intake form here (about 3 minutes):
 {INTAKE_FORM_LINK}
 
-Include your live app URL, builder (Lovable, Bolt, v0, Cursor, or similar), and what the app does. For Full Package ($29), use temporary test accounts only — never send API keys or production admin passwords.
+Include your live app URL, builder (Lovable, Bolt, v0, Cursor, or similar), and what the app does. For Full Package ($49) and Pro Package ($99), use temporary test accounts only — never send API keys or production admin passwords.
 
 Talk soon,
 Rob
@@ -17,5 +17,5 @@ hello@launchlook.app
 Variables:
 - {NAME} — customer first name
 - {APP_NAME} — app name from intake
-- {TURNAROUND} — "48 hours, usually within 24" (Starter Package) / "24 hours, usually within 12" (Full Package)
+- {TURNAROUND} — "48 hours, usually within 24" (Starter Package) / "24 hours, usually within 12" (Full Package or Pro Package)
 - {INTAKE_FORM_LINK} — Tally form URL (https://launchlook.app/thanks if they already paid)
