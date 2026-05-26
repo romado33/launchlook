@@ -442,6 +442,45 @@ approval rates.
 
 ---
 
+## Canonical finding-category taxonomy
+
+The data-driven category list lives in
+`scripts/ai_audit/finding_categories.yaml`. The pipeline loads it at
+runtime and renders `{{ categories_list }}` into `system.txt`
+(`pipeline.build_system_prompt(...)` calls `load_finding_categories()`
+then `render_categories_for_prompt(..., tier=tier)`). To add or retire
+a category, edit the YAML; do not hardcode category language in the
+prompt. Buyer-facing display names are governed by
+`docs/SIMPLICITY-GUARDRAILS.md` §6 (no internal taxonomy on customer
+surfaces).
+
+The `tier_min` field gates visibility: a category is excluded from the
+prompt for any tier below its `tier_min`. The tier rank order is
+`Starter Package` (1), `Scale Up Package` (2), `Pro Package` (3).
+Free-tier audits cap at 3 findings total across all categories and
+are filtered after generation, not at the category-list step.
+
+Active category IDs (as of q3b, May 26 2026):
+
+| ID | Buyer-facing display name | Tester | tier_min | Source |
+|---|---|---|---|---|
+| `trust_gaps` | trust signals & legal pages | The Skeptic | — | llm |
+| `broken_ctas_links` | broken buttons & dead links | The Klutz | — | llm |
+| `mobile_layout` | mobile layout issues | The Phone-First Friend | — | llm |
+| `copy_clarity` | confusing or placeholder text | The Tourist | — | llm |
+| `dev_artifacts` | dev tools and test data on the live site | The Klutz | — | llm |
+| `security_lite` | obvious visible risks | The Snoop | — | external (Snoop) |
+| `cross_user_data` | user data isolation | The Snoop | Scale Up Package | llm |
+| `ai_sounding_copy` | copy that sounds AI-written | The Tourist | — | llm |
+| `scale_ready_audit` | growth-readiness checks | The Snoop | Scale Up Package | llm |
+| `compliance_lite` | common legal must-haves | The Skeptic | — | llm |
+
+When you add a new category, also list it here (ID + buyer-facing
+display name + tester + `tier_min` if any + source) so the canonical
+list stays a one-stop read.
+
+---
+
 ## Related docs
 
 * `docs/MANUAL-REVIEW-WORKFLOW.md`: the previous (pre-AI) workflow,

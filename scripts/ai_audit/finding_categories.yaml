@@ -102,3 +102,50 @@ categories:
       Skip entirely on Starter Package.
     tester: "The Snoop"
     tier_min: "Scale Up Package"
+
+  - id: ai_sounding_copy
+    display_name_buyer: "copy that sounds AI-written"
+    display_name_internal: "AI-sounding copy detection"
+    severity_default: medium
+    description_for_llm: >-
+      Detects copy that reads like AI generated it. Watch for: em-dashes
+      in body copy, repeated tricolons ("comprehensive, elegant, and
+      powerful"), filler phrases ("it's important to note that", "in
+      today's fast-paced"), "let's", "delve into", "navigate the
+      complexities", generic hero claims with no specifics, copy that
+      says nothing about the actual product. Surface 2 to 3 examples max.
+    tester: "The Tourist"
+
+  - id: scale_ready_audit
+    display_name_buyer: "growth-readiness checks"
+    display_name_internal: "Scale-Ready (analytics / attribution / retention)"
+    severity_default: medium
+    description_for_llm: >-
+      Once a vibe-coded site starts getting real traffic, these gaps
+      cause silent revenue loss. Check for: (1) analytics installed
+      (Plausible, Mixpanel, GA, PostHog, Fathom: any one); (2) conversion
+      event tracked on the main CTA (form submit, checkout button,
+      signup); (3) attribution surface: UTM parameters preserved in the
+      URL after click, or a marketing attribution tool present; (4)
+      retention surface: email capture present, or signed-in user state
+      visible. Surface 2 to 4 findings if these are missing or
+      misconfigured.
+    tester: "The Snoop"
+    tier_min: "Scale Up Package"
+
+  - id: compliance_lite
+    display_name_buyer: "common legal must-haves"
+    display_name_internal: "Compliance-Lite (AI disclosure / accessibility statement / cookie banner)"
+    severity_default: medium
+    description_for_llm: >-
+      Three quick legal signals most vibe-coded sites miss: (1) AI
+      disclosure: if the site uses AI to generate user-facing content
+      (chatbot, dynamic summaries), is that disclosed somewhere
+      reasonable? (2) Accessibility statement: is there a one-line
+      statement of accessibility commitment, even a placeholder?
+      Required in EU, increasingly expected in US. (3) Cookie banner:
+      if the site uses cookies for analytics or sessions, is there a
+      consent banner? Required under GDPR if any EU traffic possible.
+      Skip cookie check if no cookies are set. Surface 1 to 3 findings;
+      tier-cap them at 3 max.
+    tester: "The Skeptic"
