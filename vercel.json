@@ -34,6 +34,7 @@
     { "source": "/thanks", "destination": "/thanks.html" },
     { "source": "/sample", "destination": "/sample.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/terms", "destination": "/terms.html" }
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/webflow", "destination": "/webflow.html" }
   ]
 }

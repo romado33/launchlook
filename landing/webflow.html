@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LaunchLook for Webflow: Pre-launch checkup before your forms silently break</title>
+  <meta name="description" content="Pre-launch checkup for Webflow sites: form-submission audit, noindex/robots check, JSON-LD schema, Designer-to-live mismatches, mobile breakpoint bugs. From $19. No Webflow account access required." />
+
+  <meta property="og:title" content="LaunchLook for Webflow: Pre-launch checkup" />
+  <meta property="og:description" content="Catch silent form failures, accidental noindex, missing schema, and Designer-to-live mismatches before your client does. From $19." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://launchlook.app/webflow" />
+  <meta property="og:image" content="https://launchlook.app/images/og.png" />
+  <link rel="canonical" href="https://launchlook.app/webflow" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
+  <meta name="twitter:title" content="LaunchLook for Webflow: Pre-launch checkup" />
+  <meta name="twitter:description" content="Pre-launch checkup for Webflow sites. From $19." />
+
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script src="/assets/tailwind-brand.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header class="border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
+        <img src="/images/logo-icon.svg" alt="" width="22" height="22" class="shrink-0" aria-hidden="true" />
+        <span>LaunchLook <span class="text-muted text-base font-normal">for Webflow</span></span>
+      </a>
+      <nav class="flex items-center gap-5 text-sm text-muted">
+        <a href="#pricing" class="hover:text-ink">Pricing</a>
+        <a href="#faq" class="hover:text-ink">FAQ</a>
+        <a href="/" class="hover:text-ink">For vibe-coders</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-line">
+    <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
+    <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
+    <p class="text-xs font-medium text-accent uppercase tracking-widest">Webflow · Designer-to-live checkup</p>
+    <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
+      Built your Webflow site in Designer? Get the pre-launch checkup before your forms silently break, your noindex blocks Google, or your client finds the typo.
+    </h1>
+    <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
+      Send your live URL. We scan every page for the issues Webflow Designer doesn't warn you about: form submissions failing silently after the November 2024 update, accidental noindex meta tags, missing JSON-LD schema, Designer-to-live mismatches, mobile breakpoint bugs at 991/767/478. AI does the scan; a founder personally curates every finding before delivery.
+    </p>
+    <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-primary">See Webflow pricing</a>
+      <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
+      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist (~20 min)</a>
+    </div>
+    <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>URL-only. <strong class="text-ink font-medium">No access to your Webflow account</strong> required</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Catches the silent form failure most agencies don't notice for months</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Fix prompts in <strong class="text-ink font-medium">Webflow Designer language</strong>, not generic dev jargon</span></li>
+      <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Sits in the price gap below the $899 human-audit floor</span></li>
+    </ul>
+    <p class="mt-5 text-sm text-muted">Delivered in 24 hours · 7-day full refund if it's not useful.</p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="bg-surface-tint border-y border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Process</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-6">How it works</h2>
+      <ol class="space-y-6">
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">1</span>
+          <div>
+            <p class="font-medium">You send your live Webflow URL</p>
+            <p class="text-muted text-sm mt-1">Through our 30-second intake form: the live URL (webflow.io subdomain or your custom domain), one-line description, and pick &ldquo;Webflow&rdquo; from the platform list.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">2</span>
+          <div>
+            <p class="font-medium">AI runs a full Webflow-aware pass</p>
+            <p class="text-muted text-sm mt-1">Captures every page at desktop and three Webflow mobile breakpoints (991px / 767px / 478px). Checks form submission endpoints, robots.txt, per-page noindex tags, JSON-LD schema, Designer-to-published mismatches, and the &ldquo;works in Designer, breaks live&rdquo; patterns.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">3</span>
+          <div>
+            <p class="font-medium">A founder personally reviews every finding</p>
+            <p class="text-muted text-sm mt-1">AI is fast but it misses nuance. We catch the AI's blind spots, edit any wording that's off, and sign off before anything goes to you. Nothing ships without a human pass.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">4</span>
+          <div>
+            <p class="font-medium">You get two PDFs by email</p>
+            <p class="text-muted text-sm mt-1">Your Main Report and Quick Start Guide arrive in your inbox. Each finding has a paste-ready fix instruction in Webflow Designer language: &ldquo;In Webflow Designer, navigate to Pages &rarr; [page] &rarr; select [element] &rarr; update X to Y.&rdquo;</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- What we check (Webflow-specific) -->
+  <section class="bg-paper">
+    <div class="max-w-3xl mx-auto px-6 section-inner section-inner-tight">
+      <p class="section-label">Scope</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-6">What we check on your Webflow site</h2>
+      <ul class="space-y-3">
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
+          <span><strong class="text-ink font-medium">Form submissions actually work</strong>: the November 2024 Webflow change silently broke form handlers for hundreds of sites. Agencies lost months of leads. We test every form's submit path and flag the ones quietly dropping submissions.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
+          <span><strong class="text-ink font-medium">noindex / robots.txt not blocking your live URL</strong>: the &ldquo;Disable Webflow subdomain indexing&rdquo; toggle is a silent killer. We flag any page that's still set to noindex, and any robots.txt rule blocking your production host.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
+          <span><strong class="text-ink font-medium">JSON-LD / schema present and valid</strong>: per-page structured data is missed by every Webflow site we've reviewed. Only Framer plugins catch it. We do.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">4</span>
+          <span><strong class="text-ink font-medium">Designer-to-live mismatches</strong>: placeholder &ldquo;Lorem ipsum&rdquo; or default field values still on the production page, broken component instances, hidden elements that show up published, interactions that worked in Designer preview but don't trigger live.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">5</span>
+          <span><strong class="text-ink font-medium">Mobile breakpoint breakage at 991 / 767 / 478</strong>: Webflow's three native breakpoints. We render every page at each one and flag overflow, text overlap, broken nav, hidden CTAs.</span>
+        </li>
+        <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+          <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">6</span>
+          <span><strong class="text-ink font-medium">Trust pages and CMS data</strong>: missing /privacy or /terms, empty CMS collection states, fake-looking testimonials, dummy &ldquo;John Doe&rdquo; team cards still on the published page.</span>
+        </li>
+      </ul>
+      <p class="mt-6 text-sm text-muted">On <strong class="text-ink">Pro Package ($99)</strong> we also include a personal <strong class="text-ink">Webflow Designer walkthrough Loom</strong> recording: we open your published site alongside your live URL and talk through every finding in Designer terms.</p>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="bg-paper border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Trust</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-4">Who's behind this</h2>
+      <div class="rounded-xl border border-line bg-surface-tint px-5 py-5 sm:px-6 sm:py-6 max-w-prose">
+      <p class="text-muted leading-relaxed">
+        I'm <strong class="text-ink">Rob</strong>, a technical writer who's shipped products and documentation for years. AI drafts every LaunchLook checkup; I personally review and curate every finding before it reaches you. For Webflow we never ask for your Designer login, your Workspace, or your Editor access. URL only.
+      </p>
+      <p class="text-muted leading-relaxed mt-4">
+        Built for Webflow freelancers, agencies, and in-house teams who want the second pair of eyes before client handoff or a public launch. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
+      </p>
+      <p data-launchlook-linkedin-wrap class="mt-4 hidden">
+        <a data-launchlook-linkedin href="#" class="launchlook-btn launchlook-btn-secondary">Connect on LinkedIn</a>
+      </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why us -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Different by design</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-3">Why Webflow teams pick LaunchLook over the alternatives</h2>
+      <p class="text-muted text-sm mb-6 max-w-prose">Webflow QA today is either Webflow University's manual checklist (free, ~2 hours, requires you to know what to look for) or a $899&ndash;$4,800 human audit. We sit in the gap: scanner-speed delivery, founder-curated quality, $19 to start.</p>
+
+      <div class="hidden sm:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-surface-tint text-left">
+              <th class="px-4 py-3 font-medium text-ink">What you get from LaunchLook for Webflow</th>
+              <th class="px-4 py-3 font-medium text-muted">What you usually get elsewhere</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">URL-only, no Workspace or Designer access</td>
+              <td class="px-4 py-3 align-top text-muted">Human auditors ask for Editor or Designer access, plus a 1-week scheduling window</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">Webflow Designer language in every fix prompt (Pages, Style Manager, Symbols)</td>
+              <td class="px-4 py-3 align-top text-muted">Generic dev advice (&ldquo;add canonical tag,&rdquo; &ldquo;update meta&rdquo;) that doesn't say which Designer panel to open</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">$19 / $49 / $99. Refund in 7 days.</td>
+              <td class="px-4 py-3 align-top text-muted">$899 minimum on Codeable / Webflow Experts. No refund window.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">Catches the post-Nov-2024 silent form failures</td>
+              <td class="px-4 py-3 align-top text-muted">Most Webflow QA was written before the change. They still don't check.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">Pro tier: Webflow Designer walkthrough Loom recorded for your team</td>
+              <td class="px-4 py-3 align-top text-muted">PDF report and good luck</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sm:hidden space-y-4">
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook for Webflow</p>
+          <p class="text-sm text-ink">URL-only. Webflow Designer language in every fix. $19 to start.</p>
+          <p class="mt-2 text-xs text-muted">Elsewhere: Workspace access required, generic dev advice, $899+ minimum.</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook for Webflow</p>
+          <p class="text-sm text-ink">Catches the post-Nov-2024 silent form failures</p>
+          <p class="mt-2 text-xs text-muted">Elsewhere: most Webflow QA tools were written before the change. They still don't check.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Pricing</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-2">Three tiers. Same human curation.</h2>
+      <p class="text-muted mb-4">Pick depth. Not a different quality of care.</p>
+      <p class="text-sm text-muted mb-8 max-w-prose rounded-lg border border-line bg-white/80 px-4 py-3">
+        Works with any Webflow site (webflow.io preview subdomain or custom domain). AI drafts the audit, a founder personally curates every finding before delivery. No Designer or Workspace access required. Pay &rarr; intake form (pick &ldquo;Webflow&rdquo; as platform) &rarr; two PDFs by email. Full refund within 7 days if the report isn't useful.
+      </p>
+
+      <div class="grid sm:grid-cols-3 gap-5">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
+          <h3 class="font-serif text-xl">Starter</h3>
+          <p class="font-serif text-4xl mt-2">$19</p>
+          <p class="text-sm text-muted mt-1">Priority triage</p>
+          <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Up to <strong>5</strong> prioritized findings</li>
+            <li>Form-submission test</li>
+            <li>noindex / robots check</li>
+            <li>Desktop + 3 Webflow breakpoints</li>
+            <li>Designer-language fix prompts</li>
+            <li>24-hour delivery</li>
+          </ul>
+          <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6">
+            Get Starter ($19)
+          </a>
+        </div>
+
+        <div class="rounded-xl border-2 border-accent bg-white p-6 flex flex-col relative shadow-sm">
+          <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Most popular</div>
+          <h3 class="font-serif text-xl">Launch</h3>
+          <p class="font-serif text-4xl mt-2">$49</p>
+          <p class="text-sm text-muted mt-1">Handoff or going public</p>
+          <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Everything in Starter, plus:</li>
+            <li>Up to <strong>25</strong> findings (deeper pass)</li>
+            <li>Per-page JSON-LD schema review</li>
+            <li>Designer-to-live mismatch sweep</li>
+            <li>Shareable report link</li>
+            <li>12-hour delivery</li>
+          </ul>
+          <a href="#" data-launchlook-stripe="launch" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6">
+            Get Launch ($49)
+          </a>
+        </div>
+
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
+          <h3 class="font-serif text-xl">Pro</h3>
+          <p class="font-serif text-4xl mt-2">$99</p>
+          <p class="text-sm text-muted mt-1">Agency / client handoff</p>
+          <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Everything in Launch, plus:</li>
+            <li>Up to <strong>40</strong> findings (full depth)</li>
+            <li>Integrations review (forms, Stripe, analytics)</li>
+            <li><strong>Webflow Designer walkthrough Loom</strong></li>
+            <li>White-label-friendly PDF</li>
+          </ul>
+          <a href="#" data-launchlook-stripe="pro" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6">
+            Get Pro ($99)
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="bg-paper">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Questions</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-6">Webflow FAQ</h2>
+      <div class="divide-y divide-line border border-line rounded-xl bg-white px-4 sm:px-5 shadow-sm shadow-ink/5">
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Do you have access to my Webflow account?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No. We only need your <strong>live URL</strong> (your <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">.webflow.io</code> subdomain or your custom domain). We don't request Workspace access, Editor seats, Designer logins, or your CMS API key. If a tool ever asks for those things just to spot broken UI, be wary.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Does this work for staging / preview URLs?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes. Your <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">.webflow.io</code> preview URL works fine, as long as it's reachable. We do flag whether the preview is set to noindex (often a good thing for staging, sometimes accidentally still set when you cut over to custom domain).</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Why is this so much cheaper than a Webflow Expert audit?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">AI does the scan, a founder does the curation. A human-only audit on Codeable or Webflow Experts is $899&ndash;$4,800 because every minute is billable. We use AI to capture every screen at every breakpoint, run the standard Webflow checks (forms, noindex, schema, breakpoints), and then a founder spends ~10 minutes rejecting AI false positives and tightening the language before it ships. Scanner-speed delivery, human-curated quality, sub-$100 price.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What if the AI gets it wrong?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">That's exactly what the founder review catches. AI is fast but it hallucinates. Every AI-drafted finding is verified against the actual screenshots and live HTML before delivery. Findings that aren't grounded in real evidence get dropped, not shipped.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Will you catch the November 2024 form failure?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes. We submit a probe payload to every form on your site and flag any that silently fail to send. The Nov 2024 Webflow update broke form handlers for many sites in a way that <strong>still shows a success message</strong> while dropping the submission server-side. That's the pattern most agencies don't catch for months.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Does this replace the Webflow University pre-launch checklist?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No, it complements it. The Webflow University checklist is the right place to start if you have 2 hours and know what to look for. LaunchLook is the second pair of eyes that catches what you stopped seeing. Many of our customers run the Webflow checklist first, then send us the URL to confirm.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Is this a security audit?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No. We focus on what's visible: broken UI, broken forms, missing schema, accidentally indexable pages, mobile breakage. For deep security, you don't need much on a Webflow site (the platform handles most of it), but if you have custom code blocks or third-party embeds you want pen-tested, that's a different product.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Can I white-label the report for my client?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">On the <strong>Pro ($99)</strong> tier, yes. We deliver a white-label-friendly PDF with no LaunchLook branding in the body, plus the Webflow Designer walkthrough Loom you can pass to your client or in-house team.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Not a Webflow site?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">If you built with Lovable, Bolt, v0, Cursor, Replit, Base44, or another AI builder, see the vibe-coder version at <a href="/" class="underline hover:text-ink">launchlook.app</a>. Same pricing, same human curation, fix prompts tailored to your builder.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-ink text-paper border-t border-ink">
+    <div class="max-w-3xl mx-auto px-6 section-inner text-center">
+      <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mt-3">Stop guessing if the form actually sent.</h2>
+      <p class="text-paper/75 mt-2 text-sm">Starter $19 · Launch $49 · Pro $99</p>
+      <a href="#pricing" class="launchlook-btn launchlook-btn-accent mt-6">
+        See pricing
+      </a>
+    </div>
+  </section>
+
+  <footer class="border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook for Webflow</p>
+        <p class="mt-1">Pre-launch checkup for Webflow sites.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/" class="hover:text-ink">For vibe-coders</a></li>
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
+        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-ink">Terms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
+</body>
+</html>

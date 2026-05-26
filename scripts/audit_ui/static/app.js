@@ -27,7 +27,7 @@
 
   const state = {
     slug: "",
-    tierCaps: window.AUDIT_UI_BOOTSTRAP?.tier_caps || { "Starter Package": 7, "Full Package": 25, "Pro Package": 40 },
+    tierCaps: window.AUDIT_UI_BOOTSTRAP?.tier_caps || { "Starter Package": 5, "Full Package": 20 },
     payload: blankPayload(),
     autosaveTimer: null,
     autosaveHeartbeat: null,
@@ -51,6 +51,7 @@
         url_redacted: false,
         tier: "",
         builder: "",
+        platform: (window.AUDIT_UI_BOOTSTRAP && window.AUDIT_UI_BOOTSTRAP.default_platform) || "vibe-coder",
       },
       verdict: { emoji: "", summary: "", narrative: "" },
       findings: [],
@@ -157,6 +158,7 @@
     if (prefill.app_url) c.app_url = prefill.app_url;
     if (prefill.tier) c.tier = prefill.tier;
     if (prefill.builder) c.builder = prefill.builder;
+    if (prefill.platform) c.platform = prefill.platform;
     if (typeof prefill.url_redacted === "boolean") c.url_redacted = prefill.url_redacted;
 
     if (prefill.first_name || prefill.email) {
@@ -499,9 +501,8 @@
   function refreshQsgVisibility() {
     const qsgCard = $('[data-section="qsg"]');
     if (!qsgCard) return;
-    const tier = state.payload.customer.tier;
-    const showQsg = tier === "Full Package" || tier === "Pro Package";
-    qsgCard.hidden = !showQsg;
+    const isFull = state.payload.customer.tier === "Full Package";
+    qsgCard.hidden = !isFull;
     refreshFindingsCounter();
   }
 
@@ -571,6 +572,7 @@
     setVal('[data-field="customer.app_name"]', c.app_name);
     setVal('[data-field="customer.app_url"]', c.app_url);
     setVal('[data-field="customer.builder"]', c.builder);
+    setVal('[data-field="customer.platform"]', c.platform || (bootstrap.default_platform || "vibe-coder"));
     setRadio('[data-field="customer.tier"]', c.tier);
     setCheckbox('[data-field="url_redacted"]', !!c.url_redacted);
 

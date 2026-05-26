@@ -1,8 +1,29 @@
 <!DOCTYPE html>
+{# ----------------------------------------------------------------------
+   Platform awareness (additive — existing vibe-coder customers render
+   identically because ``platform`` defaults to ``vibe-coder``).
+
+   * ``is_webflow`` flips on when the YAML carries ``customer.platform: webflow``
+   * ``report_label`` overrides the "LaunchLook · {tier} report" eyebrow text
+   * ``fix_prompt_label_target`` overrides "Copy-paste fix prompt for {builder}"
+
+   Future platforms can register additional branches here.
+---------------------------------------------------------------------- #}
+{% set platform_raw = (customer.platform or 'vibe-coder') | lower %}
+{% set is_webflow = platform_raw == 'webflow' %}
+{% if is_webflow %}
+  {% set report_label = 'LaunchLook for Webflow · ' ~ customer.tier ~ ' report' %}
+  {% set page_title = customer.app_name ~ ' · LaunchLook Webflow Checkup' %}
+  {% set fix_prompt_label_target = 'Webflow Designer' %}
+{% else %}
+  {% set report_label = 'LaunchLook · ' ~ customer.tier ~ ' report' %}
+  {% set page_title = customer.app_name ~ ' · LaunchLook ' ~ customer.tier ~ ' Report' %}
+  {% set fix_prompt_label_target = customer.builder %}
+{% endif %}
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>{{ customer.app_name }} · LaunchLook {{ customer.tier }} Report</title>
+  <title>{{ page_title }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -296,7 +317,7 @@
   <div class="page">
 
     <header class="doc-header">
-      <p class="eyebrow">LaunchLook · {{ customer.tier }} report</p>
+      <p class="eyebrow">{{ report_label }}</p>
       <h1>{{ customer.app_name }}</h1>
       <p class="subtitle">
         Pre-launch checkup for {{ customer.first_name }}
@@ -314,7 +335,10 @@
       <p class="verdict-meta">
         <strong>{{ findings|length }} finding{{ '' if findings|length == 1 else 's' }}</strong>
         below, sorted by severity. Each one includes what we saw, why it matters,
-        and a paste-ready fix prompt for {{ customer.builder }}.
+        and a paste-ready fix
+        {%- if is_webflow %} instruction for the Webflow Designer.
+        {%- else %} prompt for {{ customer.builder }}.
+        {%- endif %}
       </p>
     </section>
 
@@ -363,7 +387,11 @@
 
             {% if f.fix_prompt %}
             <div class="fix-prompt">
-              <p class="fix-prompt-label">Copy-paste fix prompt for {{ customer.builder }}</p>
+              <p class="fix-prompt-label">
+                {%- if is_webflow %}Step-by-step fix in Webflow Designer
+                {%- else %}Copy-paste fix prompt for {{ fix_prompt_label_target }}
+                {%- endif %}
+              </p>
               <p class="fix-prompt-body">{{ f.fix_prompt }}</p>
             </div>
             {% endif %}
@@ -375,8 +403,10 @@
     <section class="closing">
       <p>
         <strong>What to do next.</strong>
-        Start at the top. Paste each fix prompt into {{ customer.builder }} and verify the
-        change on your live URL before moving to the next finding.
+        Start at the top.
+        {%- if is_webflow %} Open Webflow Designer, follow each fix step, click <strong>Publish</strong> in the top right, and verify the change on your live URL before moving to the next finding.
+        {%- else %} Paste each fix prompt into {{ customer.builder }} and verify the change on your live URL before moving to the next finding.
+        {%- endif %}
       </p>
       {% if qsg_link %}
       <p>

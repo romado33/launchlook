@@ -65,8 +65,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--builder",
         default="",
-        choices=["", "Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Other"],
+        choices=["", "Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Webflow", "Other"],
         help="Builder used by the customer's app.",
+    )
+    parser.add_argument(
+        "--platform",
+        default="",
+        choices=["", "vibe-coder", "webflow"],
+        help=(
+            "Customer's editing environment. 'vibe-coder' covers Lovable / "
+            "Bolt / v0 / Cursor / Replit / Base44. 'webflow' switches the "
+            "fix-prompt voice to Webflow Designer language. Default empty "
+            "= form selects 'vibe-coder'."
+        ),
     )
     parser.add_argument("--port", type=int, default=8000, help="Port to bind (default: 8000).")
     parser.add_argument("--host", default="127.0.0.1", help="Host to bind (default: 127.0.0.1).")
@@ -101,6 +112,7 @@ def build_prefill(args: argparse.Namespace) -> dict[str, object]:
         "app_url": (args.url or "").strip(),
         "tier": (args.tier or "").strip(),
         "builder": (args.builder or "").strip(),
+        "platform": (args.platform or "").strip(),
         "url_redacted": False,
     }
     return {k: v for k, v in prefill.items() if v not in ("", None, False) or k == "slug"}

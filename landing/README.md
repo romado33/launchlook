@@ -6,7 +6,8 @@ Static site for **LaunchLook** at [launchlook.app](https://launchlook.app). No b
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Home — hero, what we check, sample, pricing, FAQ, footer |
+| `index.html` | Home — hero, what we check, sample, pricing, FAQ, footer (vibe-coder SKU: Lovable / Bolt / v0 / Cursor / Replit / Base44) |
+| `webflow.html` | **LaunchLook for Webflow** — parallel SKU at `/webflow`. Webflow-specific hero, finding categories, FAQ, $19/$49/$99 pricing. Reuses the same Stripe Payment Links and the same Tally intake form (customer picks "Webflow" in Q7). See `docs/WEBFLOW-EXPANSION.md`. |
 | `checklist.html` | Free pre-launch checklist (BL-06) |
 | `privacy.html`, `terms.html`, `thanks.html` | Legal + post-checkout |
 | `assets/config.js` | `LAUNCHLOOK_CONFIG` — Stripe links, `supportEmail`, `intakeFormUrl`, `linkedinUrl` |
@@ -51,7 +52,7 @@ vercel --prod
 Edit `assets/config.js` (committed) or `config.local.js` (gitignored override):
 
 - `intakeFormUrl` — after Tally publish; paste from [`docs/TALLY-COPY-PASTE.md`](../docs/TALLY-COPY-PASTE.md)
-- `stripe.starter` / `stripe.launch` / `stripe.pro` — Payment Links ($19 / $49 / $99). Pro link is pending; see `docs/MANUAL-TASKS-PRICE-BUMP.md`.
+- `stripe.starter` / `stripe.launch` — Payment Links ($9 / $29)
 - `supportEmail` — `hello@launchlook.app`
 - `linkedinUrl` — footer + Who's behind section
 
@@ -63,11 +64,12 @@ Stripe Payment Link **success URL** (dashboard): `https://launchlook.app/thanks`
 
 | URL | File |
 |-----|------|
-| `/` | `index.html` |
+| `/` | `index.html` (vibe-coder SKU) |
+| `/webflow` | `webflow.html` (Webflow SKU — parallel landing page) |
 | `/checklist` | `checklist.html` |
 | `/privacy` | `privacy.html` |
 | `/terms` | `terms.html` |
-| `/thanks` | `thanks.html` |
+| `/thanks` | `thanks.html` (shared by both SKUs; copy is platform-agnostic) |
 
 ## Before launch
 

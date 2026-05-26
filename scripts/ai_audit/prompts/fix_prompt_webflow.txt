@@ -1,0 +1,78 @@
+## Webflow fix-prompt augmentation
+
+When the customer's platform is **webflow**, the customer edits their site in
+the Webflow Designer, not in an AI builder chat. Every `fix_prompt` must be
+rewritten so it reads as a step-by-step Designer walkthrough a non-developer
+Webflow user can follow without external help.
+
+### Voice rules for Webflow fix prompts
+
+* Imperative, second person. "In Webflow Designer, open Pages → Home → …"
+  Never "you should consider," never "the developer should."
+* Reference the Designer panels by their visible names: **Pages**, **Style
+  Manager**, **Symbols**, **CMS Collections**, **Project Settings**, **SEO
+  tab**, **Custom Code tab**, **Forms** tab (in Project Settings),
+  **Interactions**, **Navigator**, **Asset Manager**, **Breakpoints**
+  (Desktop / 991 / 767 / 478).
+* When pointing at a breakpoint, use the Webflow numbers explicitly: 991px
+  (Tablet), 767px (Mobile landscape), 478px (Mobile portrait). Do not call
+  them "tablet" / "phone" alone; Webflow customers think in pixel values.
+* When pointing at an element, name the Navigator path when possible:
+  `Body → Section.hero → Container → H1`. Quote the visible label if you do
+  not know the Navigator path.
+* Custom-code fixes go in the SEO tab (page-level meta) or Project Settings
+  → Custom Code (site-wide). Never tell a Webflow user to "edit index.html"
+  or "deploy."
+* "Publish" is the verb Webflow customers use, not "deploy" or "ship." End
+  multi-step fixes with: "Then click **Publish** in the top right and
+  confirm the change on your live URL."
+* Form fixes: point at the form's **Form Settings** in the right panel
+  (where Webflow stores the action URL, success/error messages, and the
+  Forms tab redirect). Never reference `fetch()` or `XHR` unless the
+  customer is clearly using a custom-code workaround.
+
+### Fix-prompt skeleton (use this shape)
+
+> In Webflow Designer, open **Pages** → `{page slug}` → **SEO tab**.
+> Set the **Search engine indexing** toggle to **Allow** (currently set to
+> **Disable**). Save, then **Publish** the site and reload the live URL.
+> Confirm the `<meta name="robots">` tag no longer contains `noindex` by
+> viewing the page source.
+
+> In the Designer, open **Project Settings** → **Forms** → **Form
+> Notifications**. Add an email recipient (currently empty, which is why
+> submissions silently disappear). Save. Then on the live URL, fill out the
+> form once with a test email and confirm it lands in the inbox you
+> configured.
+
+> In the Designer, switch to the **991px** breakpoint. Select the
+> `Body → Section.hero → Container` element. The right side has horizontal
+> overflow because **Container** is using `width: 100%` plus a fixed
+> `padding-left: 80px`. Change the padding to `40px` at 991px and below,
+> then **Publish**. Reload the live URL at 991px width and confirm there
+> is no horizontal scrollbar.
+
+### Banned phrasings on Webflow fix prompts
+
+* "Tell Lovable to…" / "Ask Bolt to…" / "Prompt Cursor with…" — wrong
+  platform entirely.
+* "Edit `src/components/…`" — Webflow users have no source tree.
+* "Add `import.meta.env.DEV` guard" — meaningless in Webflow.
+* "Run `npm install`," "deploy to Vercel," "push to GitHub" — wrong stack.
+* "Open DevTools and inspect" — Webflow customers fix things in Designer,
+  not in browser DevTools. Only mention DevTools when verifying a fix
+  (after Publish).
+
+### Webflow finding ↔ fix-prompt pairing (calibration)
+
+| Finding category | Where to fix in Designer |
+|---|---|
+| Form silently dropping submissions (post-Nov 2024) | Project Settings → Forms → add a notification email and verify Form Notifications recipient is set |
+| Accidental noindex on a page | Page Settings → SEO tab → toggle Search engine indexing → Allow |
+| Site-wide robots.txt blocking | Project Settings → SEO → robots.txt → remove `Disallow: /` |
+| Missing JSON-LD schema | Page Settings → Custom Code → Inside `<head>` tag, paste a `<script type="application/ld+json">` block |
+| Placeholder lorem ipsum in production | Designer → Navigator → find the text element → replace copy → Publish |
+| Broken component / Symbol instance | Symbols panel → select the Symbol → fix the broken instance → all instances update |
+| Hidden element visible on live | Style panel → Display → set to None (or use a Visibility condition on CMS-bound items) |
+| Mobile breakpoint overflow at 991/767/478 | Switch to that breakpoint in the Designer toolbar → select the offending element → adjust padding/width/font-size → Publish |
+| Interaction not firing live | Interactions panel → re-bind trigger to the correct element → ensure trigger target exists at publish time |

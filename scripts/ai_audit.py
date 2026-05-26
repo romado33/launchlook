@@ -83,12 +83,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--slug", required=True, help="Customer slug (filename for customers/<slug>.yaml)")
     parser.add_argument("--url", required=True, help="Customer app URL (https://...)")
-    parser.add_argument(
-        "--tier",
-        required=True,
-        choices=["Starter Package", "Full Package", "Pro Package"],
-        help="Tier purchased",
-    )
+    parser.add_argument("--tier", required=True, choices=["Starter Package", "Full Package"], help="Tier purchased")
     parser.add_argument("--builder", required=True, help="Builder (Lovable, Bolt, v0, Cursor, Replit, Base44, Other)")
     parser.add_argument("--name", default="", help='Customer full name (e.g. "Jane Smith")')
     parser.add_argument("--first-name", default="", dest="first_name", help="Override first name")
@@ -96,6 +91,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--email", default="", help="Customer email")
     parser.add_argument("--app-name", required=True, dest="app_name", help="Customer app/product name")
     parser.add_argument("--intake-notes", default="", dest="intake_notes", help="Optional intake notes pulled from Tally")
+    parser.add_argument(
+        "--platform",
+        default="vibe-coder",
+        choices=["vibe-coder", "webflow"],
+        help=(
+            "Customer's editing platform. 'vibe-coder' (default) covers "
+            "Lovable / Bolt / v0 / Cursor / Replit / Base44 and uses the "
+            "builder-aware fix prompts. 'webflow' switches fix prompts to "
+            "Webflow Designer language and enables Webflow-specific check "
+            "categories (form submission, noindex, schema, breakpoints)."
+        ),
+    )
     parser.add_argument(
         "--provider",
         default="auto",
@@ -123,6 +130,7 @@ def main(argv: list[str] | None = None) -> int:
         email=args.email,
         app_name=args.app_name,
         intake_notes=args.intake_notes,
+        platform=args.platform,
     )
 
     print()
@@ -130,6 +138,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  Slug:      {ctx.slug}")
     print(f"  URL:       {ctx.url}")
     print(f"  Tier:      {ctx.tier}")
+    print(f"  Platform:  {ctx.platform}")
     print(f"  Builder:   {ctx.builder}")
     print(f"  Customer:  {ctx.first_name} {ctx.last_name} <{ctx.email}>")
     print(f"  App:       {ctx.app_name}")

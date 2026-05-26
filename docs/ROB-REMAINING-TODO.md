@@ -10,7 +10,7 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 1. **Tally** — Pick a form to use, then finish setup in Tally UI:
    - New rebuilt API form `QKOX1A` (DRAFT, May 25) — edit at https://tally.so/forms/QKOX1A/edit, **OR**
    - Existing form `9qodVE` (already wired into `config.js`)
-   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package + Pro Package / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in §1 below.
+   - Either way, in Tally UI: add Notifications → `hello@launchlook.app`, After-submit redirect → `https://tally.so/r/Y5xO5J`, and conditional logic for Q9–Q11 (Full Package only / "Yes" to test accounts). Click-by-click steps for `QKOX1A` are in §1 below.
 2. **Tracker** — `python scripts/customers_track.py init` then `add` for your two test payments (or real ones).
 3. **Notion ops** — LaunchLook Ops workspace so you can deliver the first real checkup.
 
@@ -21,7 +21,7 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 ## Already done (don’t redo)
 
 - [x] Landing site live (Vercel, clean URLs, security headers)
-- [x] Starter Package **$19** / Full Package **$49** / Pro Package **$99** on homepage; Stripe **public** links in `landing/assets/config.js` (Pro link still pending — see `docs/MANUAL-TASKS-PRICE-BUMP.md`)
+- [x] Starter Package **$9** / Full Package **$29** on homepage; Stripe **public** links in `landing/assets/config.js`
 - [x] Privacy, terms, sample report, free checklist, OG/logo (Option A)
 - [x] Report templates + plain-language voice guide for customers
 - [x] Findings library (35 entries) in repo
@@ -36,7 +36,7 @@ Use this as your single owner checklist. Code/deploy items below marked ✅ are 
 - [x] Customer 10 prep: [`CUSTOMER-10-RUNBOOK.md`](CUSTOMER-10-RUNBOOK.md) + `data/milestones.json`
 - [x] Tally URLs in `config.js`: intake `9qodVE`, post-intake thanks `Y5xO5J` (deployed)
 - [x] Homepage CTAs use shared button styles (all primary actions look clickable)
-- [x] Stripe checkout tested for the original $9 / $29 prices (May 2026); $19 / $49 / $99 retest pending (see `docs/MANUAL-TASKS-PRICE-BUMP.md`)
+- [x] Stripe checkout tested: **Starter $9** and **Full $29** both complete successfully (May 2026)
 
 ---
 
@@ -79,11 +79,10 @@ In the editor (https://tally.so/forms/QKOX1A/edit), do these in order. The dropd
    - On Q10 (`Test account 1 — email and password`): `⋮⋮` → **Hide**
    - On Q11 (`Test account 2 — email and password`): `⋮⋮` → **Hide**
 
-2. **Rule 1 — show Q9 only for Full / Pro Package buyers** (place this `/logic` block right after Q8)
+2. **Rule 1 — show Q9 only for Full Package buyers** (place this `/logic` block right after Q8)
    - Type `/logic` → Conditional logic
-   - IF `Which tier did you purchase?` **is** `Full Package ($49)` OR **is** `Pro Package ($99)`
+   - IF `Which tier did you purchase?` **is** `Full Package ($29)`
    - THEN **Show blocks** → select `Can we use test accounts?`
-   - (After the price bump, the Tally tier dropdown needs updating in the form editor — see `docs/MANUAL-TASKS-PRICE-BUMP.md`. Same rule, just the option labels move from `$29` → `$49` plus a new `$99` Pro option.)
 
 3. **Rule 2 — show Q10 when Q9 = Yes** (place this `/logic` block right after Q9)
    - Type `/logic` → Conditional logic
@@ -94,7 +93,7 @@ In the editor (https://tally.so/forms/QKOX1A/edit), do these in order. The dropd
    - IF `Can we use test accounts?` **is** `Yes — I'll provide two test accounts`
    - THEN **Show blocks** → select `Test account 2 — email and password`
 
-Three rules total. There is no need to re-gate Q10/Q11 by Q8 — Q9 is already hidden unless Q8 = Full Package or Pro Package, so Q10/Q11 inherit that gate transitively (if Q9 is hidden, no one can answer "Yes" on it, so Q10/Q11 stay hidden).
+Three rules total. There is no need to re-gate Q10/Q11 by Q8 — Q9 is already hidden unless Q8 = Full Package, so Q10/Q11 inherit that gate transitively (if Q9 is hidden, no one can answer "Yes" on it, so Q10/Q11 stay hidden).
 
 #### Checklist
 
@@ -113,10 +112,10 @@ Three rules total. There is no need to re-gate Q10/Q11 by Q8 — Q9 is already h
 
 Dashboard: [dashboard.stripe.com](https://dashboard.stripe.com) → **Payment Links** (live mode when ready)
 
-- [ ] **Three** links: $19 Starter, $49 Full, $99 Pro — see `docs/MANUAL-TASKS-PRICE-BUMP.md` for the price-bump migration steps
+- [x] Exactly **two** links: $9 Starter, $29 Full — both checkout successfully
 - [x] Success URL returns customers to `/thanks` (verified via live test)
 - [ ] Cancel URL (if offered): `https://launchlook.app/#pricing` (optional)
-- [x] URLs match `config.js` (`stripe.starter`, `stripe.launch`); add `stripe.pro` once the Pro payment link exists
+- [x] URLs match `config.js` (`stripe.starter`, `stripe.launch`)
 
 ### 3. Email receiving (~15–30 min)
 
@@ -130,25 +129,19 @@ Site and templates use **hello@launchlook.app** (matches launchlook.app). If you
 
 Use **incognito** on desktop and once on your **phone**. Detail: [`07-launchlook-go-live.md`](07-launchlook-go-live.md) §8.
 
-**Starter ($19)**
+**Starter ($9)**
 
-- [ ] Click **Get Starter Package — $19** → Stripe opens
-- [ ] Complete payment (live retest pending after price bump)
-- [ ] Land on `https://launchlook.app/thanks` (not 404)
+- [x] Click **Get Starter Package — $9** → Stripe opens
+- [x] Complete payment (live test May 2026)
+- [x] Land on `https://launchlook.app/thanks` (not 404)
 - [ ] Intake opens **Tally** (not only mailto)
 - [ ] Submit test intake → you receive it at hello@launchlook.app
 - [ ] Form only asks safe fields; security checkbox required
 
-**Full ($49)**
+**Full ($29)**
 
-- [ ] Same flow for **Get Full Package — $49** (live retest pending after price bump)
+- [x] Same flow for **Get Full Package — $29** (live test May 2026)
 - [ ] Full Package shows test-account questions when selected
-
-**Pro ($99)**
-
-- [ ] Same flow for **Get Pro Package — $99** (new tier — Stripe product not yet created; see `docs/MANUAL-TASKS-PRICE-BUMP.md`)
-- [ ] Pro Package shows test-account questions when selected (same as Full)
-- [ ] Pro Package customers receive email confirming the 30-min Loom walkthrough scheduling step
 
 **Quick URL check**
 
@@ -204,6 +197,25 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
 
 ---
 
+## 🟣 LaunchLook for Webflow SKU (parallel landing at `/webflow`)
+
+The Webflow SKU shipped as code (landing page, platform-aware fix prompts, finding categories, outreach playbook). Three manual items remain to switch it fully on:
+
+- [ ] **Tally Q7**: open the intake form in Tally → click Q7 (`Which platform built it?`) → **Edit options** → add `Webflow` between `v0` and `Other`. ~5 min. See [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) §"Webflow option for Q7" for the exact new list. No conditional logic changes are needed.
+- [ ] **Webflow community validation outreach**: post in 2–3 Webflow communities to validate demand and find your first Webflow customer. Use the three Webflow pitches in [`OUTREACH-PLAYBOOK.md`](OUTREACH-PLAYBOOK.md) §7b. Targets: [forum.webflow.com](https://forum.webflow.com), [r/Webflow](https://reddit.com/r/Webflow), Webflow Community Slack/Discord. The "post-Nov 2024 silent form failure" hook is the most specific opener; lead with it.
+- [ ] **(Optional) Stripe success URL for Webflow buyers** — by default Stripe redirects all paid customers to `/thanks` (whose copy is platform-agnostic, so this works fine out of the box). If you want a dedicated Webflow thanks experience, duplicate `landing/thanks.html` to `landing/webflow/thanks.html` (or just `landing/webflow-thanks.html`), point a third Stripe Payment Link at it, and update `landing/assets/config.js`. Skip until you have ≥3 paying Webflow customers — same product, different vanity URL.
+
+Code that already shipped (verify with `git log --oneline` if you doubt):
+
+- `landing/webflow.html` (dedicated page, $19 / $49 / $99, Webflow-flavored copy)
+- `scripts/ai_audit.py --platform webflow` (Designer-flavored fix prompts)
+- `scripts/ai_audit/prompts/fix_prompt_webflow.txt` (platform appendix)
+- `scripts/audit_ui/` Platform dropdown (vibe-coder / webflow, default vibe-coder)
+- `templates/report/report.html.j2` ("LaunchLook for Webflow" header, Designer fix-prompt label)
+- `docs/WEBFLOW-EXPANSION.md` (single source of truth for the SKU)
+
+---
+
 ## 🟡 Optional — trust & polish
 
 - [x] **LinkedIn** on homepage (Who's behind + footer)
@@ -217,14 +229,14 @@ Guide: [`03-build-queue.md`](03-build-queue.md) BL-03, BL-08 · Templates: [`tem
 
 ## 🟢 Shmoozing — when §1–4 are green
 
-Goal: **3 strangers pay $19** — then stop polishing the site.
+Goal: **3 strangers pay $9** — then stop polishing the site.
 
 - [ ] Read: [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) (weekly rhythm + what to link)
 - [ ] Script: [`templates/cold-outreach-loom-script.md`](../templates/cold-outreach-loom-script.md)
 - [ ] Free sample playbook: [`templates/week-1-free-sample-playbook.md`](../templates/week-1-free-sample-playbook.md)
 - [ ] Track prospects in Notion **Outreach Tracker**
 - [ ] **30** targeted DMs/Looms (quality over volume)
-- [ ] Offer $19 Starter first; upsell Full ($49) when they’re launching this week, or Pro ($99) for founders going to investor demo / paid traffic
+- [ ] Offer $9 Starter first; upsell Full when they’re launching this week
 
 ---
 
@@ -234,7 +246,7 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 
 | Target | Number |
 |--------|--------|
-| Paying customers | **8+** (mix $19 / $49 / $99) |
+| Paying customers | **8+** (mix $9 / $29) |
 | “Useful” or better | **6 of 8** |
 | Referrals | **2+** |
 
@@ -246,7 +258,7 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 |------|--------|
 | Domain | launchlook.app |
 | Support | hello@launchlook.app |
-| Tiers | Starter **$19** (cap 7) · Full **$49** (cap 25) · Pro **$99** (cap 40) |
+| Tiers | Starter Package **$9**, Full Package **$29** |
 | Config file | `landing/assets/config.js` |
 | Go-live detail | [`07-launchlook-go-live.md`](07-launchlook-go-live.md) |
 | Security posture | [`08-launchlook-security.md`](08-launchlook-security.md) |

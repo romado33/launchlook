@@ -112,6 +112,15 @@
               </select>
             </label>
           </div>
+
+          <label class="field">
+            <span class="field__label">Platform <span class="field__hint">(controls fix-prompt voice and report flavour; default: vibe-coder)</span></span>
+            <select class="field__input" data-field="customer.platform">
+              {% for p in platforms %}
+              <option value="{{ p }}"{% if p == default_platform %} selected{% endif %}>{{ p }}</option>
+              {% endfor %}
+            </select>
+          </label>
         </div>
       </section>
 
@@ -177,11 +186,11 @@
       </section>
 
       <!-- ------------------------------------------------------------ -->
-      <!-- Quick Start Guide (Full Package + Pro Package)                -->
+      <!-- Quick Start Guide (Full Package only)                         -->
       <!-- ------------------------------------------------------------ -->
       <section class="card" data-section="qsg" hidden>
         <header class="card__header">
-          <h2 class="card__title">Quick Start Guide <span class="card__title-tag">Full + Pro</span></h2>
+          <h2 class="card__title">Quick Start Guide <span class="card__title-tag">Full Package</span></h2>
         </header>
         <div class="card__body">
           <label class="field">
@@ -297,6 +306,8 @@
       severities: {{ severities | tojson }},
       tiers: {{ tiers | tojson }},
       builders: {{ builders | tojson }},
+      platforms: {{ platforms | tojson }},
+      default_platform: {{ default_platform | tojson }},
       review_ai: {{ (review_ai | tojson) if review_ai is defined else 'false' }},
     };
   </script>

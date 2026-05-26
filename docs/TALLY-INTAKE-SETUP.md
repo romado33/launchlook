@@ -32,6 +32,7 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 - [ ] Block 0: **Text** (security notice) — paste from file
 - [ ] Questions 1–15 in order — paste titles, descriptions, placeholders, options
 - [ ] Q7, Q8, Q9: use **Bulk insert options** for option lists
+- [ ] **Q7 (Which platform built it?) — add `Webflow` to the option list** (between `v0` and `Other`). This is what routes Webflow customers through to the right fix-prompt voice. See "Webflow option for Q7" below.
 - [ ] Logic on Q9, Q10, Q11, Q12 (see bottom of paste file)
 - [ ] Q15 checkbox required, above Submit
 - [ ] Thank you page — paste from file
@@ -39,6 +40,26 @@ Do **not** paste from `.md` files — Tally will show formatting junk.
 - [ ] Notifications → `hello@launchlook.app`, all answers
 - [ ] Test Starter path (Q9–12 hidden) and Full path (Q9–12 visible)
 - [x] `intakeFormUrl` in `config.js` → `9qodVE` (already deployed — skip unless you publish a new form)
+
+### Webflow option for Q7 (5-min add)
+
+LaunchLook for Webflow (the `/webflow` SKU at `launchlook.app/webflow`) reuses this same intake form. Webflow customers will land here from the Webflow landing page, so Q7's dropdown needs to include `Webflow` so they can self-identify.
+
+Updated Q7 option list (in order):
+
+```
+Lovable
+Bolt
+Base44
+Replit
+v0
+Webflow
+Other
+```
+
+Open the form in Tally → click Q7 (`Which platform built it?`) → **Edit options** → add `Webflow` between `v0` and `Other`. No conditional logic needs to change (Q9–Q12 still trigger off Q8 tier, not Q7 platform).
+
+When the Tally webhook fires into the AI pipeline, the platform value `Webflow` should be passed through to `scripts/ai_audit.py --platform webflow --builder Webflow`. See `docs/WEBFLOW-EXPANSION.md` for the full handoff.
 
 ---
 

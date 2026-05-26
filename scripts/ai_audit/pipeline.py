@@ -37,7 +37,41 @@ from . import html_extract, llm_client  # noqa: E402
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 
-DEFAULT_TIER_CAPS = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}
+DEFAULT_TIER_CAPS = {"Starter Package": 5, "Full Package": 20}
+
+# ---------------------------------------------------------------------------
+# Platform registry
+# ---------------------------------------------------------------------------
+#
+# A "platform" selects which fix-prompt appendix is layered onto the base
+# system prompt. The default ("vibe-coder") keeps the original behavior
+# (Lovable / Bolt / v0 / Cursor / Replit / Base44). Adding a new platform
+# is intentionally additive: register a slug here, point it at a prompt
+# file under ``prompts/``, and the pipeline will start using it. The base
+# system.txt is *never* rewritten -- it explicitly delegates platform-
+# specific language to whichever appendix the pipeline appends at runtime.
+
+VALID_PLATFORMS = ("vibe-coder", "webflow")
+DEFAULT_PLATFORM = "vibe-coder"
+
+PLATFORM_PROMPT_FILES: dict[str, str | None] = {
+    "vibe-coder": None,  # base system.txt already speaks vibe-coder
+    "webflow": "fix_prompt_webflow.txt",
+}
+
+
+def normalize_platform(value: str | None) -> str:
+    """Normalize a free-form platform string to a known slug.
+
+    Falls back to ``DEFAULT_PLATFORM`` when the input is empty or unknown,
+    so the pipeline keeps working for unspecified / legacy inputs.
+    """
+    if not value:
+        return DEFAULT_PLATFORM
+    cleaned = value.strip().lower().replace("_", "-").replace(" ", "-")
+    if cleaned in VALID_PLATFORMS:
+        return cleaned
+    return DEFAULT_PLATFORM
 
 DELIVER_REPORT = REPO_ROOT / "scripts" / "deliver_report.py"
 FINDINGS_CSV = REPO_ROOT / "findings_library" / "findings.csv"
@@ -61,6 +95,7 @@ class CustomerContext:
     email: str = ""
     app_name: str = ""
     intake_notes: str = ""
+    platform: str = DEFAULT_PLATFORM
 
 
 @dataclass
@@ -82,13 +117,8 @@ class PipelineResult:
 # ---------------------------------------------------------------------------
 
 
-# Matches the dict-lookup form in deliver_report.validate(), e.g.
-#   cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
 _TIER_CAP_PATTERN = re.compile(
-    r"cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\s*\(\s*tier\s*,",
-)
-_TIER_CAP_ENTRY = re.compile(
-    r"['\"](?P<name>[^'\"]+)['\"]\s*:\s*(?P<cap>\d+)"
+    r"cap\s*=\s*(?P<starter>\d+)\s*if\s*tier\s*==\s*['\"]Starter Package['\"]\s*else\s*(?P<full>\d+)"
 )
 
 
@@ -101,10 +131,10 @@ def load_tier_caps() -> dict[str, int]:
     match = _TIER_CAP_PATTERN.search(text)
     if not match:
         return dict(DEFAULT_TIER_CAPS)
-    caps: dict[str, int] = {}
-    for entry in _TIER_CAP_ENTRY.finditer(match.group("body")):
-        caps[entry.group("name")] = int(entry.group("cap"))
-    return caps or dict(DEFAULT_TIER_CAPS)
+    return {
+        "Starter Package": int(match.group("starter")),
+        "Full Package": int(match.group("full")),
+    }
 
 
 def load_findings_library() -> list[dict[str, Any]]:
@@ -311,23 +341,107 @@ def _read_prompt(name: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def build_system_prompt(platform: str = DEFAULT_PLATFORM) -> str:
+    """Return the system prompt layered with any platform-specific appendix.
+
+    The base ``system.txt`` is always loaded. If the platform has a
+    registered appendix (see ``PLATFORM_PROMPT_FILES``), its contents are
+    appended below a clear divider. This keeps the base prompt untouched
+    while letting platform-specific voice / finding categories slot in.
+
+    Adding a new platform appendix later (e.g. security-lite, Snoop
+    persona) is intentionally a *new file + one-line registration*, never
+    a rewrite of the base.
+    """
+    base = _read_prompt("system.txt")
+    platform = normalize_platform(platform)
+    appendix_file = PLATFORM_PROMPT_FILES.get(platform)
+    if not appendix_file:
+        return base
+    appendix_path = PROMPTS_DIR / appendix_file
+    if not appendix_path.exists():
+        return base
+    appendix = appendix_path.read_text(encoding="utf-8")
+    return (
+        f"{base}\n\n"
+        f"==========================================================================\n"
+        f"PLATFORM APPENDIX — {platform.upper()}\n"
+        f"==========================================================================\n"
+        f"\n"
+        f"The customer's platform is **{platform}**. Apply the rules below in\n"
+        f"addition to (not in replacement of) the base system prompt. When the\n"
+        f"base prompt and this appendix conflict, the appendix wins for any\n"
+        f"language pointed at the customer's editing environment (fix_prompt\n"
+        f"voice, platform-specific finding categories). Severity definitions,\n"
+        f"grounding rules, and voice rules from the base prompt always apply.\n"
+        f"\n"
+        f"{appendix}\n"
+    )
+
+
+# Webflow-specific finding-category guidance appended to the user prompt
+# (not the system prompt) so it sits next to the per-customer evidence and
+# can be tuned per audit without rewriting the platform appendix.
+_WEBFLOW_FINDING_CHECKS = """
+### Webflow-specific check list (apply when platform=webflow)
+
+Beyond the standard pre-launch checks, look hard for these Webflow-only
+failure modes. Each one is high-value because Webflow's own Designer does
+not warn the customer when it happens:
+
+1. **Silent form submission failure (post-Nov 2024)**. For every <form> on
+   the site, check whether the form has a Webflow Form Notification email
+   configured. If the form action points at Webflow's standard handler but
+   no notification recipient is set, submissions disappear silently after
+   showing a success message. Flag any form whose evidence suggests this
+   pattern (e.g., missing form name attribute, default success/error blocks
+   still present, no JSON-LD organization contact pointing to a real
+   inbox). Severity: critical when contact / lead form, high otherwise.
+
+2. **Accidental noindex / robots block on a production page**. Inspect the
+   <head> for `<meta name="robots" content="noindex">` on pages that
+   appear to be production (homepage, about, contact, pricing, services,
+   collection landing pages). Also check the robots.txt body if visible
+   in the page-status summary for a wildcard `Disallow: /` on the live
+   host. Severity: critical when on the homepage, high otherwise.
+
+3. **Missing or malformed JSON-LD schema**. Check whether the page exposes
+   a `<script type="application/ld+json">` block. For business / agency /
+   product pages, the absence of Organization, LocalBusiness, Product, or
+   Article schema (whichever fits) is a finding. Severity: medium unless
+   the customer's intake notes mention SEO as a goal, then high.
+
+4. **Designer-to-live mismatch indicators**. Flag any of: visible "Lorem
+   ipsum" placeholder text, default Webflow component placeholders like
+   "Heading goes here" or "Button text," literal "Your text goes here" in
+   CMS-bound elements, broken Symbol instances (empty interior), elements
+   marked hidden in Designer that render visible on the live URL.
+
+5. **Mobile breakpoint breakage at Webflow's three native breakpoints**:
+   991px (Tablet), 767px (Mobile landscape), 478px (Mobile portrait). If
+   the mobile screenshot at 390px width shows overflow, broken nav, text
+   overlap, or hidden CTAs, flag the most likely breakpoint origin in the
+   fix_prompt so the customer knows which breakpoint to switch to in the
+   Designer.
+
+These are *categories*, not personas. Other workers may layer persona
+tagging on top of findings later; do not assign persona names in the
+finding payload.
+"""
+
+
+def _maybe_append_webflow_checks(prompt: str, platform: str) -> str:
+    if normalize_platform(platform) != "webflow":
+        return prompt
+    return f"{prompt}\n{_WEBFLOW_FINDING_CHECKS}"
+
+
 def _tier_guidance(tier: str, cap: int) -> str:
     if tier == "Starter Package":
         return (
             f"Starter Package is priority triage. Return at most {cap} findings, "
             "the most important things a first-time visitor would notice. Skew "
             "toward criticals and highs. If the app is clean, return fewer."
-        )
-    if tier == "Pro Package":
-        return (
-            f"Pro Package is the deepest pass we offer. Return up to {cap} findings "
-            "spanning trust, polish, mobile, broken functionality, AND a dedicated "
-            "review of the customer's operational integrations (Stripe / auth / "
-            "email / analytics setup) — flag misconfiguration, missing webhooks, "
-            "leaked test keys on the public surface, redirect URLs that point at "
-            "localhost, broken from-addresses, double-counted analytics events, "
-            "etc. Include lower-severity polish items the customer paid extra "
-            "for. Still drop any finding you cannot ground in real evidence."
         )
     return (
         f"Full Package is the deeper pass. Return up to {cap} findings spanning "
@@ -431,7 +545,7 @@ def run(
 ) -> PipelineResult:
     """Run the full pipeline. Returns the result (YAML text + payload)."""
     tier_caps = load_tier_caps()
-    cap = max_findings or tier_caps.get(customer_ctx.tier, 25)
+    cap = max_findings or tier_caps.get(customer_ctx.tier, 7)
     print(f"[pipeline] tier={customer_ctx.tier!r} cap={cap} provider={provider!r}")
 
     # ---- 1. Capture ----
@@ -474,7 +588,7 @@ def run(
     print(f"[llm] provider={client.name} model={client.model}")
 
     library = load_findings_library()
-    system_prompt = _read_prompt("system.txt")
+    system_prompt = build_system_prompt(customer_ctx.platform)
 
     finding_prompt = build_finding_user_prompt(
         customer_ctx,
@@ -484,6 +598,7 @@ def run(
         pages=pages,
         library=library,
     )
+    finding_prompt = _maybe_append_webflow_checks(finding_prompt, customer_ctx.platform)
 
     findings = client.generate_findings(
         system_prompt=system_prompt,
@@ -508,9 +623,9 @@ def run(
         print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
         verdict = _default_verdict(findings, customer_ctx.app_name)
 
-    # ---- 7. QSG (Full Package + Pro Package) ----
+    # ---- 7. QSG (Full Package only) ----
     qsg = None
-    if customer_ctx.tier in ("Full Package", "Pro Package"):
+    if customer_ctx.tier == "Full Package":
         qsg_prompt = build_qsg_user_prompt(customer_ctx, pages=pages)
         try:
             qsg = client.generate_qsg(
@@ -532,6 +647,7 @@ def run(
             "url_redacted": False,
             "tier": customer_ctx.tier,
             "builder": customer_ctx.builder,
+            "platform": customer_ctx.platform,
         },
         "verdict": verdict,
         "findings": findings,
@@ -622,7 +738,7 @@ def regenerate_finding(
     }
     client = llm_client.build_client(provider=provider, stub_context=stub_context)
 
-    system_prompt = _read_prompt("system.txt")
+    system_prompt = build_system_prompt(customer_ctx.platform)
     base = build_finding_user_prompt(
         customer_ctx,
         cap=1,
@@ -631,6 +747,7 @@ def regenerate_finding(
         pages=pages,
         library=library,
     )
+    base = _maybe_append_webflow_checks(base, customer_ctx.platform)
     regen_hint = (
         "\n\n### Regeneration request\n\n"
         "Produce exactly ONE replacement finding. The previous draft was:\n"
@@ -674,10 +791,18 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         sys.exit("ERROR: --url must start with http:// or https://")
 
     tier = (kwargs.get("tier") or "").strip()
-    if tier not in {"Starter Package", "Full Package", "Pro Package"}:
-        sys.exit("ERROR: --tier must be 'Starter Package', 'Full Package', or 'Pro Package'")
+    if tier not in {"Starter Package", "Full Package"}:
+        sys.exit("ERROR: --tier must be 'Starter Package' or 'Full Package'")
 
     builder = (kwargs.get("builder") or "").strip() or "Lovable"
+    platform = normalize_platform(kwargs.get("platform"))
+
+    # If the caller passed builder=Webflow but forgot to set platform, infer
+    # webflow so the right fix-prompt voice kicks in automatically. The
+    # reverse (platform=webflow but builder=Lovable) trusts the explicit
+    # caller intent and does not override builder.
+    if platform == DEFAULT_PLATFORM and builder.strip().lower() == "webflow":
+        platform = "webflow"
 
     return CustomerContext(
         slug=slug,
@@ -689,4 +814,5 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         email=(kwargs.get("email") or "").strip(),
         app_name=(kwargs.get("app_name") or "").strip() or kwargs.get("app_name", ""),
         intake_notes=(kwargs.get("intake_notes") or "").strip(),
+        platform=platform,
     )

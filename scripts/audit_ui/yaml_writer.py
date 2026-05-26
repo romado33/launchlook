@@ -32,8 +32,10 @@ import yaml
 
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3}
 VALID_SEVERITIES = ("critical", "high", "medium", "low")
-VALID_TIERS = ("Starter Package", "Full Package", "Pro Package")
-VALID_BUILDERS = ("Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Other")
+VALID_TIERS = ("Starter Package", "Full Package")
+VALID_BUILDERS = ("Lovable", "Bolt", "v0", "Base44", "Replit", "Cursor", "Webflow", "Other")
+VALID_PLATFORMS = ("vibe-coder", "webflow")
+DEFAULT_PLATFORM = "vibe-coder"
 
 
 # ---------------------------------------------------------------------------
@@ -93,7 +95,7 @@ def form_to_yaml(payload: dict[str, Any]) -> str:
             if i != len(findings) - 1:
                 lines.append("")
 
-    if customer.get("tier") in ("Full Package", "Pro Package"):
+    if customer.get("tier") == "Full Package":
         qsg = _clean_qsg(payload.get("quick_start_guide", {}))
         if qsg:
             lines.append("")
@@ -123,6 +125,7 @@ _CUSTOMER_KEYS = (
     "url_redacted",
     "tier",
     "builder",
+    "platform",
 )
 
 _VERDICT_KEYS = ("emoji", "summary", "narrative")
@@ -149,6 +152,14 @@ def _clean_customer(raw: dict[str, Any]) -> dict[str, Any]:
             continue
         if isinstance(val, str):
             val = val.strip()
+        if key == "platform":
+            # Only emit ``platform`` when it's non-default. This keeps
+            # legacy vibe-coder YAMLs byte-identical (no spurious
+            # ``platform: vibe-coder`` showing up where nothing existed
+            # before).
+            if isinstance(val, str) and val and val != DEFAULT_PLATFORM:
+                out[key] = val
+            continue
         if val:
             out[key] = val
     return out
@@ -358,6 +369,7 @@ def yaml_to_form(text: str) -> dict[str, Any]:
             "url_redacted": bool(customer.get("url_redacted", False)),
             "tier": customer.get("tier", "") or "",
             "builder": customer.get("builder", "") or "",
+            "platform": customer.get("platform") or DEFAULT_PLATFORM,
         },
         "verdict": {
             "emoji": verdict.get("emoji", "") or "",

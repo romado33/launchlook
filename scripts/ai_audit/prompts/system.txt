@@ -171,3 +171,24 @@ DO NOT
   one specific, fixable thing.
 * Do not output any explanation, preamble, or postamble around the
   structured response. Only the structured output the tool/schema requires.
+
+==========================================================================
+PLATFORM-CONDITIONAL APPENDICES (additive, do not edit other sections)
+==========================================================================
+
+The pipeline injects a "platform conditional" block below this point at
+runtime by appending the contents of a platform-specific prompt file
+(e.g. scripts/ai_audit/prompts/fix_prompt_webflow.txt) when the customer
+is on a non-default platform.
+
+The structure is intentionally additive: future workers can register
+additional platform appendices (security-lite, Snoop persona, Tester
+personas) by appending more conditional sections here, without rewriting
+the vibe-coder logic above. Each appendix is a *layer*, not a replacement.
+
+When the platform is `vibe-coder` (default), no appendix is appended and
+the FIX PROMPT TONE BY BUILDER section above governs.
+
+When the platform is `webflow`, the Webflow appendix replaces the FIX
+PROMPT TONE BY BUILDER guidance with Webflow Designer language. Findings
+themselves remain platform-agnostic; only fix-prompt voice changes.

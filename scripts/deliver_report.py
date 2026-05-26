@@ -60,7 +60,9 @@ EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
 OUTPUT_ROOT = REPO_ROOT / "output" / "reports"
 
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
-VALID_TIERS = {"Starter Package", "Full Package", "Pro Package"}
+VALID_TIERS = {"Starter Package", "Full Package"}
+VALID_PLATFORMS = {"vibe-coder", "webflow"}
+DEFAULT_PLATFORM = "vibe-coder"
 
 
 # ---------------------------------------------------------------------------
@@ -96,6 +98,15 @@ def validate(data: dict[str, Any]) -> None:
     if tier not in VALID_TIERS:
         sys.exit(f"ERROR: customer.tier must be one of {sorted(VALID_TIERS)}, got: {tier!r}")
 
+    # ``platform`` is optional. Legacy YAMLs without it default to vibe-coder
+    # so existing customers keep rendering identically.
+    platform = (customer.get("platform") or DEFAULT_PLATFORM).strip().lower()
+    if platform not in VALID_PLATFORMS:
+        sys.exit(
+            f"ERROR: customer.platform must be one of {sorted(VALID_PLATFORMS)}, got: {platform!r}"
+        )
+    customer["platform"] = platform
+
     findings = data.get("findings") or []
     if not isinstance(findings, list) or not findings:
         sys.exit("ERROR: at least one finding is required")
@@ -111,7 +122,7 @@ def validate(data: dict[str, Any]) -> None:
         if not f.get("title"):
             sys.exit(f"ERROR: findings[{i}].title is required")
 
-    cap = {"Starter Package": 7, "Full Package": 25, "Pro Package": 40}.get(tier, 25)
+    cap = 7 if tier == "Starter Package" else 20
     if len(findings) > cap:
         print(
             f"WARN: {tier} caps at {cap} findings, this YAML has {len(findings)}.",
