@@ -492,6 +492,8 @@ Active category IDs (as of q3b, May 26 2026):
 | `ai_sounding_copy` | copy that sounds AI-written | The Tourist | — | llm |
 | `scale_ready_audit` | growth-readiness checks | The Snoop | Scale Up Package | llm |
 | `compliance_lite` | common legal must-haves | The Skeptic | — | llm |
+| `performance_speed` | performance & speed | The Phone-First Friend | — | external (PSI) |
+| `accessibility_checks` | accessibility checks | The Phone-First Friend | — | external (axe-core) |
 
 When you add a new category, also list it here (ID + buyer-facing
 display name + tester + `tier_min` if any + source) so the canonical
@@ -576,6 +578,121 @@ YAML. Full setup + invocation + failure-recovery docs at
 `docs/GITHUB-INTEGRATION.md`. Library lives at
 `scripts/github_integration.py`; the thin CLI is
 `scripts/github_push.py`.
+
+---
+
+## Performance & speed (Core Web Vitals translator)
+
+`scripts/ai_audit/performance_speed.py` runs alongside Snoop and
+calls the PageSpeed Insights v5 API for the customer's homepage. The
+free anonymous quota is 25 req/100s shared; set `PSI_API_KEY` in
+`.env` for the per-project 25,000 req/day budget (key is optional,
+the pipeline falls back to anonymous with retry-on-429 backoff).
+
+Responses cache for 24h per (url, mobile/desktop) in
+`data/psi_cache/<hash>.json` (gitignored) so test runs and re-runs of
+the same customer never burn the daily quota. Override the TTL with
+the `PSI_CACHE_TTL_SECONDS` env var if you need a faster local loop.
+
+Each Core Web Vital is translated into a plain-English finding:
+
+| Internal metric | Buyer-facing dimension |
+|---|---|
+| LCP (Largest Contentful Paint) | how fast the main image or headline shows up |
+| INP (Interaction to Next Paint) | how fast the page reacts to a tap or click |
+| CLS (Cumulative Layout Shift) | how much things jump around as the page loads |
+
+The customer NEVER sees the internal acronyms (LCP / INP / CLS) or
+the phrase "Core Web Vitals" anywhere on a customer surface, per
+`docs/SIMPLICITY-GUARDRAILS.md` section 6. The buyer-facing display
+name for the whole category is "performance & speed".
+
+Findings are tier-capped inside `translate_to_findings`:
+
+| Tier | Findings exposed |
+|---|---|
+| Starter Package | 1 (worst-rated metric only) |
+| Scale Up Package | up to 3 (one per metric) |
+| Pro Package | full breakdown |
+
+Fix prompts are pre-generated per (metric × platform) and live in
+`_FIX_PROMPT_LIBRARY` inside `performance_speed.py`. Supported
+builders: Lovable, Bolt, v0, Cursor, Webflow, plus a generic
+fallback. We never ask the LLM to draft these prompts: deterministic
+templates keep cost flat and tone consistent.
+
+When all three metrics return GOOD (or PSI has no field data for the
+URL and we don't know), the category does NOT roll into the report's
+"What's working" section unless the runner explicitly returned a
+non-empty `passed_check_ids` list (mirrors the Snoop gate). Silence
+is not certification.
+
+---
+
+## Accessibility checks (axe-core)
+
+`scripts/ai_audit/accessibility_axe.py` injects axe-core (pinned at
+`4.10.0` via the unpkg CDN) into a headless Playwright tab pointed at
+the customer's homepage, runs the WCAG 2.1 AA rule subset, and rolls
+the violations into five buyer-facing buckets:
+
+| Internal bucket | Buyer-facing finding title |
+|---|---|
+| `image_alt` | Some images on your site have no description for screen readers |
+| `color_contrast` | Some text on your site is hard to read against its background |
+| `form_label` | Some form fields on your site don't tell screen readers what to type |
+| `button_name` | Some buttons on your site have no readable text |
+| `keyboard` | Some interactive parts of your site can't be reached with the Tab key |
+
+Customer-facing copy never says "axe-core", "WCAG", "aria-label", or
+"a11y" per `docs/SIMPLICITY-GUARDRAILS.md` section 6. The
+buyer-facing display name for the whole category is
+"accessibility checks".
+
+Findings are tier-capped (1 / 3 / all) the same way as performance &
+speed. Fix prompts are pre-generated per (bucket × platform); the
+same builder set as `performance_speed.py` (Lovable, Bolt, v0, Cursor,
+Webflow, generic).
+
+When Playwright is not installed or the headless run can't reach the
+URL, `run_accessibility_axe(...)` returns
+`{"ran": False, ...}` and the pipeline still produces a YAML. Axe
+results are cached for 24h per URL in `data/axe_cache/<hash>.json`
+(gitignored) so re-runs don't re-launch Chromium.
+
+---
+
+## AI-builder deep links in QSG (Pro Package)
+
+`templates/qsg/qsg.html.j2` renders each Quick Start Guide step with
+an "Open this in your AI builder" action row when
+`customer.tier == "Pro Package"`. The row contains real PDF
+hyperlinks that open the customer's AI builder with the step body
+URL-encoded as the chat prompt:
+
+| Builder | Deep-link scheme used |
+|---|---|
+| Bolt | `https://bolt.new/?q={encoded_prompt}` |
+| v0 | `https://v0.app/chat?q={encoded_prompt}` |
+| Cursor | `cursor://anysphere.cursor-deeplink/prompt?text={encoded_prompt}` |
+| Lovable | `https://lovable.dev/` (no native chat deep link; opens the dashboard so the buyer can paste) |
+| Webflow | `https://webflow.com/dashboard` (no AI deep link; opens the Designer) |
+
+The customer's own builder gets the primary (filled) button style;
+the others render with the secondary outline style so the buyer's
+default tool is the obvious next click. The "Copy" pill is a visual
+cue that the step body above is copyable (PDF readers don't expose a
+JS clipboard; the buyer selects and copies the text directly).
+
+Pro tier audits also pick up a "How to apply these prompts in one
+pass" appendix tailored to the customer's builder. This appendix is
+Pro-only and gated by the same `customer.tier` Jinja conditional.
+
+Per `docs/SIMPLICITY-GUARDRAILS.md` section 6 + section 2.5
+("Integrations stay invisible on the main landing"), the deep-link
+feature is **never** marketed on `landing/index.html` or
+`landing/webflow.html`. It is a delivery-only delight that appears
+inside the PDF after purchase.
 
 ---
 

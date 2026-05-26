@@ -146,6 +146,87 @@
       white-space: pre-wrap;
     }
 
+    /* q20: AI-builder deep-link buttons. Gated to Pro Package per
+       PRODUCT-DECISIONS.md section 1 ("deep links in QSG" = Pro
+       deliverable). Each button is a real PDF hyperlink that opens
+       the buyer's AI builder with the step body URL-encoded as the
+       chat prompt. */
+    .step-actions {
+      margin: 10pt 0 0;
+      padding-top: 8pt;
+      border-top: 1px dashed var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6pt;
+      align-items: center;
+    }
+
+    .step-actions-label {
+      font-size: 8.5pt;
+      color: var(--muted);
+      margin-right: 4pt;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .step-action {
+      display: inline-block;
+      padding: 4pt 9pt;
+      font-size: 8.5pt;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      color: var(--surface);
+      background: var(--accent);
+      border-radius: 999pt;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+
+    .step-action.secondary {
+      color: var(--ink);
+      background: var(--surface-tint);
+      border: 1px solid var(--line);
+    }
+
+    .step-copy {
+      display: inline-block;
+      padding: 4pt 9pt;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--muted);
+      background: transparent;
+      border: 1px dashed var(--line);
+      border-radius: 999pt;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .pro-appendix {
+      margin: 22pt 0 8pt;
+      padding: 12pt 14pt;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .pro-appendix h3 {
+      margin: 0 0 6pt;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 11.5pt;
+      color: var(--ink);
+    }
+
+    .pro-appendix ol {
+      margin: 0;
+      padding-left: 18pt;
+      font-size: 9.5pt;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
     .footer-note {
       margin-top: 18pt;
       padding: 10pt 12pt;
@@ -191,6 +272,20 @@
 </head>
 <body>
 
+  {#-
+    q20: AI-builder deep-link helpers.
+
+    We never market these on landing pages (per SIMPLICITY-GUARDRAILS
+    section 6); they live only inside delivered QSG PDFs. Each button
+    is a real PDF hyperlink that opens the buyer's AI builder with
+    the step body URL-encoded as the chat prompt. Buttons render only
+    at the Pro Package tier per PRODUCT-DECISIONS.md section 1; the
+    plain-text body above each button is always copy-pasteable.
+  -#}
+  {%- set _tier = customer.tier if customer and customer.tier else "" %}
+  {%- set _builder = (customer.builder if customer and customer.builder else "") | lower %}
+  {%- set _show_deep_links = (_tier == "Pro Package") %}
+
   {% if qsg %}
     <header class="doc-header">
       <p class="eyebrow">
@@ -215,12 +310,72 @@
     <h2>Get started</h2>
     <ol class="steps">
       {% for step in qsg.steps %}
+      {%- set _encoded = step.body | string | urlencode %}
       <li class="step">
         <p class="step-title">{{ step.title }}</p>
         <p class="step-body">{{ step.body }}</p>
+
+        {% if _show_deep_links %}
+        <div class="step-actions">
+          <span class="step-actions-label">Open this in your AI builder:</span>
+
+          {%- if _builder == "lovable" %}
+            <a class="step-action" href="https://lovable.dev/">Open in Lovable</a>
+          {%- endif %}
+
+          <a class="step-action{% if _builder != 'bolt' %} secondary{% endif %}"
+             href="https://bolt.new/?q={{ _encoded }}">Open in Bolt</a>
+
+          <a class="step-action{% if _builder != 'v0' %} secondary{% endif %}"
+             href="https://v0.app/chat?q={{ _encoded }}">Open in v0</a>
+
+          <a class="step-action{% if _builder != 'cursor' %} secondary{% endif %}"
+             href="cursor://anysphere.cursor-deeplink/prompt?text={{ _encoded }}">Open in Cursor</a>
+
+          {%- if _builder == "webflow" %}
+            <a class="step-action" href="https://webflow.com/dashboard">Open Webflow Designer</a>
+          {%- endif %}
+
+          <span class="step-copy" aria-label="Or copy the text above and paste it manually">Copy</span>
+        </div>
+        {% endif %}
       </li>
       {% endfor %}
     </ol>
+    {% endif %}
+
+    {% if _show_deep_links and qsg.steps %}
+    <section class="pro-appendix">
+      <h3>How to apply these prompts in one pass</h3>
+      <ol>
+        {%- if _builder == "cursor" %}
+        <li>Open your project in Cursor.</li>
+        <li>Click each "Open in Cursor" button below in order. The prompt loads into the chat panel.</li>
+        <li>After each prompt, run your local dev server and verify the change in the browser.</li>
+        <li>Commit each fix as you go so you can roll back one step at a time.</li>
+        {%- elif _builder == "lovable" %}
+        <li>Open your project in Lovable.</li>
+        <li>Select the text above each "Copy" pill, copy it, and paste it into the Lovable chat.</li>
+        <li>After each AI reply, click "Preview" to confirm the change before moving on.</li>
+        {%- elif _builder == "bolt" %}
+        <li>Open your project in Bolt.</li>
+        <li>Click each "Open in Bolt" button below in order; each one loads a prompt into a fresh chat.</li>
+        <li>Apply the diff Bolt suggests, then run the dev preview before moving on.</li>
+        {%- elif _builder == "v0" %}
+        <li>Open v0.app and sign into your project.</li>
+        <li>Click each "Open in v0" button below in order; each one drops the prompt into a new chat.</li>
+        <li>Apply the component diff, preview, then move on.</li>
+        {%- elif _builder == "webflow" %}
+        <li>Open Webflow Designer for your site.</li>
+        <li>The prompts above describe what to change in the Designer. Apply one prompt per session, then publish.</li>
+        <li>Re-test the published URL after each publish before moving on.</li>
+        {%- else %}
+        <li>Pick the builder you use most. Click the matching "Open in" button on each step.</li>
+        <li>Apply one prompt at a time. Run the live preview before moving to the next.</li>
+        <li>Commit each fix separately so you can roll back one step at a time.</li>
+        {%- endif %}
+      </ol>
+    </section>
     {% endif %}
 
     {% if qsg.footer_note %}

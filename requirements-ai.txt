@@ -11,3 +11,9 @@ anthropic>=0.40.0
 openai>=1.50.0
 beautifulsoup4>=4.12.0
 playwright>=1.40.0
+
+# q16 (accessibility checks): axe-core is loaded from CDN at runtime by
+# scripts/ai_audit/accessibility_axe.py (https://unpkg.com/axe-core/axe.min.js),
+# so no extra Python package is required when the pipeline has network
+# access. Optional belt-and-suspenders for air-gapped runs:
+#   pip install axe-selenium-python
