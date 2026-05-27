@@ -77,7 +77,7 @@
     "available": false,
     "shared": false
   },
-  "is_public": false,
+  "is_public": true,
   "passed_checks": [
     "mobile layout issues",
     "confusing or placeholder text",
