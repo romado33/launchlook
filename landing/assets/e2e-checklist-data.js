@@ -3,7 +3,7 @@
  * Bump STORAGE_KEY when item ids change so progress resets intentionally.
  */
 window.LAUNCHLOOK_E2E = {
-  STORAGE_KEY: "launchlook-e2e-checklist-v3",
+  STORAGE_KEY: "launchlook-e2e-checklist-v4",
   SECTIONS: [
     {
       id: "preflight",
@@ -71,14 +71,9 @@ window.LAUNCHLOOK_E2E = {
           hint: "",
         },
         {
-          id: "pf-stripe-tax-reg",
-          label: "Stripe Tax registrations complete (regions you sell into)",
-          hint: "Dashboard → Settings → Tax",
-        },
-        {
-          id: "pf-stripe-tax",
-          label: "automatic_tax enabled on all active Payment Links",
-          hint: "python scripts/stripe_payment_links.py enable-tax",
+          id: "pf-stripe-tax-off",
+          label: "automatic_tax disabled on API Payment Links (no tax at checkout)",
+          hint: "python scripts/stripe_payment_links.py disable-tax",
         },
         {
           id: "pf-stripe-dead",
@@ -199,9 +194,9 @@ window.LAUNCHLOOK_E2E = {
           hint: "",
         },
         {
-          id: "st-tax",
-          label: "Checkout collects billing address; tax line appears when applicable",
-          hint: "Depends on Stripe Tax registrations + customer location",
+          id: "st-no-tax",
+          label: "Checkout shows listed price only (no automatic tax line)",
+          hint: "automatic_tax should be off on Payment Links",
         },
         {
           id: "st-thanks",

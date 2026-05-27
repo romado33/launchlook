@@ -12,7 +12,7 @@ Tiers: **Starter $19** · **Scale Up $49** · **Pro $99**.
 ## Go-live ready when
 
 - [ ] Free audit → Resend email + Notion Free Audit row
-- [ ] Paid Starter → Stripe (with tax where registered) + `/thanks` + Tally + email to you + Notion intake
+- [ ] Paid Starter → Stripe + `/thanks` + Tally + email to you + Notion intake
 - [ ] Scale Up conditional test-account questions work (if you sell that tier)
 - [ ] You can generate + send PDFs for a test customer
 
@@ -69,7 +69,7 @@ Tiers: **Starter $19** · **Scale Up $49** · **Pro $99**.
 ## C. Paid path — Starter $19 (~15 min)
 
 - [ ] **Get Starter** → Stripe Checkout shows **$19 USD**
-- [ ] Checkout collects billing address; **tax line** when applicable (registered regions)
+- [ ] Checkout shows **$19 only** (no automatic tax line)
 - [ ] After pay → `https://launchlook.app/thanks`
 - [ ] Stripe receipt email arrives
 - [ ] Notion Customers: row with **Starter Package** tier

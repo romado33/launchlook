@@ -24,7 +24,7 @@ This file is the **source of truth** for what you still need to do manually. Pro
 - `privacy` / `terms` footers fixed (no dead `/checklist` link)
 
 **Ops / infra (code)**
-- **`automatic_tax` enabled** on all 6 active Payment Links via `scripts/stripe_payment_links.py` (May 27)
+- **`automatic_tax` disabled** on all 6 API Payment Links (listed price at checkout; no Stripe Tax)
 - Repo cleanup: removed `checklist_tokens.json`, external GitHub checklist mirror, dead config keys
 - **E2E checklist v3** — https://launchlook.app/e2e · [`E2E-CHECKLIST.md`](E2E-CHECKLIST.md) · `landing/assets/e2e-checklist-data.js`
 - `followup-d3` / `followup-d7` email templates removed
@@ -34,8 +34,8 @@ This file is the **source of truth** for what you still need to do manually. Pro
 ## Your next 3 actions
 
 1. **Tally `QKOX1A`** — In the editor: tier names **Starter $19 / Scale Up $49 / Pro $99**, Webflow in Q7, conditional logic (Scale Up + Pro test-account questions only), notifications → `hello@launchlook.app`, after-submit → `https://launchlook.app/thanks`. Paste buffers: [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt).
-2. **Stripe Tax registrations** — Dashboard → Settings → Tax (add regions you sell into). Links already have `automatic_tax` on; tax only shows at checkout after registrations. Re-run if needed: `python scripts/stripe_payment_links.py enable-tax`.
-3. **Run E2E v3** — https://launchlook.app/e2e (`E2E_CHECKLIST_PASSWORD` in Vercel). Work through all sections in incognito; one real Starter checkout if you’re comfortable with a live charge.
+2. **Run E2E v3** — https://launchlook.app/e2e (`E2E_CHECKLIST_PASSWORD` in Vercel). Work through all sections in incognito; one real Starter checkout if you’re comfortable with a live charge.
+3. **Deactivate old Stripe links** — CAD $9 / $29 tiers if still active (Dashboard).
 
 ---
 
