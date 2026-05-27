@@ -30,7 +30,6 @@ What is kept on the public surface:
 * ``passed_checks`` -- what worked
 * ``findings`` -- with URLs / emails / screenshots scrubbed
 * ``share_metadata`` -- title / description / og_image for OG scrapers
-* ``verified_badge_slug`` -- ties this report to the q17 Verified badge
 
 This module is import-safe (no I/O, no network) so it can be unit-tested
 without setting up a customer YAML.
@@ -259,9 +258,6 @@ def sanitize_report_json(
         "verdict": sanitize_verdict(report.get("verdict") or {}, customer_url),
         "passed_checks": list(report.get("passed_checks") or []),
         "findings": findings_out,
-        "verified_badge_slug": report.get(
-            "verified_badge_slug", report.get("customer_slug", "")
-        ),
         "share_metadata": dict(report.get("share_metadata") or {}),
         "handoff_report": {
             "available": bool(

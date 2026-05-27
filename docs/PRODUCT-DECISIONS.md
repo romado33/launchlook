@@ -12,19 +12,18 @@ Companion docs:
 
 The tier ladder is **fixed at 4 tiers**: Free / Starter / Scale Up / Pro. Do not add a 5th. Do not rename one. See §3 for what we explicitly killed.
 
-| Tier | Price | Findings cap | Verified badge validity | Key deliverables |
-|---|---|---|---|---|
-| Free | $0 | 3 (top severity only) | none | Email-gated. Used as lead magnet. |
-| Starter | $19 | 10 | 30 days | Main Report PDF, QSG PDF, 30-day Verified badge |
-| Scale Up | $49 | 30 | 90 days | + cross-user data isolation check, comprehensive checklist PDF |
-| Pro | $99 | 40 | 180 days | + integrations review, recorded Loom walkthrough, Handoff Report, GitHub integration (when shipped), deep links in QSG |
+| Tier | Price | Findings cap | Key deliverables |
+|---|---|---|---|
+| Free | $0 | 3 (top severity only) | Email-gated. Used as lead magnet. |
+| Starter | $19 | 10 | Main Report PDF, QSG PDF |
+| Scale Up | $49 | 30 | + cross-user data isolation check, comprehensive checklist PDF |
+| Pro | $99 | 40 | + integrations review, recorded Loom walkthrough, Handoff Report, GitHub integration (when shipped), deep links in QSG |
 
 ### Add-ons (any paid tier)
 
 | Add-on | Price | Notes |
 |---|---|---|
 | Confidence Check re-scan | $19 standalone, $9 within 14 days of original audit | Free 1x with Pro. |
-| Badge re-verification | $9 per re-check | Future "always verified" subscription planned at $19/year. |
 | Handoff Report for Starter / Scale Up | $49 add-on | Pro tier already includes it. Dropped from $99 on 2026-05-26 to slot into the upsell ladder: Scale Up + Handoff = $98, intentionally $1 below Pro $99. Old $99 add-on made the bundle $148, above Pro, so it never sold. |
 
 ### Webflow SKU
@@ -129,7 +128,6 @@ So future workers don't quietly re-scope what each tier ships, here is the bindi
 
 - **Main Report PDF.** The customer-facing audit. Verdict, findings (sorted by severity), one-page "if you only fix three things" summary. Plain-English titles, founder voice. Bound by `SIMPLICITY-GUARDRAILS.md` §3. Ships at Starter, Scale Up, and Pro.
 - **QSG PDF.** Paste-ready fix prompts ordered by severity, self-contained. Deep links allowed at Pro tier when the buyer's AI builder supports them. Bound by `SIMPLICITY-GUARDRAILS.md` §4. Ships at Starter, Scale Up, and Pro.
-- **Verified badge.** A signed badge confirming an audit passed on a given date, validity window per tier (30 / 90 / 180 days). Re-verification is a $9 add-on (see §1).
 - **Comprehensive checklist PDF.** The full pre-launch list. Customer-facing copy says "full checklist" or "launch checklist" (per `SIMPLICITY-GUARDRAILS.md` §6 vocabulary rules). Ships at Scale Up and Pro.
 - **Cross-user data isolation check.** Verifies that one logged-in user cannot read or modify another user's data. Bundled in Scale Up and Pro. Standalone SKU is deferred (see §4).
 - **Integrations review.** A pass over any third-party integrations the buyer is using (auth, payments, email, analytics) for misconfiguration. Pro only.
@@ -155,6 +153,7 @@ When you change anything in this file:
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
 | 2026-05-26 | Handoff Report add-on dropped from $99 → $49 (autonomous batch worker). Anchoring math: Scale Up $49 + Handoff $49 = $98, sits just below Pro $99, intentional upsell ladder. Old bundle was $148 (above Pro), so the add-on never sold. New Stripe Payment Link `plink_1TbNP9BxCiPye3m0c5A1DNfq` (URL `https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06`) wired into `landing/assets/config.js` `stripe.handoff`. Webhook routing was already metadata-first (`product=handoff_report`); the `HANDOFF_REPORT_CENTS_TO_LABEL` dict gained a `4900` entry. Landing copy, FAQ, deliver_report.py, share_report.py, and consistency_check.py all updated to read `$49`. |
+| 2026-05-26 | **Verified badge (q17) killed end-to-end.** Stripped every customer-facing surface (index/webflow tier cards, r.html shareable reports, delivery email templates, report PDF template) and deleted the underlying infrastructure (api/verify.py, scripts/generate_verified_badge.py, landing/verify.html, landing/verify-scope.html, landing/assets/verify.js, landing/images/badges, the re-verify SKU branch in stripe-webhook.py, stripe.reverify Payment Link in config.js, /verify rewrites in vercel.json). Zero customer demand after launch + the badge added a maintenance tax across 6+ surfaces every tier rename. Saboteur / Confidence Check $9-within-14-days re-scan SKU is unaffected (different product, different metadata). |
 | 2026-05-26 | Plausible account creation **deferred** (Option C). Tracker script + 7 event-name CSS classes stay on every landing page. No account currently owns `launchlook.app` on Plausible, so events POST and get silently dropped — zero cost, zero harm, zero data collected. Trigger to revisit: ≥10 paying customers or noticeable traffic without obvious conversion. Activation steps documented in `docs/ROB-REMAINING-TODO.md` §Plausible analytics setup. Alternative is to strip the tracker entirely and switch to Vercel Analytics; that path is also documented. |
 
 ---

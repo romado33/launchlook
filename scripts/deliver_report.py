@@ -354,7 +354,7 @@ def deliver_handoff_report(
     md_text = render_handoff_markdown(env, data, narrative, delivered_at)
     md_path = out_dir / "handoff-report.md"
     md_path.write_text(md_text, encoding="utf-8")
-    print(f"  ✓ wrote {md_path.name} ({md_path.stat().st_size / 1024:.1f} KB)")
+    print(f"  âœ“ wrote {md_path.name} ({md_path.stat().st_size / 1024:.1f} KB)")
 
     html = render_handoff_html(env, data, narrative, delivered_at)
     pdf_path = out_dir / "handoff-report.pdf"
@@ -362,7 +362,7 @@ def deliver_handoff_report(
         html_to_pdf(
             html, pdf_path, data.get("customer", {}).get("first_name", "customer")
         )
-        print(f"  ✓ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
+        print(f"  âœ“ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
     except SystemExit as exc:
         print(f"  ! Handoff PDF skipped: {exc}", file=sys.stderr)
         pdf_path = None
@@ -389,7 +389,6 @@ def render_main_report_html(
         findings=data["findings"],
         delivered_at=delivered_at,
         qsg_link=qsg_link,
-        verified_badge=_verified_badge_context(data["customer"]),
     )
 
 
@@ -421,8 +420,8 @@ def html_to_pdf(html: str, out_path: Path, customer_name: str) -> None:
         '<div style="font-size:8pt; color:#6B6359; width:100%; '
         "padding:0 20mm; font-family:-apple-system,sans-serif; "
         'display:flex; justify-content:space-between;">'
-        f"<span>LaunchLook · launchlook.app · prepared {date.today().isoformat()}</span>"
-        f"<span>Confidential, for {customer_name} only · "
+        f"<span>LaunchLook Â· launchlook.app Â· prepared {date.today().isoformat()}</span>"
+        f"<span>Confidential, for {customer_name} only Â· "
         '<span class="pageNumber"></span> / <span class="totalPages"></span></span>'
         "</div>"
     )
@@ -455,42 +454,6 @@ def html_to_pdf(html: str, out_path: Path, customer_name: str) -> None:
 # Email send (Resend)
 # ---------------------------------------------------------------------------
 
-
-def _verified_badge_context(customer: dict[str, Any]) -> dict[str, Any]:
-    """Build the LaunchLook Verified badge embed snippet variables.
-
-    Mirrors the slug + validity-window logic in
-    ``scripts/generate_verified_badge.py`` so the email and report PDF point
-    customers at the same asset paths the badge generator wrote.
-    """
-    slug = slugify(customer.get("first_name", ""), customer.get("app_name", ""))
-    tier_alias = (customer.get("tier") or "").strip().lower()
-    validity_days = {
-        "starter": 30,
-        "starter package": 30,
-        "scale up": 90,
-        "scale up package": 90,
-        "full": 90,
-        "full package": 90,
-        "pro": 180,
-        "pro package": 180,
-    }.get(tier_alias, 30)
-    domain = (
-        os.getenv("LAUNCHLOOK_DOMAIN", "launchlook.app").strip() or "launchlook.app"
-    )
-    platform = (customer.get("platform") or "").strip().lower()
-    return {
-        "slug": slug,
-        "validity_days": validity_days,
-        "verify_url": f"https://{domain}/verify?slug={slug}",
-        "badge_url_light": f"https://{domain}/images/badges/{slug}/light.svg",
-        "badge_url_dark": f"https://{domain}/images/badges/{slug}/dark.svg",
-        "domain": domain,
-        "is_webflow": platform == "webflow"
-        or (customer.get("builder") or "").strip().lower() == "webflow",
-    }
-
-
 def render_email_bodies(
     env, data: dict[str, Any], delivered_at: str
 ) -> tuple[str, str, str]:
@@ -505,7 +468,6 @@ def render_email_bodies(
         "customer": customer,
         "n_findings": n_findings,
         "delivered_at": delivered_at,
-        "verified_badge": _verified_badge_context(customer),
     }
     return subject, html_tpl.render(**ctx), text_tpl.render(**ctx)
 
@@ -648,7 +610,7 @@ def render_confidence_check_email(
 def deliver_confidence_check(args) -> int:
     """Render + (optionally) send the Confidence Check short-form report."""
     yaml_path = latest_confidence_check_for(args.customer)
-    print(f"→ Confidence Check YAML: {yaml_path.relative_to(REPO_ROOT)}")
+    print(f"â†’ Confidence Check YAML: {yaml_path.relative_to(REPO_ROOT)}")
 
     try:
         import yaml as _yaml
@@ -674,22 +636,22 @@ def deliver_confidence_check(args) -> int:
     env = build_jinja_env()
 
     print(
-        f"→ Customer:   {cc.get('customer_first_name', customer_id)} ({cc.get('customer_email', '?')})"
+        f"â†’ Customer:   {cc.get('customer_first_name', customer_id)} ({cc.get('customer_email', '?')})"
     )
-    print(f"→ App:        {cc.get('app_name', '?')}")
-    print(f"→ Original:   {cc.get('original_audit_id', '?')}")
+    print(f"â†’ App:        {cc.get('app_name', '?')}")
+    print(f"â†’ Original:   {cc.get('original_audit_id', '?')}")
     print(
-        f"→ Buckets:    ✓ {len(data.get('fixed') or [])}"
-        f" / ✗ {len(data.get('still_present') or [])}"
-        f" / ⚠ {len(data.get('new') or [])}"
+        f"â†’ Buckets:    âœ“ {len(data.get('fixed') or [])}"
+        f" / âœ— {len(data.get('still_present') or [])}"
+        f" / âš  {len(data.get('new') or [])}"
     )
-    print(f"→ Output:     {out_dir.relative_to(REPO_ROOT)}")
+    print(f"â†’ Output:     {out_dir.relative_to(REPO_ROOT)}")
 
     html = render_confidence_check_html(env, data, delivered_at)
     html_to_pdf(html, pdf_path, cc.get("customer_first_name") or customer_id)
-    print(f"  ✓ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
+    print(f"  âœ“ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
 
-    # Confidence Check intentionally has NO QSG (per the spec — it's a
+    # Confidence Check intentionally has NO QSG (per the spec â€” it's a
     # short focused report, not a full audit).
 
     if not args.send:
@@ -703,7 +665,7 @@ def deliver_confidence_check(args) -> int:
             f"Subject: {subject}\n\n--- TEXT ---\n{text_body}\n\n--- HTML ---\n{html_body}\n",
             encoding="utf-8",
         )
-        print(f"  ✓ wrote {preview_path.name} (email preview)")
+        print(f"  âœ“ wrote {preview_path.name} (email preview)")
         print(
             "\nDry-run complete. Review the PDF + email preview, then re-run with "
             "--send to email it.\n"
@@ -741,7 +703,7 @@ def deliver_confidence_check(args) -> int:
         attachments=[pdf_path],
     )
     msg_id = result.get("id") if isinstance(result, dict) else None
-    print(f"\n✓ Sent. Resend message id: {msg_id or '(none returned)'}")
+    print(f"\nâœ“ Sent. Resend message id: {msg_id or '(none returned)'}")
     return 0
 
 
@@ -831,7 +793,6 @@ def _build_public_report_dict(
         "verdict": dict(verdict),
         "passed_checks": list(data.get("passed_checks") or []),
         "findings": [dict(f) for f in findings if isinstance(f, dict)],
-        "verified_badge_slug": slug,
         "share_metadata": share_metadata,
         "handoff_report": {
             "available": bool(is_pro_handoff),
@@ -1008,10 +969,10 @@ def main() -> int:
 
     env = build_jinja_env()
 
-    print(f"→ Customer:  {customer['first_name']} ({customer['email']})")
-    print(f"→ App:       {customer['app_name']} [{customer['tier']}]")
-    print(f"→ Findings:  {len(data['findings'])}")
-    print(f"→ Output:    {out_dir.relative_to(REPO_ROOT)}")
+    print(f"â†’ Customer:  {customer['first_name']} ({customer['email']})")
+    print(f"â†’ App:       {customer['app_name']} [{customer['tier']}]")
+    print(f"â†’ Findings:  {len(data['findings'])}")
+    print(f"â†’ Output:    {out_dir.relative_to(REPO_ROOT)}")
 
     # Pro tier GitHub integration reminder. Never auto-runs: Rob has to
     # invoke scripts/github_push.py manually after reviewing the YAML.
@@ -1022,19 +983,19 @@ def main() -> int:
         and data["github"].get("repo")
     ):
         print(
-            "→ GitHub integration available for this customer. "
+            "â†’ GitHub integration available for this customer. "
             f"Run: `python scripts/github_push.py --customer {args.customer}` "
             "after manual review."
         )
 
     main_html = render_main_report_html(env, data, delivered_at, args.qsg_link)
     html_to_pdf(main_html, main_pdf, customer["first_name"])
-    print(f"  ✓ wrote {main_pdf.name} ({main_pdf.stat().st_size / 1024:.1f} KB)")
+    print(f"  âœ“ wrote {main_pdf.name} ({main_pdf.stat().st_size / 1024:.1f} KB)")
 
     qsg_html = render_qsg_html(env, data, delivered_at)
     if qsg_html:
         html_to_pdf(qsg_html, qsg_pdf, customer["first_name"])
-        print(f"  ✓ wrote {qsg_pdf.name} ({qsg_pdf.stat().st_size / 1024:.1f} KB)")
+        print(f"  âœ“ wrote {qsg_pdf.name} ({qsg_pdf.stat().st_size / 1024:.1f} KB)")
     else:
         print("  ! no quick_start_guide section in YAML, skipping QSG PDF")
 
@@ -1057,7 +1018,7 @@ def main() -> int:
         has_handoff=is_pro_for_handoff,
     )
     print(
-        f"  ✓ wrote {shareable_json.relative_to(REPO_ROOT)}"
+        f"  âœ“ wrote {shareable_json.relative_to(REPO_ROOT)}"
         f" + {shareable_html.relative_to(REPO_ROOT)}"
         " (private by default)"
     )
@@ -1072,7 +1033,7 @@ def main() -> int:
         is_pro = effective_tier == "Pro Package"
         if is_pro or has_handoff_addon:
             print(
-                f"→ Handoff Report:  generating (tier={effective_tier!r}, "
+                f"â†’ Handoff Report:  generating (tier={effective_tier!r}, "
                 f"addon={has_handoff_addon})"
             )
             handoff_md_path, handoff_pdf_path = deliver_handoff_report(
@@ -1088,7 +1049,7 @@ def main() -> int:
                 attachments.append(handoff_pdf_path)
         else:
             print(
-                "→ Handoff Report:  SKIPPED — customer is not Pro Package and "
+                "â†’ Handoff Report:  SKIPPED â€” customer is not Pro Package and "
                 "no --tier-override <Tier>+Handoff was passed."
             )
 
@@ -1123,7 +1084,7 @@ def main() -> int:
         attachments=attachments,
     )
     msg_id = result.get("id") if isinstance(result, dict) else None
-    print(f"\n✓ Sent. Resend message id: {msg_id or '(none returned)'}")
+    print(f"\nâœ“ Sent. Resend message id: {msg_id or '(none returned)'}")
     return 0
 
 

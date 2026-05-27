@@ -17,7 +17,7 @@ Paste as a **Statement** or **Text** block before questions:
 > **Please read before submitting**
 > - **Only submit temporary test accounts.** Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
 > - For **Full Package ($29)** only: create **temporary test accounts** (not real users). Submit credentials here only — not by email.
-> - We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+> - We delete test credentials promptly after delivery. Rotate or delete test accounts after your report arrives.
 
 ## Form behavior
 
@@ -146,7 +146,7 @@ In Tally form settings → **Notifications**:
 
 Add this line to the thank-you screen:
 
-> Your responses are stored privately in LaunchLook's internal workspace. Test account credentials are deleted within 24 hours of the audit. See [our privacy policy](https://launchlook.app/privacy) for details.
+> Your responses are stored privately in LaunchLook's internal workspace. Test account credentials are deleted promptly after the audit. See [our privacy policy](https://launchlook.app/privacy) for details.
 
 ## Future automation (not MVP)
 

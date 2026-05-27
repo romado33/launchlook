@@ -271,7 +271,6 @@ def test_each_example_generates_matching_files(
     assert html_path.exists()
     data = json.loads(json_path.read_text(encoding="utf-8"))
     assert data["customer_slug"] == expected_slug
-    assert data["verified_badge_slug"] == expected_slug
 
 
 # ---------------------------------------------------------------------------

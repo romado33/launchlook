@@ -106,41 +106,6 @@
     return "";
   }
 
-  function renderVerified(slug, data) {
-    var banner = document.querySelector("[data-r-verified]");
-    var line = document.querySelector("[data-r-verified-line]");
-    if (!banner || !line) return;
-    // We piggyback on the data already in the report JSON. If the badge
-    // slug + audit date are present we render a tier-tagged verification
-    // line; otherwise we skip the banner so we never fake validity.
-    var auditDate = data.audit_date;
-    var tier = data.tier;
-    var verifiedSlug = data.verified_badge_slug;
-    if (!auditDate || !tier || !verifiedSlug) return;
-    // Compute expiry from tier (mirrors the q17 generator's table).
-    var days = 30;
-    var tl = (tier || "").toLowerCase();
-    if (tl.indexOf("pro") !== -1) days = 180;
-    else if (tl.indexOf("scale") !== -1 || tl.indexOf("full") !== -1) days = 90;
-    var expiryIso = "";
-    try {
-      var d = new Date(auditDate + "T00:00:00Z");
-      d.setUTCDate(d.getUTCDate() + days);
-      expiryIso = d.toISOString().slice(0, 10);
-    } catch (e) {
-      expiryIso = "";
-    }
-    var tierShort = tier.replace(/\s+Package$/i, "");
-    line.textContent =
-      "\u2713 LaunchLook Verified \u2014 " +
-      tierShort +
-      " audit completed " +
-      humanDate(auditDate) +
-      ". " +
-      (expiryIso ? "Valid through " + humanDate(expiryIso) + "." : "");
-    banner.classList.remove("hidden");
-  }
-
   function renderPublic(slug, data) {
     var appName =
       data.app_name || (data.customer && data.customer.app_name) || "this app";
@@ -275,7 +240,6 @@
       }
     }
 
-    renderVerified(slug, data);
     show("public");
   }
 

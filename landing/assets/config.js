@@ -24,7 +24,7 @@ window.LAUNCHLOOK_CONFIG = {
     // Stripe Product prod_UaZvTiEzXRtvkT / Price price_1TbOlzBxCiPye3m0bd7mDaLj.
     // Metadata: product=starter_package, tier=starter. Webhook routes via
     // CENTS_TO_TIER (1900 -> Starter Package) since none of the add-on
-    // metadata gates (handoff_report / reverify / confidence_check) match.
+    // metadata gates (handoff_report / confidence_check) match.
     starter: "https://buy.stripe.com/28EdR81OlbU00p51u83cc08",
     // Scale Up Package $49 USD main-tier Payment Link (created 2026-05-26).
     // Stripe Product prod_UaZvI1jMiz3qQq / Price price_1TbOm0BxCiPye3m0mbEUxjcU.
@@ -55,12 +55,6 @@ window.LAUNCHLOOK_CONFIG = {
     // this link; see docs/PRODUCT-DECISIONS.md §9 for the upsell-ladder
     // rationale (Scale Up + Handoff = $98, intentionally $1 below Pro).
     handoff: "https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06",
-    // LaunchLook Verified badge $9 re-verification (q17). Payment Link
-    // metadata includes product=reverify so the webhook routes to
-    // handle_reverify_purchase. Optional metadata customer_slug (or the
-    // session client_reference_id) lets Rob look up the badge directly.
-    // See docs/VERIFIED-BADGE-WORKFLOW.md.
-    reverify: "https://buy.stripe.com/00wfZgeB72jq9ZF3Cg3cc07",
   },
   githubChecklist: "https://github.com/romado33/launchlook-prelaunch-checklist",
   linkedinUrl: "https://www.linkedin.com/in/rob-dods/",

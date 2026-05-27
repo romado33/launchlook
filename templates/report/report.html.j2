@@ -527,35 +527,7 @@
         Refunds within 7 days if the report wasn't useful.
       </p>
     </section>
-
-    {% if verified_badge %}
-    <section class="verified-badge">
-      <h2>Your LaunchLook Verified badge</h2>
-      <p>
-        This audit comes with a small badge you can drop on your site footer. It links
-        to a public verification page so visitors can confirm the badge is current.
-        Valid for <strong>{{ verified_badge.validity_days }} days</strong> from today
-        (re-check is $9 after that).
-      </p>
-      <p><strong>Paste this into your site footer:</strong></p>
-      <pre class="embed-snippet">&lt;a href="{{ verified_badge.verify_url }}" target="_blank" rel="noopener"&gt;
-  &lt;img src="{{ verified_badge.badge_url_light }}" alt="LaunchLook Verified" height="48"&gt;
-&lt;/a&gt;</pre>
-      {% if verified_badge.is_webflow %}
-      <p>
-        <strong>How to add this in Webflow Designer:</strong>
-        open Webflow Designer, drag an Embed element into your footer, paste the code
-        above, save. Publish to see it on your live site.
-      </p>
-      {% endif %}
-      <p>
-        A dark-background version is at
-        <a href="{{ verified_badge.badge_url_dark }}">{{ verified_badge.badge_url_dark }}</a>.
-        Visitors can verify the badge any time at
-        <a href="{{ verified_badge.verify_url }}">{{ verified_badge.verify_url }}</a>.
-      </p>
-    </section>
-    {% endif %}
+
 
   </div>
 </body>

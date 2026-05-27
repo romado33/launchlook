@@ -17,5 +17,5 @@ hello@launchlook.app
 Variables:
 - {NAME} — customer first name
 - {APP_NAME} — app name from intake
-- {TURNAROUND} — "48 hours, usually within 24" (every paid tier)
+- {TURNAROUND} — "when it's ready, usually within a few days" (every paid tier)
 - {INTAKE_FORM_LINK} — Tally form URL (https://launchlook.app/thanks if they already paid)

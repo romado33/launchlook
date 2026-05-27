@@ -94,6 +94,5 @@
     "label": "Needs fixes before launch",
     "narrative": "Polished at first glance: custom branding, booking flow, search, and auth.\nTwo dev-only features are still visible on the live URL, and the headline\nbooking CTA dead-ends. Fix the critical items before sharing outside your\ntest circle. Everything else is polish you can pace through this week.\n",
     "summary": "Two dev-only blockers and a dead-end booking CTA to clear before any wider share."
-  },
-  "verified_badge_slug": "jane-sparkle-marketplace"
+  }
 }

@@ -345,7 +345,7 @@ def _send_confirmation_email(*, to: str, audit_url: str) -> None:
     text_body = (
         f"Hi,\n\n"
         f"Got your request for a free 3-finding audit on {audit_url}. "
-        f"I'll walk through it on desktop and phone like a first-time visitor and email you the three highest-impact things to fix within 24 hours. "
+        f"I'll walk through it on desktop and phone like a first-time visitor and email you the three highest-impact things to fix when it's ready, usually within a few days. "
         f"No login, no portal -- just one email back.\n\n"
         f"If you want all 10 findings sooner, Starter ($19) covers the full pass: {STARTER_URL}\n\n"
         f"-- LaunchLook\n"
@@ -558,7 +558,7 @@ def process_request(
 
     return 200, {
         "status": "queued",
-        "message": "Got it. Check your inbox for a confirmation. Your 3 findings will arrive within 24 hours.",
+        "message": "Got it. Check your inbox for a confirmation. We'll email your 3 findings when they're ready, usually within a few days.",
     }
 
 

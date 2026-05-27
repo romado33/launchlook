@@ -716,37 +716,6 @@ inside the PDF after purchase.
 
 ---
 
-## Verified badge generation (post-delivery)
-
-q17 added a small "LaunchLook Verified" badge that ships with every
-paid tier. The badge is **not** part of the audit pipeline itself - it
-is a post-delivery step Rob runs once the report has been emailed and
-the customer has signed off (or after the 7-day refund window, if Rob
-prefers to wait).
-
-The flow:
-
-1. Rob receives the Stripe checkout event (already routed via
-   `api/stripe-webhook.py`).
-2. Rob runs `python scripts/ai_audit.py --customer customers/{slug}.yaml`
-   to produce the YAML + PDFs as usual.
-3. **New step**: Rob runs `python scripts/generate_verified_badge.py
-   --customer customers/{slug}.yaml` to mint the badge assets and the
-   `verify.json` record. Output paths:
-   * `landing/images/badges/{slug}/light.svg` + `.png`
-   * `landing/images/badges/{slug}/dark.svg` + `.png`
-   * `landing/data/verified/{slug}.json`
-4. Vercel deploy picks these up on the next push. The delivery email
-   / report PDF already reference the same URLs, so once the assets
-   land on prod the customer's embed snippet is live.
-
-For `` badge re-verifications, the same script is run with
-`--re-verify`. See `docs/VERIFIED-BADGE-WORKFLOW.md` for the full
-runbook, including the operator guardrail that prevents a misfired
-`` re-verify from issuing a badge to a customer who never had one.
-
----
-
 ## Related docs
 
 * `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 3-finding

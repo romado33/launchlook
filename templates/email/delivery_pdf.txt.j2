@@ -13,27 +13,6 @@ If anything in the report isn't clear, or you want a re-scan after fixes, just r
 Thanks for trying LaunchLook.
 LaunchLook
 
-{% if verified_badge %}
----
-Get your LaunchLook Verified badge
-
-Your audit comes with a small badge you can drop on your site footer. It links to a public verification page so visitors can confirm the badge is current. Valid for {{ verified_badge.validity_days }} days from today (re-check is $9 after that).
-
-Paste this into your site footer:
-
-<a href="{{ verified_badge.verify_url }}" target="_blank" rel="noopener">
-  <img src="{{ verified_badge.badge_url_light }}" alt="LaunchLook Verified" height="48">
-</a>
-
-{% if verified_badge.is_webflow %}
-How to add this in Webflow Designer:
-Open Webflow Designer, drag an Embed element into your footer, paste the code above, save. Publish to see it on your live site.
-{% endif %}
-
-A dark-background version: {{ verified_badge.badge_url_dark }}
-Visitors can verify the badge at: {{ verified_badge.verify_url }}
-
-{% endif %}
 {% if customer.tier == "Pro Package" %}
 ---
 Optional: Want these findings as GitHub issues?

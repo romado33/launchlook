@@ -51,29 +51,6 @@
               <p style="margin:0 0 4px; color:#1F1B16;">Thanks for trying LaunchLook.</p>
               <p style="margin:0; color:#1F1B16;">LaunchLook</p>
 
-              {% if verified_badge %}
-              <p style="border-top: 1px solid #E7E0D6; padding-top: 16px; margin-top: 24px; color:#1F1B16;">
-                <strong>Get your LaunchLook Verified badge</strong><br />
-                Your audit comes with a small badge you can drop on your site footer. It links to a public verification page so visitors can confirm the badge is current. Valid for <strong>{{ verified_badge.validity_days }} days</strong> from today (re-check is $9 after that).
-              </p>
-              <p style="margin:0 0 8px; color:#1F1B16;">Paste this into your site footer:</p>
-              <pre style="margin:0 0 14px; padding:12px 14px; background:#F4EFE7; border:1px solid #E7E0D6; border-radius:4px; font-family:Consolas,'JetBrains Mono',monospace; font-size:12px; line-height:1.5; color:#1F1B16; white-space:pre-wrap; word-break:break-all; overflow-x:auto;">&lt;a href="{{ verified_badge.verify_url }}" target="_blank" rel="noopener"&gt;
-  &lt;img src="{{ verified_badge.badge_url_light }}" alt="LaunchLook Verified" height="48"&gt;
-&lt;/a&gt;</pre>
-              {% if verified_badge.is_webflow %}
-              <p style="margin:0 0 14px; color:#6B6359; font-size:13px;">
-                <strong style="color:#1F1B16;">How to add this in Webflow Designer:</strong>
-                open Webflow Designer, drag an Embed element into your footer, paste the code above, save. Publish to see it on your live site.
-              </p>
-              {% endif %}
-              <p style="margin:0 0 14px; color:#6B6359; font-size:13px;">
-                A dark-background version is at
-                <a href="{{ verified_badge.badge_url_dark }}" style="color:#B45309; text-decoration:none;">{{ verified_badge.badge_url_dark }}</a>.
-                Visitors can verify the badge any time at
-                <a href="{{ verified_badge.verify_url }}" style="color:#B45309; text-decoration:none;">{{ verified_badge.verify_url }}</a>.
-              </p>
-              {% endif %}
-
               {% if customer.tier == "Pro Package" %}
               <p style="border-top: 1px solid #ddd; padding-top: 16px; margin-top: 24px; color:#1F1B16;">
                 <strong>Optional: Want these findings as GitHub issues?</strong><br />

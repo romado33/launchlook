@@ -97,8 +97,7 @@ price point collides with the Scale Up Package SKU; the older $99
 price collided with the Pro Package SKU. Both collisions are why we
 never route by amount alone. See
 `api/stripe-webhook.py::is_handoff_report_session` and the sibling
-pattern around `is_confidence_check_session` (q6) and
-`is_reverify_session` (q17).
+pattern around `is_confidence_check_session` (q6).
 
 ## Operational flow for Rob
 

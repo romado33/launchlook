@@ -18,7 +18,7 @@ Hey [name] — I recorded a 60-sec walkthrough of [app] before you share it wide
 
 I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $19 (Starter Package) with fix prompts you paste into [Lovable/Bolt/etc].
 
-Want 3 free findings first? Drop your URL at launchlook.app — we'll email the top 3 within 24 hours, no credit card.
+Want 3 free findings first? Drop your URL at launchlook.app — we'll email the top 3 when they're ready (usually within a few days), no credit card.
 
 No pressure — launchlook.app if useful.
 ```

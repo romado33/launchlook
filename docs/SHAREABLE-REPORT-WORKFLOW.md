@@ -20,9 +20,9 @@ launchlook.app/r/alex-bauer-studio
 launchlook.app/r/mira-tessera-boards
 ```
 
-The slug is the same one `scripts/generate_verified_badge.py` uses
-(`first_name + app_name`, slugified). One slug per customer, identical
-across the verify page, the badge filenames, and the shareable URL.
+The slug is derived from `first_name + app_name` (slugified) by
+`scripts/deliver_report.py`. One slug per customer, identical across
+the shareable URL and any internal artifacts.
 
 ## 2. What ships at delivery time
 
@@ -113,38 +113,6 @@ The unit tests in `tests/test_sanitize_for_public.py` enforce this
 end-to-end. The integration test in `tests/test_share_report.py`
 verifies the three committed example customers produce JSON + HTML
 files with zero customer-URL leakage.
-
-## 5. Pairing with the q17 Verified badge
-
-Each public report page renders a `LaunchLook Verified` banner at the
-top, derived from the same audit date and tier the report itself
-carries. The banner reads:
-
-> ✓ LaunchLook Verified — Starter audit completed May 26, 2026. Valid
-> through June 25, 2026.
-
-```
-+----------------+      +-----------------+      +---------------------+
-|  Embed badge   |  →   |  /verify?slug=  |  →   |  /r/{slug}          |
-|  on site       |      |  signed JSON    |      |  public report page |
-+----------------+      +-----------------+      +---------------------+
-        |                                              ▲
-        |        (visual / SEO loop on public flip)    |
-        +----------------------------------------------+
-```
-
-The badge on the customer's site footer continues to link to
-`/verify?slug=...`, which is the canonical verification endpoint. The
-report page surfaces the same verification line so visitors who land
-via the badge see the audit they're standing on top of, and visitors
-who land via a Reddit / Twitter share see the verification claim
-without having to click out.
-
-When the report is private, the verification page still works
-(`/verify?slug=...` is governed by the q17 badge JSON in
-`landing/data/verified/{slug}.json`, not the q22 report JSON). The
-private state of `/r/{slug}` only affects whether the report content
-is rendered.
 
 ## 6. Handoff Report download (Pro tier only)
 

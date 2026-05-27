@@ -47,8 +47,8 @@
     </div>
   </header>
 
-  <!-- Hero (free 3-finding audit is the primary lead magnet per PRODUCT-DECISIONS section 1) -->
-  <section id="hero" class="relative overflow-hidden border-b border-line">
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-line">
     <div class="absolute -top-24 right-0 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
     <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-accent-soft/50 blur-2xl pointer-events-none" aria-hidden="true"></div>
     <div class="relative max-w-3xl mx-auto px-6 pt-14 pb-12 sm:pt-20 sm:pb-16">
@@ -56,78 +56,69 @@
     <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
       Built your Webflow site in Designer? Get the pre-launch checkup before your forms silently break, your noindex blocks Google, or your client finds the typo.
     </h1>
-    <p class="mt-5 text-lg text-muted leading-relaxed">
-      Get 3 free findings on what to fix before you go live. A real person walks your live site and emails you the top 3 in 24 hours. No credit card.
+    <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
+      Send your live URL. A real person walks every page on desktop and the three Webflow mobile breakpoints, then sends back a shareable PDF: form submissions, noindex tags, schema, Designer-to-live mismatches, mobile breakage. Every finding is reviewed by a founder before it ships, with paste-ready fixes in Webflow Designer language.
     </p>
-
-    <form data-free-audit-form action="/api/free-audit" method="POST" class="mt-7 rounded-2xl border border-line bg-white px-5 py-5 sm:px-6 sm:py-6 shadow-sm shadow-ink/5">
-      <input type="hidden" name="platform" value="webflow" />
-      <div class="grid sm:grid-cols-2 gap-3">
-        <label class="block">
-          <span class="text-xs font-medium text-muted">Your Webflow URL</span>
-          <input type="url" name="url" placeholder="https://your-webflow-site.com or https://yourname.webflow.io" required autocomplete="url" inputmode="url" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
-        </label>
-        <label class="block">
-          <span class="text-xs font-medium text-muted">Where do we send your findings?</span>
-          <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/60" />
-        </label>
-      </div>
-      <button type="submit" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-4 plausible-event-name=FreeAuditSignup">Get my free 3 findings</button>
-      <p data-free-audit-status class="mt-3 text-sm text-muted hidden" role="status" aria-live="polite"></p>
-      <p class="mt-3 text-xs text-muted">We&rsquo;ll send your top 3 Webflow launch issues within 24 hours. Free, no credit card. One email per submission, no newsletter.</p>
-    </form>
-
-    <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted">
+    <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
+      <a href="#pricing" class="launchlook-btn launchlook-btn-primary">See Webflow pricing</a>
+      <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
+      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist (~20 min)</a>
+    </div>
+    <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>URL-only. <strong class="text-ink font-medium">No access to your Webflow account</strong> required</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Catches the silent form failure most agencies don't notice for months</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Fix prompts in <strong class="text-ink font-medium">Webflow Designer language</strong>, not generic dev jargon</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Sits in the price gap below the $899 human-audit floor</span></li>
     </ul>
-    <p class="mt-5 text-sm text-muted">Delivered within 48 hours (usually 24) · 7-day full refund if the report isn't useful.</p>
+    <p class="mt-5 text-sm text-muted">Delivered when it&rsquo;s ready, usually within a few days · 7-day full refund if the report isn't useful.</p>
     </div>
   </section>
 
-  <!--
-    What you get (deep-trim merge per 9->4 restructure: combines prior
-    "How it works", "What we check", "Trust", "Why us", and dropped the
-    standalone "Urgency moment" section. 4-step process consolidated to
-    3 by merging the "we walk" + "Rob reviews" steps; comparison table
-    reduced from 5 rows to the 3 most-impactful contrast bullets.
-  -->
+  <!-- How it works -->
   <section class="bg-surface-tint border-y border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner">
-      <p class="section-label">What you get</p>
+      <p class="section-label">Process</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl sm:text-3xl mb-4">What you get for your Webflow site</h2>
-      <p class="text-muted leading-relaxed">Three steps, two PDFs, fixes in Designer language.</p>
-
-      <!-- 3-step process (consolidated from 4 to 3: merged "we walk" + "Rob reviews" into one step) -->
-      <ol class="mt-9 space-y-6">
+      <h2 class="font-serif text-2xl mb-6">How it works</h2>
+      <ol class="space-y-6">
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">1</span>
           <div>
             <p class="font-medium">You send your live Webflow URL</p>
-            <p class="text-muted text-sm mt-1">30-second intake: live URL, one-line description, "Webflow" picked as platform.</p>
+            <p class="text-muted text-sm mt-1">Through our 30-second intake form: the live URL (webflow.io subdomain or your custom domain), one-line description, and pick &ldquo;Webflow&rdquo; from the platform list.</p>
           </div>
         </li>
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">2</span>
           <div>
-            <p class="font-medium">We walk every page, a human reviews every finding</p>
-            <p class="text-muted text-sm mt-1">Every page captured on desktop and the three Webflow mobile breakpoints (991px / 767px / 478px). A human reviewer reads every finding, drops the false positives, and tightens the language before delivery.</p>
+            <p class="font-medium">We walk every page, every breakpoint</p>
+            <p class="text-muted text-sm mt-1">Every page captured at desktop and the three Webflow mobile breakpoints (991px / 767px / 478px). We probe every form, read your robots.txt and per-page noindex tags, check JSON-LD schema, look for Designer-to-published mismatches, and flag the &ldquo;works in Designer, breaks live&rdquo; patterns.</p>
           </div>
         </li>
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">3</span>
           <div>
+            <p class="font-medium">A founder personally reviews every finding</p>
+            <p class="text-muted text-sm mt-1">Every report is reviewed by Rob (the founder) before it ships. False positives get dropped, wording that doesn&rsquo;t land gets cut, and only the things you should actually fix make it into the final PDF.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">4</span>
+          <div>
             <p class="font-medium">You get two PDFs by email</p>
-            <p class="text-muted text-sm mt-1">Main Report and Quick Start Guide arrive by email with paste-ready fixes in Webflow Designer language.</p>
+            <p class="text-muted text-sm mt-1">Your Main Report and Quick Start Guide arrive in your inbox. Each finding has a paste-ready fix instruction in Webflow Designer language: &ldquo;In Webflow Designer, navigate to Pages &rarr; [page] &rarr; select [element] &rarr; update X to Y.&rdquo;</p>
           </div>
         </li>
       </ol>
+    </div>
+  </section>
 
-      <!-- What we check on your Webflow site (6 unique-to-Webflow bullets kept verbatim per spec) -->
-      <h3 class="font-serif text-xl mt-8 mb-4">What we check on your Webflow site</h3>
+  <!-- What we check (Webflow-specific) -->
+  <section class="bg-paper">
+    <div class="max-w-3xl mx-auto px-6 section-inner section-inner-tight">
+      <p class="section-label">Scope</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-6">What we check on your Webflow site</h2>
       <ul class="space-y-3">
         <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
           <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
@@ -135,7 +126,7 @@
         </li>
         <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
           <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
-          <span><strong class="text-ink font-medium">noindex / robots.txt not blocking your live URL</strong>: the settings that decide whether Google can find your page. The &ldquo;Disable Webflow subdomain indexing&rdquo; toggle is a silent killer. We flag any page that's still set to noindex, and any robots.txt rule blocking your production host.</span>
+          <span><strong class="text-ink font-medium">noindex / robots.txt not blocking your live URL</strong>: the &ldquo;Disable Webflow subdomain indexing&rdquo; toggle is a silent killer. We flag any page that's still set to noindex, and any robots.txt rule blocking your production host.</span>
         </li>
         <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
           <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
@@ -147,7 +138,7 @@
         </li>
         <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
           <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">5</span>
-          <span><strong class="text-ink font-medium">Mobile breakpoint breakage at 991 / 767 / 478 (Webflow's three mobile widths)</strong>: we render every page at each one and flag overflow, text overlap, broken nav, hidden CTAs.</span>
+          <span><strong class="text-ink font-medium">Mobile breakpoint breakage at 991 / 767 / 478</strong>: Webflow's three native breakpoints. We render every page at each one and flag overflow, text overlap, broken nav, hidden CTAs.</span>
         </li>
         <li class="rounded-lg border border-line bg-white px-4 py-3.5 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
           <span class="flex-shrink-0 w-6 h-6 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center mt-0.5">6</span>
@@ -155,77 +146,153 @@
         </li>
       </ul>
       <p class="mt-6 text-sm text-muted">On <strong class="text-ink">Pro Package ($99)</strong> we also include a personal <strong class="text-ink">Webflow Designer walkthrough Loom</strong> recording: we open your published site alongside your live URL and talk through every finding in Designer terms.</p>
-
-      <!-- Different from $899 human audits (3 contrast bullets, reduced from prior 5-row table per deep-trim spec; "Different by design" eyebrow + long intro dropped) -->
-      <h3 class="font-serif text-xl mt-8 mb-6">Different from $899 human audits</h3>
-      <ul class="space-y-4">
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
-          <p class="font-serif text-lg text-ink">URL-only, no Workspace or Designer access</p>
-          <p class="text-muted text-sm mt-2 leading-relaxed">We never ask for your Webflow account, Designer login, Editor seat, or CMS API key. Just your live URL. <span class="text-muted/80">Human auditors ask for Workspace access plus a 1-week scheduling window.</span></p>
-        </li>
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
-          <p class="font-serif text-lg text-ink">Webflow Designer language in every fix prompt</p>
-          <p class="text-muted text-sm mt-2 leading-relaxed">Pages, Style Manager, Symbols, the exact panel to open. <span class="text-muted/80">Elsewhere: generic dev advice that doesn't say which Designer panel to open.</span></p>
-        </li>
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
-          <p class="font-serif text-lg text-ink">$19 to $99. Refund in 7 days.</p>
-          <p class="text-muted text-sm mt-2 leading-relaxed">Founder-reviewed quality at a fraction of the price. <span class="text-muted/80">Elsewhere: $899 minimum on Codeable / Webflow Experts. No refund window.</span></p>
-        </li>
-      </ul>
     </div>
   </section>
-  <!-- Pricing + add-ons (deep-trim: dropped verbose intro paragraph, cut each tier bullets to 4 max, added Handoff Report to Pro tier, folded the prior standalone Saboteur add-on section into a compact 2-line summary, added the Handoff Report add-on row that was previously missing from the Webflow surface; Verified Badge kept on all 3 tiers per fallback in PRODUCT-DECISIONS â€” Webflow buyers get the same 30/90/180-day proof-of-launch-readiness as the main SKU) -->
+
+  <!-- Trust -->
+  <section class="bg-paper border-t border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Trust</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-4">Who's behind this</h2>
+      <div class="rounded-xl border border-line bg-surface-tint px-5 py-5 sm:px-6 sm:py-6 max-w-prose">
+      <p class="text-muted leading-relaxed">
+        I'm <strong class="text-ink">Rob</strong>, a technical writer who's shipped products and documentation for years. Every LaunchLook checkup is reviewed by me manually before it goes out. For Webflow we never ask for your Designer login, your Workspace, or your Editor access. URL only.
+      </p>
+      <p class="text-muted leading-relaxed mt-4">
+        Built for Webflow freelancers, agencies, and in-house teams who want the second pair of eyes before client handoff or a public launch. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
+      </p>
+      <p data-launchlook-linkedin-wrap class="mt-4 hidden">
+        <a data-launchlook-linkedin href="#" class="launchlook-btn launchlook-btn-secondary">Connect on LinkedIn</a>
+      </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why us -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 section-inner">
+      <p class="section-label">Different by design</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-3">Why Webflow teams pick LaunchLook over the alternatives</h2>
+      <p class="text-muted text-sm mb-6 max-w-prose">Webflow QA today is either Webflow University's manual checklist (free, ~2 hours, requires you to know what to look for) or a $899&ndash;$4,800 human audit. We sit in the gap: a fast, founder-curated checkup at $19 to start.</p>
+
+      <div class="hidden sm:block overflow-hidden rounded-xl border border-line bg-white shadow-sm shadow-ink/5">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-surface-tint text-left">
+              <th class="px-4 py-3 font-medium text-ink">What you get from LaunchLook for Webflow</th>
+              <th class="px-4 py-3 font-medium text-muted">What you usually get elsewhere</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">URL-only, no Workspace or Designer access</td>
+              <td class="px-4 py-3 align-top text-muted">Human auditors ask for Editor or Designer access, plus a 1-week scheduling window</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">Webflow Designer language in every fix prompt (Pages, Style Manager, Symbols)</td>
+              <td class="px-4 py-3 align-top text-muted">Generic dev advice (&ldquo;add canonical tag,&rdquo; &ldquo;update meta&rdquo;) that doesn't say which Designer panel to open</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">$19 / $49 / $99. Refund in 7 days.</td>
+              <td class="px-4 py-3 align-top text-muted">$899 minimum on Codeable / Webflow Experts. No refund window.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">Catches the post-Nov-2024 silent form failures</td>
+              <td class="px-4 py-3 align-top text-muted">Most Webflow QA was written before the change. They still don't check.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 align-top text-ink">Pro tier: Webflow Designer walkthrough Loom recorded for your team</td>
+              <td class="px-4 py-3 align-top text-muted">PDF report and good luck</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sm:hidden space-y-4">
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook for Webflow</p>
+          <p class="text-sm text-ink">URL-only. Webflow Designer language in every fix. $19 to start.</p>
+          <p class="mt-2 text-xs text-muted">Elsewhere: Workspace access required, generic dev advice, $899+ minimum.</p>
+        </div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5">
+          <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">LaunchLook for Webflow</p>
+          <p class="text-sm text-ink">Catches the post-Nov-2024 silent form failures</p>
+          <p class="mt-2 text-xs text-muted">Elsewhere: most Webflow QA tools were written before the change. They still don't check.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Urgency moment (above pricing per SIMPLICITY-GUARDRAILS §2.2) -->
+  <section class="bg-paper border-b border-line">
+    <div class="max-w-3xl mx-auto px-6 py-10 sm:py-12">
+      <p class="section-label">When to run one</p>
+      <div class="section-rule mt-2 mb-4" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-3">The moment matters.</h2>
+      <p class="text-muted leading-relaxed max-w-prose">
+        Before client handoff. Before the Loom you send the marketing team. Before you swap the staging URL onto the custom domain. Before the form goes live and quietly drops every lead.
+      </p>
+      <p class="text-ink mt-3 max-w-prose">Run a quick LaunchLook for Webflow checkup first.</p>
+    </div>
+  </section>
+
+  <!-- Pricing -->
   <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
     <div class="max-w-3xl mx-auto px-6 section-inner">
       <p class="section-label">Pricing</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl sm:text-3xl mb-2">Pick the question you actually need answered.</h2>
-      <p class="text-muted mb-2">Same human curation on every paid tier. You're picking depth, not quality of care.</p>
+      <p class="text-muted mb-4">Same human curation on every paid tier. You're picking depth, not quality of care.</p>
+      <p class="text-sm text-muted mb-8 max-w-prose rounded-lg border border-line bg-white/80 px-4 py-3">
+        Works with any Webflow site (webflow.io preview subdomain or custom domain). Every report is reviewed by a founder before delivery. No Designer or Workspace access required. Pay &rarr; intake form (pick &ldquo;Webflow&rdquo; as platform) &rarr; two PDFs by email. Full refund within 7 days if the report isn't useful.
+      </p>
 
-      <div class="grid sm:grid-cols-3 gap-5 mt-8">
-        <div class="rounded-xl border border-line bg-white p-5 flex flex-col shadow-sm shadow-ink/5">
+      <div class="grid sm:grid-cols-3 gap-5">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Starter</h3>
           <p class="font-serif text-4xl mt-2">$19</p>
           <p class="text-sm text-muted mt-1 leading-snug"><em>Can I share this without embarrassment?</em></p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
             <li>Up to <strong>10</strong> prioritized findings</li>
             <li>Form-submission test + noindex / robots check</li>
+            <li>Desktop + 3 Webflow breakpoints</li>
             <li>Designer-language fix prompts</li>
-            <li>Delivered within 48h (usually 24h)</li>
-            <li>Includes <strong>LaunchLook Verified badge</strong>, valid 30 days*</li>
+            <li>Delivered when it&rsquo;s ready, usually within a few days</li>
           </ul>
           <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=StarterCheckout">
             Get Starter ($19)
           </a>
         </div>
 
-        <div class="rounded-xl border-2 border-accent bg-white p-5 flex flex-col relative shadow-sm">
+        <div class="rounded-xl border-2 border-accent bg-white p-6 flex flex-col relative shadow-sm">
           <div class="absolute -top-3 left-4 bg-accent text-paper text-xs font-medium px-2 py-0.5 rounded">Most popular</div>
           <h3 class="font-serif text-xl">Scale Up</h3>
           <p class="font-serif text-4xl mt-2">$49</p>
           <p class="text-sm text-muted mt-1 leading-snug"><em>Can I invite real users without trust or auth problems?</em></p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Everything in Starter, plus:</li>
             <li>Up to <strong>30</strong> findings (deeper pass)</li>
             <li>Per-page JSON-LD schema review</li>
             <li>Designer-to-live mismatch sweep</li>
-            <li>Delivered within 48h (usually 24h)</li>
-            <li>Includes <strong>LaunchLook Verified badge</strong>, valid 90 days*</li>
+            <li>Delivered when it&rsquo;s ready, usually within a few days</li>
           </ul>
           <a href="#" data-launchlook-stripe="scaleup" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6 plausible-event-name=ScaleUpCheckout">
             Get Scale Up ($49)
           </a>
         </div>
 
-        <div class="rounded-xl border border-line bg-white p-5 flex flex-col shadow-sm shadow-ink/5">
+        <div class="rounded-xl border border-line bg-white p-6 flex flex-col shadow-sm shadow-ink/5">
           <h3 class="font-serif text-xl">Pro</h3>
           <p class="font-serif text-4xl mt-2">$99</p>
           <p class="text-sm text-muted mt-1 leading-snug"><em>Am I ready to take real money and hand off to a developer?</em></p>
           <ul class="mt-5 space-y-2.5 text-sm flex-1">
+            <li>Everything in Scale Up, plus:</li>
             <li>Up to <strong>40</strong> findings (full depth)</li>
             <li>Integrations review (forms, Stripe, analytics)</li>
             <li><strong>Webflow Designer walkthrough Loom</strong></li>
-            <li><strong>Handoff Report (PDF)</strong> for your in-house team &mdash; included</li>
-            <li>Includes <strong>LaunchLook Verified badge</strong>, valid 180 days*</li>
+            <li>White-label-friendly PDF</li>
           </ul>
           <a href="#" data-launchlook-stripe="pro" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=ProCheckout">
             Get Pro ($99)
@@ -233,49 +300,11 @@
         </div>
       </div>
 
-      <p class="mt-5 text-xs text-muted">
-        *<a href="/verify-scope" class="underline hover:text-ink">What does Verified mean?</a>
-        Reviewed for visible launch issues. Not a security certification.
-      </p>
-
-      <!-- Handoff Report add-on (new on Webflow surface: previously missing entirely; gives Webflow buyers the same in-house-team handoff option the main SKU has) -->
-      <div class="mt-8 rounded-lg border border-line bg-white/70 px-4 py-4 text-sm text-muted">
-        <p><strong class="text-ink font-medium">Handoff Report (PDF)</strong> &mdash; your audit framed for the developer or in-house designer you hand off to. Plain-English findings paired with technical fix prompts and an architecture-level code-review section. <strong class="text-ink">$49 add-on for Starter/Scale Up &middot; included with Pro.</strong></p>
-        <p class="mt-3">
-          <a href="#" data-launchlook-stripe="handoff_report" class="underline hover:text-ink plausible-event-name=HandoffReportAddOn">Add the Handoff Report</a>
-        </p>
-      </div>
-
-      <!-- Confidence Check / Saboteur add-on (folded in from prior standalone section per the 9->4 restructure) -->
-      <div class="mt-4 rounded-lg border border-line bg-white/70 px-4 py-4 text-sm text-muted">
-        <p><strong class="text-ink font-medium">Confidence Check / Saboteur re-scan</strong> &mdash; we re-walk your site after you've applied your fixes, confirm what's resolved, and flag anything new that broke along the way. <strong class="text-ink">$19 standalone &middot; $9 within 14 days of your last audit.</strong></p>
-        <p class="mt-3">
-          <a href="#" data-launchlook-stripe="saboteur" class="underline hover:text-ink plausible-event-name=RescanAddOn">Send in The Saboteur</a>
-        </p>
-      </div>
     </div>
   </section>
-  <!--
-    Section 4 (deep-trim merge): Founder + FAQ + bottom CTA wrapped into a
-    single coherent close per 9->4 restructure. Founder voice matches the
-    main landing page so we have one consistent author across surfaces.
-    TODO: swap placeholder photo at landing/images/rob.jpg with a real
-    headshot (tracked in docs/ROB-REMAINING-TODO.md).
-  -->
-  <section class="made-by-rob bg-paper border-b border-line">
-    <div class="max-w-3xl mx-auto px-6 py-10 sm:py-12">
-      <div class="max-w-prose mx-auto text-center">
-        <h3 class="font-serif text-xl mb-3">Reviewed by a human, not an algorithm</h3>
-        <p class="text-muted leading-relaxed text-sm">
-          Every report is AI-drafted and <strong class="text-ink font-medium">personally reviewed</strong> for Webflow-specific issues before it reaches you.
-          <strong class="text-ink font-medium">Full refund within 7 days</strong> if it isn't useful.
-          Reply to any email and a real person reads it.
-        </p>
-      </div>
-    </div>
 
-    <!-- FAQ (sub-block of section 4) -->
-    <div id="faq" class="bg-paper">
+  <!-- FAQ -->
+  <section id="faq" class="bg-paper">
     <div class="max-w-3xl mx-auto px-6 section-inner">
       <p class="section-label">Questions</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
@@ -310,16 +339,8 @@
           <p class="mt-2 text-muted text-sm leading-relaxed">No. We focus on what's visible: broken UI, broken forms, missing schema, accidentally indexable pages, mobile breakage. For deep security, you don't need much on a Webflow site (the platform handles most of it), but if you have custom code blocks or third-party embeds you want pen-tested, that's a different product.</p>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How are you different from PageLens AI?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Both scan your live site and surface findings. We're built for vibe coders shipping with Lovable / Cursor / Bolt (and Webflow freelancers and agencies on this page); PageLens is built for SEO-focused marketers. <a href="/vs-pagelens" class="underline hover:text-ink">Full comparison &rarr;</a></p>
-        </details>
-        <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Can I white-label the report for my client?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">On the <strong>Pro ($99)</strong> tier, yes. We deliver a white-label-friendly PDF with no LaunchLook branding in the body, plus the Webflow Designer walkthrough Loom you can pass to your client or in-house team.</p>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Can I share my report publicly?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
@@ -331,9 +352,9 @@
         </details>
       </div>
     </div>
+  </section>
 
-    <!-- Bottom CTA (sub-block of section 4) -->
-    <div class="bg-ink text-paper border-t border-ink">
+  <section class="bg-ink text-paper border-t border-ink">
     <div class="max-w-3xl mx-auto px-6 section-inner text-center">
       <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
       <h2 class="font-serif text-2xl sm:text-3xl mt-3">Stop guessing if the form actually sent.</h2>
@@ -342,11 +363,10 @@
         See pricing
       </a>
     </div>
-    </div>
   </section>
 
   <footer class="border-t border-line">
-    <div class="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+    <div class="max-w-3xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
         <p class="font-serif text-ink">LaunchLook for Webflow</p>
         <p class="mt-1">Pre-launch checkup for Webflow sites.</p>
@@ -357,7 +377,7 @@
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="/" class="hover:text-ink">For vibe-coders</a></li>
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="#hero" class="hover:text-ink">Free 3-finding audit</a></li>
+        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
@@ -368,6 +388,5 @@
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
-  <script src="/assets/free-audit.js" defer></script>
 </body>
 </html>

@@ -982,9 +982,8 @@ def scan_stripe_pricing() -> list[Issue]:
       9900 -> Pro Package
 
     Also verifies metadata-discriminated routing exists for the q6 Confidence
-    Check ($19 + product=confidence_check, $9 + product=confidence_check), the
-    q17 badge re-verification ($9 + product=reverify), and the q18 Handoff
-    Report add-on ($99 + product=handoff_report).
+    Check ($19 + product=confidence_check, $9 + product=confidence_check) and
+    the q18 Handoff Report add-on ($99 + product=handoff_report).
     """
     issues: list[Issue] = []
     webhook = ROOT / "api" / "stripe-webhook.py"
@@ -1008,10 +1007,6 @@ def scan_stripe_pricing() -> list[Issue]:
         (
             'CONFIDENCE_CHECK_METADATA_VALUE = "confidence_check"',
             "q6 Confidence Check metadata routing present.",
-        ),
-        (
-            'REVERIFY_METADATA_VALUE = "reverify"',
-            "q17 badge re-verification metadata routing present.",
         ),
         (
             'HANDOFF_REPORT_METADATA_VALUE = "handoff_report"',

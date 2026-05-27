@@ -213,7 +213,6 @@ def _example_report() -> dict:
                 "fingerprint": "abc123",
             }
         ],
-        "verified_badge_slug": "jane-sparkle-marketplace",
         "share_metadata": {
             "title": "LaunchLook audit for Sparkle Marketplace",
             "description": "Pre-launch audit. Verdict: Needs fixes before launch.",
@@ -258,7 +257,6 @@ def test_sanitize_report_json_keeps_public_safe_metadata() -> None:
     assert "email" not in out["customer"]
     assert "app_url" not in out["customer"]
     assert out["share_metadata"]["title"] == "LaunchLook audit for Sparkle Marketplace"
-    assert out["verified_badge_slug"] == "jane-sparkle-marketplace"
 
 
 def test_sanitize_report_json_findings_are_scrubbed() -> None:

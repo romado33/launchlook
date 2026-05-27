@@ -96,7 +96,7 @@ Send by DM (never in the public thread). Wait until the founder has actually rea
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version — ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER} — that's what LaunchLook does ($19 Starter, $49 Scale Up, $99 Pro). Founder-reviewed, no scanner, no GitHub access. Within 48 hours, usually 24.
+If you want the full version — ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER} — that's what LaunchLook does ($19 Starter, $49 Scale Up, $99 Pro). Founder-reviewed, no scanner, no GitHub access. Delivered when it's ready, usually within a few days.
 
 launchlook.app — and you can grab 3 free findings (real person, 24-hour turnaround) by dropping your URL on the home page. No pressure either way.
 ```

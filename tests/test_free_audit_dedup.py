@@ -21,7 +21,7 @@ Notion client implements just enough of the ``Client.databases`` /
 ``Client.data_sources`` / ``Client.pages`` surface to drive the dedupe
 code paths.
 
-Runs two ways (mirrors tests/test_dedup.py + tests/test_verified_badge.py):
+Runs two ways (mirrors tests/test_dedup.py):
 
 * ``pytest tests/test_free_audit_dedup.py``
 * ``python tests/test_free_audit_dedup.py`` (stdlib-only)
@@ -49,8 +49,7 @@ os.environ.setdefault("NOTION_TOKEN", "test-token")
 os.environ.setdefault("NOTION_FREE_AUDIT_DB_ID", "test-free-audit-db-id")
 
 # api/free-audit.py is not a regular module (hyphenated filename + no
-# package __init__.py); load it through importlib the same way
-# tests/test_verified_badge.py loads api/verify.py.
+# package __init__.py); load it through importlib.
 _FREE_AUDIT_PATH = REPO_ROOT / "api" / "free-audit.py"
 _spec = importlib.util.spec_from_file_location("free_audit_api", _FREE_AUDIT_PATH)
 free_audit = importlib.util.module_from_spec(_spec)

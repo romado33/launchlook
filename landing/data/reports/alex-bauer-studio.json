@@ -78,6 +78,5 @@
     "label": "Needs fixes before launch",
     "narrative": "Bauer Studio looks polished in Designer and at first glance on the live\nURL: the brand work is strong, the Symbols are reused cleanly, the CMS\nblog is populated. The Webflow-specific checks turned up the things\nDesigner does not warn about. The contact form silently drops every\nsubmission because no Form Notification recipient is set. The /about\npage is still flagged noindex from when staging was live, so Google\ncan never index it. Two CMS items contain literal \"Lorem ipsum\"\nplaceholder copy. Fix the form first (it costs leads every day), the\nnoindex next (it costs SEO every day), then the visible polish.\n",
     "summary": "Three quiet failures to clear before any client handoff."
-  },
-  "verified_badge_slug": "alex-bauer-studio"
+  }
 }

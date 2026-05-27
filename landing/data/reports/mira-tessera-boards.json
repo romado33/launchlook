@@ -156,6 +156,5 @@
     "label": "Do not invite real users yet",
     "narrative": "Tessera Boards looks ready at a glance: clean Kanban layout, working sign-up,\nStripe checkout that actually completes, and mobile screens that don't break.\nThe depth review surfaced four operational integration gaps that aren't\nvisible from the app itself but will bite the moment you turn on paid\ntraffic: a Stripe webhook pointing at a sandbox URL, an analytics tag that\ndouble-counts every signup, an email sender that lands in spam on Gmail,\nand a password reset flow that appears to work but never actually sends\nthe email. Plus the usual polish layer (placeholder copy, missing trust\npages, mobile tap targets). Fix the integrations before the launch push;\nthe rest can pace through this week.\n",
     "summary": "Dev login bypass and a cross-user data leak need to clear before any real traffic."
-  },
-  "verified_badge_slug": "mira-tessera-boards"
+  }
 }

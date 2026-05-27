@@ -23,8 +23,6 @@
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/webflow", "destination": "/webflow.html" },
     { "source": "/vs-pagelens", "destination": "/vs-pagelens.html" },
-    { "source": "/verify", "destination": "/verify.html" },
-    { "source": "/verify-scope", "destination": "/verify-scope.html" },
     { "source": "/r/:slug", "destination": "/r.html?slug=:slug" }
   ]
 }
