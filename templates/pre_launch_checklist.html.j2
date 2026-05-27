@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pre-Launch Checklist for AI-Builder Apps · LaunchLook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #FAF7F2;
+      --ink: #1F1B16;
+      --muted: #6B6359;
+      --accent: {{ primary_color | default('#B45309') }};
+      --line: #E7E0D6;
+      --surface: #FFFFFF;
+      --surface-tint: #F4EFE7;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 22mm 18mm 20mm 18mm;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.55;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .doc-header {
+      border-top: 3px solid var(--accent);
+      padding-top: 9pt;
+      margin-bottom: 12pt;
+    }
+
+    .eyebrow {
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    h1 {
+      font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+      font-weight: 500;
+      font-size: 22pt;
+      line-height: 1.15;
+      margin: 5pt 0 3pt;
+      color: var(--ink);
+      letter-spacing: -0.005em;
+    }
+
+    .subtitle {
+      font-size: 9.5pt;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .intro {
+      margin: 12pt 0 14pt;
+      padding: 11pt 14pt;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .intro p {
+      margin: 0 0 6pt;
+      font-size: 10pt;
+      color: var(--ink);
+    }
+
+    .intro p:last-child { margin-bottom: 0; }
+
+    h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 13pt;
+      margin: 14pt 0 4pt;
+      padding-bottom: 3pt;
+      border-bottom: 1px solid var(--line);
+      page-break-after: avoid;
+    }
+
+    .section-meta {
+      font-size: 8.5pt;
+      color: var(--muted);
+      margin: 0 0 6pt;
+    }
+
+    ul.checks {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ul.checks li {
+      position: relative;
+      padding: 3pt 0 3pt 20pt;
+      font-size: 9.5pt;
+      color: var(--ink);
+      page-break-inside: avoid;
+    }
+
+    ul.checks li::before {
+      content: "";
+      position: absolute;
+      top: 5pt;
+      left: 2pt;
+      width: 10pt;
+      height: 10pt;
+      border: 1px solid var(--muted);
+      border-radius: 2pt;
+      background: var(--surface);
+    }
+
+    .next-block {
+      margin-top: 14pt;
+      padding: 11pt 14pt;
+      background: var(--surface-tint);
+      border: 1px solid var(--line);
+      border-radius: 4pt;
+      page-break-inside: avoid;
+    }
+
+    .next-block h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 12pt;
+      margin: 0 0 5pt;
+    }
+
+    .next-block ul {
+      margin: 0;
+      padding-left: 16pt;
+      color: var(--muted);
+      font-size: 9.5pt;
+    }
+
+    .next-block ul li { margin-bottom: 3pt; }
+    .next-block strong { color: var(--ink); }
+
+    .closing {
+      margin-top: 16pt;
+      padding-top: 8pt;
+      border-top: 1px solid var(--line);
+      font-size: 8.5pt;
+      color: var(--muted);
+    }
+
+    .closing a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <header class="doc-header">
+    <p class="eyebrow">
+      LaunchLook · Pre-Launch Checklist
+      {%- if customer and customer.tier %} · bundled with {{ customer.tier }}{% endif %}
+    </p>
+    <h1>Pre-Launch Checklist for AI-Builder Apps</h1>
+    <p class="subtitle">
+      A short, plain-English review before strangers see your live link · ~20 minutes
+      {%- if customer and customer.app_name %} · prepared for {{ customer.app_name }}{% endif %}
+    </p>
+  </header>
+
+  <section class="intro">
+    <p>A short list for founders about to share a real link, built with Lovable, Bolt, Base44, Replit, v0, Cursor, or similar.</p>
+    <p>Open your app in a <strong>normal browser tab</strong> (not the builder preview). Work through each section, mark each line done / problem / not sure, and turn the problems into your fix list. About 20 minutes total.</p>
+    <p>This is what visitors notice. It is not a deep code review or security audit &mdash; it complements your LaunchLook report, it does not replace it.</p>
+  </section>
+
+  <h2>1. First look</h2>
+  <p class="section-meta">~5 minutes &middot; homepage and footer</p>
+  <ul class="checks">
+    <li>The live link loads without feeling broken or endlessly spinning.</li>
+    <li>Your URL bar shows a padlock (or no warning), not a &ldquo;Not Secure&rdquo; label.</li>
+    <li>The browser tab shows your app name, not &ldquo;My App&rdquo; or generic builder text.</li>
+    <li>A stranger can tell what your app does within a few seconds of reading the homepage.</li>
+    <li>No placeholder text left behind: lorem ipsum, &ldquo;Your Company Name,&rdquo; &ldquo;[insert tagline],&rdquo; obvious TODO notes.</li>
+    <li>No default &ldquo;welcome to your new app&rdquo; copy from the builder &mdash; it sounds like <em>your</em> product.</li>
+    <li>Your product name appears in the header, not the platform&rsquo;s logo as the star.</li>
+    <li>Nothing obviously &ldquo;for developers only&rdquo; on the public site (test data buttons, skip-login, seed sample data).</li>
+    <li>The main button on the homepage does what it promises when you click it.</li>
+  </ul>
+
+  <h2>2. Trust &amp; contact</h2>
+  <p class="section-meta">~3 minutes</p>
+  <ul class="checks">
+    <li>Privacy policy page works (often at /privacy).</li>
+    <li>Terms page works (often at /terms).</li>
+    <li>Visitors can find how to reach you (support email in footer or a contact page).</li>
+    <li>That email is real and one you check &mdash; not support@example.com.</li>
+    <li>Footer links to privacy and terms work (no &ldquo;page not found&rdquo;).</li>
+  </ul>
+
+  <h2>3. Does the main flow work?</h2>
+  <p class="section-meta">~10 minutes &middot; the one thing users come to do</p>
+  <ul class="checks">
+    <li>Buttons and menu links you tried actually do something (no dead ends).</li>
+    <li>If people sign up: confirmation email arrives (check spam).</li>
+    <li>If people sign up: you can log in afterward with that account.</li>
+    <li>If people sign up: you can log out.</li>
+    <li>If you have a public signup or contact form: it has some &ldquo;prove you&rsquo;re human&rdquo; step (a checkbox, image puzzle, or similar) so a bot can&rsquo;t flood your inbox and database overnight.</li>
+    <li>The core workflow finishes: book, pay, submit, save, whatever your app is for.</li>
+    <li>After submitting a form, you see a clear &ldquo;it worked&rdquo; or &ldquo;something went wrong&rdquo; message.</li>
+    <li>If you charge money: a test payment completes and shows a sensible thank-you page.</li>
+    <li>A brand-new user isn&rsquo;t staring at a totally blank screen with no hint what to do next.</li>
+  </ul>
+
+  <h2>4. On a phone</h2>
+  <p class="section-meta">~5 minutes &middot; open on your phone or narrow the browser window</p>
+  <ul class="checks">
+    <li>No sideways scrolling. Everything fits the screen width.</li>
+    <li>Text is readable without pinching to zoom.</li>
+    <li>Buttons are easy to tap (not tiny).</li>
+    <li>The main workflow is usable on phone, not only on desktop.</li>
+  </ul>
+
+  <h2>5. Sharing your link</h2>
+  <p class="section-meta">~2 minutes</p>
+  <ul class="checks">
+    <li>Paste your URL into Slack, iMessage, or LinkedIn: the preview shows the right title and description, not generic builder fluff.</li>
+  </ul>
+
+  <h2>6. If people can sign in</h2>
+  <p class="section-meta">Optional &middot; skip if your app has no accounts &middot; otherwise create two throwaway test accounts</p>
+  <ul class="checks">
+    <li>Signed in as person A, you cannot see person B&rsquo;s private stuff (messages, files, bookings, etc.).</li>
+    <li>When signed out, opening &ldquo;dashboard&rdquo; or &ldquo;settings&rdquo; asks you to log in. It does not show someone else&rsquo;s data.</li>
+  </ul>
+
+  <h2>7. Gut check</h2>
+  <p class="section-meta">~2 minutes</p>
+  <ul class="checks">
+    <li>You&rsquo;d be comfortable sending this link to a friend today.</li>
+    <li>You wouldn&rsquo;t be embarrassed if someone screenshotted the homepage.</li>
+  </ul>
+
+  <div class="next-block">
+    <h3>What to do next</h3>
+    <ul>
+      <li><strong>Fix before you share widely:</strong> broken signup, missing privacy/terms, placeholder text, dev-only buttons still visible, one user seeing another&rsquo;s data.</li>
+      <li><strong>Fix soon after launch:</strong> mobile layout quirks, weak link previews, empty screens without guidance.</li>
+      <li><strong>More than ~5 serious problems?</strong> Pause the launch push until the worst ones are handled.</li>
+    </ul>
+  </div>
+
+  <p class="closing">
+    Pre-Launch Checklist prepared by LaunchLook &middot;
+    <a href="https://launchlook.app">launchlook.app</a>
+    {%- if delivered_at %} &middot; {{ delivered_at }}{% endif %}
+    <br />
+    Free to copy and share. Bundled with every paid LaunchLook tier (Starter, Scale Up, Pro).
+  </p>
+
+</body>
+</html>

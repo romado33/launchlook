@@ -1,11 +1,17 @@
 """
-deliver_report.py: render Main Report + Quick Start Guide PDFs and email them.
+deliver_report.py: render Main Report + Quick Start Guide + Pre-Launch
+Checklist PDFs and email them.
 
-Reads a customer YAML file (verdict, findings, QSG sections) and renders two
+Reads a customer YAML file (verdict, findings, QSG sections) and renders three
 A4 PDFs with Playwright + Jinja2:
 
     output/reports/{slug}/main-report.pdf
     output/reports/{slug}/quick-start-guide.pdf
+    output/reports/{slug}/pre-launch-checklist.pdf
+
+The Pre-Launch Checklist is a generic deliverable bundled with every paid
+tier (Starter / Scale Up / Pro). It replaces the deleted
+landing/checklist.html surface.
 
 Workflow:
 
@@ -204,6 +210,7 @@ def build_jinja_env():
                 str(CONFIDENCE_CHECK_TEMPLATE_DIR),
                 str(HANDOFF_TEMPLATE_DIR),
                 str(SHAREABLE_TEMPLATE_DIR),
+                str(TEMPLATE_ROOT),
             ]
         ),
         autoescape=select_autoescape(["html", "xml", "j2"]),
@@ -401,6 +408,24 @@ def render_qsg_html(env, data: dict[str, Any], delivered_at: str) -> str | None:
     return template.render(
         customer=data["customer"],
         qsg=qsg,
+        delivered_at=delivered_at,
+    )
+
+
+def render_pre_launch_checklist_html(
+    env, data: dict[str, Any], delivered_at: str
+) -> str:
+    """Render the bundled Pre-Launch Checklist PDF.
+
+    The content is generic (same for every paid customer); we only
+    personalise the eyebrow line via customer.app_name + customer.tier so
+    it does not feel like an unrelated leaflet. Replaces the deleted
+    landing/checklist.html surface; bundled with every paid tier per
+    docs/PRODUCT-DECISIONS.md changelog (May 2026 simplification).
+    """
+    template = env.get_template("pre_launch_checklist.html.j2")
+    return template.render(
+        customer=data["customer"],
         delivered_at=delivered_at,
     )
 
@@ -1003,6 +1028,18 @@ def main() -> int:
     if qsg_html:
         attachments.append(qsg_pdf)
 
+    # Pre-Launch Checklist is bundled with every paid tier; this script is
+    # only ever invoked for paid deliveries (free 3-finding audits go through
+    # api/free-audit.py and do NOT include the checklist).
+    checklist_pdf = out_dir / "pre-launch-checklist.pdf"
+    checklist_html = render_pre_launch_checklist_html(env, data, delivered_at)
+    html_to_pdf(checklist_html, checklist_pdf, customer["first_name"])
+    print(
+        f"  - wrote {checklist_pdf.name} "
+        f"({checklist_pdf.stat().st_size / 1024:.1f} KB)"
+    )
+    attachments.append(checklist_pdf)
+
     # q22: shareable hosted report page. Default is private (no
     # surprises). Customer opts in by replying 'share' to the delivery
     # email; Rob then runs scripts/share_report.py to flip.
@@ -1058,6 +1095,7 @@ def main() -> int:
             open_in_viewer(main_pdf)
             if qsg_html:
                 open_in_viewer(qsg_pdf)
+            open_in_viewer(checklist_pdf)
         print(
             "\nDry-run complete. Review the PDFs, then re-run with --send to email them.\n"
             f"  python scripts/deliver_report.py --customer {args.customer} --send"

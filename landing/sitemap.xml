@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://launchlook.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://launchlook.app/checklist</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://launchlook.app/sample</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://launchlook.app/vs-pagelens</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://launchlook.app/r/jane-sparkle-marketplace.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://launchlook.app/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://launchlook.app/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>

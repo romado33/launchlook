@@ -17,7 +17,6 @@ Operational scripts for LaunchLook. All written for Python 3.11+. None are requi
 | `qsg_generate.py` | BL-09 v2 | skeleton — needs API key | When you decide to automate QSG generation |
 | `notion_test.py` | BL-04 | ready | After Notion workspace + token set up |
 | `referral_create.py` | BL-12 | skeleton — needs Stripe + Notion keys | First customer to deliver |
-| `followup_send.py` | BL-13 | skeleton — needs Notion + Resend keys | First customer to deliver + 3 days |
 | `crawler.py` (TODO) | BL-14 | NOT BUILT | After customer 10 — hard gate |
 | `notion_populate.py` (TODO) | BL-15 | NOT BUILT | After BL-14 |
 
@@ -37,10 +36,9 @@ Operational scripts for LaunchLook. All written for Python 3.11+. None are requi
    ↓
 5. Rob delivers — copies Notion link into delivery email
    → Marks Delivered=true + Payment Date in Notion
-   ↓
-6. (BL-13) GitHub Actions runs daily at 14:00 UTC:
-   python scripts/followup_send.py --days-after 3
-   → Sends day-3 follow-up to anyone delivered 3 days ago
+   → The post-delivery email already carries the Fix Check / refund offer,
+     so no separate follow-up cadence runs (BL-13 followup_send.py and
+     daily-followup.yml were removed in May 2026).
 ```
 
 ## Manual fallbacks
@@ -49,7 +47,6 @@ If any script breaks or any API key isn't set, the workflow degrades gracefully:
 
 - `qsg_compose_prompt.py` works without any API key — its output is paste-ready
 - `referral_create.py` has `--dry-run` to print the code without calling Stripe
-- `followup_send.py` has `--dry-run` to print the emails it would send
 
 ## Common gotchas
 

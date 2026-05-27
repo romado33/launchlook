@@ -1,6 +1,8 @@
 # Testers Cast
 
-Canonical reference for the 7 Testers personas. Read this before tagging findings, writing report copy, or adding marketing language about the cast. Do **not** invent new Testers. Do **not** describe existing ones inconsistently.
+> **INTERNAL-ONLY (as of 2026-05-26).** The 7-persona named labels are no longer surfaced to customers (landing footers, report PDFs, shareable pages, /r/{slug} pages — all stripped). Underlying scanning behavior is unchanged: the offline pipeline still tags findings internally for routing and category coverage, and the dormant CSS / JS helpers stay in place so re-enabling display is a one-line change. Section "How the cast appears to buyers" below is now historical.
+
+Canonical reference for the 7 Testers personas. Read this before tagging findings (internally), writing report copy, or adding marketing language about the cast. Do **not** invent new Testers. Do **not** describe existing ones inconsistently.
 
 Companion docs: `SIMPLICITY-GUARDRAILS.md`, `PRODUCT-DECISIONS.md`.
 

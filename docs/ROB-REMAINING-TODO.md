@@ -35,8 +35,8 @@ left to do.
 - [x] Heavy landing restructure (10 sections to 5, FAQ to its own page) — commit `78aea39`
 - [x] Free 3-finding audit with 30-day fingerprint dedupe + upsell response — commits `9b013d9` / `c07f0e4`
 - [x] Tier-name alignment across scripts/ — commit `ca8ce0f`
-- [x] Confidence Check / Saboteur re-scan add-on shipped (q6)
-- [x] ~~LaunchLook Verified badge (q17)~~ deprecated 2026-05-26 (see `docs/PRODUCT-DECISIONS.md` A9 changelog)
+- [x] Fix Check re-scan add-on shipped (q6) — internally still routed via `confidence_check` metadata + filenames; surfaced to customers as "Fix Check" only via the post-delivery email + report PDF footer (no longer on landing pricing pages as of May 2026 simplification pass)
+- [x] LaunchLook Verified badge + $9 re-verification flow (q17)
 - [x] Handoff Report (q18) — free with Pro, $49 add-on for Starter/Scale Up (bumped down from $99 on 2026-05-26 — see `docs/PRODUCT-DECISIONS.md` for the upsell-ladder math)
 - [x] GitHub integration for Pro tier (q19, opt-in, Rob-triggered CLI)
 - [x] Hosted shareable report pages at /r/{slug} (q22, opt-in)
@@ -137,7 +137,7 @@ Dashboard: [dashboard.stripe.com](https://dashboard.stripe.com) → **Payment Li
 - [x] Success URL returns customers to `/thanks` (verified via live test)
 - [ ] Cancel URL (if offered): `https://launchlook.app/#pricing` (optional)
 - [x] URLs match `config.js` (`stripe.starter`, `stripe.scaleup`) at legacy prices
-- [ ] **NEW (May 26):** new Payment Links at $19 / $49 / $99 + $19 Saboteur standalone + $9 Saboteur repeat + $49 Handoff add-on. Tracked in `docs/MANUAL-APPROVAL-2026-05-26.md` — autonomous worker captured the inventory and created what was missing.
+- [ ] **NEW (May 26):** new Payment Links at $19 / $49 / $99 + $19 Fix Check standalone + $9 Fix Check repeat (within 14 days) + $49 Handoff add-on. Tracked in `docs/MANUAL-APPROVAL-2026-05-26.md` — autonomous worker captured the inventory and created what was missing. Stripe Payment Link internal descriptions can stay "Confidence Check" or be re-labeled "Fix Check" in the dashboard for receipt clarity.
 
 ### 3. Email receiving (~15–30 min)
 
@@ -279,7 +279,7 @@ From [`00-START-HERE.md`](00-START-HERE.md):
 **Decision:** Leave the Plausible tracker installed on all landing pages but defer signing up for an account / creating goal events until there's a real reason to look at conversion data (e.g. ≥10 paying customers, or noticeable traffic without obvious conversion).
 
 **Current state:**
-- Tracker script (`<script data-domain="launchlook.app" src="plausible.io/js/script.tagged-events.js">`) is on `index.html`, `webflow.html`, `faq.html`, `vs-pagelens.html`, `checklist.html`, `sample.html`, `thanks.html`, `thanks-free-audit.html`, `r.html`, `r/*.html`.
+- Tracker script (`<script data-domain="launchlook.app" src="plausible.io/js/script.tagged-events.js">`) is on `index.html`, `webflow.html`, `faq.html`, `vs-pagelens.html`, `checklist.html`, `sample.html`, `verify.html`, `verify-scope.html`, `thanks.html`, `thanks-free-audit.html`, `r.html`, `r/*.html`.
 - Event-name CSS classes (`StarterCheckout`, `ScaleUpCheckout`, `ProCheckout`, `IntakeFormStart`, `RescanAddOn`, `HandoffReportAddOn`, `FreeAuditSignup`) are wired into every CTA — these fire `/api/event` POSTs to plausible.io every time someone loads a page or clicks a button.
 - **No account currently owns `launchlook.app`** on Plausible's side, so those events are silently dropped. No data is being collected.
 

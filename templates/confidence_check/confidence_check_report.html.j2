@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 {# ----------------------------------------------------------------------
-   Confidence Check / Saboteur re-scan — short-form report.
+   Fix Check (internal filename retained: confidence_check_report.html.j2)
+   — short-form re-scan report.
 
    Modeled on templates/report/report.html.j2, trimmed to:
-     - Header ("Confidence Check by The Saboteur" + verdict label)
+     - Header ("Fix Check" + verdict label)
      - "What's now fixed" (✓)
      - "Still showing up" (✗)
      - "New things that surfaced" (⚠ regressions)
-     - Footer ("Need another? Send in The Saboteur again.")
+     - Footer ("Need another? Reply with 'recheck'.")
 
-   Voice: The Saboteur (per docs/TESTERS-CAST.md §6). Mischievous,
-   conversational, "chaos monkey trying to break things." NOT QA-report
-   style. Per SIMPLICITY-GUARDRAILS §3.4.
+   Voice: conversational, "second pair of eyes" tone. The Saboteur
+   persona name was pulled from customer surfaces in the May 2026
+   simplification pass; the underlying re-scan logic is unchanged.
 ---------------------------------------------------------------------- #}
 {% set check = confidence_check %}
-{% set page_title = check.app_name ~ ' · LaunchLook Confidence Check' %}
+{% set page_title = check.app_name ~ ' · LaunchLook Fix Check' %}
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -229,8 +230,8 @@
   <div class="page">
 
     <header class="doc-header">
-      <p class="eyebrow">Confidence Check by The Saboteur</p>
-      <h1>{{ check.app_name or 'Confidence Check' }}</h1>
+      <p class="eyebrow">LaunchLook · Fix Check</p>
+      <h1>{{ check.app_name or 'Fix Check' }}</h1>
       <p class="subtitle">
         Re-scan after fixes
         {%- if check.customer_first_name %} for {{ check.customer_first_name }}{% endif -%}
@@ -307,7 +308,7 @@
     <section class="closing">
       <p>
         <strong>Need another?</strong>
-        {{ footer_note or 'Send in The Saboteur again whenever you ship the next round.' }}
+        {{ footer_note or "Reply with 'recheck' whenever you ship the next round of fixes." }}
       </p>
     </section>
 

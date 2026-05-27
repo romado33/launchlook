@@ -26,9 +26,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
-
-  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS §2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
-  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 
 <body class="bg-paper text-ink font-sans antialiased">
@@ -61,8 +58,7 @@
     </p>
     <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
       <a href="#pricing" class="launchlook-btn launchlook-btn-primary">See Webflow pricing</a>
-      <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
-      <a href="/checklist" class="launchlook-btn launchlook-btn-secondary">Free checklist (~20 min)</a>
+      <a href="/r/jane-sparkle-marketplace.html" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
     </div>
     <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>URL-only. <strong class="text-ink font-medium">No access to your Webflow account</strong> required</span></li>
@@ -259,6 +255,7 @@
             <li>Form-submission test + noindex / robots check</li>
             <li>Desktop + 3 Webflow breakpoints</li>
             <li>Designer-language fix prompts</li>
+            <li><strong>Pre-Launch Checklist PDF</strong> (bundled)</li>
             <li>Delivered when it&rsquo;s ready, usually within a few days</li>
           </ul>
           <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=StarterCheckout">
@@ -276,6 +273,7 @@
             <li>Up to <strong>30</strong> findings (deeper pass)</li>
             <li>Per-page JSON-LD schema review</li>
             <li>Designer-to-live mismatch sweep</li>
+            <li><strong>Pre-Launch Checklist PDF</strong> (bundled)</li>
             <li>Delivered when it&rsquo;s ready, usually within a few days</li>
           </ul>
           <a href="#" data-launchlook-stripe="scaleup" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6 plausible-event-name=ScaleUpCheckout">
@@ -292,6 +290,7 @@
             <li>Up to <strong>40</strong> findings (full depth)</li>
             <li>Integrations review (forms, Stripe, analytics)</li>
             <li><strong>Webflow Designer walkthrough Loom</strong></li>
+            <li><strong>Pre-Launch Checklist PDF</strong> (bundled)</li>
             <li>White-label-friendly PDF</li>
           </ul>
           <a href="#" data-launchlook-stripe="pro" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=ProCheckout">
@@ -377,8 +376,7 @@
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="/" class="hover:text-ink">For vibe-coders</a></li>
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="/checklist" class="hover:text-ink">Free checklist</a></li>
-        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/r/jane-sparkle-marketplace.html" class="hover:text-ink">Sample report</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

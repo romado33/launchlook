@@ -39,9 +39,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
-
-  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS section 2). -->
-  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 
 <body class="bg-paper text-ink font-sans antialiased" data-slug="{{ customer_slug }}">
@@ -117,8 +114,7 @@
         <h2 class="font-serif text-xl mb-2">Handoff Report</h2>
         <p class="text-sm text-muted leading-relaxed">
           The customer also published the Handoff Report, formatted for the
-          developer they hire next. Plain English, persona-tagged, honest
-          scope statements.
+          developer they hire next. Plain English with honest scope statements.
         </p>
         <a href="#" data-r-handoff-link class="launchlook-btn launchlook-btn-secondary mt-4 plausible-event-name=ShareableHandoffDownload">
           Download the Handoff Report (PDF)
@@ -135,7 +131,7 @@
           <a href="/#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=ShareableCTAPricing">
             See pricing
           </a>
-          <a href="/sample" class="launchlook-btn launchlook-btn-secondary">
+          <a href="/r/jane-sparkle-marketplace.html" class="launchlook-btn launchlook-btn-secondary">
             See a sample report
           </a>
         </div>
@@ -165,15 +161,9 @@
         <li><a href="mailto:hello@launchlook.app" class="hover:text-ink">hello@launchlook.app</a></li>
       </ul>
     </div>
-    <details class="testers-cast max-w-3xl mx-auto px-6 pb-6 text-xs text-muted">
-      <summary class="cursor-pointer hover:text-ink">Meet the cast (the 7 Testers who reviewed the site)</summary>
-      <p class="mt-2 leading-relaxed">
-        Every finding on a LaunchLook report gets attached to the imaginary
-        first-time visitor who caught it: The Tourist, The Skeptic, The Klutz,
-        The Snoop, The Phone-First Friend, The Saboteur, and The Stranger Who
-        Tried to Sign Up. It's a tag, not a sales pitch.
-      </p>
-    </details>
+    <p class="max-w-3xl mx-auto px-6 pb-6 text-xs text-muted">
+      Reviewed by a human reviewer.
+    </p>
   </footer>
 
   <script src="/assets/r.js"></script>

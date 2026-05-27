@@ -11,18 +11,18 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://plausible.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self' mailto: https://buy.stripe.com https://link.stripe.com https://tally.so https://*.tally.so; upgrade-insecure-requests" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' mailto: https://buy.stripe.com https://link.stripe.com https://tally.so https://*.tally.so; upgrade-insecure-requests" }
       ]
     }
   ],
+  "redirects": [
+    { "source": "/sample", "destination": "/r/jane-sparkle-marketplace.html", "permanent": true },
+    { "source": "/checklist", "destination": "/", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/checklist", "destination": "/checklist.html" },
     { "source": "/thanks", "destination": "/thanks.html" },
-    { "source": "/sample", "destination": "/sample.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/webflow", "destination": "/webflow.html" },
-    { "source": "/vs-pagelens", "destination": "/vs-pagelens.html" },
-    { "source": "/r/:slug", "destination": "/r.html?slug=:slug" }
+    { "source": "/webflow", "destination": "/webflow.html" }
   ]
 }

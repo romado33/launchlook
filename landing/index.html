@@ -26,9 +26,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
-
-  <!-- Plausible analytics (privacy-friendly, no cookie banner needed per SIMPLICITY-GUARDRAILS section 2). Tagged-events build fires custom goals via CSS classes like "plausible-event-name=StarterCheckout". -->
-  <script defer data-domain="launchlook.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 
 <body class="bg-paper text-ink font-sans antialiased">
@@ -78,7 +75,7 @@
 
     <div class="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
       <a href="#pricing" class="launchlook-btn launchlook-btn-secondary">Want all 10? See Starter ($19)</a>
-      <a href="/sample" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
+      <a href="/r/jane-sparkle-marketplace.html" class="launchlook-btn launchlook-btn-secondary">See a sample report</a>
     </div>
     <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>A real person reads your live app, then we email you 3 plain-English findings.</span></li>
@@ -192,6 +189,7 @@
           <ul class="mt-4 space-y-2.5 text-sm flex-1">
             <li>The <strong>10 most important</strong> findings, ranked by impact</li>
             <li>Copy-paste fix prompts for your builder</li>
+            <li><strong>Pre-Launch Checklist PDF</strong> (bundled)</li>
             <li>Delivered when it's ready, usually within a few days</li>
           </ul>
           <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=StarterCheckout">
@@ -207,6 +205,7 @@
           <ul class="mt-4 space-y-2.5 text-sm flex-1">
             <li>Up to <strong>30</strong> findings across every category</li>
             <li>User data isolation (2 test accounts)</li>
+            <li><strong>Pre-Launch Checklist PDF</strong> (bundled)</li>
             <li><strong>Quick Start Guide PDF</strong> for your users</li>
           </ul>
           <a href="#" data-launchlook-stripe="launch" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-6 plausible-event-name=ScaleUpCheckout">
@@ -222,6 +221,7 @@
             <li>Up to <strong>40</strong> findings across every category</li>
             <li><strong>Integrations review</strong> (Stripe, login, email, analytics setup)</li>
             <li><strong>30-min Loom walkthrough</strong> included</li>
+            <li><strong>Pre-Launch Checklist PDF</strong> (bundled)</li>
             <li><strong>Handoff Report (PDF)</strong> &mdash; included</li>
           </ul>
           <a href="#" data-launchlook-stripe="pro" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-6 plausible-event-name=ProCheckout">
@@ -230,11 +230,9 @@
         </div>
       </div>
 
-      <!-- One-off add-ons (collapsed to a 2-line summary per the deep-trim spec; Stripe + Plausible hooks preserved inline so analytics + checkout still fire) -->
+      <!-- One-off add-ons (Stripe + Plausible hooks preserved inline so analytics + checkout still fire). Fix Check / re-scan is no longer surfaced here -- it ships in the post-delivery report PDF + email footer for paid customers only. -->
       <div class="mt-8 rounded-lg border border-line bg-white/70 px-4 py-3 text-sm text-muted max-w-prose">
-        <strong class="text-ink font-medium">Add-ons:</strong>
-        <a href="#" data-launchlook-stripe="saboteur" class="underline hover:text-ink plausible-event-name=RescanAddOn">Confidence Check / Saboteur re-scan</a> ($19 standalone, $9 within 14 days)
-        &middot;
+        <strong class="text-ink font-medium">Add-on:</strong>
         <a href="#" data-launchlook-stripe="handoff_report" class="underline hover:text-ink plausible-event-name=HandoffReportAddOn">Handoff Report</a> ($49 add-on for Starter/Scale Up, included with Pro).
       </div>
     </div>
@@ -282,7 +280,7 @@
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
         <li><a href="#hero" class="hover:text-ink">Free 3-finding audit</a></li>
-        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/r/jane-sparkle-marketplace.html" class="hover:text-ink">Sample report</a></li>
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
         <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>

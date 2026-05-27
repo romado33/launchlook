@@ -1,10 +1,11 @@
 Hi {{ customer.first_name }},
 
-Your LaunchLook checkup for {{ customer.app_name }} is attached as two PDFs:
+Your LaunchLook checkup for {{ customer.app_name }} is attached as three PDFs:
 - Main Report ({{ n_findings }} finding{{ '' if n_findings == 1 else 's' }}, sorted by severity)
 - Quick Start Guide (a one-pager you can hand to your first users)
+- Pre-Launch Checklist (a generic 7-section list to run before sharing your live link)
 
-Both open in any PDF reader. No login or Notion account needed.
+All three open in any PDF reader. No login or Notion account needed.
 
 Each finding includes a copy-paste fix prompt for {{ customer.builder }}. Start at the top, paste the prompts in, verify the fix on your live URL, and move down the list.
 
@@ -13,12 +14,10 @@ If anything in the report isn't clear, or you want a re-scan after fixes, just r
 Thanks for trying LaunchLook.
 LaunchLook
 
-{% if customer.tier == "Pro Package" %}
 ---
-Optional: Want these findings as GitHub issues?
-If your project is on GitHub, reply with your repo URL (and a commit SHA if you want them tied to a specific point in history) and we'll create one issue per finding, tagged with the persona that caught it.
+APPLIED YOUR FIXES? GET A FIX CHECK.
+Reply with "recheck" once you've worked through the report and we'll re-walk your site for $19 -- or $9 if you book within 14 days of this report. Confirms what's fixed and catches anything new that broke along the way.
 
-{% endif %}
 ---
 LaunchLook · launchlook.app · prepared {{ delivered_at }}
 Confidential. Prepared for {{ customer.first_name }} only.

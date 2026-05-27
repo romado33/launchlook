@@ -320,28 +320,6 @@
     .finding.medium   { border-left: 3px solid var(--medium); }
     .finding.low      { border-left: 3px solid var(--low); }
 
-    /* ---------- Persona tag (e.g. "Caught by The Snoop") ---------- */
-    .persona-tag {
-      display: inline-block;
-      margin-left: 6pt;
-      padding: 1pt 6pt;
-      font-size: 7.5pt;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--accent);
-      background: var(--surface-tint);
-      border-radius: 3pt;
-      vertical-align: middle;
-    }
-    .persona-tag.persona-tourist { background: #f5efe6; color: #6a5a3d; }
-    .persona-tag.persona-skeptic { background: #ecedf2; color: #4a4d63; }
-    .persona-tag.persona-klutz { background: #f6e9e6; color: #6b3f37; }
-    .persona-tag.persona-snoop { background: #e8efe6; color: #3d5a3f; }
-    .persona-tag.persona-phone-first-friend { background: #e6eef5; color: #34516b; }
-    .persona-tag.persona-saboteur { background: #f1e8f0; color: #5a3a52; }
-    .persona-tag.persona-stranger { background: #efece6; color: #5a4f3a; }
-
-
     /* ---------- Passed checks ("What's working") ---------- */
     .passed-checks {
       margin: 16pt 0 6pt;
@@ -453,7 +431,6 @@
               <span class="finding-num">FINDING {{ "%02d"|format(ns.idx) }}</span>
               <h3 class="finding-title">
                 {{ f.title }}
-                {%- if f.tag %} <span class="persona-tag {% if "The Tourist" in f.tag %}persona-tourist{% elif "The Skeptic" in f.tag %}persona-skeptic{% elif "The Klutz" in f.tag %}persona-klutz{% elif "The Snoop" in f.tag %}persona-snoop{% elif "The Phone-First Friend" in f.tag %}persona-phone-first-friend{% elif "The Saboteur" in f.tag %}persona-saboteur{% elif "The Stranger" in f.tag %}persona-stranger{% endif %}">{{ f.tag }}</span>{% endif %}
               </h3>
             </div>
 
@@ -527,7 +504,6 @@
         Refunds within 7 days if the report wasn't useful.
       </p>
     </section>
-
 
   </div>
 </body>

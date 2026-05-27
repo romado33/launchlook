@@ -1,6 +1,6 @@
 # LaunchLook Internal Consistency Audit
 
-Generated: 2026-05-27 02:26 UTC by `scripts/consistency_check.py` (q-final-audit worker)
+Generated: 2026-05-27 03:01 UTC by `scripts/consistency_check.py` (q-final-audit worker)
 
 
 Canonical truth sources audited against:
@@ -16,7 +16,7 @@ Canonical truth sources audited against:
 |---|---|---|---|
 | Stale tier names + finding caps | 0 | 0 | 0 |
 | Stale prices | 0 | 0 | 0 |
-| Forbidden vocabulary | 9 | 0 | 9 |
+| Forbidden vocabulary | 8 | 0 | 8 |
 | Customer-facing em-dashes | 0 | 0 | 0 |
 | Persona typos | 0 | 0 | 0 |
 | Stale internal category names | 0 | 0 | 0 |
@@ -38,17 +38,16 @@ None remaining.
 
 None remaining.
 
-### Forbidden vocab still on customer surfaces (9 instances)
+### Forbidden vocab still on customer surfaces (8 instances)
 
 | File | Line | Context | Suggested replacement |
 |---|---|---|---|
-| `landing/checklist.html` | 98 | <p class="mt-4 text-sm text-muted">This is what <em>visitors</em> notice. Not a code review or security audit.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
-| `landing/index.html` | 158 | ...ess checkup, not a full security audit.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
+| `landing/index.html` | 155 | ...ess checkup, not a full security audit.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
 | `landing/terms.html` | 34 | <h2 class="font-serif text-xl mt-10 mb-3">Not a security audit</h2> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
 | `landing/terms.html` | 35 | ...ibility check, not a full security audit. The Pro Package integrations review covers configuration of St... | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
-| `landing/webflow.html` | 338 | <summary class="flex justify-between items-center font-medium text-sm">Is this a security audit?<span class="text-muted text-lg">+</span></summary> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
-| `templates/handoff/handoff.html.j2` | 370 | <li>Security posture against motivated attackers (this is not a pentest)</li> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
-| `templates/handoff/handoff.html.j2` | 373 | <p>For any of these, get a developer with that specific specialty. Before processing real payments at volume, get a real pentest.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
+| `landing/webflow.html` | 337 | <summary class="flex justify-between items-center font-medium text-sm">Is this a security audit?<span class="text-muted text-lg">+</span></summary> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('not a security audit' style scope-statement is OK.) |
+| `templates/handoff/handoff.html.j2` | 355 | <li>Security posture against motivated attackers (this is not a pentest)</li> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
+| `templates/handoff/handoff.html.j2` | 358 | <p>For any of these, get a developer with that specific specialty. Before processing real payments at volume, get a real pentest.</p> | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
 | `templates/handoff/handoff.md.j2` | 121 | - Security posture against motivated attackers (this is not a pentest) | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
 | `templates/handoff/handoff.md.j2` | 124 | For any of these, get a developer with that specific specialty. Before processing real payments at volume, get a real pentest. | Security jargon. Reframe per SIMPLICITY-GUARDRAILS section 6. ('this is not a pentest' style scope-statements are OK; flag exists so human can verify framing.) |
 

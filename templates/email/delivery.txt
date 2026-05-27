@@ -19,7 +19,7 @@ Optional — helps us a ton (pick any, no pressure):
 
 1. **One-sentence quote** — If this saved you an embarrassing moment before launch, reply with a line we can use on the site (name + app optional).
 
-2. **Share the checklist** — Forward https://launchlook.app/checklist to a founder friend who's about to share their link.
+2. **Share the report link** — If you know a founder about to share a vibe-coded app, forward https://launchlook.app or the sample report at https://launchlook.app/r/jane-sparkle-marketplace.html.
 
 3. **Copy-paste post** (edit as you like):
    "Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. Worth the $19. launchlook.app"
@@ -32,7 +32,7 @@ If anything isn't clear, just reply to this email. I'll respond within a few hou
 
 Good luck with the launch.
 
-— LaunchLook
+— Rob
 
 ---
 Variables:

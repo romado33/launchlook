@@ -1,0 +1,71 @@
+PRE-LAUNCH CHECKLIST FOR AI-BUILDER APPS
+LaunchLook · ~20 minutes
+{% if customer and customer.app_name %}Prepared for {{ customer.app_name }}{% if customer.tier %} (bundled with {{ customer.tier }}){% endif %}{% endif %}
+
+A short list for founders about to share a real link, built with Lovable,
+Bolt, Base44, Replit, v0, Cursor, or similar. Open your app in a normal
+browser tab (not the builder preview). Mark each line done / problem /
+not sure, and turn the problems into your fix list.
+
+This is what visitors notice. It is not a deep code review or security
+audit -- it complements your LaunchLook report, it does not replace it.
+
+---
+
+1. FIRST LOOK (~5 minutes -- homepage and footer)
+[ ] The live link loads without feeling broken or endlessly spinning.
+[ ] Your URL bar shows a padlock (or no warning), not "Not Secure".
+[ ] The browser tab shows your app name, not "My App" or generic builder text.
+[ ] A stranger can tell what your app does within a few seconds of reading the homepage.
+[ ] No placeholder text left behind (lorem ipsum, "Your Company Name", "[insert tagline]", obvious TODO notes).
+[ ] No default "welcome to your new app" copy from the builder -- it sounds like your product.
+[ ] Your product name appears in the header, not the platform's logo as the star.
+[ ] Nothing obviously "for developers only" on the public site (test data buttons, skip-login, seed sample data).
+[ ] The main button on the homepage does what it promises when you click it.
+
+2. TRUST & CONTACT (~3 minutes)
+[ ] Privacy policy page works (often at /privacy).
+[ ] Terms page works (often at /terms).
+[ ] Visitors can find how to reach you (support email in footer or a contact page).
+[ ] That email is real and one you check -- not support@example.com.
+[ ] Footer links to privacy and terms work (no "page not found").
+
+3. DOES THE MAIN FLOW WORK? (~10 minutes -- the one thing users come to do)
+[ ] Buttons and menu links you tried actually do something (no dead ends).
+[ ] If people sign up: confirmation email arrives (check spam).
+[ ] If people sign up: you can log in afterward with that account.
+[ ] If people sign up: you can log out.
+[ ] If you have a public signup or contact form: it has some "prove you're human" step (checkbox, image puzzle, or similar) so a bot can't flood your inbox and database overnight.
+[ ] The core workflow finishes: book, pay, submit, save, whatever your app is for.
+[ ] After submitting a form, you see a clear "it worked" or "something went wrong" message.
+[ ] If you charge money: a test payment completes and shows a sensible thank-you page.
+[ ] A brand-new user isn't staring at a totally blank screen with no hint what to do next.
+
+4. ON A PHONE (~5 minutes)
+[ ] No sideways scrolling. Everything fits the screen width.
+[ ] Text is readable without pinching to zoom.
+[ ] Buttons are easy to tap (not tiny).
+[ ] The main workflow is usable on phone, not only on desktop.
+
+5. SHARING YOUR LINK (~2 minutes)
+[ ] Paste your URL into Slack, iMessage, or LinkedIn: the preview shows the right title and description, not generic builder fluff.
+
+6. IF PEOPLE CAN SIGN IN (optional -- skip if your app has no accounts)
+[ ] Signed in as person A, you cannot see person B's private stuff (messages, files, bookings, etc.).
+[ ] When signed out, opening "dashboard" or "settings" asks you to log in. It does not show someone else's data.
+
+7. GUT CHECK (~2 minutes)
+[ ] You'd be comfortable sending this link to a friend today.
+[ ] You wouldn't be embarrassed if someone screenshotted the homepage.
+
+---
+
+WHAT TO DO NEXT
+- Fix before you share widely: broken signup, missing privacy/terms, placeholder text, dev-only buttons still visible, one user seeing another's data.
+- Fix soon after launch: mobile layout quirks, weak link previews, empty screens without guidance.
+- More than ~5 serious problems? Pause the launch push until the worst ones are handled.
+
+---
+Pre-Launch Checklist prepared by LaunchLook · launchlook.app
+{% if delivered_at %}{{ delivered_at }}{% endif %}
+Free to copy and share. Bundled with every paid LaunchLook tier (Starter, Scale Up, Pro).

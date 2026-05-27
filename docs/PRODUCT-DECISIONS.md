@@ -14,16 +14,16 @@ The tier ladder is **fixed at 4 tiers**: Free / Starter / Scale Up / Pro. Do not
 
 | Tier | Price | Findings cap | Key deliverables |
 |---|---|---|---|
-| Free | $0 | 3 (top severity only) | Email-gated. Used as lead magnet. |
-| Starter | $19 | 10 | Main Report PDF, QSG PDF |
-| Scale Up | $49 | 30 | + cross-user data isolation check, comprehensive checklist PDF |
-| Pro | $99 | 40 | + integrations review, recorded Loom walkthrough, Handoff Report, GitHub integration (when shipped), deep links in QSG |
+| Free | $0 | 3 (top severity only) | Email-gated. Used as lead magnet. No bundled PDFs. |
+| Starter | $19 | 10 | Main Report PDF, Pre-Launch Checklist PDF |
+| Scale Up | $49 | 30 | + cross-user data isolation check, Quick Start Guide PDF, Pre-Launch Checklist PDF |
+| Pro | $99 | 40 | + integrations review, recorded Loom walkthrough, Handoff Report, Pre-Launch Checklist PDF, deep links in QSG |
 
 ### Add-ons (any paid tier)
 
 | Add-on | Price | Notes |
 |---|---|---|
-| Confidence Check re-scan | $19 standalone, $9 within 14 days of original audit | Free 1x with Pro. |
+| Fix Check (re-scan after fixes) | $19 standalone, $9 within 14 days of original audit | Customer-facing name as of May 2026; internal routing/template filenames keep `confidence_check`. Free 1x with Pro. No longer surfaced on landing pricing pages — offered only via the post-delivery email + report PDF footer for paid customers. |
 | Handoff Report for Starter / Scale Up | $49 add-on | Pro tier already includes it. Dropped from $99 on 2026-05-26 to slot into the upsell ladder: Scale Up + Handoff = $98, intentionally $1 below Pro $99. Old $99 add-on made the bundle $148, above Pro, so it never sold. |
 
 ### Webflow SKU
@@ -128,6 +128,7 @@ So future workers don't quietly re-scope what each tier ships, here is the bindi
 
 - **Main Report PDF.** The customer-facing audit. Verdict, findings (sorted by severity), one-page "if you only fix three things" summary. Plain-English titles, founder voice. Bound by `SIMPLICITY-GUARDRAILS.md` §3. Ships at Starter, Scale Up, and Pro.
 - **QSG PDF.** Paste-ready fix prompts ordered by severity, self-contained. Deep links allowed at Pro tier when the buyer's AI builder supports them. Bound by `SIMPLICITY-GUARDRAILS.md` §4. Ships at Starter, Scale Up, and Pro.
+- **Verified badge.** A signed badge confirming an audit passed on a given date, validity window per tier (30 / 90 / 180 days). Re-verification is a $9 add-on (see §1).
 - **Comprehensive checklist PDF.** The full pre-launch list. Customer-facing copy says "full checklist" or "launch checklist" (per `SIMPLICITY-GUARDRAILS.md` §6 vocabulary rules). Ships at Scale Up and Pro.
 - **Cross-user data isolation check.** Verifies that one logged-in user cannot read or modify another user's data. Bundled in Scale Up and Pro. Standalone SKU is deferred (see §4).
 - **Integrations review.** A pass over any third-party integrations the buyer is using (auth, payments, email, analytics) for misconfiguration. Pro only.
@@ -153,8 +154,8 @@ When you change anything in this file:
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
 | 2026-05-26 | Handoff Report add-on dropped from $99 → $49 (autonomous batch worker). Anchoring math: Scale Up $49 + Handoff $49 = $98, sits just below Pro $99, intentional upsell ladder. Old bundle was $148 (above Pro), so the add-on never sold. New Stripe Payment Link `plink_1TbNP9BxCiPye3m0c5A1DNfq` (URL `https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06`) wired into `landing/assets/config.js` `stripe.handoff`. Webhook routing was already metadata-first (`product=handoff_report`); the `HANDOFF_REPORT_CENTS_TO_LABEL` dict gained a `4900` entry. Landing copy, FAQ, deliver_report.py, share_report.py, and consistency_check.py all updated to read `$49`. |
-| 2026-05-26 | **Verified badge (q17) killed end-to-end.** Stripped every customer-facing surface (index/webflow tier cards, r.html shareable reports, delivery email templates, report PDF template) and deleted the underlying infrastructure (api/verify.py, scripts/generate_verified_badge.py, landing/verify.html, landing/verify-scope.html, landing/assets/verify.js, landing/images/badges, the re-verify SKU branch in stripe-webhook.py, stripe.reverify Payment Link in config.js, /verify rewrites in vercel.json). Zero customer demand after launch + the badge added a maintenance tax across 6+ surfaces every tier rename. Saboteur / Confidence Check $9-within-14-days re-scan SKU is unaffected (different product, different metadata). |
 | 2026-05-26 | Plausible account creation **deferred** (Option C). Tracker script + 7 event-name CSS classes stay on every landing page. No account currently owns `launchlook.app` on Plausible, so events POST and get silently dropped — zero cost, zero harm, zero data collected. Trigger to revisit: ≥10 paying customers or noticeable traffic without obvious conversion. Activation steps documented in `docs/ROB-REMAINING-TODO.md` §Plausible analytics setup. Alternative is to strip the tracker entirely and switch to Vercel Analytics; that path is also documented. |
+| 2026-05-26 | **Phase 3 simplification (eight cuts in one commit).** (a) `/checklist` standalone page deleted; the Pre-Launch Checklist now ships as a bundled PDF deliverable on every paid tier via `templates/pre_launch_checklist.html.j2` + `.txt.j2` and is attached automatically by `scripts/deliver_report.py`. Tier cards on `index.html` and `webflow.html` gained a "Pre-Launch Checklist PDF (bundled)" bullet. (b) The 7 named-persona pills (Tourist / Skeptic / Klutz / Snoop / Phone-First Friend / Saboteur / Stranger Who Doesn't Care) are no longer rendered on customer surfaces; underlying scanning + tagging logic is unchanged, only the visible attribution is gone. `docs/TESTERS-CAST.md` is now flagged INTERNAL-ONLY. (c) `/vs-pagelens` trimmed from 416 to ~150 lines (table compressed 11→7 rows, FAQ block dropped, trade-off section condensed). (d) GitHub auto-create-issues promise pulled from Pro tier copy + delivery email; `scripts/github_integration.py` and `scripts/github_push.py` remain dormant and `GITHUB_PAT` moved to `.env.example` future-use section. (e) Plausible `<script>` tag + CSP entries removed from every landing HTML and Jinja2 template; `plausible-event-name=…` classes preserved on CTAs for one-line re-enable. (f) `templates/email/followup-d3.txt` + `followup-d7.txt` deleted along with `scripts/followup_send.py` and `.github/workflows/daily-followup.yml`; the post-delivery email already carries the Fix Check + refund offer. (g) `/sample` is now a 301 to `/r/jane-sparkle-marketplace.html` and `landing/sample.html` is deleted; nav links rewired directly to the `/r/` path so the redirect is just a fallback. (h) **Confidence Check → Fix Check (Option B):** the Confidence Check / Saboteur re-scan add-on card was pulled from landing pricing pages; on customer-facing copy (email subject + body, report PDF eyebrow + closing) it's now "Fix Check"; Stripe routing, webhook branches (`product=confidence_check`), Notion DB, and the `confidence_check_*` template filenames are unchanged — the rename is customer-language and surface-placement only. The offer ("Reply 'recheck' for $19, or $9 within 14 days") now ships in the post-delivery `delivery_pdf.html.j2` + `.txt.j2` footer block instead of a landing card. |
 
 ---
 
@@ -167,11 +168,11 @@ Conversion measurement via Plausible (privacy-friendly, no cookie banner needed 
 - `ScaleUpCheckout` — Scale Up $49 button click
 - `ProCheckout` — Pro $99 button click
 - `IntakeFormStart` — Tally intake form opened
-- `RescanAddOn` — Confidence Check re-scan CTA click
+- `RescanAddOn` — Fix Check re-scan CTA click (dormant: card was pulled from landing pricing in May 2026; class preserved for one-line re-enable if Rob ever surfaces the add-on standalone again)
 - `HandoffReportAddOn` — Handoff Report $49 add-on CTA click
 
-**Status (2026-05-26):** Plausible account creation is deferred (changelog row above). The CSS classes still fire events to `plausible.io/api/event` on every load/click, but no account owns the site yet, so those events are dropped. The code is "Plausible-ready" — flipping it on later requires only dashboard config, no code changes.
+**Status (2026-05-26 — phase 3 simplification):** The Plausible `<script>` tag was pulled from every landing HTML / Jinja2 template and `plausible.io` was removed from CSP. The `plausible-event-name=…` CSS classes on CTAs are intentionally preserved so re-enabling is a one-line `<script>` re-add (no per-CTA edits). Until then, the classes are dormant. Activation steps still documented in `docs/ROB-REMAINING-TODO.md` §Plausible analytics setup.
 
-Page views auto-tracked: `/`, `/webflow`, `/sample`, `/checklist`, `/thanks`, `/privacy`, `/terms`, `/vs-pagelens` (when live).
+Page views auto-tracked (when re-enabled): `/`, `/webflow`, `/thanks`, `/privacy`, `/terms`, `/vs-pagelens`. (`/sample` and `/checklist` are now 301 redirects as of the May 2026 simplification — see §9 changelog.)
 
 Funnel of interest: page view → free audit → Starter checkout → Scale Up upsell.

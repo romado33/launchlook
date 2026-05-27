@@ -8,7 +8,7 @@ Static site for **LaunchLook** at [launchlook.app](https://launchlook.app). No b
 |------|---------|
 | `index.html` | Home — hero, what we check, sample, pricing, FAQ, footer (vibe-coder SKU: Lovable / Bolt / v0 / Cursor / Replit / Base44) |
 | `webflow.html` | **LaunchLook for Webflow** — parallel SKU at `/webflow`. Webflow-specific hero, finding categories, FAQ, $19/$49/$99 pricing. Reuses the same Stripe Payment Links and the same Tally intake form (customer picks "Webflow" in Q7). See `docs/WEBFLOW-EXPANSION.md`. |
-| `checklist.html` | Pre-launch checklist, token-gated paid deliverable included with Scale Up + Pro (BL-06; demoted from free in q4) |
+| `checklist.html` | Free pre-launch checklist (BL-06) |
 | `privacy.html`, `terms.html`, `thanks.html` | Legal + post-checkout |
 | `assets/config.js` | `LAUNCHLOOK_CONFIG` — Stripe links, `supportEmail`, `intakeFormUrl`, `linkedinUrl` |
 | `assets/config.local.js` | Optional overrides (gitignored) |
@@ -66,11 +66,12 @@ Stripe Payment Link **success URL** (dashboard): `https://launchlook.app/thanks`
 |-----|------|
 | `/` | `index.html` (vibe-coder SKU) |
 | `/webflow` | `webflow.html` (Webflow SKU — parallel landing page) |
-| `/checklist` | `checklist.html` |
-| `/vs-pagelens` | `vs-pagelens.html` (SEO + FAQ destination, not in main nav per `SIMPLICITY-GUARDRAILS.md` §2.7) |
+| `/sample` | 301 → `/r/jane-sparkle-marketplace.html` (sample report — formerly `sample.html`, deleted May 2026) |
+| `/checklist` | 301 → `/` (standalone checklist page deleted May 2026; the Pre-Launch Checklist is now a bundled PDF deliverable on every paid tier — see `templates/pre_launch_checklist.html.j2`) |
 | `/privacy` | `privacy.html` |
 | `/terms` | `terms.html` |
 | `/thanks` | `thanks.html` (shared by both SKUs; copy is platform-agnostic) |
+| `/r/{slug}` | `r/{slug}.html` (hosted shareable reports per customer; static fallback is `r.html`) |
 
 ## Before launch
 

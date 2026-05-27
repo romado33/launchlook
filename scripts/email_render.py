@@ -2,9 +2,12 @@
 email_render.py — render email templates with variables for manual send.
 
 Usage:
-    python scripts/email_render.py welcome --name Rob --app-name LiLo --turnaround "48 hours, usually within 24" --intake-link https://tally.so/r/xxx
+    python scripts/email_render.py welcome --name Rob --app-name LiLo --turnaround "24 hours" --intake-link https://tally.so/r/xxx
     python scripts/email_render.py delivery --name Rob --app-name LiLo --report-link https://notion.so/... --platform Lovable
-    python scripts/email_render.py followup-d3 --name Rob --referral-code ROB5
+
+Note (May 2026): the followup-d3 / followup-d7 templates and their cron
+runner were removed. The post-delivery email now carries the Fix Check
+offer; a separate cadence wasn't earning its keep.
 """
 
 from __future__ import annotations
@@ -19,8 +22,6 @@ EMAIL_DIR = REPO_ROOT / "templates" / "email"
 TEMPLATE_VARS: dict[str, list[str]] = {
     "welcome": ["NAME", "APP_NAME", "TURNAROUND", "INTAKE_FORM_LINK"],
     "delivery": ["NAME", "APP_NAME", "NOTION_REPORT_LINK", "PLATFORM"],
-    "followup-d3": ["NAME", "REFERRAL_CODE"],
-    "followup-d7": ["NAME", "APP_NAME"],
     "free-sample-outreach": ["NAME", "APP_NAME", "PLATFORM", "NOTION_REPORT_LINK"],
 }
 

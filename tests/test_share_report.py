@@ -240,11 +240,13 @@ def test_generated_html_bakes_in_og_tags(tmp_reports_dir, jane_yaml):
     ) in html
 
 
-def test_generated_html_loads_plausible(tmp_reports_dir, jane_yaml):
+def test_generated_html_does_not_load_plausible(tmp_reports_dir, jane_yaml):
+    # Plausible script tag was pulled in the May 2026 simplification pass
+    # (account creation deferred). The plausible-event-name=... CSS classes
+    # on CTAs are intentionally preserved so re-enabling is one line.
     _, html_path = _gen_shareable(jane_yaml)
     html = html_path.read_text(encoding="utf-8")
-    assert "plausible.io/js/script" in html
-    assert 'data-domain="launchlook.app"' in html
+    assert "plausible.io/js/script" not in html
 
 
 # ---------------------------------------------------------------------------

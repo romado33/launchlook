@@ -93,6 +93,11 @@
     if (el) el.textContent = value == null ? "" : value;
   }
 
+  // The 7-persona named labels (The Tourist / Skeptic / Klutz / Snoop /
+  // Phone-First Friend / Saboteur / Stranger) were pulled from customer
+  // surfaces in the May 2026 simplification pass. The CSS classes in
+  // assets/site.css and the personaClass helper below are kept dormant
+  // so re-enabling display is a one-line change in renderPublic().
   function personaClass(tag) {
     if (!tag) return "";
     if (tag.indexOf("Skeptic") !== -1) return "persona-skeptic";
@@ -190,12 +195,10 @@
             title.textContent = f.title || "Finding " + (idx + 1);
             head.appendChild(title);
 
-            if (f.tag) {
-              var tag = document.createElement("span");
-              tag.className = "persona-tag " + personaClass(f.tag);
-              tag.textContent = f.tag;
-              head.appendChild(tag);
-            }
+            // f.tag (e.g. "Caught by The Snoop") is intentionally NOT
+            // rendered on customer surfaces as of the May 2026
+            // simplification pass. Backend still tags findings internally
+            // for routing; only the visible pill is gone.
 
             card.appendChild(head);
 
