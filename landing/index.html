@@ -32,12 +32,12 @@
 
   <header id="site-header" class="site-header border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
     <div class="page-wrap px-6 py-3 flex items-center justify-between">
-      <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
+      <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
-        <span>LaunchLook</span>
+        <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
+        <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
       <nav class="flex items-center gap-5 text-sm text-muted">
-        <a href="#hero" class="nav-link">Free audit</a>
         <a href="#pricing" class="nav-link">Pricing</a>
         <a href="/faq" class="nav-link">FAQ</a>
         <a href="/webflow" class="nav-link">Webflow</a>
@@ -143,8 +143,7 @@
           <a href="#" data-launchlook-stripe="starter" class="launchlook-btn launchlook-btn-primary launchlook-btn-block mt-4 plausible-event-name=StarterCheckout">Get Starter</a>
         </div>
 
-        <div class="card-featured p-5 flex flex-col relative">
-          <div class="absolute -top-2.5 left-4 bg-ink text-paper text-xs font-medium px-2 py-0.5 rounded-md">Popular</div>
+        <div class="card-elevated p-5 flex flex-col">
           <h3 class="font-serif text-lg">Scale Up</h3>
           <p class="font-serif text-3xl mt-1">$49</p>
           <ul class="mt-3 space-y-2 text-sm flex-1 text-muted">
@@ -180,8 +179,7 @@
   <footer class="border-t border-line">
     <div class="page-wrap px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
-        <p class="font-serif text-ink">LaunchLook</p>
-        <p class="mt-1">Human-reviewed reports · 7-day refund on paid tiers</p>
+        <p>Human-reviewed reports · 7-day refund on paid tiers</p>
         <div data-launchlook-linkedin-wrap class="mt-3 pt-3 border-t border-line hidden">
           <p class="text-xs font-medium text-ink">Connect with the founder</p>
           <p class="text-xs text-muted mt-1">Built by Rob — human-reviewed audits for vibe-coded apps before you launch.</p>
