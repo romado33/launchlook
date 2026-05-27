@@ -92,14 +92,6 @@
     "Payment link not configured (Handoff Report - see docs/MANUAL-APPROVAL-2026-05-26.md)",
   );
 
-  var checklistUrl = safeHttpsUrl(cfg.githubChecklist);
-  if (checklistUrl) {
-    $("[data-launchlook-github='checklist']").forEach(function (el) {
-      el.setAttribute("href", checklistUrl);
-      el.removeAttribute("aria-disabled");
-    });
-  }
-
   function intakeMailto(email) {
     var subject = encodeURIComponent("LaunchLook intake");
     var body = encodeURIComponent(

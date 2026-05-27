@@ -18,7 +18,7 @@
     if (form.__launchlookFreeAuditBound) return;
     form.__launchlookFreeAuditBound = true;
 
-    var errorEl = form.querySelector("[data-launchlook-free-audit-error]");
+    var errorEl = form.querySelector("[data-free-audit-status]");
     var submitBtn = form.querySelector('button[type="submit"]');
 
     function showError(msg) {
@@ -33,7 +33,7 @@
       errorEl.classList.add("hidden");
     }
 
-    form.addEventListener("submit", function (event) {
+    function onSubmit(event) {
       event.preventDefault();
       clearError();
       if (submitBtn) {
@@ -70,8 +70,6 @@
             resp.data &&
             (resp.data.status === "queued" || resp.data.status === "duplicate")
           ) {
-            // Plausible's tagged-events handler already fired the goal on
-            // the click; redirect now and let the thanks page do the rest.
             window.location.assign("/thanks-free-audit");
             return;
           }
@@ -88,14 +86,16 @@
         .catch(function () {
           // Network blip: fall back to a native form POST so the request still
           // reaches the serverless function.
-          form.removeEventListener("submit", arguments.callee, false);
+          form.removeEventListener("submit", onSubmit);
           form.submit();
         });
-    });
+    }
+
+    form.addEventListener("submit", onSubmit);
   }
 
   function init() {
-    var forms = document.querySelectorAll("form[data-launchlook-free-audit]");
+    var forms = document.querySelectorAll("form[data-free-audit-form]");
     Array.prototype.forEach.call(forms, attach);
   }
 
