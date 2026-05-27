@@ -88,6 +88,13 @@
     return month + " " + day + ", " + year;
   }
 
+  function flowText(value) {
+    return String(value == null ? "" : value)
+      .replace(/\s*\n+\s*/g, " ")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  }
+
   function setText(selector, value) {
     var el = document.querySelector(selector);
     if (el) el.textContent = value == null ? "" : value;
@@ -236,22 +243,24 @@
 
             if (f.what_we_saw) {
               var p1 = document.createElement("p");
-              p1.className = "mt-2 text-sm text-muted leading-relaxed";
+              p1.className =
+                "mt-2 text-sm text-muted leading-relaxed report-body-copy";
               var label1 = document.createElement("strong");
               label1.className = "text-ink";
               label1.textContent = "What we saw. ";
               p1.appendChild(label1);
-              p1.appendChild(document.createTextNode(f.what_we_saw));
+              p1.appendChild(document.createTextNode(flowText(f.what_we_saw)));
               card.appendChild(p1);
             }
             if (f.why_it_matters) {
               var p2 = document.createElement("p");
-              p2.className = "mt-2 text-sm text-muted leading-relaxed";
+              p2.className =
+                "mt-2 text-sm text-muted leading-relaxed report-body-copy";
               var label2 = document.createElement("strong");
               label2.className = "text-ink";
               label2.textContent = "Why it matters. ";
               p2.appendChild(label2);
-              p2.appendChild(document.createTextNode(f.why_it_matters));
+              p2.appendChild(document.createTextNode(flowText(f.why_it_matters)));
               card.appendChild(p2);
             }
             if (isSample && f.fix_prompt) {

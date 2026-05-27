@@ -311,3 +311,14 @@ details > summary::-webkit-details-marker {
     rgba(251, 246, 238, 0.9) 100%
   );
 }
+
+/* Shareable reports: one readable measure inside cards (no mixed max-w-prose). */
+.report-content .report-body-copy,
+.report-verdict-card .report-body-copy {
+  max-width: none;
+  width: 100%;
+}
+
+.report-content .max-w-prose {
+  max-width: none;
+}
