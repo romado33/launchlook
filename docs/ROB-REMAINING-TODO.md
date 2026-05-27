@@ -9,30 +9,39 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 ## Shipped recently (May 26–27, 2026)
 
+**Product / landing**
 - Landing **simplified** to 3 sections (hero → how it works → pricing); wider `page-wrap` column; no standalone `/checklist` page
 - **Pre-Launch Checklist PDF** bundled on every paid tier (not sold separately on the site)
-- **Verified badge** removed end-to-end
+- **Verified badge** removed end-to-end (`reverify` dropped from `config.js`)
 - **Delivery SLA clocks** removed from customer copy (“when it’s ready, usually within a few days”)
 - **Plausible script** removed (CTA classes kept for easy re-enable)
 - **GitHub auto-issues** removed from Pro promise (scripts dormant in repo)
 - **Persona names** hidden on customer reports (internal scanning unchanged)
 - **Fix Check** (was Confidence Check) — offer only in post-delivery email/PDF footer, not on landing pricing
-- `/sample` → redirects to `/r/jane-sparkle-marketplace.html`
+- `/sample` → redirects to `/r/jane-sparkle-marketplace.html`; sample JSON deploys correctly
+- Header tagline on all pages; top nav trimmed (no “Free audit” in nav); no Scale Up “Popular” badge
+- Free-audit form wired to JS (`data-free-audit-form`); hero/footer sample links use `/sample`
+- `privacy` / `terms` footers fixed (no dead `/checklist` link)
+
+**Ops / infra (code)**
+- **`automatic_tax` enabled** on all 6 active Payment Links via `scripts/stripe_payment_links.py` (May 27)
+- Repo cleanup: removed `checklist_tokens.json`, external GitHub checklist mirror, dead config keys
+- **E2E checklist v3** — https://launchlook.app/e2e · [`E2E-CHECKLIST.md`](E2E-CHECKLIST.md) · `landing/assets/e2e-checklist-data.js`
 - `followup-d3` / `followup-d7` email templates removed
 
 ---
 
 ## Your next 3 actions
 
-1. **Tally `QKOX1A`** — In the editor: update tier names (Starter $19 / Scale Up $49 / Pro $99), add Webflow to Q7, fix conditional logic (Scale Up + Pro test-account questions, not “Full Package”), notifications → `hello@launchlook.app`, after-submit → `https://launchlook.app/thanks`. Paste buffers: [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) (update SLA + credential wording to match site before pasting).
-2. **Stripe** — Confirm Payment Links in `landing/assets/config.js` match live $19 / $49 / $99 products. **Deactivate** dead links: old $9/$29 tiers, **$9 re-verify badge** (feature removed). Keep Fix Check ($19 / $9 within 14 days) and Handoff ($49) links.
-3. **End-to-end test** — https://launchlook.app/e2e (password: `E2E_CHECKLIST_PASSWORD` in Vercel). Guide: [`E2E-CHECKLIST.md`](E2E-CHECKLIST.md) · local UI: [`e2e-checklist.html`](e2e-checklist.html) (v3 items in `landing/assets/e2e-checklist-data.js`).
+1. **Tally `QKOX1A`** — In the editor: tier names **Starter $19 / Scale Up $49 / Pro $99**, Webflow in Q7, conditional logic (Scale Up + Pro test-account questions only), notifications → `hello@launchlook.app`, after-submit → `https://launchlook.app/thanks`. Paste buffers: [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt).
+2. **Stripe Tax registrations** — Dashboard → Settings → Tax (add regions you sell into). Links already have `automatic_tax` on; tax only shows at checkout after registrations. Re-run if needed: `python scripts/stripe_payment_links.py enable-tax`.
+3. **Run E2E v3** — https://launchlook.app/e2e (`E2E_CHECKLIST_PASSWORD` in Vercel). Work through all sections in incognito; one real Starter checkout if you’re comfortable with a live charge.
 
 ---
 
 ## Blocking — before cold outreach
 
-### 1. Tally intake (~20 min)
+### 1. Tally intake (~20 min) — **you**
 
 - [ ] Form `QKOX1A` published (not draft)
 - [ ] Tier question matches **Starter / Scale Up / Pro** at $19 / $49 / $99
@@ -43,41 +52,48 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 Guides: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) · API rebuild: `python scripts/tally_create_intake.py`
 
-### 2. Stripe Payment Links (~10 min)
+### 2. Stripe (~10 min) — **mostly done in code; verify in Dashboard**
 
-- [ ] `config.js` URLs work for `starter`, `scaleup`, `pro`, `handoff_report`, Fix Check SKUs
-- [ ] Success URL → `https://launchlook.app/thanks`
-- [ ] Dead Payment Links archived in Stripe Dashboard
+- [x] `config.js` wired: `starter`, `scaleup`, `pro`, `handoff`, `saboteur`, `saboteurDiscounted` (no `reverify`)
+- [x] `automatic_tax` on active Payment Links (API, May 27)
+- [x] $9 re-verify Payment Link **inactive** in Stripe
+- [ ] **Stripe Tax registrations** complete for your selling regions
+- [ ] Spot-check checkout: billing address + tax line when applicable
+- [ ] Old CAD $9 / $29 Payment Links **deactivated** (if still active)
+- [ ] Success URL on all live links → `https://launchlook.app/thanks`
 
-### 3. Email (~15 min)
+### 3. Email & Vercel env (~15 min) — **you**
 
 - [ ] `hello@launchlook.app` forwards to an inbox you check
-- [ ] Test send + Tally notification received
-- [ ] Resend domain verified; `STRIPE_WEBHOOK_SECRET` + Notion DB IDs in Vercel
+- [ ] Test free-audit email + Tally notification received
+- [ ] Resend domain verified
+- [ ] Vercel env present: `STRIPE_WEBHOOK_SECRET`, `NOTION_TOKEN`, `NOTION_CUSTOMERS_DB_ID`, `NOTION_FREE_AUDIT_DB_ID`, `NOTION_CONFIDENCE_CHECK_DB_ID`, `RESEND_API_KEY`, `TALLY_WEBHOOK_TOKEN`, `E2E_CHECKLIST_PASSWORD`
 
-### 4. Smoke URLs
+### 4. Site smoke — **run via /e2e or quick manual pass**
 
-- [ ] `/`, `/faq`, `/webflow`, `/thanks`, `/privacy`, `/terms`, `/r/jane-sparkle-marketplace.html` → 200
-- [ ] `/sample` → redirects to sample report
-- [ ] Hard-refresh homepage after deploy (Ctrl+Shift+R)
+- [x] Code/deploy: sample report JSON public; `/checklist` → `/`; free-audit JS; pricing bullets
+- [ ] You confirm in incognito: `/`, `/faq`, `/webflow`, `/thanks`, `/thanks-free-audit`, `/privacy`, `/terms`, `/sample` → sample findings visible
+- [ ] You confirm: Get Starter / Scale Up / Pro → `buy.stripe.com` (not grayed `#`)
+- [ ] Hard-refresh after latest deploy (Ctrl+Shift+R)
 
 ---
 
 ## First paying customer delivery
 
 - [ ] `python scripts/customers_track.py add` after each payment
-- [ ] Notion **LaunchLook Ops**: Customers DB — add **Scale Up Package** + **Webflow** to select options if missing
+- [ ] Notion **LaunchLook Ops**: Customers DB — **Scale Up Package** + **Webflow** on tier/platform selects if missing
 - [ ] Deliver: Main Report + QSG + Pre-Launch Checklist PDFs (`scripts/deliver_report.py`)
-- [ ] Env: `NOTION_FREE_AUDIT_DB_ID`, `NOTION_CONFIDENCE_CHECK_DB_ID` on Vercel
+- [ ] Post-delivery email mentions **Fix Check** (reply recheck), not a landing upsell
 
 ---
 
 ## Optional / deferred
 
-- [ ] **Plausible** — only if you want conversion data at ≥10 customers ([§ in old notes below — script is off, classes dormant](PRODUCT-DECISIONS.md))
+- [ ] **Plausible** — only if you want conversion data at ≥10 customers ([`PRODUCT-DECISIONS.md`](PRODUCT-DECISIONS.md))
 - [ ] **60-second Loom** on homepage (replaces text explainer when recorded)
-- [ ] **GitHub PAT** for Pro — only if a Pro buyer asks (`GITHUB_PAT` in `.env.example` future-use section)
+- [ ] **GitHub PAT** for Pro — only if a Pro buyer asks
 - [ ] **PSI_API_KEY** — only at higher audit volume
+- [ ] Webflow hero sample link → `/sample` (main site already uses `/sample`; low priority)
 - [ ] Webflow community outreach ([`OUTREACH-PLAYBOOK.md`](OUTREACH-PLAYBOOK.md) §7b)
 
 ---
@@ -90,8 +106,12 @@ Guides: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) · API rebuild: `python
 | Tiers | Starter **$19**, Scale Up **$49**, Pro **$99** |
 | Support | hello@launchlook.app |
 | Config | `landing/assets/config.js` |
+| E2E | https://launchlook.app/e2e · [`E2E-CHECKLIST.md`](E2E-CHECKLIST.md) |
+| Stripe tax script | `python scripts/stripe_payment_links.py enable-tax` |
 | Build | `node scripts/copy-landing-for-vercel.mjs` → `dist/` |
 
 ---
 
-*When §1–4 blocking items are done, you’re in outreach mode — not “one more site tweak” mode.*
+## Done = outreach mode
+
+When **Tally §1**, **Stripe registrations + one checkout spot-check**, **email/env §3**, and **E2E v3** are checked off, you’re in outreach mode — not “one more site tweak” mode.
