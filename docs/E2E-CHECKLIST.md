@@ -1,6 +1,6 @@
 # LaunchLook E2E checklist
 
-**Interactive version (saves progress in your browser):** open [`docs/e2e-checklist.html`](e2e-checklist.html) in Chrome/Edge — double-click the file or drag it into a browser tab.
+**Interactive version (saves progress in your browser):** https://launchlook.app/e2e — password from Vercel env `E2E_CHECKLIST_PASSWORD`. Local file: [`docs/e2e-checklist.html`](e2e-checklist.html) (no password gate).
 
 Run in **incognito** on desktop, then repeat the paid path on your phone.  
 Tiers: **Starter $19** · **Scale Up $49** · **Pro $99**.
