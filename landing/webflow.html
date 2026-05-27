@@ -56,11 +56,11 @@
     <h1 class="font-serif text-4xl sm:text-[2.75rem] leading-[1.1] tracking-tight mt-4">
       Built your Webflow site in Designer? Get the pre-launch checkup before your forms silently break, your noindex blocks Google, or your client finds the typo.
     </h1>
-    <p class="mt-5 text-lg text-muted leading-relaxed max-w-prose">
+    <p class="mt-5 text-lg text-muted leading-relaxed">
       Get 3 free findings on what to fix before you go live. A real person walks your live site and emails you the top 3 in 24 hours. No credit card.
     </p>
 
-    <form data-free-audit-form action="/api/free-audit" method="POST" class="mt-7 max-w-xl rounded-2xl border border-line bg-white px-5 py-5 sm:px-6 sm:py-6 shadow-sm shadow-ink/5">
+    <form data-free-audit-form action="/api/free-audit" method="POST" class="mt-7 rounded-2xl border border-line bg-white px-5 py-5 sm:px-6 sm:py-6 shadow-sm shadow-ink/5">
       <input type="hidden" name="platform" value="webflow" />
       <div class="grid sm:grid-cols-2 gap-3">
         <label class="block">
@@ -77,7 +77,7 @@
       <p class="mt-3 text-xs text-muted">We&rsquo;ll send your top 3 Webflow launch issues within 24 hours. Free, no credit card. One email per submission, no newsletter.</p>
     </form>
 
-    <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted max-w-prose">
+    <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted">
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>URL-only. <strong class="text-ink font-medium">No access to your Webflow account</strong> required</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Catches the silent form failure most agencies don't notice for months</span></li>
       <li class="flex gap-2"><span class="text-accent font-semibold" aria-hidden="true">✓</span><span>Fix prompts in <strong class="text-ink font-medium">Webflow Designer language</strong>, not generic dev jargon</span></li>
@@ -99,7 +99,7 @@
       <p class="section-label">What you get</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl sm:text-3xl mb-4">What you get for your Webflow site</h2>
-      <p class="text-muted leading-relaxed max-w-prose">Three steps, two PDFs, fixes in Designer language.</p>
+      <p class="text-muted leading-relaxed">Three steps, two PDFs, fixes in Designer language.</p>
 
       <!-- 3-step process (consolidated from 4 to 3: merged "we walk" + "Rob reviews" into one step) -->
       <ol class="mt-9 space-y-6">
@@ -239,7 +239,7 @@
       </p>
 
       <!-- Handoff Report add-on (new on Webflow surface: previously missing entirely; gives Webflow buyers the same in-house-team handoff option the main SKU has) -->
-      <div class="mt-8 rounded-lg border border-line bg-white/70 px-4 py-4 text-sm text-muted max-w-prose">
+      <div class="mt-8 rounded-lg border border-line bg-white/70 px-4 py-4 text-sm text-muted">
         <p><strong class="text-ink font-medium">Handoff Report (PDF)</strong> &mdash; your audit framed for the developer or in-house designer you hand off to. Plain-English findings paired with technical fix prompts and an architecture-level code-review section. <strong class="text-ink">$49 add-on for Starter/Scale Up &middot; included with Pro.</strong></p>
         <p class="mt-3">
           <a href="#" data-launchlook-stripe="handoff_report" class="underline hover:text-ink plausible-event-name=HandoffReportAddOn">Add the Handoff Report</a>
@@ -247,7 +247,7 @@
       </div>
 
       <!-- Confidence Check / Saboteur add-on (folded in from prior standalone section per the 9->4 restructure) -->
-      <div class="mt-4 rounded-lg border border-line bg-white/70 px-4 py-4 text-sm text-muted max-w-prose">
+      <div class="mt-4 rounded-lg border border-line bg-white/70 px-4 py-4 text-sm text-muted">
         <p><strong class="text-ink font-medium">Confidence Check / Saboteur re-scan</strong> &mdash; we re-walk your site after you've applied your fixes, confirm what's resolved, and flag anything new that broke along the way. <strong class="text-ink">$19 standalone &middot; $9 within 14 days of your last audit.</strong></p>
         <p class="mt-3">
           <a href="#" data-launchlook-stripe="saboteur" class="underline hover:text-ink plausible-event-name=RescanAddOn">Send in The Saboteur</a>
