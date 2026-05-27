@@ -14,9 +14,10 @@ Static site for **LaunchLook** at [launchlook.app](https://launchlook.app). No b
 | `assets/config.local.js` | Optional overrides (gitignored) |
 | `assets/tailwind-brand.js` | Shared Tailwind theme (load before CDN) |
 | `assets/apply-config.js` | Wires `data-launchlook-*` elements |
-| `images/og.png` | Social preview — Option A minimal (1200×630) |
-| `images/logo-icon.svg` | Header mark (accent check, matches OG) |
-| `images/favicon.svg` | Tab icon (cream + check) |
+| `images/og.png` | Social preview (1200×630, paper/ink/amber brand) |
+| `images/og.svg` | Editable source for `og.png` |
+| `images/logo-icon.svg` | Header mark (magnifying glass + accent check) |
+| `images/favicon.svg` | Tab icon (matches logo-icon) |
 | `vercel.json` | Clean URLs, security headers |
 
 ## Local preview

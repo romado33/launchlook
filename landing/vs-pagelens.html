@@ -30,23 +30,23 @@
 
 <body class="bg-paper text-ink font-sans antialiased">
 
-  <header class="border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
-    <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+  <header id="site-header" class="site-header border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="page-wrap px-6 py-3 flex items-center justify-between">
       <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-medium text-ink hover:opacity-90 transition">
-        <img src="/images/logo-icon.svg" alt="" width="22" height="22" class="shrink-0" aria-hidden="true" />
+        <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
         <span>LaunchLook</span>
       </a>
       <nav class="flex items-center gap-5 text-sm text-muted">
-        <a href="/#hero" class="hover:text-ink">Free audit</a>
-        <a href="/#pricing" class="hover:text-ink">Pricing</a>
-        <a href="/#faq" class="hover:text-ink">FAQ</a>
+        <a href="/#hero" class="nav-link">Free audit</a>
+        <a href="/#pricing" class="nav-link">Pricing</a>
+        <a href="/faq" class="nav-link">FAQ</a>
       </nav>
     </div>
   </header>
 
-  <section class="border-b border-line">
-    <div class="max-w-3xl mx-auto px-6 pt-12 pb-10 sm:pt-16 sm:pb-12">
-      <p class="text-xs font-medium text-accent uppercase tracking-widest">Side-by-side comparison</p>
+  <section class="border-b border-line bg-paper">
+    <div class="page-wrap px-6 section-inner-tight">
+      <p class="text-sm text-muted-strong">Side-by-side comparison</p>
       <h1 class="font-serif text-4xl sm:text-[2.5rem] leading-[1.15] tracking-tight mt-3">LaunchLook vs. PageLens AI</h1>
       <p class="mt-4 text-lg text-muted leading-relaxed">
         Both scan your live site and surface findings. The difference is who they're built for and what they're built to catch. PageLens is the better fit for ongoing SEO monitoring; LaunchLook is the better fit for a one-off pre-launch checkup with paste-ready fix prompts.
@@ -60,7 +60,7 @@
   </section>
 
   <section class="bg-paper border-b border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner">
+    <div class="page-wrap px-6 section-inner">
       <p class="section-label">Side-by-side</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-4">The seven differences that actually matter</h2>
@@ -99,7 +99,7 @@
   </section>
 
   <section class="bg-surface-warm border-y border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner">
+    <div class="page-wrap px-6 section-inner">
       <p class="section-label">Honest trade-offs</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-3">When PageLens is the better choice</h2>
@@ -110,7 +110,7 @@
   </section>
 
   <section id="pricing" class="bg-gradient-to-b from-accent-soft/25 via-surface-tint to-paper border-y border-line">
-    <div class="max-w-3xl mx-auto px-6 section-inner">
+    <div class="page-wrap px-6 section-inner">
       <p class="section-label">Pricing</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl sm:text-3xl mb-2">LaunchLook pricing at a glance</h2>
@@ -131,7 +131,7 @@
   </section>
 
   <section class="bg-ink text-paper border-t border-ink">
-    <div class="max-w-3xl mx-auto px-6 section-inner text-center">
+    <div class="page-wrap px-6 section-inner text-center">
       <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready when you are</p>
       <h2 class="font-serif text-2xl sm:text-3xl mt-3">Start with the free 3-finding audit.</h2>
       <p class="text-paper/75 mt-2 text-sm">No credit card, no signup. Just your live URL.</p>
@@ -140,7 +140,7 @@
   </section>
 
   <footer class="border-t border-line">
-    <div class="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+    <div class="page-wrap px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
         <p class="font-serif text-ink">LaunchLook</p>
         <p class="mt-1">One last look before you launch.</p>
@@ -160,5 +160,6 @@
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
+  <script src="/assets/site.js" defer></script>
 </body>
 </html>

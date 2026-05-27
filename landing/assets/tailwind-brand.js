@@ -10,6 +10,7 @@ tailwind.config = {
         paper: "#FAF7F2",
         ink: "#1F1B16",
         muted: "#6B6359",
+        "muted-strong": "#5C554C",
         accent: "#B45309",
         "accent-soft": "#FDE68A",
         "surface-warm": "#F3EDE4",

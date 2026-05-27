@@ -8,31 +8,8 @@ body {
   font-feature-settings: "ss01", "cv11";
 }
 
-details > summary {
-  list-style: none;
-  cursor: pointer;
-}
+/* --- Layout --- */
 
-details > summary::-webkit-details-marker {
-  display: none;
-}
-
-.section-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b45309;
-}
-
-.section-rule {
-  width: 2.5rem;
-  height: 3px;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, #b45309, #fde68a);
-}
-
-/* Full-width content column (~1024px) — less vertical stacking than max-w-3xl */
 .page-wrap {
   width: 100%;
   max-width: 64rem;
@@ -59,10 +36,85 @@ details > summary::-webkit-details-marker {
 
 @media (min-width: 640px) {
   .section-inner-tight {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
   }
 }
+
+/* --- Surfaces (two levels only: page + elevated card) --- */
+
+.card-elevated {
+  border-radius: 1rem;
+  border: 1px solid #e7e0d6;
+  background-color: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(31, 27, 22, 0.05),
+    0 8px 24px rgba(31, 27, 22, 0.06);
+}
+
+.card-featured {
+  border-radius: 1rem;
+  border: 1px solid #e7e0d6;
+  background-color: #ffffff;
+  box-shadow:
+    0 2px 4px rgba(31, 27, 22, 0.06),
+    0 12px 32px rgba(31, 27, 22, 0.08);
+  border-top: 3px solid #b45309;
+}
+
+/* --- Header --- */
+
+.site-header {
+  transition: box-shadow 0.2s ease;
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 1px 3px rgba(31, 27, 22, 0.08);
+}
+
+.nav-link {
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover {
+  color: #1f1b16;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- Forms --- */
+
+.launchlook-input {
+  margin-top: 0.25rem;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #e7e0d6;
+  background-color: #faf7f2;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #1f1b16;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.launchlook-input::placeholder {
+  color: rgba(92, 85, 76, 0.65);
+}
+
+.launchlook-input:focus {
+  outline: none;
+  border-color: #b45309;
+  box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.18);
+}
+
+.text-footnote {
+  color: #5c554c;
+}
+
+/* --- Buttons --- */
 
 .launchlook-btn {
   display: inline-flex;
@@ -70,7 +122,7 @@ details > summary::-webkit-details-marker {
   justify-content: center;
   min-height: 2.75rem;
   padding: 0.625rem 1.25rem;
-  border-radius: 0.375rem;
+  border-radius: 0.75rem;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -86,7 +138,7 @@ details > summary::-webkit-details-marker {
 }
 
 .launchlook-btn:hover {
-  box-shadow: 0 2px 4px rgba(31, 27, 22, 0.1);
+  box-shadow: 0 2px 6px rgba(31, 27, 22, 0.12);
 }
 
 .launchlook-btn-primary {
@@ -96,8 +148,8 @@ details > summary::-webkit-details-marker {
 }
 
 .launchlook-btn-primary:hover {
-  background-color: #b45309;
-  border-color: #b45309;
+  background-color: #3d3630;
+  border-color: #3d3630;
 }
 
 .launchlook-btn-secondary {
@@ -118,8 +170,8 @@ details > summary::-webkit-details-marker {
 }
 
 .launchlook-btn-accent:hover {
-  background-color: #1f1b16;
-  border-color: #1f1b16;
+  background-color: #92400e;
+  border-color: #92400e;
 }
 
 .launchlook-btn[aria-disabled="true"] {
@@ -133,8 +185,28 @@ details > summary::-webkit-details-marker {
   width: 100%;
 }
 
-@media (min-width: 640px) {
-  .launchlook-btn-block {
-    width: auto;
-  }
+/* --- FAQ / legacy --- */
+
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b45309;
+}
+
+.section-rule {
+  width: 2.5rem;
+  height: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #b45309, #fde68a);
 }
