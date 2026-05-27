@@ -6,7 +6,7 @@ Please read before submitting
 
 • For Scale Up Package ($49) and Pro Package ($99) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
 
-• We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+• We delete test credentials promptly after delivery. Rotate or delete test accounts after your report arrives.
 
 What's your name?
 
@@ -62,13 +62,13 @@ No — skip the cross-user check
 
 Test account 1 — email and password
 
-We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+We'll only use these for the audit. Credentials are deleted promptly after delivery.
 
 Email: ... / Password: ...
 
 Test account 2 — email and password
 
-We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+We'll only use these for the audit. Credentials are deleted promptly after delivery.
 
 Email: ... / Password: ...
 
@@ -96,11 +96,10 @@ Thanks — you're in.
 
 We'll start your checkup within a few hours of this submission.
 
-• Starter Package ($19): report within 48 hours (usually 24)
-• Scale Up Package ($49): report within 24 hours (usually 12)
-• Pro Package ($99): report within 24 hours (usually 12), plus integrations review and 30-minute Loom walkthrough
+• Every paid tier: your PDFs arrive by email when the report is ready, usually within a few days.
+• Pro Package ($99): includes integrations review and a 30-minute Loom walkthrough (scheduled separately after the report).
 
-Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
+Your responses are stored privately. Test account credentials are deleted promptly after delivery.
 
 Privacy policy: https://launchlook.app/privacy
 Questions: hello@launchlook.app
