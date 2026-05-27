@@ -1,5 +1,12 @@
 /* LaunchLook shared site styles (load after Tailwind CDN). */
 
+:root {
+  --ll-accent: #0f766e;
+  --ll-accent-hover: #115e59;
+  --ll-accent-soft: #ccfbf1;
+  --ll-accent-ring: rgba(15, 118, 110, 0.2);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -138,8 +145,8 @@ body {
 
 .launchlook-input:focus {
   outline: none;
-  border-color: #b45309;
-  box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.18);
+  border-color: var(--ll-accent);
+  box-shadow: 0 0 0 3px var(--ll-accent-ring);
 }
 
 .text-footnote {
@@ -206,14 +213,14 @@ body {
 }
 
 .launchlook-btn-accent {
-  background-color: #b45309;
+  background-color: var(--ll-accent);
   color: #faf7f2;
-  border: 1px solid #b45309;
+  border: 1px solid var(--ll-accent);
 }
 
 .launchlook-btn-accent:hover {
-  background-color: #92400e;
-  border-color: #92400e;
+  background-color: var(--ll-accent-hover);
+  border-color: var(--ll-accent-hover);
 }
 
 .launchlook-btn[aria-disabled="true"] {
@@ -243,12 +250,64 @@ details > summary::-webkit-details-marker {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #b45309;
+  color: var(--ll-accent);
 }
 
 .section-rule {
   width: 2.5rem;
   height: 3px;
   border-radius: 9999px;
-  background: linear-gradient(90deg, #b45309, #fde68a);
+  background: linear-gradient(90deg, var(--ll-accent), var(--ll-accent-soft));
+}
+
+/* --- Shareable report findings --- */
+
+.finding-card.finding-critical {
+  border-left: 3px solid #b91c1c;
+}
+
+.finding-card.finding-high {
+  border-left: 3px solid var(--ll-accent);
+}
+
+.finding-card.finding-medium {
+  border-left: 3px solid #78716c;
+}
+
+.finding-card.finding-low {
+  border-left: 3px solid #d6d3d1;
+}
+
+.report-fix-prompt {
+  margin-top: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e7e0d6;
+  background-color: #fbf6ee;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.report-fix-prompt summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #1f1b16;
+}
+
+.report-fix-prompt pre {
+  margin-top: 0.5rem;
+  white-space: pre-wrap;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #5c554c;
+}
+
+.sample-report-banner {
+  border-radius: 1rem;
+  border: 1px solid rgba(15, 118, 110, 0.22);
+  background: linear-gradient(
+    135deg,
+    rgba(204, 251, 241, 0.55) 0%,
+    rgba(251, 246, 238, 0.9) 100%
+  );
 }

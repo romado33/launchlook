@@ -14,63 +14,63 @@
       "fix_prompt": "Remove the \"Dev Bypass (Skip Login)\" button, the \"Choose Your Dev Role\"\nmodal, and all \"For development purposes only\" copy from Sparkle Marketplace's\nsign-in page. Only show these when import.meta.env.DEV is true. Never on the\npublished lovable.app URL.\n",
       "severity": "critical",
       "tag": "Caught by The Klutz",
-      "title": "Dev login bypass visible on Sparkle's sign-in page",
-      "what_we_saw": "On Sparkle Marketplace's sign-in page, a \"Dev Bypass (Skip Login)\" button\nopens a role picker and signs visitors in without credentials. Helper copy\nreads \"For development purposes only.\"\n",
-      "why_it_matters": "Anyone with your Sparkle URL can skip authentication on a marketplace app.\n"
+      "title": "Anyone can skip login — dev bypass on the live URL",
+      "what_we_saw": "Sparkle Marketplace's sign-in page ships with a \"Dev Bypass (Skip Login)\"\nbutton. One click opens a role picker and drops visitors into the app with no\npassword.\n",
+      "why_it_matters": "We catch this on most Lovable apps that shipped before a final \"remove dev UI\"\npass. On a marketplace, it means strangers can act as hosts or buyers.\n"
     },
     {
       "category": "broken_ctas",
       "fix_prompt": "Remove the \"Developer Tools\" / \"Development Data Seeder\" section from\nSparkle's signed-in homepage. Gate the Seed and Clear data buttons behind\nimport.meta.env.DEV only.\n",
       "severity": "critical",
       "tag": "Caught by The Klutz",
-      "title": "Developer Tools panel on Sparkle's homepage",
-      "what_we_saw": "After sign-in, Sparkle Marketplace's homepage shows a \"Developer Tools\" card\nwith \"Seed Sample Data\" and \"Clear My Data\" buttons.\n",
-      "why_it_matters": "First-time visitors will think Sparkle is unfinished and bounce.\n"
+      "title": "\"Developer Tools\" panel on the homepage customers see",
+      "what_we_saw": "After sign-in, Sparkle's homepage shows a \"Developer Tools\" card with\n\"Seed Sample Data\" and \"Clear My Data\" — visible on the public URL, not hidden\nbehind a dev flag.\n",
+      "why_it_matters": "Paying users and investors read this as \"still in beta.\" It undercuts every\npolished pixel around it.\n"
     },
     {
       "category": "broken_ctas",
       "fix_prompt": "Add privacy and terms routes with basic policy content for Sparkle Marketplace.\nLink both from the footer on every page. Use your real support email in the\ncontact section. Match the rest of Sparkle's typography and spacing.\n",
       "severity": "high",
       "tag": "Caught by The Klutz",
-      "title": "Sparkle's privacy and terms pages return 404",
-      "what_we_saw": "Sparkle Marketplace's footer links to privacy and terms pages, but both\nURLs return the custom 404 page.\n",
-      "why_it_matters": "Sparkle Marketplace collects booking and account data. Visitors and payment\ntools both expect legal pages.\n"
+      "title": "Privacy and Terms links go to 404",
+      "what_we_saw": "Sparkle's footer promises legal pages, but both privacy and terms URLs return\nthe app's 404 screen.\n",
+      "why_it_matters": "Stripe, App Store reviewers, and B2B buyers all look for these before they\ntrust you with money or data. Missing pages are an instant credibility hit.\n"
     },
     {
       "category": "trust_gaps",
       "fix_prompt": "Fix Quick Book on Sparkle Marketplace so available slots appear, OR hide\nQuick Book when no slots exist and show \"No dates available yet, check back soon.\"\n",
       "severity": "high",
       "tag": "Caught by The Skeptic",
-      "title": "Sparkle's Quick Book modal dead-ends with no slots",
-      "what_we_saw": "Sparkle's headline \"Quick Book\" CTA opens a modal whose time-slot picker\nshows \"No available slots found\" and the \"Book Now\" button stays disabled.\n",
-      "why_it_matters": "The single most prominent booking CTA on Sparkle Marketplace bounces every\nvisitor who tries to book.\n"
+      "title": "Hero \"Quick Book\" CTA dead-ends — zero bookable slots",
+      "what_we_saw": "Sparkle's main \"Quick Book\" button opens a modal that says \"No available slots\nfound\" and keeps \"Book Now\" disabled. There is no fallback path to book.\n",
+      "why_it_matters": "This is the conversion path you designed the whole app around. Every visitor\nwho tries to book hits a wall — and most won't email you about it.\n"
+    },
+    {
+      "category": "mobile_layout",
+      "fix_prompt": "On Sparkle's Quick Book modal, constrain height to the viewport, make the slot\nlist scroll inside the modal, and pin \"Book Now\" above the safe area on mobile.\nTest on iPhone SE and 390px width in Chrome DevTools.\n",
+      "severity": "high",
+      "tag": "Caught by The Phone-First Friend",
+      "title": "Booking modal breaks on mobile — CTA below the fold",
+      "what_we_saw": "At phone width, Sparkle's Quick Book modal is taller than the screen. The time\npicker and \"Book Now\" button sit below the fold with no obvious scroll.\n",
+      "why_it_matters": "Most vibe-coded launches get more than half their traffic on phones. A broken\nmobile booking flow is silent revenue loss.\n"
     },
     {
       "category": "trust_gaps",
       "fix_prompt": "On Sparkle listing cards, when the review count is 0, show \"New\" or \"No reviews\nyet\" instead of a numeric rating. Only show the star number once at least one\nreal review exists.\n",
       "severity": "medium",
       "tag": "Caught by The Skeptic",
-      "title": "Sparkle listings show 4.5 stars with (0) reviews",
-      "what_we_saw": "Sparkle Marketplace experience cards display \"4.5 (0)\", a numeric rating\nwith zero reviews.\n",
-      "why_it_matters": "Reads like seeded test data, which kills trust on Sparkle's marketplace.\n"
+      "title": "Listings show 4.5 stars with (0) reviews",
+      "what_we_saw": "Sparkle experience cards display \"4.5 (0)\" — a star rating with zero reviews\nbehind it.\n",
+      "why_it_matters": "Buyers know what seeded demo data looks like. It reads as fake social proof\nand makes real hosts look worse by association.\n"
     },
     {
       "category": "trust_gaps",
       "fix_prompt": "On Sparkle Marketplace, replace \"Hosted by Local Host\" with each experience's\nactual host display name from the database. If missing, show first name + last\ninitial or hide the line.\n",
       "severity": "medium",
       "tag": "Caught by The Skeptic",
-      "title": "Every Sparkle listing says \"Hosted by Local Host\"",
-      "what_we_saw": "Every Sparkle Marketplace experience card shows \"Hosted by Local Host\" instead\nof a real host name.\n",
-      "why_it_matters": "Reads as placeholder data on a public marketplace.\n"
-    },
-    {
-      "category": "trust_gaps",
-      "fix_prompt": "Add a 1200x630 og.png to Sparkle Marketplace's /public, set og:image and\ntwitter:image meta tags in index.html to /og.png. Verify with opengraph.xyz\nafter deploy.\n",
-      "severity": "low",
-      "tag": "Caught by The Skeptic",
-      "title": "Sparkle has no share preview image",
-      "what_we_saw": "Sparkle Marketplace's og:image is unset, so Slack and iMessage previews show\na blank card when someone shares the app URL.\n",
-      "why_it_matters": "First impression when someone shares Sparkle is blank, not branded.\n"
+      "title": "Every listing still says \"Hosted by Local Host\"",
+      "what_we_saw": "All Sparkle listings use the same placeholder host name instead of real people.\n",
+      "why_it_matters": "Marketplaces live or die on trust in the person behind the listing. Placeholder\ncopy tells buyers the inventory isn't real yet.\n"
     }
   ],
   "handoff_report": {
@@ -79,12 +79,12 @@
   },
   "is_public": true,
   "passed_checks": [
-    "Mobile layout on Sparkle's listing and booking screens",
-    "Search, auth, and listing detail work aside from the dev-only UI",
-    "No other obvious launch blockers beyond the findings below"
+    "Search, filters, and listing detail pages feel production-ready",
+    "Core branding and layout are ahead of most pre-launch vibe-coded apps",
+    "Auth and navigation work once dev-only UI is removed"
   ],
   "share_metadata": {
-    "description": "Pre-launch audit for Sparkle Marketplace. Verdict: Needs fixes before launch. 7 findings across trust, broken CTAs, and booking flow.",
+    "description": "Sample Starter audit for Sparkle Marketplace: 2 critical launch-stoppers, 3 high-priority trust and mobile issues — the kind we catch on Lovable apps every week.",
     "og_image": "https://launchlook.app/images/og.png",
     "title": "LaunchLook audit for Sparkle Marketplace"
   },
@@ -92,7 +92,7 @@
   "verdict": {
     "emoji": "🔴",
     "label": "Needs fixes before launch",
-    "narrative": "Sparkle Marketplace looks polished at first glance: custom branding, booking\nflow, search, and auth. Two dev-only features are still visible on the live URL,\nand the headline booking CTA dead-ends. Fix the critical items before sharing\nSparkle outside your test circle. Everything else is polish you can pace through\nthis week.\n",
-    "summary": "Two dev-only blockers and a dead-end booking CTA to clear before any wider share of Sparkle Marketplace."
+    "narrative": "Sparkle Marketplace looks investor-ready in screenshots — then you click\nthrough. Dev shortcuts are still on the live URL, legal pages 404, the hero\nbooking CTA fails, and mobile checkout is effectively broken. None of this\nrequires a redesign: these are the high-frequency fixes we ship on Starter audits\nfor Lovable and Cursor apps. Clear the two critical items and the booking path\nbefore you share the link publicly; the rest is trust polish you can batch this\nweek.\n",
+    "summary": "Polished shell, three launch-stoppers we'd fix before you post the URL anywhere."
   }
 }

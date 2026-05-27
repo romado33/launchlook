@@ -4,11 +4,11 @@
   <g transform="translate(140 200) scale(4)">
     <circle cx="13" cy="13" r="8" stroke="#1F1B16" stroke-width="2.5" fill="none"/>
     <line x1="19" y1="19" x2="26" y2="26" stroke="#1F1B16" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M9 13.5 12 16.5 17.5 10.5" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M9 13.5 12 16.5 17.5 10.5" stroke="#0F766E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   </g>
   <text x="260" y="248" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="500" fill="#1F1B16">LaunchLook</text>
   <text x="260" y="318" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#6B6359">Pre-launch checkup for vibe-coded apps</text>
   <text x="260" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#5C554C">Human review, screenshots, paste-ready fix prompts</text>
-  <rect x="260" y="430" width="280" height="56" rx="14" fill="#B45309"/>
+  <rect x="260" y="430" width="280" height="56" rx="14" fill="#0F766E"/>
   <text x="400" y="468" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#FAF7F2">launchlook.app</text>
 </svg>

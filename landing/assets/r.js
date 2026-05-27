@@ -167,6 +167,30 @@
       }
     }
 
+    if (isSample) {
+      var intro = document.querySelector("[data-r-sample-intro]");
+      if (intro) intro.classList.remove("hidden");
+
+      var statsEl = document.querySelector("[data-r-stats]");
+      var findingsForStats = data.findings || [];
+      if (statsEl && findingsForStats.length) {
+        var counts = { critical: 0, high: 0, medium: 0, low: 0 };
+        findingsForStats.forEach(function (f) {
+          var s = (f.severity || "low").toLowerCase();
+          if (counts[s] != null) counts[s] += 1;
+        });
+        var parts = [];
+        if (counts.critical) parts.push(counts.critical + " critical");
+        if (counts.high) parts.push(counts.high + " high");
+        if (counts.medium) parts.push(counts.medium + " medium");
+        if (counts.low) parts.push(counts.low + " low");
+        statsEl.textContent =
+          findingsForStats.length +
+          " findings" +
+          (parts.length ? " · " + parts.join(" · ") : "");
+      }
+    }
+
     var findings = data.findings || [];
     if (findings.length) {
       var fwrap = document.querySelector("[data-r-findings-wrap]");
@@ -229,6 +253,17 @@
               p2.appendChild(label2);
               p2.appendChild(document.createTextNode(f.why_it_matters));
               card.appendChild(p2);
+            }
+            if (isSample && f.fix_prompt) {
+              var prompt = document.createElement("details");
+              prompt.className = "report-fix-prompt";
+              var summary = document.createElement("summary");
+              summary.textContent = "Fix prompt for your AI builder";
+              prompt.appendChild(summary);
+              var pre = document.createElement("pre");
+              pre.textContent = String(f.fix_prompt).trim();
+              prompt.appendChild(pre);
+              card.appendChild(prompt);
             }
             fcontainer.appendChild(card);
           });
