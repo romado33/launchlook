@@ -84,7 +84,7 @@
       <p class="font-medium text-ink">Go-live ready when:</p>
       <ul class="mt-2 space-y-1 text-muted list-disc pl-5">
         <li>Free audit → Resend email + Notion Free Audit row</li>
-        <li>Paid Starter → Stripe + /thanks + Tally + email to you + Notion intake</li>
+        <li>Paid Starter → Stripe (tax where registered) + /thanks + Tally + email + Notion intake</li>
         <li>Scale Up conditional test-account questions work (if you sell that tier)</li>
         <li>You can generate + send PDFs for a test customer</li>
       </ul>
@@ -95,7 +95,7 @@
 
     <footer class="text-xs text-muted border-t border-line pt-6 pb-10">
       <p>Internal ops · not indexed · <a href="https://www.linkedin.com/in/rob-dods/" class="text-accent hover:text-ink underline" rel="noopener noreferrer">Founder LinkedIn</a></p>
-      <p class="mt-1">Markdown copy in repo: <code>docs/E2E-CHECKLIST.md</code></p>
+      <p class="mt-1">v3 checklist · Markdown: <code>docs/E2E-CHECKLIST.md</code></p>
     </footer>
   </main>
   </div>
@@ -106,7 +106,7 @@
     function showApp() {
       document.getElementById("e2e-gate").classList.add("hidden");
       document.getElementById("e2e-app").classList.remove("hidden");
-      render();
+      if (window.launchlookE2eRenderChecklist) window.launchlookE2eRenderChecklist();
     }
 
     function initGate() {
@@ -146,208 +146,9 @@
     }
   </script>
 
+  <script src="/assets/e2e-checklist-data.js"></script>
+  <script src="/assets/e2e-checklist-render.js"></script>
   <script>
-    var STORAGE_KEY = "launchlook-e2e-checklist-v2";
-
-    var SECTIONS = [
-      {
-        id: "preflight",
-        title: "0. Pre-flight (before testing)",
-        items: [
-          { id: "pf-deploy", label: "Vercel production on latest main", hint: "Hard-refresh launchlook.app (Ctrl+Shift+R)" },
-          { id: "pf-env", label: "Vercel env set: STRIPE_WEBHOOK_SECRET, NOTION_TOKEN, NOTION_CUSTOMERS_DB_ID, NOTION_FREE_AUDIT_DB_ID, RESEND_API_KEY, TALLY_WEBHOOK_TOKEN", hint: "" },
-          { id: "pf-email", label: "hello@launchlook.app forwards to an inbox you check", hint: "" },
-          { id: "pf-tally-pub", label: "Tally QKOX1A published (not draft)", hint: "https://tally.so/forms/QKOX1A/edit" },
-          { id: "pf-tally-notify", label: "Tally notifications → hello@launchlook.app", hint: "" },
-          { id: "pf-tally-thanks", label: "Tally after-submit redirect → https://launchlook.app/thanks", hint: "" },
-          { id: "pf-tally-webhook", label: "Tally webhook URL with ?t= token; test event returns 200", hint: "GET /api/tally-webhook?t=… should return status ok" },
-          { id: "pf-stripe-live", label: "Stripe live mode for real-money smoke (or use test mode knowingly)", hint: "" },
-          { id: "pf-stripe-thanks", label: "Active Payment Links ($19/$49/$99): success URL → https://launchlook.app/thanks", hint: "Stripe Dashboard → each Payment Link" },
-          { id: "pf-stripe-tax", label: "Stripe Tax on active Payment Links (after Dashboard registrations)", hint: "python scripts/stripe_payment_links.py enable-tax" },
-          { id: "pf-stripe-dead", label: "Dead Payment Links deactivated: $9 re-verify, old CAD tiers", hint: "" },
-        ],
-      },
-      {
-        id: "smoke",
-        title: "A. Site smoke (~5 min)",
-        items: [
-          { id: "sm-home", label: "/ loads; pricing shows $19 / $49 / $99 with bulleted tier features", hint: "" },
-          { id: "sm-pages", label: "/faq, /webflow, /thanks, /privacy, /terms → 200", hint: "" },
-          { id: "sm-sample", label: "/sample shows Sparkle Marketplace sample audit (findings visible)", hint: "Not “We don't have a report at that link”" },
-          { id: "sm-sample-json", label: "/data/reports/jane-sparkle-marketplace.json → 200", hint: "" },
-          { id: "sm-redirect-checklist", label: "/checklist redirects to /", hint: "" },
-          { id: "sm-footer", label: "Footer Sample report link works; no GitHub link", hint: "" },
-          { id: "sm-prompts", label: "Pricing mentions fix prompts on all paid tiers", hint: "" },
-        ],
-      },
-      {
-        id: "free",
-        title: "B. Free audit path (~10 min)",
-        items: [
-          { id: "free-submit", label: "Homepage form: URL + email submits successfully", hint: "Use disposable email or +alias" },
-          { id: "free-inline-error", label: "Invalid URL shows inline error on homepage (no redirect to thanks)", hint: "Try not-a-url" },
-          { id: "free-thanks", label: "Success message or redirect to /thanks-free-audit", hint: "" },
-          { id: "free-resend", label: "Resend confirmation email arrives", hint: "Check spam" },
-          { id: "free-notion", label: "Notion Free Audit DB: new row (status queued)", hint: "" },
-          { id: "free-dedupe", label: "(Optional) Same email+URL resubmit → duplicate/upsell behavior", hint: "" },
-        ],
-      },
-      {
-        id: "starter",
-        title: "C. Paid path — Starter $19 (~15 min)",
-        items: [
-          { id: "st-checkout", label: "Get Starter → Stripe Checkout shows $19", hint: "Test mode unless real charge OK" },
-          { id: "st-thanks", label: "After pay → lands on https://launchlook.app/thanks", hint: "" },
-          { id: "st-receipt", label: "Stripe receipt email arrives", hint: "" },
-          { id: "st-notion-pay", label: "Notion Customers: row with Starter Package tier", hint: "" },
-          { id: "st-intake-open", label: "Complete intake opens Tally (QKOX1A), not mailto-only", hint: "" },
-          { id: "st-intake-fill", label: "Submit Starter intake — no test-account password fields", hint: "" },
-          { id: "st-tally-email", label: "Tally notification email to hello@launchlook.app", hint: "" },
-          { id: "st-notion-intake", label: "Notion Customers: intake fields + intake received", hint: "Via tally-webhook" },
-        ],
-      },
-      {
-        id: "scaleup",
-        title: "D. Paid path — Scale Up $49 (optional, ~10 min)",
-        items: [
-          { id: "su-checkout", label: "Checkout $49 → /thanks → Tally", hint: "Different test email if possible" },
-          { id: "su-tier-q", label: "Tier question shows Scale Up $49 (not old Full/Scale names)", hint: "" },
-          { id: "su-test-q", label: "Test-account questions only for Scale Up + Yes answer", hint: "" },
-          { id: "su-notion", label: "Notion: Scale Up Package tier; notes if test accounts provided", hint: "" },
-        ],
-      },
-      {
-        id: "webhook",
-        title: "E. Stripe webhook sanity (~2 min)",
-        items: [
-          { id: "wh-test", label: "Stripe Dashboard → webhook → send test checkout.session.completed → 200", hint: "" },
-          { id: "wh-live", label: "After real test payment: event succeeded (no repeated failures)", hint: "" },
-        ],
-      },
-      {
-        id: "delivery",
-        title: "F. Delivery dry-run (optional, ~10 min)",
-        items: [
-          { id: "del-render", label: "deliver_report.py renders Main Report + QSG + Pre-Launch Checklist PDFs", hint: "python scripts/deliver_report.py --customer …" },
-          { id: "del-send", label: "--send delivers to test inbox via Resend", hint: "" },
-          { id: "del-fixcheck", label: "PDF footer mentions Fix Check (reply recheck), not landing add-on", hint: "" },
-        ],
-      },
-      {
-        id: "addons",
-        title: "G. Add-ons (only if testing those SKUs)",
-        items: [
-          { id: "ao-handoff", label: "Handoff $49 checkout → Notion / manual handoff delivery path", hint: "" },
-          { id: "ao-fixcheck", label: "Fix Check $19 checkout → Confidence Checks Notion DB row", hint: "metadata product=confidence_check" },
-          { id: "ao-skip-reverify", label: "Confirmed old $9 re-verify badge link deactivated (feature removed)", hint: "" },
-        ],
-      },
-      {
-        id: "mobile",
-        title: "H. Mobile pass (~5 min)",
-        items: [
-          { id: "mob-free", label: "Homepage free audit form works on phone", hint: "" },
-          { id: "mob-paid", label: "One Starter checkout + Tally intake on phone", hint: "" },
-        ],
-      },
-    ];
-
-    function loadState() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function saveState(state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function allItems() {
-      var items = [];
-      SECTIONS.forEach(function (s) {
-        s.items.forEach(function (item) {
-          items.push(item);
-        });
-      });
-      return items;
-    }
-
-    function updateProgress(state) {
-      var items = allItems();
-      var done = items.filter(function (i) { return state[i.id]; }).length;
-      var total = items.length;
-      var pct = total ? Math.round((done / total) * 100) : 0;
-      document.getElementById("progress-label").textContent = done + " / " + total;
-      document.getElementById("progress-bar").style.width = pct + "%";
-    }
-
-    function render() {
-      var state = loadState();
-      var root = document.getElementById("checklist-root");
-      root.innerHTML = "";
-
-      SECTIONS.forEach(function (section) {
-        var sec = document.createElement("section");
-        sec.className = "rounded-xl border border-line bg-white px-4 py-4 sm:px-5 sm:py-5";
-        sec.id = section.id;
-
-        var h2 = document.createElement("h2");
-        h2.className = "font-serif text-lg text-ink";
-        h2.textContent = section.title;
-        sec.appendChild(h2);
-
-        var ul = document.createElement("ul");
-        ul.className = "mt-4 space-y-3";
-
-        section.items.forEach(function (item) {
-          var li = document.createElement("li");
-          li.className = "check-row flex gap-3 items-start text-sm";
-
-          var input = document.createElement("input");
-          input.type = "checkbox";
-          input.id = item.id;
-          input.checked = !!state[item.id];
-          input.className = "mt-1 h-4 w-4 rounded border-line text-accent focus:ring-accent/60 shrink-0 cursor-pointer";
-          input.addEventListener("change", function () {
-            var s = loadState();
-            s[item.id] = input.checked;
-            saveState(s);
-            updateProgress(s);
-          });
-
-          var wrap = document.createElement("div");
-          var label = document.createElement("label");
-          label.htmlFor = item.id;
-          label.className = "text-ink cursor-pointer leading-relaxed";
-          label.textContent = item.label;
-          wrap.appendChild(label);
-          if (item.hint) {
-            var hint = document.createElement("p");
-            hint.className = "hint text-xs text-muted mt-0.5";
-            hint.textContent = item.hint;
-            wrap.appendChild(hint);
-          }
-
-          li.appendChild(input);
-          li.appendChild(wrap);
-          ul.appendChild(li);
-        });
-
-        sec.appendChild(ul);
-        root.appendChild(sec);
-      });
-
-      updateProgress(state);
-    }
-
-    document.getElementById("reset-btn").addEventListener("click", function () {
-      if (!confirm("Clear all checkmarks in this browser?")) return;
-      localStorage.removeItem(STORAGE_KEY);
-      render();
-    });
-
     initGate();
   </script>
 </body>
