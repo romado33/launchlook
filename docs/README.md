@@ -8,6 +8,8 @@ Read in order for full context, or jump to what you need.
 |-----|-----|---------|
 | [`00-START-HERE.md`](00-START-HERE.md) | Everyone | Product summary, status, constraints |
 | [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) | **Rob** | **Single owner checklist — what's left** |
+| [`e2e-checklist.html`](e2e-checklist.html) | **Rob** | **Interactive E2E test checklist** (checkboxes + local save) |
+| [`E2E-CHECKLIST.md`](E2E-CHECKLIST.md) | Rob | Same E2E checklist in Markdown |
 | [`07-launchlook-go-live.md`](07-launchlook-go-live.md) | Rob | Deploy, Stripe, Tally, E2E smoke test |
 
 ## Build the business

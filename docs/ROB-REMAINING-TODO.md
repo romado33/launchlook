@@ -26,7 +26,7 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 1. **Tally `QKOX1A`** — In the editor: update tier names (Starter $19 / Scale Up $49 / Pro $99), add Webflow to Q7, fix conditional logic (Scale Up + Pro test-account questions, not “Full Package”), notifications → `hello@launchlook.app`, after-submit → `https://launchlook.app/thanks`. Paste buffers: [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) · [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) (update SLA + credential wording to match site before pasting).
 2. **Stripe** — Confirm Payment Links in `landing/assets/config.js` match live $19 / $49 / $99 products. **Deactivate** dead links: old $9/$29 tiers, **$9 re-verify badge** (feature removed). Keep Fix Check ($19 / $9 within 14 days) and Handoff ($49) links.
-3. **End-to-end test** — Incognito: free audit form → paid checkout → `/thanks` → Tally intake → email arrives at `hello@launchlook.app`.
+3. **End-to-end test** — Use the interactive checklist: open [`docs/e2e-checklist.html`](e2e-checklist.html) in your browser (progress saves locally). Markdown copy: [`E2E-CHECKLIST.md`](E2E-CHECKLIST.md).
 
 ---
 
