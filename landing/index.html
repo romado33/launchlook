@@ -131,26 +131,27 @@
 
       <p class="mt-8 text-sm text-muted"><a href="/r/jane-sparkle-marketplace.html" class="underline hover:text-ink">See an anonymized sample report &rarr;</a></p>
 
-      <!-- Examples of things we catch (heading renamed 2026-05-26 from 'What we catch' so the 5-bullet list reads as illustrative, not exhaustive. The full audit can return up to 10/30/40 findings depending on tier per docs/PRODUCT-DECISIONS.md s1.) -->
-      <h3 class="font-serif text-xl mt-8 mb-4">Examples of things we catch</h3>
+      <!-- Consolidated 2026-05-26 per user feedback: was 5 individually-bordered 'Examples we catch' cards + 3 individually-bordered 'Different from auto-scanners' cards = 8 boxes; collapsed to one shared rounded card with both lists separated by a hairline divider; per-bullet borders removed so the visual quiets down and the headings carry the weight. Heading 'Examples of things we catch' kept (illustrative; the full audit can return up to 10/30/40 findings depending on tier per docs/PRODUCT-DECISIONS.md s1). -->
+      <div class="mt-10 rounded-xl border border-line bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+      <h3 class="font-serif text-xl mb-4">Examples of things we catch</h3>
       <ul class="grid sm:grid-cols-2 gap-3 text-sm">
-        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+        <li class="flex gap-3 text-muted leading-relaxed">
           <span class="text-accent font-semibold" aria-hidden="true">✓</span>
           <span><strong class="text-ink font-medium">Dead buttons and broken links</strong> on your live site.</span>
         </li>
-        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+        <li class="flex gap-3 text-muted leading-relaxed">
           <span class="text-accent font-semibold" aria-hidden="true">✓</span>
           <span><strong class="text-ink font-medium">Layout breaks at phone width</strong> (text overlap, hidden CTAs, broken nav).</span>
         </li>
-        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+        <li class="flex gap-3 text-muted leading-relaxed">
           <span class="text-accent font-semibold" aria-hidden="true">✓</span>
           <span><strong class="text-ink font-medium">Leftover placeholders</strong>: "Your Company Name," lorem ipsum, default builder copy.</span>
         </li>
-        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+        <li class="flex gap-3 text-muted leading-relaxed">
           <span class="text-accent font-semibold" aria-hidden="true">✓</span>
           <span><strong class="text-ink font-medium">Missing privacy and terms pages</strong>, plus other trust gaps a stranger would clock instantly.</span>
         </li>
-        <li class="rounded-lg border border-line bg-white px-4 py-3 flex gap-3 text-muted leading-relaxed shadow-sm shadow-ink/5">
+        <li class="flex gap-3 text-muted leading-relaxed">
           <span class="text-accent font-semibold" aria-hidden="true">✓</span>
           <span><strong class="text-ink font-medium">Dev tools and test data</strong> accidentally visible on production.</span>
         </li>
@@ -158,22 +159,25 @@
       <p class="mt-6 text-sm text-muted">Test logins are used only during the review and deleted within 24 hours.</p>
       <p class="mt-2 text-sm text-muted">This is a launch-readiness checkup, not a full security audit.</p>
 
-      <!-- Different from auto-scanners (merged in from prior standalone Why-us section per 6->4 restructure: dropped the "Different by design" eyebrow + long intro and the closing "Want a deep technical security scan too?" paragraph; landed directly on the 3 contrast bullets) -->
-      <h3 class="font-serif text-xl mt-8 mb-6">Different from auto-scanners</h3>
+        <hr class="my-8 border-line/60" />
+
+        <!-- Different from auto-scanners (merged in from prior standalone Why-us section per 6->4 restructure: dropped the "Different by design" eyebrow + long intro and the closing "Want a deep technical security scan too?" paragraph; landed directly on the 3 contrast bullets) -->
+      <h3 class="font-serif text-xl mb-5">Different from auto-scanners</h3>
       <ul class="space-y-4">
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
+        <li>
           <p class="font-serif text-lg text-ink">Founder-curated, personally reviewed</p>
           <p class="text-muted text-sm mt-2 leading-relaxed">Every finding gets read by a human before delivery. False positives get dropped, wording that doesn't land gets cut, and only the things you should actually fix make it into the final PDF. <span class="text-muted/80">Auto-scanners ship the raw dump, false positives included.</span></p>
         </li>
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
+        <li>
           <p class="font-serif text-lg text-ink">Plain-English findings, not cryptic codes</p>
           <p class="text-muted text-sm mt-2 leading-relaxed">Every finding reads like a friend wrote it. The 10 to 40 things that actually matter, ranked by impact, written so a non-technical founder can act on them. <span class="text-muted/80">Elsewhere: pages of severity codes you'd have to Google one by one.</span></p>
         </li>
-        <li class="rounded-xl border border-line bg-white p-5 sm:p-5 shadow-sm shadow-ink/5">
+        <li>
           <p class="font-serif text-lg text-ink">Paste-ready fix prompts for your builder</p>
           <p class="text-muted text-sm mt-2 leading-relaxed">Each finding ships with a copy-paste prompt written for Lovable, Bolt, v0, Cursor, or whichever AI builder you used. Paste it in, get the fix back. <span class="text-muted/80">Elsewhere: technical write-ups your AI builder can't act on directly.</span></p>
         </li>
       </ul>
+      </div>
     </div>
   </section>
 
