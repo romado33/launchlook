@@ -119,7 +119,15 @@
 
     document.title = "LaunchLook audit: " + appName;
 
-    setText("[data-r-eyebrow]", "LaunchLook \u00b7 " + tierShort + " audit");
+    var isSample =
+      (document.body && document.body.dataset.isSample === "true") ||
+      slug === "jane-sparkle-marketplace";
+    setText(
+      "[data-r-eyebrow]",
+      isSample
+        ? "LaunchLook \u00b7 sample audit"
+        : "LaunchLook \u00b7 " + tierShort + " audit",
+    );
     setText("[data-r-app-name]", appName);
     var auditLine =
       "Pre-launch audit prepared " + humanDate(data.audit_date || "") + ".";
@@ -241,6 +249,12 @@
         );
         hwrap.classList.remove("hidden");
       }
+    }
+
+    if (isSample) {
+      document.querySelectorAll("[data-r-sample-cta]").forEach(function (el) {
+        el.remove();
+      });
     }
 
     show("public");

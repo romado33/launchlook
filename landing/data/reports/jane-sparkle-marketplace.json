@@ -11,66 +11,66 @@
   "findings": [
     {
       "category": "broken_ctas",
-      "fix_prompt": "Remove the \"Dev Bypass (Skip Login)\" button, the \"Choose Your Dev Role\"\nmodal, and all \"For development purposes only\" copy from the sign-in page. Only\nshow these when import.meta.env.DEV is true. Never on the published\nlovable.app URL.\n",
+      "fix_prompt": "Remove the \"Dev Bypass (Skip Login)\" button, the \"Choose Your Dev Role\"\nmodal, and all \"For development purposes only\" copy from Sparkle Marketplace's\nsign-in page. Only show these when import.meta.env.DEV is true. Never on the\npublished lovable.app URL.\n",
       "severity": "critical",
       "tag": "Caught by The Klutz",
-      "title": "Dev login bypass visible to everyone",
-      "what_we_saw": "On the sign-in page, a \"Dev Bypass (Skip Login)\" button opens a role picker and\nsigns visitors in without credentials. Helper copy reads \"For development\npurposes only.\"\n",
-      "why_it_matters": "Anyone with your URL can skip authentication on a marketplace app.\n"
+      "title": "Dev login bypass visible on Sparkle's sign-in page",
+      "what_we_saw": "On Sparkle Marketplace's sign-in page, a \"Dev Bypass (Skip Login)\" button\nopens a role picker and signs visitors in without credentials. Helper copy\nreads \"For development purposes only.\"\n",
+      "why_it_matters": "Anyone with your Sparkle URL can skip authentication on a marketplace app.\n"
     },
     {
       "category": "broken_ctas",
-      "fix_prompt": "Remove the \"Developer Tools\" / \"Development Data Seeder\" section from\nthe published homepage. Gate the Seed and Clear data buttons behind\nimport.meta.env.DEV only.\n",
+      "fix_prompt": "Remove the \"Developer Tools\" / \"Development Data Seeder\" section from\nSparkle's signed-in homepage. Gate the Seed and Clear data buttons behind\nimport.meta.env.DEV only.\n",
       "severity": "critical",
       "tag": "Caught by The Klutz",
-      "title": "Developer Tools panel on the homepage",
-      "what_we_saw": "After sign-in the homepage shows a \"Developer Tools\" card with\n\"Seed Sample Data\" and \"Clear My Data\" buttons.\n",
-      "why_it_matters": "First-time visitors will think the product is unfinished and bounce.\n"
+      "title": "Developer Tools panel on Sparkle's homepage",
+      "what_we_saw": "After sign-in, Sparkle Marketplace's homepage shows a \"Developer Tools\" card\nwith \"Seed Sample Data\" and \"Clear My Data\" buttons.\n",
+      "why_it_matters": "First-time visitors will think Sparkle is unfinished and bounce.\n"
     },
     {
       "category": "broken_ctas",
-      "fix_prompt": "Add the privacy page and the terms page routes with basic policy content. Link both\nfrom the footer on every page. Use [email redacted] (or your\nreal support email) in the contact section. Match the rest of the\nsite's typography and spacing.\n",
+      "fix_prompt": "Add privacy and terms routes with basic policy content for Sparkle Marketplace.\nLink both from the footer on every page. Use your real support email in the\ncontact section. Match the rest of Sparkle's typography and spacing.\n",
       "severity": "high",
       "tag": "Caught by The Klutz",
-      "title": "Missing the privacy page and the terms page (404)",
-      "what_we_saw": "Both the privacy page and the terms page return the custom 404 page. The footer links\nto them but nothing loads.\n",
-      "why_it_matters": "Sparkle collects booking and account data. Visitors and payment tools\nboth expect legal pages.\n"
+      "title": "Sparkle's privacy and terms pages return 404",
+      "what_we_saw": "Sparkle Marketplace's footer links to privacy and terms pages, but both\nURLs return the custom 404 page.\n",
+      "why_it_matters": "Sparkle Marketplace collects booking and account data. Visitors and payment\ntools both expect legal pages.\n"
     },
     {
       "category": "trust_gaps",
-      "fix_prompt": "Fix Quick Book so available slots appear, OR hide Quick Book when\nno slots exist and show \"No dates available yet, check back soon.\"\n",
+      "fix_prompt": "Fix Quick Book on Sparkle Marketplace so available slots appear, OR hide\nQuick Book when no slots exist and show \"No dates available yet, check back soon.\"\n",
       "severity": "high",
       "tag": "Caught by The Skeptic",
-      "title": "Quick Book modal dead-ends with no slots",
-      "what_we_saw": "The headline \"Quick Book\" CTA opens a modal whose time-slot picker\nshows \"No available slots found\" and the \"Book Now\" button stays\ndisabled.\n",
-      "why_it_matters": "The single most prominent CTA on the marketplace bounces every\nvisitor who tries to book.\n"
+      "title": "Sparkle's Quick Book modal dead-ends with no slots",
+      "what_we_saw": "Sparkle's headline \"Quick Book\" CTA opens a modal whose time-slot picker\nshows \"No available slots found\" and the \"Book Now\" button stays disabled.\n",
+      "why_it_matters": "The single most prominent booking CTA on Sparkle Marketplace bounces every\nvisitor who tries to book.\n"
     },
     {
       "category": "trust_gaps",
-      "fix_prompt": "When the review count is 0, show \"New\" or \"No reviews yet\" instead of\na numeric rating. Only show the star number once at least one real\nreview exists.\n",
+      "fix_prompt": "On Sparkle listing cards, when the review count is 0, show \"New\" or \"No reviews\nyet\" instead of a numeric rating. Only show the star number once at least one\nreal review exists.\n",
       "severity": "medium",
       "tag": "Caught by The Skeptic",
-      "title": "Listing cards show 4.5 stars with (0) reviews",
-      "what_we_saw": "Cards display \"4.5 (0)\", a numeric rating with zero reviews.\n",
-      "why_it_matters": "Reads like seeded test data, which kills trust on a marketplace.\n"
+      "title": "Sparkle listings show 4.5 stars with (0) reviews",
+      "what_we_saw": "Sparkle Marketplace experience cards display \"4.5 (0)\", a numeric rating\nwith zero reviews.\n",
+      "why_it_matters": "Reads like seeded test data, which kills trust on Sparkle's marketplace.\n"
     },
     {
       "category": "trust_gaps",
-      "fix_prompt": "Replace \"Hosted by Local Host\" with each experience's actual host\ndisplay name from the database. If missing, show first name + last\ninitial or hide the line.\n",
+      "fix_prompt": "On Sparkle Marketplace, replace \"Hosted by Local Host\" with each experience's\nactual host display name from the database. If missing, show first name + last\ninitial or hide the line.\n",
       "severity": "medium",
       "tag": "Caught by The Skeptic",
-      "title": "Every listing says \"Hosted by Local Host\"",
-      "what_we_saw": "Every experience card shows \"Hosted by Local Host\" instead of a real\nhost name.\n",
-      "why_it_matters": "Reads as test data on a public marketplace.\n"
+      "title": "Every Sparkle listing says \"Hosted by Local Host\"",
+      "what_we_saw": "Every Sparkle Marketplace experience card shows \"Hosted by Local Host\" instead\nof a real host name.\n",
+      "why_it_matters": "Reads as placeholder data on a public marketplace.\n"
     },
     {
       "category": "trust_gaps",
-      "fix_prompt": "Add a 1200x630 og.png to /public, set og:image and twitter:image meta\ntags in index.html to /og.png. Verify with opengraph.xyz after deploy.\n",
+      "fix_prompt": "Add a 1200x630 og.png to Sparkle Marketplace's /public, set og:image and\ntwitter:image meta tags in index.html to /og.png. Verify with opengraph.xyz\nafter deploy.\n",
       "severity": "low",
       "tag": "Caught by The Skeptic",
-      "title": "Generic OG image, no preview when shared",
-      "what_we_saw": "og:image is unset, so Slack and iMessage previews show a blank card.\n",
-      "why_it_matters": "First impression when someone shares your link is blank, not branded.\n"
+      "title": "Sparkle has no share preview image",
+      "what_we_saw": "Sparkle Marketplace's og:image is unset, so Slack and iMessage previews show\na blank card when someone shares the app URL.\n",
+      "why_it_matters": "First impression when someone shares Sparkle is blank, not branded.\n"
     }
   ],
   "handoff_report": {
@@ -79,12 +79,12 @@
   },
   "is_public": true,
   "passed_checks": [
-    "mobile layout issues",
-    "confusing or placeholder text",
-    "obvious visible risks"
+    "Mobile layout on Sparkle's listing and booking screens",
+    "Search, auth, and listing detail work aside from the dev-only UI",
+    "No other obvious launch blockers beyond the findings below"
   ],
   "share_metadata": {
-    "description": "Pre-launch audit. Verdict: Needs fixes before launch. 7 findings across trust, broken CTAs, mobile layout, and more.",
+    "description": "Pre-launch audit for Sparkle Marketplace. Verdict: Needs fixes before launch. 7 findings across trust, broken CTAs, and booking flow.",
     "og_image": "https://launchlook.app/images/og.png",
     "title": "LaunchLook audit for Sparkle Marketplace"
   },
@@ -92,7 +92,7 @@
   "verdict": {
     "emoji": "🔴",
     "label": "Needs fixes before launch",
-    "narrative": "Polished at first glance: custom branding, booking flow, search, and auth.\nTwo dev-only features are still visible on the live URL, and the headline\nbooking CTA dead-ends. Fix the critical items before sharing outside your\ntest circle. Everything else is polish you can pace through this week.\n",
-    "summary": "Two dev-only blockers and a dead-end booking CTA to clear before any wider share."
+    "narrative": "Sparkle Marketplace looks polished at first glance: custom branding, booking\nflow, search, and auth. Two dev-only features are still visible on the live URL,\nand the headline booking CTA dead-ends. Fix the critical items before sharing\nSparkle outside your test circle. Everything else is polish you can pace through\nthis week.\n",
+    "summary": "Two dev-only blockers and a dead-end booking CTA to clear before any wider share of Sparkle Marketplace."
   }
 }

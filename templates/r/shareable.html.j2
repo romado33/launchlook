@@ -128,13 +128,15 @@
           A human pre-launch checkup for vibe-coded apps. Findings, fix
           prompts, and a Quick Start Guide PDF. From $19.
         </p>
-        <div class="mt-5 flex flex-col sm:flex-row gap-3">
+        <div class="mt-5{% if customer_slug != 'jane-sparkle-marketplace' %} flex flex-col sm:flex-row gap-3{% endif %}">
           <a href="/#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=ShareableCTAPricing">
             See pricing
           </a>
-          <a href="/r/jane-sparkle-marketplace.html" class="launchlook-btn launchlook-btn-secondary">
+          {% if customer_slug != 'jane-sparkle-marketplace' %}
+          <a href="/sample" class="launchlook-btn launchlook-btn-secondary plausible-event-name=ShareableCTASample">
             See a sample report
           </a>
+          {% endif %}
         </div>
       </section>
     </section>

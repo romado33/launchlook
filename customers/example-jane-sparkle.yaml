@@ -22,24 +22,23 @@ customer:
 verdict:
   label: Needs fixes before launch
   emoji: "🔴"
-  summary: Two dev-only blockers and a dead-end booking CTA to clear before any wider share.
+  summary: Two dev-only blockers and a dead-end booking CTA to clear before any wider share of Sparkle Marketplace.
   narrative: |
-    Polished at first glance: custom branding, booking flow, search, and auth.
-    Two dev-only features are still visible on the live URL, and the headline
-    booking CTA dead-ends. Fix the critical items before sharing outside your
-    test circle. Everything else is polish you can pace through this week.
+    Sparkle Marketplace looks polished at first glance: custom branding, booking
+    flow, search, and auth. Two dev-only features are still visible on the live
+    URL, and the headline booking CTA dead-ends. Fix the critical items before
+    sharing Sparkle outside your test circle. Everything else is polish you can
+    pace through this week.
 
 findings:
   - severity: critical
-    category: broken_ctas
-    tag: Caught by The Klutz
-    title: Dev login bypass visible to everyone
+    title: Dev login bypass visible on Sparkle's sign-in page
     what_we_saw: |
-      On /auth, a "Dev Bypass (Skip Login)" button opens a role picker and
-      signs visitors in without credentials. Helper copy reads "For development
-      purposes only."
+      On Sparkle Marketplace's sign-in page, a "Dev Bypass (Skip Login)" button
+      opens a role picker and signs visitors in without credentials. Helper copy
+      reads "For development purposes only."
     why_it_matters: |
-      Anyone with your URL can skip authentication on a marketplace app.
+      Anyone with your Sparkle URL can skip authentication on a marketplace app.
     screenshot_caption: /auth page with the Dev Bypass button visible.
     fix_prompt: |
       Remove the "Dev Bypass (Skip Login)" button, the "Choose Your Dev Role"
@@ -48,29 +47,25 @@ findings:
       lovable.app URL.
 
   - severity: critical
-    category: broken_ctas
-    tag: Caught by The Klutz
-    title: Developer Tools panel on the homepage
+    title: Developer Tools panel on Sparkle's homepage
     what_we_saw: |
-      After sign-in the homepage shows a "Developer Tools" card with
-      "Seed Sample Data" and "Clear My Data" buttons.
+      After sign-in, Sparkle Marketplace's homepage shows a "Developer Tools"
+      card with "Seed Sample Data" and "Clear My Data" buttons.
     why_it_matters: |
-      First-time visitors will think the product is unfinished and bounce.
+      First-time visitors will think Sparkle is unfinished and bounce.
     fix_prompt: |
       Remove the "Developer Tools" / "Development Data Seeder" section from
       the published homepage. Gate the Seed and Clear data buttons behind
       import.meta.env.DEV only.
 
   - severity: high
-    category: broken_ctas
-    tag: Caught by The Klutz
-    title: Missing /privacy and /terms (404)
+    title: Sparkle's privacy and terms pages return 404
     what_we_saw: |
-      Both /privacy and /terms return the custom 404 page. The footer links
-      to them but nothing loads.
+      Sparkle Marketplace's footer links to privacy and terms pages, but both
+      URLs return the custom 404 page.
     why_it_matters: |
-      Sparkle collects booking and account data. Visitors and payment tools
-      both expect legal pages.
+      Sparkle Marketplace collects booking and account data. Visitors and payment
+      tools both expect legal pages.
     screenshot_caption: Footer with broken Privacy and Terms links circled.
     fix_prompt: |
       Add /privacy and /terms routes with basic policy content. Link both
@@ -79,8 +74,6 @@ findings:
       site's typography and spacing.
 
   - severity: high
-    category: trust_gaps
-    tag: Caught by The Skeptic
     title: Quick Book modal dead-ends with no slots
     what_we_saw: |
       The headline "Quick Book" CTA opens a modal whose time-slot picker
@@ -94,8 +87,6 @@ findings:
       no slots exist and show "No dates available yet, check back soon."
 
   - severity: medium
-    category: trust_gaps
-    tag: Caught by The Skeptic
     title: Listing cards show 4.5 stars with (0) reviews
     what_we_saw: |
       Cards display "4.5 (0)", a numeric rating with zero reviews.
@@ -107,8 +98,6 @@ findings:
       review exists.
 
   - severity: medium
-    category: trust_gaps
-    tag: Caught by The Skeptic
     title: Every listing says "Hosted by Local Host"
     what_we_saw: |
       Every experience card shows "Hosted by Local Host" instead of a real
@@ -121,8 +110,6 @@ findings:
       initial or hide the line.
 
   - severity: low
-    category: trust_gaps
-    tag: Caught by The Skeptic
     title: Generic OG image, no preview when shared
     what_we_saw: |
       og:image is unset, so Slack and iMessage previews show a blank card.
