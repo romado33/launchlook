@@ -69,6 +69,9 @@ data/ai_costs/*
 # Accessibility (axe) per-URL response cache; pure runtime, regenerated.
 data/axe_cache/
 
+# Form smoke-test per-URL response cache; pure runtime, regenerated.
+data/form_smoke_cache/
+
 # Playwright
 test-results/
 playwright-report/

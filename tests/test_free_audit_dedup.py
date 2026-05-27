@@ -15,13 +15,14 @@ Covers the five cases the task spec calls out:
    to ``recent_delivery`` on the next call against the same stub client.
 
 The tests speak directly to ``process_request`` via its
-``notion_client_factory`` + ``email_sender`` + ``upsell_sender``
-dependency-injection seams so they do not touch the network. The fake
+``notion_client_factory`` + ``email_sender`` + ``upsell_sender`` +
+``ops_notification_sender`` dependency-injection seams so they do not
+touch the network. The fake
 Notion client implements just enough of the ``Client.databases`` /
 ``Client.data_sources`` / ``Client.pages`` surface to drive the dedupe
 code paths.
 
-Runs two ways (mirrors tests/test_dedup.py):
+Runs two ways (mirrors tests/test_dedup.py + tests/test_verified_badge.py):
 
 * ``pytest tests/test_free_audit_dedup.py``
 * ``python tests/test_free_audit_dedup.py`` (stdlib-only)
@@ -49,7 +50,8 @@ os.environ.setdefault("NOTION_TOKEN", "test-token")
 os.environ.setdefault("NOTION_FREE_AUDIT_DB_ID", "test-free-audit-db-id")
 
 # api/free-audit.py is not a regular module (hyphenated filename + no
-# package __init__.py); load it through importlib.
+# package __init__.py); load it through importlib the same way
+# tests/test_verified_badge.py loads api/verify.py.
 _FREE_AUDIT_PATH = REPO_ROOT / "api" / "free-audit.py"
 _spec = importlib.util.spec_from_file_location("free_audit_api", _FREE_AUDIT_PATH)
 free_audit = importlib.util.module_from_spec(_spec)
@@ -118,9 +120,7 @@ class _DataSources:
             prop_name = spec["property"]
             prop = row.get("properties", {}).get(prop_name, {})
             if "email" in spec:
-                return (prop.get("email") or "").lower() == (
-                    spec["email"]["equals"] or ""
-                ).lower()
+                return (prop.get("email") or "").lower() == (spec["email"]["equals"] or "").lower()
             if "rich_text" in spec:
                 parts = prop.get("rich_text") or []
                 value = "".join(p.get("plain_text") or "" for p in parts)
@@ -133,7 +133,10 @@ class _Pages:
         self._parent = parent
 
     def create(
-        self, *, parent: dict[str, Any], properties: dict[str, Any]  # noqa: ARG002
+        self,
+        *,
+        parent: dict[str, Any],
+        properties: dict[str, Any],  # noqa: ARG002
     ) -> dict[str, Any]:
         # Mimic Notion-shaped row so subsequent queries via the same
         # stub return it (storage round-trip).
@@ -209,13 +212,9 @@ def _make_row(
         "Platform": {"select": {"name": "vibe-coder"}},
     }
     if fingerprints:
-        props["Finding Fingerprints"] = {
-            "rich_text": [{"plain_text": ";".join(fingerprints)}]
-        }
+        props["Finding Fingerprints"] = {"rich_text": [{"plain_text": ";".join(fingerprints)}]}
     if summaries:
-        props["Finding Summaries"] = {
-            "rich_text": [{"plain_text": "\n".join(summaries)}]
-        }
+        props["Finding Summaries"] = {"rich_text": [{"plain_text": "\n".join(summaries)}]}
     return {
         "id": row_id,
         "created_time": created_at.isoformat().replace("+00:00", "Z"),
@@ -252,6 +251,7 @@ class FreshSubmissionCase(unittest.TestCase):
         client = FakeNotionClient(rows=[], now=now)
         confirm = _SenderRecorder()
         upsell = _SenderRecorder()
+        ops = _SenderRecorder()
 
         status, body = free_audit.process_request(
             payload={"url": TEST_URL, "email": TEST_EMAIL},
@@ -261,6 +261,7 @@ class FreshSubmissionCase(unittest.TestCase):
             notion_client_factory=lambda: client,
             email_sender=confirm,
             upsell_sender=upsell,
+            ops_notification_sender=ops,
         )
 
         self.assertEqual(status, 200, msg=f"unexpected body: {body!r}")
@@ -268,6 +269,9 @@ class FreshSubmissionCase(unittest.TestCase):
         self.assertEqual(len(client.created), 1, "fresh submission should write 1 row")
         self.assertEqual(len(confirm.calls), 1, "confirmation email must fire")
         self.assertEqual(confirm.calls[0]["to"], TEST_EMAIL)
+        self.assertEqual(len(ops.calls), 1, "ops notification must fire on fresh")
+        self.assertEqual(ops.calls[0]["customer_email"], TEST_EMAIL)
+        self.assertEqual(ops.calls[0]["audit_url"], TEST_URL)
         self.assertEqual(len(upsell.calls), 0, "upsell email must NOT fire on fresh")
 
 
@@ -394,9 +398,7 @@ class DifferentEmailSameUrlCase(unittest.TestCase):
 
         self.assertEqual(status, 200)
         self.assertEqual(body["status"], "queued")
-        self.assertEqual(
-            len(client.created), 1, "different person -> writes its own row"
-        )
+        self.assertEqual(len(client.created), 1, "different person -> writes its own row")
         self.assertEqual(len(confirm.calls), 1)
         self.assertEqual(len(upsell.calls), 0)
 
@@ -442,9 +444,7 @@ class StorageRoundTripCase(unittest.TestCase):
         self.assertEqual(record["status"], "queued")
         self.assertIsNotNone(record["created_at"])
         self.assertIsNotNone(record["expires_at"])
-        self.assertEqual(
-            record["expires_at"] - record["created_at"], timedelta(days=30)
-        )
+        self.assertEqual(record["expires_at"] - record["created_at"], timedelta(days=30))
 
         # 3. A second submission within the window now flips to upsell.
         status2, body2 = free_audit.process_request(

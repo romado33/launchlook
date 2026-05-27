@@ -292,9 +292,7 @@ def persist_free_audit_fingerprints(
         return False
     payload: dict[str, Any] = {
         PROP_FINGERPRINTS: {
-            "rich_text": [
-                {"text": {"content": FINGERPRINT_SEPARATOR.join(fingerprints)[:2000]}}
-            ]
+            "rich_text": [{"text": {"content": FINGERPRINT_SEPARATOR.join(fingerprints)[:2000]}}]
         },
     }
     if summaries:

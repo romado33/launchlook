@@ -4,7 +4,7 @@ qsg_compose_prompt.py — BL-09 (manual workflow)
 Composes a ready-to-paste Quick Start Guide prompt for the customer.
 You then paste the system prompt + this composed user message into chatgpt.com
 (or the Anthropic Workbench), edit the output, and drop it into the customer's
-Notion Launch report.
+Notion Launch Pack report.
 
 Usage:
     python scripts/qsg_compose_prompt.py \\
@@ -77,9 +77,7 @@ def compose(args: argparse.Namespace) -> str:
     template = USER_TEMPLATE_PATH.read_text(encoding="utf-8")
 
     homepage_text = read_or_inline(args.homepage, args.homepage_file, "homepage")
-    postsignup_text = read_or_inline(
-        args.postsignup, args.postsignup_file, "postsignup"
-    )
+    postsignup_text = read_or_inline(args.postsignup, args.postsignup_file, "postsignup")
 
     substitutions = {
         "app_name": args.app_name,
@@ -87,8 +85,7 @@ def compose(args: argparse.Namespace) -> str:
         "target_user_description": args.target_user,
         "main_workflow_description": args.workflow,
         "platform": args.platform,
-        "homepage_text": homepage_text
-        or "(no homepage copy captured — REVIEWER must fill)",
+        "homepage_text": homepage_text or "(no homepage copy captured — REVIEWER must fill)",
         "post_signup_text": postsignup_text
         or "(no post-signup copy captured — REVIEWER must fill)",
         "nav_labels": args.nav or "(none captured)",
@@ -115,10 +112,7 @@ def compose(args: argparse.Namespace) -> str:
     # Catch any unfilled placeholders
     unfilled = re.findall(r"\{([a-z_]+)\}", composed)
     if unfilled:
-        print(
-            f"WARN: unfilled placeholders in output: {sorted(set(unfilled))}",
-            file=sys.stderr,
-        )
+        print(f"WARN: unfilled placeholders in output: {sorted(set(unfilled))}", file=sys.stderr)
 
     return composed
 
@@ -133,19 +127,13 @@ def main() -> int:
     parser.add_argument("--target-user", required=True, help="Who the target user is")
     parser.add_argument("--workflow", required=True, help="Main workflow users do")
     parser.add_argument(
-        "--platform",
-        required=True,
-        help="Lovable / Bolt / Base44 / Replit / v0 / Other",
+        "--platform", required=True, help="Lovable / Bolt / Base44 / Replit / v0 / Other"
     )
 
     parser.add_argument("--homepage", help="Crawled homepage copy (inline)")
-    parser.add_argument(
-        "--homepage-file", help="Path to file with crawled homepage copy"
-    )
+    parser.add_argument("--homepage-file", help="Path to file with crawled homepage copy")
     parser.add_argument("--postsignup", help="Crawled post-signup copy (inline)")
-    parser.add_argument(
-        "--postsignup-file", help="Path to file with crawled post-signup copy"
-    )
+    parser.add_argument("--postsignup-file", help="Path to file with crawled post-signup copy")
 
     parser.add_argument("--nav", help="Visible nav labels, comma-separated")
     parser.add_argument("--ctas", help="Visible CTA / button labels, comma-separated")
@@ -178,16 +166,10 @@ def main() -> int:
         "# 2. Paste the contents of prompts/quickstart_system.txt as the first message.",
         file=sys.stderr,
     )
+    print("# 3. Paste the composed user message above as the second message.", file=sys.stderr)
+    print("# 4. Edit the returned Markdown. Verify no forbidden words remain.", file=sys.stderr)
     print(
-        "# 3. Paste the composed user message above as the second message.",
-        file=sys.stderr,
-    )
-    print(
-        "# 4. Edit the returned Markdown. Verify no forbidden words remain.",
-        file=sys.stderr,
-    )
-    print(
-        "# 5. Paste edited Markdown into the customer's Notion Launch report (Part 2).",
+        "# 5. Paste edited Markdown into the customer's Notion Launch Pack report (Part 2).",
         file=sys.stderr,
     )
 

@@ -1,7 +1,7 @@
 """
 free-audit.py -- Vercel Python serverless function.
 
-Receives POSTs from the free 3-finding audit form on /landing/index.html
+Receives POSTs from the free 2-finding audit form on /landing/index.html
 and /landing/webflow.html. Per docs/PRODUCT-DECISIONS.md section 1 + 7
 the free preview is the email-gated lead magnet at the top of the funnel.
 
@@ -24,7 +24,7 @@ Flow per task spec:
        request_timestamp, ip, source page, platform, finding_fingerprints
        (empty for now; scripts/ai_audit/dedup.py + free_audit_lookup.py
        populate the fingerprints once the offline pipeline generates the
-       3 findings -- see docs/FREE-AUDIT-WORKFLOW.md).
+       2 findings -- see docs/FREE-AUDIT-WORKFLOW.md).
     7. Fire-and-forget confirmation email via Resend REST (urllib, no SDK)
        so api/requirements.txt stays minimal.
     8. Respond JSON {status:"queued"|"duplicate", message:"..."} to the
@@ -61,7 +61,7 @@ from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlencode, urlparse
 
 # Make the api/_lib package importable when Vercel invokes this file directly.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -78,6 +78,7 @@ from scripts.ai_audit.free_audit_lookup import (  # noqa: E402
     DEFAULT_RECENT_DELIVERY_DAYS,
     recent_delivery,
 )
+from scripts.launchlook_constants import FREE_AUDIT_DELIVER_COUNT  # noqa: E402
 
 # notion_helpers does the heavy lifting for the Customers DB; for the
 # free-audit DB we use the bare client directly because the schema differs.
@@ -106,9 +107,7 @@ ERR_EMAIL = "That email doesn't look right. Double-check and try again."
 ERR_URL = "We couldn't reach that URL. Make sure it starts with https://, isn't localhost, and is reachable on the public internet."
 ERR_RATE_EMAIL = "We've already queued a few free audits for this email recently. Try again in a few weeks, or pick up Starter ($19) to keep going."
 ERR_RATE_IP = "A few free audits have already gone in from your network today. Try again tomorrow."
-ERR_GENERIC = (
-    "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
-)
+ERR_GENERIC = "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
 
 # Where the upsell email + JSON response point. Mirrors the existing
 # free-audit confirmation email so the Plausible StarterCheckout goal
@@ -222,9 +221,7 @@ def _get_free_audit_ds_id(client: Client) -> str:
     return sources[0]["id"]
 
 
-def _build_props(
-    *, email: str, url: str, ip: str, source: str, platform: str
-) -> dict[str, Any]:
+def _build_props(*, email: str, url: str, ip: str, source: str, platform: str) -> dict[str, Any]:
     title = f"{email} -- {urlparse(url).hostname or 'unknown'}"
     return {
         "Request": {"title": [{"text": {"content": title[:2000]}}]},
@@ -237,9 +234,7 @@ def _build_props(
     }
 
 
-def _count_recent_requests_by_email(
-    client: Client, ds_id: str, email: str, since: datetime
-) -> int:
+def _count_recent_requests_by_email(client: Client, ds_id: str, email: str, since: datetime) -> int:
     """Count free-audit rows for this email created at or after `since`."""
     try:
         resp = client.data_sources.query(
@@ -258,15 +253,11 @@ def _count_recent_requests_by_email(
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
     return sum(
-        1
-        for r in resp.get("results", [])
-        if not r.get("archived") and not r.get("in_trash")
+        1 for r in resp.get("results", []) if not r.get("archived") and not r.get("in_trash")
     )
 
 
-def _count_recent_requests_by_ip(
-    client: Client, ds_id: str, ip: str, since: datetime
-) -> int:
+def _count_recent_requests_by_ip(client: Client, ds_id: str, ip: str, since: datetime) -> int:
     if not ip:
         return 0
     try:
@@ -286,9 +277,7 @@ def _count_recent_requests_by_ip(
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
     return sum(
-        1
-        for r in resp.get("results", [])
-        if not r.get("archived") and not r.get("in_trash")
+        1 for r in resp.get("results", []) if not r.get("archived") and not r.get("in_trash")
     )
 
 
@@ -297,15 +286,15 @@ def _count_recent_requests_by_ip(
 # ---------------------------------------------------------------------------
 
 
-def _post_resend_email(*, payload: dict[str, Any], context: str) -> None:
-    """POST an email payload to Resend; log + swallow failures."""
+def _post_resend_email(*, payload: dict[str, Any], context: str) -> bool:
+    """POST an email payload to Resend; log + swallow failures. Returns True on 2xx."""
     api_key = optional_env("RESEND_API_KEY")
     if not api_key:
         print(
             f"[free-audit] WARN: RESEND_API_KEY missing; skipping {context} email",
             file=sys.stderr,
         )
-        return
+        return False
 
     req = urllib.request.Request(
         "https://api.resend.com/emails",
@@ -317,10 +306,20 @@ def _post_resend_email(*, payload: dict[str, Any], context: str) -> None:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(
-            req, timeout=8
-        ) as resp:  # noqa: S310 - explicit trusted host
-            resp.read()
+        with urllib.request.urlopen(req, timeout=8) as resp:  # noqa: S310 - explicit trusted host
+            body = resp.read()
+        email_id = ""
+        try:
+            parsed = json.loads(body.decode("utf-8"))
+            if isinstance(parsed, dict):
+                email_id = str(parsed.get("id") or "")
+        except json.JSONDecodeError:
+            pass
+        print(
+            f"[free-audit] Resend OK ({context})" + (f" id={email_id}" if email_id else ""),
+            file=sys.stderr,
+        )
+        return True
     except urllib.error.HTTPError as exc:
         print(
             f"[free-audit] WARN: Resend HTTP {exc.code} on {context}: {exc.read()[:200]!r}",
@@ -331,6 +330,12 @@ def _post_resend_email(*, payload: dict[str, Any], context: str) -> None:
             f"[free-audit] WARN: Resend network error on {context}: {exc}",
             file=sys.stderr,
         )
+    return False
+
+
+def _notion_page_url(page_id: str) -> str:
+    """Public Notion URL for a page id (integration must have access)."""
+    return f"https://www.notion.so/{page_id.replace('-', '')}"
 
 
 # Plain-English founder voice per SIMPLICITY-GUARDRAILS section 5.1 and 6.
@@ -341,19 +346,22 @@ def _send_confirmation_email(*, to: str, audit_url: str) -> None:
     admin_email = optional_env("ADMIN_EMAIL")
 
     host = urlparse(audit_url).hostname or audit_url
-    subject = f"Got it -- your 3 findings for {host} are queued"
+    n = FREE_AUDIT_DELIVER_COUNT
+    subject = f"Got it -- your {n} findings for {host} are queued"
     text_body = (
         f"Hi,\n\n"
-        f"Got your request for a free 3-finding audit on {audit_url}. "
-        f"I'll walk through it on desktop and phone like a first-time visitor and email you the three highest-impact things to fix when it's ready, usually within a few days. "
-        f"No login, no portal -- just one email back.\n\n"
+        f"Got your request for a free {n}-finding audit on {audit_url}. "
+        f"I'll load it at desktop and mobile width in the browser, run the main workflows "
+        f"(forms, signup, checkout), and check that confirmation emails actually arrive. "
+        f"You'll get the top {n} highest-impact fixes by email when it's ready, usually within a few days. "
+        f"No login, no portal, just one email back.\n\n"
         f"If you want all 10 findings sooner, Starter ($19) covers the full pass: {STARTER_URL}\n\n"
-        f"-- LaunchLook\n"
+        f"-- Rob\n"
         f"hello@launchlook.app\n"
     )
 
     payload: dict[str, Any] = {
-        "from": f"LaunchLook <{from_email}>",
+        "from": f"Rob at LaunchLook <{from_email}>",
         "to": [to],
         "subject": subject,
         "text": text_body,
@@ -389,15 +397,15 @@ def _send_upsell_email(
         f"Hi,\n\n"
         f"Thanks for coming back. You ran the free check for {audit_url} on {submitted_str}. "
         f"I keep the findings consistent for 30 days so you can re-check after fixing.\n\n"
-        f"If you've already worked through those three, Starter ($19) picks up where the free audit left off "
-        f"(same plain-English style, 10 findings instead of 3, no rehash): {STARTER_URL}\n\n"
+        f"If you've already worked through those two, Starter ($19) picks up where the free audit left off "
+        f"(same plain-English style, 10 findings instead of {FREE_AUDIT_DELIVER_COUNT}, no rehash): {STARTER_URL}\n\n"
         f"Or wait until {available_str} to run the free check again.\n\n"
-        f"-- LaunchLook\n"
+        f"-- Rob\n"
         f"hello@launchlook.app\n"
     )
 
     payload: dict[str, Any] = {
-        "from": f"LaunchLook <{from_email}>",
+        "from": f"Rob at LaunchLook <{from_email}>",
         "to": [to],
         "subject": subject,
         "text": text_body,
@@ -407,6 +415,53 @@ def _send_upsell_email(
         payload["bcc"] = [admin_email]
 
     _post_resend_email(payload=payload, context="upsell")
+
+
+def _send_ops_notification_email(
+    *,
+    customer_email: str,
+    audit_url: str,
+    ip: str,
+    source: str,
+    platform: str,
+    notion_page_id: str | None = None,
+) -> None:
+    """Notify the founder when a new free-audit row is queued (TO admin, not BCC)."""
+    admin_email = optional_env("ADMIN_EMAIL")
+    if not admin_email:
+        print(
+            "[free-audit] WARN: ADMIN_EMAIL missing; skipping ops notification",
+            file=sys.stderr,
+        )
+        return
+
+    from_email = optional_env("FROM_EMAIL", "hello@launchlook.app")
+    host = urlparse(audit_url).hostname or audit_url
+    notion_line = (
+        f"Notion: {_notion_page_url(notion_page_id)}\n"
+        if notion_page_id
+        else "Notion: row created (open Free Audit Requests DB)\n"
+    )
+    subject = f"[LaunchLook] Free audit queued: {host}"
+    text_body = (
+        "New free audit submission.\n\n"
+        f"URL: {audit_url}\n"
+        f"Email: {customer_email}\n"
+        f"IP: {ip or '(unknown)'}\n"
+        f"Source page: {source or 'unknown'}\n"
+        f"Platform: {platform or 'unknown'}\n"
+        f"{notion_line}\n"
+        "Next: filter Free Audit Requests by Status = queued.\n"
+    )
+
+    payload: dict[str, Any] = {
+        "from": f"LaunchLook <{from_email}>",
+        "to": [admin_email],
+        "subject": subject,
+        "text": text_body,
+        "reply_to": customer_email,
+    }
+    _post_resend_email(payload=payload, context="ops-notification")
 
 
 # ---------------------------------------------------------------------------
@@ -427,8 +482,8 @@ def _build_upsell_message(
     return (
         f"You ran the free check for {audit_url} on {submitted_str}. "
         f"The findings stay consistent for 30 days so you can re-check after fixing. "
-        f"If you've already worked through those three, Starter ($19) picks up where "
-        f"the free audit left off (10 findings instead of 3, no rehash): "
+        f"If you've already worked through those {FREE_AUDIT_DELIVER_COUNT}, Starter ($19) picks up where "
+        f"the free audit left off (10 findings instead of {FREE_AUDIT_DELIVER_COUNT}, no rehash): "
         f"{STARTER_URL}. Otherwise the free check opens back up on {available_str}."
     )
 
@@ -447,6 +502,7 @@ def process_request(
     notion_client_factory=None,
     email_sender=_send_confirmation_email,
     upsell_sender=_send_upsell_email,
+    ops_notification_sender=_send_ops_notification_email,
 ) -> tuple[int, dict[str, Any]]:
     """Validate + rate-limit + persist + notify. Returns (status_code, body)."""
     now = now or datetime.now(UTC)
@@ -463,9 +519,7 @@ def process_request(
     if platform not in {"vibe-coder", "webflow"}:
         platform = "vibe-coder"
 
-    factory = notion_client_factory or (
-        lambda: Client(auth=require_env("NOTION_TOKEN"))
-    )
+    factory = notion_client_factory or (lambda: Client(auth=require_env("NOTION_TOKEN")))
     try:
         client = factory()
         ds_id = _get_free_audit_ds_id(client)
@@ -544,8 +598,11 @@ def process_request(
 
     # ---- Persist ----
     props = _build_props(email=email, url=url, ip=ip, source=source, platform=platform)
+    notion_page_id: str | None = None
     try:
-        client.pages.create(parent={"data_source_id": ds_id}, properties=props)
+        page = client.pages.create(parent={"data_source_id": ds_id}, properties=props)
+        if isinstance(page, dict):
+            notion_page_id = str(page.get("id") or "") or None
     except Exception as exc:  # noqa: BLE001
         print(f"[free-audit] ERROR: Notion create failed: {exc}", file=sys.stderr)
         return 500, {"status": "error", "message": ERR_GENERIC}
@@ -556,9 +613,22 @@ def process_request(
     except Exception as exc:  # noqa: BLE001
         print(f"[free-audit] WARN: confirmation email failed: {exc}", file=sys.stderr)
 
+    # ---- Founder ops notification (best-effort; separate from customer BCC) ----
+    try:
+        ops_notification_sender(
+            customer_email=email,
+            audit_url=url,
+            ip=ip,
+            source=source,
+            platform=platform,
+            notion_page_id=notion_page_id,
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[free-audit] WARN: ops notification failed: {exc}", file=sys.stderr)
+
     return 200, {
         "status": "queued",
-        "message": "Got it. Check your inbox for a confirmation. We'll email your 3 findings when they're ready, usually within a few days.",
+        "message": f"Got it. Check your inbox for a confirmation. Your {FREE_AUDIT_DELIVER_COUNT} findings will arrive by email when ready, usually within a few days.",
     }
 
 
@@ -642,16 +712,19 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801 (Vercel convention)
 
             if wants_html and status in (200,):
                 # No-JS native form POST: redirect to the thanks page.
+                loc = "/thanks-free-audit"
+                audit_url = (payload.get("url") or "").strip()
+                host = (urlparse(audit_url).hostname or "").strip()
+                if host:
+                    loc = loc + "?" + urlencode({"site": host})
                 self.send_response(303)
-                self.send_header("Location", "/thanks-free-audit")
+                self.send_header("Location", loc)
                 self.end_headers()
                 return
 
             self._respond_json(status, body)
         except Exception as exc:  # noqa: BLE001
-            print(
-                f"[free-audit] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr
-            )
+            print(f"[free-audit] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr)
             self._respond_json(500, {"status": "error", "message": ERR_GENERIC})
 
     def do_GET(self) -> None:  # noqa: N802
@@ -660,7 +733,7 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801 (Vercel convention)
             200,
             {
                 "status": "ok",
-                "hint": "POST {url, email} as JSON to queue a free 3-finding audit.",
+                "hint": "POST {url, email} as JSON to queue a free 2-finding audit.",
             },
         )
 

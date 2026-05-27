@@ -12,6 +12,8 @@
   <meta property="og:url" content="https://launchlook.app/vs-pagelens" />
   <meta property="og:image" content="https://launchlook.app/images/og.png" />
   <link rel="canonical" href="https://launchlook.app/vs-pagelens" />
+  <link rel="alternate" type="text/markdown" href="https://launchlook.app/vs-pagelens.md" title="LaunchLook vs PageLens (markdown)" />
+  <link rel="alternate" type="text/plain" href="https://launchlook.app/llms.txt" title="LLM site summary" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
@@ -19,6 +21,17 @@
   <meta name="twitter:description" content="Neutral side-by-side: who each one fits, where they overlap, where they differ." />
 
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "LaunchLook vs PageLens AI",
+    "description": "Neutral comparison of LaunchLook and PageLens AI for pre-launch and SEO audits.",
+    "url": "https://launchlook.app/vs-pagelens",
+    "isPartOf": { "@type": "WebSite", "name": "LaunchLook", "url": "https://launchlook.app/" }
+  }
+  </script>
 
   <script src="/assets/tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -37,10 +50,10 @@
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
         <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
-      <nav class="flex items-center gap-5 text-sm text-muted">
-        <a href="/#hero" class="nav-link">Free audit</a>
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
         <a href="/#pricing" class="nav-link">Pricing</a>
         <a href="/faq" class="nav-link">FAQ</a>
+        <a href="/webflow" class="nav-link">Webflow</a>
       </nav>
     </div>
   </header>
@@ -77,7 +90,8 @@
           </thead>
           <tbody class="divide-y divide-line">
             <tr><td class="px-4 py-3 align-top text-muted">Built for</td><td class="px-4 py-3 align-top text-ink">Vibe coders shipping with Lovable / Cursor / Bolt</td><td class="px-4 py-3 align-top text-muted">SEO-focused marketers</td></tr>
-            <tr><td class="px-4 py-3 align-top text-muted">Human review</td><td class="px-4 py-3 align-top text-ink">Yes. Every finding is reviewed by a founder before delivery.</td><td class="px-4 py-3 align-top text-muted">No. Software-only delivery.</td></tr>
+            <tr><td class="px-4 py-3 align-top text-muted">Human workflow testing</td><td class="px-4 py-3 align-top text-ink">Yes. Forms, signups, and emails checked by a person (not just the UI).</td><td class="px-4 py-3 align-top text-muted">Automated scan of the page; no inbox checks.</td></tr>
+            <tr><td class="px-4 py-3 align-top text-muted">Human review of findings</td><td class="px-4 py-3 align-top text-ink">Yes. Every finding is reviewed by a founder before delivery.</td><td class="px-4 py-3 align-top text-muted">No. Software-only delivery.</td></tr>
             <tr><td class="px-4 py-3 align-top text-muted">Depth</td><td class="px-4 py-3 align-top text-ink">10 / 30 / 40 prioritized findings, plus visible-only security checks (exposed credentials, public admin routes, missing headers)</td><td class="px-4 py-3 align-top text-muted">SEO scorecards across many pages</td></tr>
             <tr><td class="px-4 py-3 align-top text-muted">Turnaround</td><td class="px-4 py-3 align-top text-ink">Usually within a few days (human in the loop)</td><td class="px-4 py-3 align-top text-muted">Instant</td></tr>
             <tr><td class="px-4 py-3 align-top text-muted">What you get</td><td class="px-4 py-3 align-top text-ink">PDF report with paste-ready fix prompts for your AI builder, plus a Quick Start Guide and Pre-Launch Checklist</td><td class="px-4 py-3 align-top text-muted">SEO scorecards and Markdown export</td></tr>
@@ -89,7 +103,8 @@
 
       <div class="sm:hidden space-y-3">
         <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Built for</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> vibe coders shipping with Lovable / Cursor / Bolt</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> SEO marketers</p></div>
-        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Human review</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> yes, every finding</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> no, software-only</p></div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Workflow testing</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> real submits + email checks</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> page scan only</p></div>
+        <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Finding review</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> yes, every finding</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> software-only</p></div>
         <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Depth</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> 10 / 30 / 40 prioritized findings + visible-only security checks</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> SEO scorecards across many pages</p></div>
         <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">Turnaround</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> usually a few days</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> instant</p></div>
         <div class="rounded-lg border border-line bg-white p-4 shadow-sm shadow-ink/5"><p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">What you get</p><p class="text-sm text-ink"><strong>LaunchLook:</strong> PDF + paste-ready fix prompts + Quick Start Guide + Pre-Launch Checklist</p><p class="mt-1 text-xs text-muted"><strong class="text-ink/80">PageLens:</strong> SEO scorecards / Markdown export</p></div>
@@ -105,7 +120,7 @@
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-3">When PageLens is the better choice</h2>
       <p class="text-muted leading-relaxed max-w-prose">
-        If you need ongoing weekly SEO monitoring, a marketing-team dashboard, or an instant scan with no waiting, PageLens is purpose-built for that workflow and beats LaunchLook on those axes. We take a few days because a real person reviews every finding before it ships; if you need an answer in the next 60 seconds, PageLens is faster. We don't think one tool fits everyone, and we'd rather you pick the one that fits the job.
+        If you need ongoing weekly SEO monitoring, a marketing-team dashboard, or an instant scan with no waiting, PageLens is purpose-built for that workflow and beats LaunchLook on those axes. We take a few days because a real person tests your workflows (forms, emails that should follow) and reviews every finding before it ships; if you need an answer in the next 60 seconds, PageLens is faster. We don't think one tool fits everyone, and we'd rather you pick the one that fits the job.
       </p>
     </div>
   </section>
@@ -122,7 +137,7 @@
         <li><strong class="text-ink">Pro ($99):</strong> up to 40 findings, integrations review, 30-min Loom walkthrough, Handoff Report PDF.</li>
       </ul>
       <p class="mt-5 text-sm text-muted">
-        Want to try LaunchLook without paying? The <a href="/" class="underline hover:text-ink font-medium">main landing</a> includes a free 3-finding audit. No credit card, no signup, just your live URL.
+        Want to try LaunchLook without paying? The <a href="/" class="underline hover:text-ink font-medium">main landing</a> includes a free 2-finding audit. No credit card, no signup, just your live URL.
       </p>
       <div class="mt-5 flex flex-col sm:flex-row gap-3">
         <a href="/#pricing" class="launchlook-btn launchlook-btn-primary">See full LaunchLook pricing</a>
@@ -141,13 +156,19 @@
   </section>
 
   <footer class="border-t border-line">
-    <div class="page-wrap px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+    <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
-        <li><a href="/" class="hover:text-ink">Main landing</a></li>
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="/#hero" class="hover:text-ink">Free 3-finding audit</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
-        <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

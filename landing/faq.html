@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LaunchLook FAQ: pre-launch checkup for vibe-coded apps</title>
-  <meta name="description" content="LaunchLook FAQ. Tier differences, supported platforms, what we need from you, data handling, refunds, and how the checkup actually works. Plain English, founder-curated." />
+  <title>LaunchLook FAQ — Tiers, human review, platforms, refunds</title>
+  <meta name="description" content="LaunchLook FAQ: human-tested workflows and human-reviewed findings, tiers, supported builders, data safety, refunds, and how the checkup works." />
 
   <meta property="og:title" content="LaunchLook FAQ" />
   <meta property="og:description" content="Tier differences, supported platforms, data handling, refunds. Everything you might ask before booking a pre-launch checkup." />
@@ -12,6 +12,8 @@
   <meta property="og:url" content="https://launchlook.app/faq" />
   <meta property="og:image" content="https://launchlook.app/images/og.png" />
   <link rel="canonical" href="https://launchlook.app/faq" />
+  <link rel="alternate" type="text/markdown" href="https://launchlook.app/faq.md" title="LaunchLook FAQ (markdown)" />
+  <link rel="alternate" type="text/plain" href="https://launchlook.app/llms.txt" title="LLM site summary" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
@@ -37,8 +39,7 @@
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
         <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
-      <nav class="flex items-center gap-5 text-sm text-muted">
-        <a href="/#hero" class="nav-link">Free audit</a>
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
         <a href="/#pricing" class="nav-link">Pricing</a>
         <a href="/faq" class="nav-link text-ink">FAQ</a>
         <a href="/webflow" class="nav-link">Webflow</a>
@@ -64,6 +65,14 @@
     <div class="page-wrap px-6 section-inner">
       <h2 class="font-serif text-2xl mb-6">Tiers, scope, data handling, refunds</h2>
       <div class="card-elevated divide-y divide-line px-4 sm:px-5">
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What do we mean by human-tested workflows and human review?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p><strong class="text-ink">Human-tested workflows.</strong> We do not only look at screenshots. A real person clicks through signup, booking, contact, and checkout paths, submits forms, and checks whether confirmation, thank-you, and notification emails actually arrive. That is how we catch &ldquo;the form looked fine but nothing ever emailed anyone.&rdquo;</p>
+            <p><strong class="text-ink">Human-reviewed findings.</strong> AI helps surface issues quickly. Every finding still goes through a person before you see it: false positives dropped, unclear wording rewritten, and gaps added when something matters for your app.</p>
+            <p>You get a curated list from real walkthroughs, not a raw tool dump.</p>
+          </div>
+        </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">What's the difference between Starter, Scale Up, and Pro?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
@@ -97,10 +106,6 @@
           <p class="mt-2 text-muted text-sm leading-relaxed">SEO tools help Google. We help the friend you send the link to: dead buttons, dev tools on prod, missing legal pages, fake-looking reviews.</p>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How are you different from PageLens AI?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Both scan your live site and surface findings. We're built for vibe coders shipping with Lovable / Cursor / Bolt; PageLens is built for SEO-focused marketers. <a href="/vs-pagelens" class="underline hover:text-ink">Full comparison &rarr;</a></p>
-        </details>
-        <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Staging URLs OK?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Yes if they're reachable on the internet (Lovable preview, Vercel staging, etc.). localhost won't work.</p>
         </details>
@@ -113,12 +118,30 @@
           <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
         </details>
         <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How is a Webflow checkup different from a vibe-coded app checkup?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p>Webflow is a <strong class="text-ink">site builder</strong>, not an AI app generator. The same human review applies, but what we look for shifts to Webflow-specific launch risks: form submissions that silently fail, accidental noindex, missing JSON-LD, Designer-to-live mismatches, and breakage at Webflow&rsquo;s 991 / 767 / 478 breakpoints.</p>
+            <p>Fix prompts are written in <strong class="text-ink">Webflow Designer language</strong> (Pages, elements, settings), not &ldquo;paste this into Lovable.&rdquo; We still only need your <strong class="text-ink">live URL</strong>, never your Webflow account or Designer login. Scale Up and Pro tiers that include a user data isolation check are aimed at vibe-coded apps with logins; most marketing Webflow sites don&rsquo;t need test accounts.</p>
+            <p><a href="/webflow" class="underline hover:text-ink">Webflow pricing and scope &rarr;</a></p>
+          </div>
+        </details>
+        <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
         </details>
         <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to PageLens AI?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">
+            Both scan your live site. PageLens is built for SEO marketers who want fast, recurring scans.
+            LaunchLook is built for vibe coders shipping with Lovable, Cursor, or Bolt who want a one-off pre-launch checkup:
+            a real person tests forms and emails, reviews every finding, and you get paste-ready fix prompts for your builder.
+            See our side-by-side breakdown on the
+            <a href="/vs-pagelens" class="underline hover:text-ink font-medium">LaunchLook vs PageLens</a> page.
+          </p>
+        </details>
+        <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Refer a founder?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or send them straight to <strong class="text-ink"><a href="https://launchlook.app/#hero" class="underline hover:text-ink">launchlook.app</a></strong> for their own 3 free findings.</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">After your checkup you'll get a referral code: <strong class="text-ink">$5 off</strong> for them and for you on a follow-up. Or send them straight to <strong class="text-ink"><a href="https://launchlook.app/#hero" class="underline hover:text-ink">launchlook.app</a></strong> for their own 2 free findings.</p>
         </details>
       </div>
     </div>
@@ -128,10 +151,10 @@
   <section class="bg-ink text-paper border-t border-ink">
     <div class="page-wrap px-6 section-inner text-center">
       <p class="text-xs font-medium text-accent-soft uppercase tracking-widest">Ready to start?</p>
-      <h2 class="font-serif text-2xl sm:text-3xl mt-3">Try the free 3-finding audit</h2>
-      <p class="text-paper/75 mt-2 text-sm">Send your URL. Get 3 plain-English findings when it's ready, usually within a few days. No credit card.</p>
+      <h2 class="font-serif text-2xl sm:text-3xl mt-3">Try the free 2-finding audit</h2>
+      <p class="text-paper/75 mt-2 text-sm">Send your URL. Get 2 plain-English findings when it's ready, usually within a few days. No credit card.</p>
       <a href="/#hero" class="launchlook-btn launchlook-btn-accent mt-6">
-        Get my free 3 findings
+        Get my free 2 findings
       </a>
     </div>
   </section>
@@ -139,18 +162,17 @@
   <footer class="border-t border-line">
     <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
-        <div data-launchlook-linkedin-wrap class="hidden">
-          <p class="text-xs font-medium text-ink">Connect with the founder</p>
-          <p class="text-xs text-muted mt-1">Built by Rob — human-reviewed audits for vibe-coded apps before you launch.</p>
-          <a data-launchlook-linkedin href="#" class="text-xs text-ink hover:text-accent underline mt-1.5 inline-block">LinkedIn profile &rarr;</a>
-        </div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="/#hero" class="hover:text-ink">Free 3-finding audit</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
-        <li><a href="/webflow" class="hover:text-ink">For Webflow</a></li>
+        <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

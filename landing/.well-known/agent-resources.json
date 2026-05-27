@@ -1,0 +1,61 @@
+{
+  "name": "LaunchLook",
+  "website": "https://launchlook.app",
+  "tagline": "One last look before you launch.",
+  "description": "Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites. Live URL only; findings curated by a founder before delivery.",
+  "contact": {
+    "email": "hello@launchlook.app"
+  },
+  "discovery": {
+    "llms_txt": "https://launchlook.app/llms.txt",
+    "llms_full_txt": "https://launchlook.app/llms-full.txt",
+    "ai_txt": "https://launchlook.app/ai.txt",
+    "sitemap": "https://launchlook.app/sitemap.xml",
+    "robots": "https://launchlook.app/robots.txt"
+  },
+  "markdown_pages": [
+    {
+      "path": "/index.md",
+      "url": "https://launchlook.app/index.md",
+      "title": "Home"
+    },
+    {
+      "path": "/faq.md",
+      "url": "https://launchlook.app/faq.md",
+      "title": "FAQ"
+    },
+    {
+      "path": "/webflow.md",
+      "url": "https://launchlook.app/webflow.md",
+      "title": "Webflow checkup"
+    },
+    {
+      "path": "/vs-pagelens.md",
+      "url": "https://launchlook.app/vs-pagelens.md",
+      "title": "LaunchLook vs PageLens"
+    }
+  ],
+  "primary_pages": [
+    { "url": "https://launchlook.app/", "title": "Home" },
+    { "url": "https://launchlook.app/webflow", "title": "Webflow" },
+    { "url": "https://launchlook.app/faq", "title": "FAQ" },
+    { "url": "https://launchlook.app/sample", "title": "Sample report" }
+  ],
+  "pricing_usd": {
+    "free": { "price": 0, "findings": 2 },
+    "starter": { "price": 19, "findings": 10 },
+    "scale_up": { "price": 49, "findings": 30 },
+    "pro": { "price": 99, "findings": 40 }
+  },
+  "public_api": [
+    {
+      "method": "POST",
+      "path": "/api/free-audit",
+      "url": "https://launchlook.app/api/free-audit",
+      "description": "Free 2-finding audit signup (same as homepage form). Rate-limited.",
+      "content_type": "application/x-www-form-urlencoded",
+      "fields": ["url", "email"]
+    }
+  ],
+  "noindex_paths": ["/thanks", "/thanks-free-audit", "/e2e"]
+}

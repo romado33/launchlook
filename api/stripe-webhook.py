@@ -103,9 +103,7 @@ def cents_to_tier(amount_cents: int | None) -> str | None:
 def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
     """Handle a checkout.session.completed object."""
     details = session.get("customer_details") or {}
-    email = (
-        (details.get("email") or session.get("customer_email") or "").strip().lower()
-    )
+    email = (details.get("email") or session.get("customer_email") or "").strip().lower()
     if not email:
         return {"status": "error", "reason": "no email on checkout session"}
 
@@ -140,9 +138,7 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
         f"Amount: ${amount_dollars:.2f} {session.get('currency', 'usd').upper()}",
     ]
     if not tier:
-        notes_lines.append(
-            f"Tier could not be inferred from amount ({amount_cents} cents)."
-        )
+        notes_lines.append(f"Tier could not be inferred from amount ({amount_cents} cents).")
 
     fields: dict[str, Any] = {
         "email": email,
@@ -206,7 +202,7 @@ def confidence_check_label(amount_cents: int | None) -> str:
     if amount_cents is None:
         return "Confidence Check"
     return CONFIDENCE_CHECK_CENTS_TO_LABEL.get(
-        amount_cents, f"Confidence Check (${amount_cents/100:.2f})"
+        amount_cents, f"Confidence Check (${amount_cents / 100:.2f})"
     )
 
 
@@ -219,13 +215,9 @@ def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
     customer never sees a failed purchase.
     """
     customer_details = session.get("customer_details") or {}
-    email = (
-        customer_details.get("email") or session.get("customer_email") or ""
-    ).strip()
+    email = (customer_details.get("email") or session.get("customer_email") or "").strip()
     amount_cents = session.get("amount_total")
-    label = confidence_check_label(
-        amount_cents if isinstance(amount_cents, int) else None
-    )
+    label = confidence_check_label(amount_cents if isinstance(amount_cents, int) else None)
 
     paid_at = datetime.now(UTC).isoformat(timespec="seconds")
 
@@ -239,9 +231,7 @@ def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
                 "customer_email": {"email": email},
                 "original_audit_id": {"rich_text": []},
                 "paid_at": {"date": {"start": paid_at}},
-                "price_paid": {
-                    "number": amount_cents if isinstance(amount_cents, int) else None
-                },
+                "price_paid": {"number": amount_cents if isinstance(amount_cents, int) else None},
                 "status": {"select": {"name": "queued"}},
             }
             client.pages.create(parent={"database_id": db_id}, properties=properties)
@@ -284,9 +274,9 @@ def handle_handoff_report_purchase(session: dict[str, Any]) -> dict[str, Any]:
     docs/HANDOFF-REPORT-WORKFLOW.md.
     """
     amount_cents = (session.get("amount_total") or 0) or None
-    customer_email = (
-        (session.get("customer_details") or {}).get("email") or ""
-    ).strip() or (session.get("customer_email") or "").strip()
+    customer_email = ((session.get("customer_details") or {}).get("email") or "").strip() or (
+        session.get("customer_email") or ""
+    ).strip()
     label = handoff_report_label(amount_cents)
     return {
         "status": "handoff_report_recorded",

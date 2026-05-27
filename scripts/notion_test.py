@@ -29,9 +29,7 @@ except ImportError:
 def require_env(key: str) -> str:
     val = os.getenv(key)
     if not val:
-        sys.exit(
-            f"ERROR: {key} not set. Copy .env.example to .env and fill in Notion values."
-        )
+        sys.exit(f"ERROR: {key} not set. Copy .env.example to .env and fill in Notion values.")
     return val
 
 
@@ -55,10 +53,7 @@ def main() -> int:
 
     db_id = os.getenv("NOTION_CUSTOMERS_DB_ID")
     if not db_id:
-        print(
-            "WARN: NOTION_CUSTOMERS_DB_ID not set — skipping database query.",
-            file=sys.stderr,
-        )
+        print("WARN: NOTION_CUSTOMERS_DB_ID not set — skipping database query.", file=sys.stderr)
         print(
             "Create Customers DB in Notion, import templates/notion/customers-db.csv, share with integration.",
             file=sys.stderr,

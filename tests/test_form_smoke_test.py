@@ -244,9 +244,7 @@ class SyntheticValueDispatchCase(unittest.TestCase):
         self.assertEqual(value, fst.SYNTHETIC_VALUES["message"])
 
     def test_unknown_field_falls_back_to_default_text(self) -> None:
-        value, key = fst._synthetic_value_for(
-            {"type": "text", "name": "x", "placeholder": "??"}
-        )
+        value, key = fst._synthetic_value_for({"type": "text", "name": "x", "placeholder": "??"})
         self.assertEqual(key, "default_text")
         self.assertEqual(value, fst.SYNTHETIC_VALUES["default_text"])
 
@@ -287,16 +285,12 @@ def _three_failed_results() -> list[dict]:
 
 class TierCapCase(unittest.TestCase):
     def test_starter_caps_at_one_actionable_finding(self) -> None:
-        out = fst.to_findings(
-            _three_failed_results(), tier="Starter Package", platform="lovable"
-        )
+        out = fst.to_findings(_three_failed_results(), tier="Starter Package", platform="lovable")
         actionable = [f for f in out["findings"] if not f.get("skipped")]
         self.assertEqual(len(actionable), 1)
 
     def test_scale_up_caps_at_three_actionable_findings(self) -> None:
-        out = fst.to_findings(
-            _three_failed_results(), tier="Scale Up Package", platform="lovable"
-        )
+        out = fst.to_findings(_three_failed_results(), tier="Scale Up Package", platform="lovable")
         actionable = [f for f in out["findings"] if not f.get("skipped")]
         self.assertEqual(len(actionable), 3)
 
@@ -339,9 +333,7 @@ class SafetyGuardrailsCase(unittest.TestCase):
         self.assertEqual(fst._skip_reason(_checkout_form()), "checkout_skipped")
 
     def test_destructive_form_detected_as_skip(self) -> None:
-        self.assertEqual(
-            fst._skip_reason(_delete_account_form()), "destructive_skipped"
-        )
+        self.assertEqual(fst._skip_reason(_delete_account_form()), "destructive_skipped")
 
     def test_clean_form_not_skipped(self) -> None:
         self.assertIsNone(fst._skip_reason(_newsletter_form()))
@@ -360,9 +352,7 @@ class SafetyGuardrailsCase(unittest.TestCase):
         skipped = [f for f in out["findings"] if f.get("skipped")]
         self.assertEqual(len(skipped), 1)
         self.assertEqual(skipped[0]["severity"], "low")
-        self.assertEqual(
-            skipped[0]["tag"], "Caught by The Stranger Who Tried to Sign Up"
-        )
+        self.assertEqual(skipped[0]["tag"], "Caught by The Stranger Who Tried to Sign Up")
         self.assertIn("didn't submit", skipped[0]["what_we_saw"].lower())
 
     def test_destructive_skip_surfaces_low_severity_finding(self) -> None:
@@ -407,9 +397,7 @@ class SafetyGuardrailsCase(unittest.TestCase):
     def test_blocked_selector_match_is_substring(self) -> None:
         # The customer-YAML opt-out should accept a selector substring.
         self.assertTrue(fst._is_blocked_selector("#prod-checkout", ["#prod-checkout"]))
-        self.assertTrue(
-            fst._is_blocked_selector("form#prod-checkout", ["#prod-checkout"])
-        )
+        self.assertTrue(fst._is_blocked_selector("form#prod-checkout", ["#prod-checkout"]))
         self.assertFalse(fst._is_blocked_selector("#newsletter", ["#prod-checkout"]))
         self.assertFalse(fst._is_blocked_selector("#x", []))
 
@@ -424,9 +412,7 @@ class EmailRoundTripCase(unittest.TestCase):
         self.calls: list[dict] = []
 
         def fake_roundtrip(*, raw_results, customer_email=None):
-            self.calls.append(
-                {"raw_results": raw_results, "customer_email": customer_email}
-            )
+            self.calls.append({"raw_results": raw_results, "customer_email": customer_email})
             # Pretend nothing arrived so we surface a finding.
             return [{"form": _newsletter_form(), "arrived": False}]
 
@@ -538,9 +524,7 @@ class PersonaTagCase(unittest.TestCase):
         out = fst.to_findings(raw, tier="Pro Package", platform="lovable")
         for f in out["findings"]:
             with self.subTest(title=f["title"]):
-                self.assertEqual(
-                    f["tag"], "Caught by The Stranger Who Tried to Sign Up"
-                )
+                self.assertEqual(f["tag"], "Caught by The Stranger Who Tried to Sign Up")
                 self.assertEqual(f["category"], "form_submit_smoke")
                 self.assertEqual(f["source"], "external")
 
@@ -565,9 +549,7 @@ class FixPromptCase(unittest.TestCase):
 
     def test_fix_prompt_falls_back_to_generic_when_platform_missing(self) -> None:
         # 'xyz' is not a known platform; we still get a non-empty prompt.
-        prompt = fst._fix_prompt_for(
-            "no_response", "xyz", form_name="newsletter signup form"
-        )
+        prompt = fst._fix_prompt_for("no_response", "xyz", form_name="newsletter signup form")
         self.assertTrue(prompt)
         self.assertIn("newsletter signup form", prompt)
 

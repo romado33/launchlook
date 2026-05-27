@@ -121,9 +121,7 @@ def form_to_yaml(payload: dict[str, Any]) -> str:
 
     parsed = yaml.safe_load(text)
     if not isinstance(parsed, dict):
-        raise ValueError(
-            "Internal error: serialized YAML did not round-trip as a mapping"
-        )
+        raise ValueError("Internal error: serialized YAML did not round-trip as a mapping")
 
     return text
 
@@ -399,9 +397,7 @@ def yaml_to_form(text: str) -> dict[str, Any]:
     findings = data.get("findings") or []
     qsg = data.get("quick_start_guide") or {}
     passed_checks = [
-        s.strip()
-        for s in (data.get("passed_checks") or [])
-        if isinstance(s, str) and s.strip()
+        s.strip() for s in (data.get("passed_checks") or []) if isinstance(s, str) and s.strip()
     ]
 
     payload = {

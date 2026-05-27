@@ -40,7 +40,7 @@
 {% for finding in findings_high %}
 **{{ finding.title }}**{% if finding.tag %} *({{ finding.tag }})*{% endif %}
 
-- What we saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
+- What I saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
 - Why it matters: {{ finding.why_it_matters | replace('\n', ' ') | trim }}
 - Fix prompt:
 
@@ -56,7 +56,7 @@
 {% for finding in findings_medium %}
 **{{ finding.title }}**{% if finding.tag %} *({{ finding.tag }})*{% endif %}
 
-- What we saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
+- What I saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
 - Why it matters: {{ finding.why_it_matters | replace('\n', ' ') | trim }}
 - Fix prompt:
 
@@ -72,7 +72,7 @@
 {% for finding in findings_low %}
 **{{ finding.title }}**{% if finding.tag %} *({{ finding.tag }})*{% endif %}
 
-- What we saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
+- What I saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
 - Why it matters: {{ finding.why_it_matters | replace('\n', ' ') | trim }}
 - Fix prompt:
 

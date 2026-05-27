@@ -37,12 +37,8 @@ def test_sanitize_finding_strips_customer_url() -> None:
     finding = {
         "title": "Dev Bypass button signs visitors in",
         "severity": "critical",
-        "what_we_saw": (
-            "On https://sparkle.lovable.app/auth, the Dev Bypass button is " "visible."
-        ),
-        "why_it_matters": (
-            "Anyone with the URL sparkle.lovable.app can skip authentication."
-        ),
+        "what_we_saw": ("On https://sparkle.lovable.app/auth, the Dev Bypass button is visible."),
+        "why_it_matters": ("Anyone with the URL sparkle.lovable.app can skip authentication."),
         "fix_prompt": "Remove the button from /auth on sparkle.lovable.app.",
     }
     clean = sanitize_finding(finding, "https://sparkle.lovable.app")

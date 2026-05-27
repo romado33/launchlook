@@ -194,10 +194,7 @@ def _check_xcto(headers: dict[str, str]) -> dict[str, Any] | None:
     return {
         "severity": "low",
         "title": "Missing X-Content-Type-Options: nosniff",
-        "what_we_saw": (
-            "Your homepage response does not include "
-            "X-Content-Type-Options: nosniff."
-        ),
+        "what_we_saw": ("Your homepage response does not include X-Content-Type-Options: nosniff."),
         "why_it_matters": (
             "Without nosniff, the browser is allowed to guess the type of a "
             "response (e.g. treat a text file as JavaScript). It's a small, "
@@ -317,9 +314,7 @@ def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     findings.append(
                         {
                             "severity": "high",
-                            "title": (
-                                "Public link to " f"{label} visible on your site"
-                            ),
+                            "title": (f"Public link to {label} visible on your site"),
                             "what_we_saw": (
                                 f"On {path}, the rendered HTML contains a "
                                 f"link with href {href!r} which matches a "

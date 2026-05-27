@@ -11,11 +11,11 @@ Files Rob imports into Notion to set up the **LaunchLook Ops** workspace (BL-03)
    - `Customers` — import `customers-db.csv`
    - `Outreach Tracker` — import `outreach-db.csv`
    - `Findings Library` — import `../../findings_library/findings.csv`
-3. Create a top-level page called **Report Templates**. Inside it, create sub-pages from the templates in this folder:
-   - `Template — Starter Package` (from `report-quick-checkup.md`)
-   - `Template — Scale Up Package` (from `report-launch-pack.md`, the historical name was "Full Package")
-   - `Template — Pro Package` (from `report-launch-pack.md` extended with the integrations / Loom sections)
-   - *(Optional, advanced)* `Template — Polish add-on` (from `report-polish.md`) — only if you start offering a paid follow-up tier; not part of the current MVP.
+3. Create a top-level page called **Report Templates**. Inside it, create three sub-pages — see **`REPORT-TEMPLATES-SETUP.md`** for the mapping:
+   - `Template — Starter Package` ← `report-quick-checkup.md` ($19, up to 10 findings)
+   - `Template — Scale Up Package` ← `report-launch-pack.md` ($49, up to 30; was "Full Package")
+   - `Template — Pro Package` ← `report-pro-package.md` ($99, up to 40 + integrations + Loom + Handoff)
+   - *(Optional)* `Template — Polish add-on` ← `report-polish.md` — legacy follow-up only; not on the current ladder.
 4. Create a page called **Crawler Wishlist** (from `crawler-wishlist.md`).
 5. Mark each report template page as a **Notion Template** so duplicating is one click per customer.
 
@@ -43,7 +43,7 @@ Notion natively supports Markdown import on page creation:
 | Tier | Select | Starter Package / Scale Up Package / Pro Package (legacy values still in DB: Full Package, Quick Checkup, Launch Pack, Polish) |
 | Payment Date | Date | |
 | Intake Received | Checkbox | |
-| Delivery Due | Date | Formula: Payment Date + tier turnaround (Starter 24h, Full 12h) |
+| Delivery Due | Date | Formula: Payment Date + tier turnaround (typically within 48h of intake; often faster) |
 | Delivered | Checkbox | |
 | Follow-up Sent | Checkbox | Day-3 automation flips this |
 | Feedback Received | Text | |

@@ -136,9 +136,7 @@ def main() -> int:
             dry_run=True,
             labels=labels,
         )
-        print(
-            f"Dry-run complete: {len(results)} issue(s) would be created on {repo_url}."
-        )
+        print(f"Dry-run complete: {len(results)} issue(s) would be created on {repo_url}.")
         if pr_number:
             print(
                 f"PR comment would target #{pr_number} on the same repo "

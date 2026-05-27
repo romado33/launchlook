@@ -136,7 +136,7 @@ flowchart LR
 | Curate + QSG | Manual + `qsg_compose_prompt.py` | 15–30 min |
 | Send | `email_render.py` + delivery template | 5 min |
 
-**SLA:** Starter within 48h (usually 24) · Full within 24h (usually 12), measured from intake submission.
+**SLA unchanged:** Starter 24h · Full 12h from intake.
 
 ---
 

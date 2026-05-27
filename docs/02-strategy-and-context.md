@@ -70,7 +70,7 @@ Critical: the quality bar matters more than the quantity. If 8 customers buy but
 - Impulse purchase range. Below conscious deliberation.
 - Lower than every direct competitor's entry tier.
 - Signals "low-stakes check," matching the friendly positioning.
-- Creates room for Full Package ($29) and email-quoted follow-ups without sticker shock.
+- Creates room for Ship Package ($29) and email-quoted follow-ups without sticker shock.
 - Generates more customers per outreach attempt, accelerating learning.
 
 Counter-arguments and rebuttals:

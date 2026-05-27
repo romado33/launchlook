@@ -137,13 +137,9 @@ def _scrub_text(text: str, customer_host: str) -> str:
     if customer_host:
         host = re.escape(customer_host)
         # https://host or http://host (with optional path)
-        out = re.sub(
-            rf"https?://{host}(/[^\s)\"']*)?", "your site", out, flags=re.IGNORECASE
-        )
+        out = re.sub(rf"https?://{host}(/[^\s)\"']*)?", "your site", out, flags=re.IGNORECASE)
         # Bare host appearance (word boundary on left)
-        out = re.sub(
-            rf"(?<![A-Za-z0-9.-]){host}\b", "your site", out, flags=re.IGNORECASE
-        )
+        out = re.sub(rf"(?<![A-Za-z0-9.-]){host}\b", "your site", out, flags=re.IGNORECASE)
 
     out = _email_pattern().sub("[email redacted]", out)
     return out
@@ -226,9 +222,7 @@ def sanitize_verdict(verdict: dict[str, Any], customer_url: str) -> dict[str, An
     return out
 
 
-def sanitize_report_json(
-    report: dict[str, Any], customer: dict[str, Any]
-) -> dict[str, Any]:
+def sanitize_report_json(report: dict[str, Any], customer: dict[str, Any]) -> dict[str, Any]:
     """Top-level sanitizer. Returns the public-safe report dict.
 
     The input ``report`` is the full delivery-time dict (verdict +
@@ -244,9 +238,7 @@ def sanitize_report_json(
     customer_url = customer.get("app_url") or report.get("customer_url") or ""
 
     findings_in = report.get("findings") or []
-    findings_out = [
-        sanitize_finding(f, customer_url) for f in findings_in if isinstance(f, dict)
-    ]
+    findings_out = [sanitize_finding(f, customer_url) for f in findings_in if isinstance(f, dict)]
 
     out: dict[str, Any] = {
         "customer_slug": report.get("customer_slug", ""),
@@ -260,9 +252,7 @@ def sanitize_report_json(
         "findings": findings_out,
         "share_metadata": dict(report.get("share_metadata") or {}),
         "handoff_report": {
-            "available": bool(
-                (report.get("handoff_report") or {}).get("available", False)
-            ),
+            "available": bool((report.get("handoff_report") or {}).get("available", False)),
             "shared": bool((report.get("handoff_report") or {}).get("shared", False)),
         },
     }

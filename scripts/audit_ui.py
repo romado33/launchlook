@@ -69,12 +69,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default="",
         help='Customer name, e.g. "Jane Smith". Split into first/last by the first space.',
     )
-    parser.add_argument(
-        "--first-name", default="", help="Customer first name (overrides --name)."
-    )
-    parser.add_argument(
-        "--last-name", default="", help="Customer last name (overrides --name)."
-    )
+    parser.add_argument("--first-name", default="", help="Customer first name (overrides --name).")
+    parser.add_argument("--last-name", default="", help="Customer last name (overrides --name).")
     parser.add_argument("--email", default="", help="Customer email.")
     parser.add_argument("--app-name", default="", help="Customer app/product name.")
     parser.add_argument(
@@ -104,15 +100,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "= form selects 'vibe-coder'."
         ),
     )
-    parser.add_argument(
-        "--port", type=int, default=8000, help="Port to bind (default: 8000)."
-    )
-    parser.add_argument(
-        "--host", default="127.0.0.1", help="Host to bind (default: 127.0.0.1)."
-    )
-    parser.add_argument(
-        "--no-browser", action="store_true", help="Do not auto-open the browser."
-    )
+    parser.add_argument("--port", type=int, default=8000, help="Port to bind (default: 8000).")
+    parser.add_argument("--host", default="127.0.0.1", help="Host to bind (default: 127.0.0.1).")
+    parser.add_argument("--no-browser", action="store_true", help="Do not auto-open the browser.")
     parser.add_argument(
         "--debug", action="store_true", help="Run Flask in debug mode (auto-reload)."
     )
@@ -148,9 +138,7 @@ def build_prefill(args: argparse.Namespace) -> dict[str, object]:
         "platform": (args.platform or "").strip(),
         "url_redacted": False,
     }
-    return {
-        k: v for k, v in prefill.items() if v not in ("", None, False) or k == "slug"
-    }
+    return {k: v for k, v in prefill.items() if v not in ("", None, False) or k == "slug"}
 
 
 def schedule_browser_open(host: str, port: int, delay_seconds: float = 1.0) -> None:

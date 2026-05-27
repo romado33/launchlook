@@ -98,15 +98,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         required=True,
         help="Builder (Lovable, Bolt, v0, Cursor, Replit, Base44, Other)",
     )
-    parser.add_argument(
-        "--name", default="", help='Customer full name (e.g. "Jane Smith")'
-    )
-    parser.add_argument(
-        "--first-name", default="", dest="first_name", help="Override first name"
-    )
-    parser.add_argument(
-        "--last-name", default="", dest="last_name", help="Override last name"
-    )
+    parser.add_argument("--name", default="", help='Customer full name (e.g. "Jane Smith")')
+    parser.add_argument("--first-name", default="", dest="first_name", help="Override first name")
+    parser.add_argument("--last-name", default="", dest="last_name", help="Override last name")
     parser.add_argument("--email", default="", help="Customer email")
     parser.add_argument(
         "--app-name", required=True, dest="app_name", help="Customer app/product name"
@@ -140,12 +134,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Skip screenshot capture (use existing screenshots)",
     )
-    parser.add_argument(
-        "--skip-prescreen", action="store_true", help="Skip regex prescreener"
-    )
-    parser.add_argument(
-        "--dry-run", action="store_true", help="Do not write YAML; print to stdout"
-    )
+    parser.add_argument("--skip-prescreen", action="store_true", help="Skip regex prescreener")
+    parser.add_argument("--dry-run", action="store_true", help="Do not write YAML; print to stdout")
     parser.add_argument(
         "--max-findings",
         type=int,

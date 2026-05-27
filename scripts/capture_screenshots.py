@@ -123,9 +123,7 @@ def capture(customer: Customer, paths: list[str]) -> dict[str, Any]:
                 context = browser.new_context(
                     viewport={"width": width, "height": height},
                     ignore_https_errors=True,
-                    user_agent=(
-                        "Mozilla/5.0 (LaunchLook Review Bot; +https://launchlook.app)"
-                    ),
+                    user_agent=("Mozilla/5.0 (LaunchLook Review Bot; +https://launchlook.app)"),
                 )
                 for path in paths:
                     url = join_url(base_url, path)
@@ -137,9 +135,7 @@ def capture(customer: Customer, paths: list[str]) -> dict[str, Any]:
                     }
                     page = context.new_page()
                     try:
-                        response = page.goto(
-                            url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle"
-                        )
+                        response = page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
                         status = response.status if response else None
                         entry["status"] = status
                         dismiss_cookie_banner(page)
@@ -150,9 +146,7 @@ def capture(customer: Customer, paths: list[str]) -> dict[str, Any]:
                         msg = str(exc)
                         if "ERR_INVALID_AUTH_CREDENTIALS" in msg or "401" in msg:
                             entry["status"] = "auth_required"
-                            print(
-                                f"  [{viewport_name}] AUTH required at {path} - skipped"
-                            )
+                            print(f"  [{viewport_name}] AUTH required at {path} - skipped")
                         elif "timeout" in msg.lower():
                             entry["status"] = "timeout"
                             print(f"  [{viewport_name}] TIMEOUT at {path}")
@@ -209,7 +203,7 @@ def render_index(customer: Customer, meta: dict[str, Any]) -> Path:
             img = (
                 f'<img loading="lazy" src="{file_rel}" alt="{entry["path"]}">'
                 if file_rel and (out_dir / file_rel).exists()
-                else '<div class="missing">No screenshot (status: ' f"{status})</div>"
+                else f'<div class="missing">No screenshot (status: {status})</div>'
             )
             cards.append(
                 f"""<div class="card">
@@ -283,12 +277,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument(
-        "--customer-id", help="Notion Customers DB page id (or unique prefix)"
-    )
-    parser.add_argument(
-        "--url", help="Override URL - useful for smoke tests without Notion"
-    )
+    parser.add_argument("--customer-id", help="Notion Customers DB page id (or unique prefix)")
+    parser.add_argument("--url", help="Override URL - useful for smoke tests without Notion")
     parser.add_argument(
         "--paths",
         nargs="*",

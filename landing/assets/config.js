@@ -57,4 +57,18 @@ window.LAUNCHLOOK_CONFIG = {
     handoff: "https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06",
   },
   linkedinUrl: "https://www.linkedin.com/in/rob-dods/",
+  // Shown on shareable report footers (landing stays "human reviewer" in prose).
+  reviewerName: "Rob",
+  // Tally hidden-field URL-param keys for prefill on /thanks.
+  // "email" works on all Tally forms. "appUrl" and "tier" require a matching
+  // hidden field in QKOX1A (add in Tally editor — 2-minute task):
+  //   - appUrl: hidden field with URL-param key "app_url" (or whatever key you set below)
+  //   - tier:   hidden field with URL-param key "tier"
+  // The tier field drives Q9-Q12 conditional logic (replacing Q8).
+  // See docs/TALLY-INTAKE-SETUP.md "Hidden-tier setup" section.
+  tallyPrefill: {
+    email: "email",
+    appUrl: "",
+    tier: "tier",
+  },
 };

@@ -63,17 +63,10 @@ grounding rules from the system prompt.
 
 Quality bar before you return:
 * Did you quote at least one specific label / phrase / route per finding?
+* Does title / what_we_saw / why_it_matters sound informal and human (Rob
+  will ship this with light edits, not a full rewrite)?
 * Is each fix_prompt a directive (not advice), and tailored to {builder}?
 * Are there zero em-dashes in any field?
 * Is every severity placement defensible against the system-prompt definitions?
 
 Return the structured response only. No preamble.
-
-Final quality bar before you emit each finding:
-
-* Pick a ``category`` (one of the ids in the finding-categories list).
-* Emit a matching ``tag`` of the form ``Caught by The {Persona}`` where
-  ``{Persona}`` is the ``tester`` declared on that category in
-  ``scripts/ai_audit/finding_categories.yaml`` (e.g. ``Caught by The
-  Skeptic`` for ``trust_gaps``). The 7 personas are canonical; never
-  invent a new one. See docs/TESTERS-CAST.md.

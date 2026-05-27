@@ -3,20 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LaunchLook for Webflow: Pre-launch checkup before your forms silently break</title>
-  <meta name="description" content="Pre-launch checkup for Webflow sites: form-submission audit, noindex/robots check, JSON-LD schema, Designer-to-live mismatches, mobile breakpoint bugs. From $19. No Webflow account access required." />
+  <title>LaunchLook for Webflow — Human-reviewed pre-launch checkup</title>
+  <meta name="description" content="Human-reviewed Webflow pre-launch checkup: form submissions, noindex/robots, JSON-LD schema, Designer-to-live mismatches, breakpoint bugs. URL only — no Workspace access. From $19." />
 
-  <meta property="og:title" content="LaunchLook for Webflow: Pre-launch checkup" />
-  <meta property="og:description" content="Catch silent form failures, accidental noindex, missing schema, and Designer-to-live mismatches before your client does. From $19." />
+  <meta property="og:site_name" content="LaunchLook" />
+  <meta property="og:title" content="LaunchLook for Webflow — Human-reviewed pre-launch checkup" />
+  <meta property="og:description" content="Humans test forms and notification emails, then review every finding. Catch silent failures before your client does." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://launchlook.app/webflow" />
   <meta property="og:image" content="https://launchlook.app/images/og.png" />
   <link rel="canonical" href="https://launchlook.app/webflow" />
+  <link rel="alternate" type="text/markdown" href="https://launchlook.app/webflow.md" title="LaunchLook Webflow (markdown)" />
+  <link rel="alternate" type="text/plain" href="https://launchlook.app/llms.txt" title="LLM site summary" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
-  <meta name="twitter:title" content="LaunchLook for Webflow: Pre-launch checkup" />
-  <meta name="twitter:description" content="Pre-launch checkup for Webflow sites. From $19." />
+  <meta name="twitter:title" content="LaunchLook for Webflow — Human-reviewed checkup" />
+  <meta name="twitter:description" content="Human-reviewed Webflow audit. Forms, noindex, schema, breakpoints. From $19." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://launchlook.app/#organization",
+        "name": "LaunchLook",
+        "url": "https://launchlook.app/",
+        "logo": "https://launchlook.app/images/og.png",
+        "email": "hello@launchlook.app"
+      },
+      {
+        "@type": "Service",
+        "name": "Webflow pre-launch checkup",
+        "provider": { "@id": "https://launchlook.app/#organization" },
+        "serviceType": "Webflow site quality audit",
+        "description": "Human-reviewed checkup for Webflow sites: form submissions, noindex and robots rules, JSON-LD schema, Designer-to-live mismatches, and mobile breakpoint issues.",
+        "areaServed": "Worldwide",
+        "url": "https://launchlook.app/webflow",
+        "offers": {
+          "@type": "Offer",
+          "name": "Starter — Webflow",
+          "price": "19",
+          "priceCurrency": "USD",
+          "url": "https://launchlook.app/webflow#pricing"
+        }
+      }
+    ]
+  }
+  </script>
 
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
 
@@ -32,15 +67,15 @@
 
   <header id="site-header" class="site-header border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
     <div class="page-wrap px-6 py-3 flex items-center justify-between">
-      <a href="/webflow" class="site-brand">
+      <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
-        <span class="font-serif text-xl font-medium text-ink">LaunchLook <span class="text-muted text-base font-normal">for Webflow</span></span>
+        <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
         <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
-      <nav class="flex items-center gap-5 text-sm text-muted">
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
         <a href="#pricing" class="nav-link">Pricing</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <a href="/" class="nav-link">For vibe-coders</a>
+        <a href="/faq" class="nav-link">FAQ</a>
+        <a href="/webflow" class="nav-link text-ink">Webflow</a>
       </nav>
     </div>
   </header>
@@ -52,7 +87,7 @@
       Built your Webflow site in Designer? Get the pre-launch checkup before your forms silently break, your noindex blocks Google, or your client finds the typo.
     </h1>
     <p class="mt-4 text-lg text-muted leading-relaxed max-w-3xl">
-      Send your live URL. A real person walks every page on desktop and the three Webflow mobile breakpoints, then sends back a shareable PDF: form submissions, noindex tags, schema, Designer-to-live mismatches, mobile breakage. Every finding is reviewed by a founder before it ships, with paste-ready fixes in Webflow Designer language.
+      Send your live URL. A real person walks every page on desktop and the three Webflow mobile breakpoints, submits forms where we can, and checks whether notifications and auto-replies actually arrive. You get a shareable PDF on form failures, noindex tags, schema, Designer-to-live mismatches, and mobile breakage. Every finding is reviewed by a founder before it ships, with paste-ready fixes in Webflow Designer language.
     </p>
     <div class="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
       <a href="#pricing" class="launchlook-btn launchlook-btn-primary">See Webflow pricing</a>
@@ -82,8 +117,8 @@
         <li class="flex gap-4">
           <span class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-soft text-ink text-sm font-medium flex items-center justify-center">2</span>
           <div>
-            <p class="font-medium">We walk every page, every breakpoint</p>
-            <p class="text-muted text-sm mt-1">Every page captured at desktop and the three Webflow mobile breakpoints (991px / 767px / 478px). We probe every form, read your robots.txt and per-page noindex tags, check JSON-LD schema, look for Designer-to-published mismatches, and flag the &ldquo;works in Designer, breaks live&rdquo; patterns.</p>
+            <p class="font-medium">Human-tested workflows on every breakpoint</p>
+            <p class="text-muted text-sm mt-1">Every page captured at desktop and the three Webflow mobile breakpoints (991px / 767px / 478px). We submit forms, check whether confirmation emails land, read robots.txt and noindex tags, check JSON-LD schema, and flag Designer-to-published mismatches.</p>
           </div>
         </li>
         <li class="flex gap-4">
@@ -151,7 +186,7 @@
         I'm <strong class="text-ink">Rob</strong>, a technical writer who's shipped products and documentation for years. Every LaunchLook checkup is reviewed by me manually before it goes out. For Webflow we never ask for your Designer login, your Workspace, or your Editor access. URL only.
       </p>
       <p class="text-muted leading-relaxed mt-4">
-        Built for Webflow freelancers, agencies, and in-house teams who want the second pair of eyes before client handoff or a public launch. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful. Connect on LinkedIn in the footer.
+        Built for Webflow freelancers, agencies, and in-house teams who want the second pair of eyes before client handoff or a public launch. <strong class="text-ink font-medium">Full refund within 7 days</strong> if the report isn't useful.
       </p>
       </div>
     </div>
@@ -356,16 +391,17 @@
   <footer class="border-t border-line">
     <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
-        <div data-launchlook-linkedin-wrap class="hidden">
-          <p class="text-xs font-medium text-ink">Connect with the founder</p>
-          <p class="text-xs text-muted mt-1">Human-reviewed Webflow checkups before client handoff.</p>
-          <a data-launchlook-linkedin href="#" class="text-xs text-ink hover:text-accent underline mt-1.5 inline-block">LinkedIn profile &rarr;</a>
-        </div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
-        <li><a href="/" class="hover:text-ink">For vibe-coders</a></li>
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

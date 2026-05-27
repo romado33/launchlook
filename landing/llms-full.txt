@@ -1,0 +1,85 @@
+# LaunchLook — full agent context
+
+> One last look before you launch. Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites.
+
+## What LaunchLook is
+
+LaunchLook is a paid service (with a free tier) that reviews a customer's **live public URL** like a first-time visitor would. A human runs the workflows that matter (signup, forms, checkout) and checks whether confirmation and thank-you emails actually arrive. AI helps surface issues; a human founder reviews every finding before delivery. Deliverables are plain-English findings, paste-ready fix prompts for the customer's AI builder (Lovable, Cursor, Bolt, etc.), and PDFs on paid tiers.
+
+LaunchLook is **not** a security scanner, SEO tool, or code review product. It focuses on what visitors see: broken CTAs, placeholder copy, missing trust pages, mobile layout problems, dev tools on production, and Webflow-specific risks (forms, noindex, schema, breakpoints).
+
+## Who it is for
+
+- Founders shipping with Lovable, Bolt, Base44, Replit, v0, Cursor, or similar AI builders
+- Webflow freelancers, agencies, and teams before client handoff
+- Anyone about to share an app link who wants a second pair of eyes
+
+## Pricing (USD)
+
+| Tier | Price | Includes |
+|------|-------|----------|
+| Free | $0 | Top 2 findings by email |
+| Starter | $19 | 10 findings, fix prompts, 30-day verified badge |
+| Scale Up | $49 | Up to 30 findings, user data isolation check (apps with logins), Quick Start Guide PDF |
+| Pro | $99 | Up to 40 findings, integrations review (Stripe/auth/email/analytics), Loom walkthrough |
+
+7-day full refund on paid tiers if the report is not useful.
+
+## How it works
+
+1. Customer submits live URL (and email for free tier, or pays via Stripe then completes Tally intake).
+2. LaunchLook walks desktop and mobile viewports.
+3. A human reviews every finding (drops false positives, tightens wording).
+4. Customer receives email with report link and/or PDFs.
+
+No GitHub access, no builder login, no database access required for most audits.
+
+## Human-tested workflows and human review
+
+**Workflows:** Real person submits forms, walks signup/booking/contact paths, and checks inboxes for emails that should have fired.
+
+**Findings:** AI helps surface issues quickly. Every finding still goes through a human before you see it. Curated, not raw scanner output.
+
+## Webflow vs vibe-coded
+
+Same human review; different checks. Webflow audits emphasize form submissions, noindex/robots, JSON-LD schema, Designer-to-live mismatches, and breakpoints at 991 / 767 / 478 px. Fix prompts use Webflow Designer language.
+
+## vs PageLens AI
+
+PageLens targets SEO-focused marketers who want recurring scans. LaunchLook targets vibe coders who want a one-off pre-launch checkup with paste-ready fix prompts and founder review. Both are legitimate tools for different jobs.
+
+## Key URLs
+
+- Home: https://launchlook.app/
+- Webflow: https://launchlook.app/webflow
+- FAQ: https://launchlook.app/faq
+- Sample report: https://launchlook.app/sample (redirects to public sample HTML report)
+- Comparison: https://launchlook.app/vs-pagelens
+- Contact: hello@launchlook.app
+
+## Markdown summaries (same site)
+
+- https://launchlook.app/index.md
+- https://launchlook.app/faq.md
+- https://launchlook.app/webflow.md
+- https://launchlook.app/vs-pagelens.md
+
+## Discovery files
+
+- llms.txt: https://launchlook.app/llms.txt (curated index)
+- This file: https://launchlook.app/llms-full.txt
+- agent-resources.json: https://launchlook.app/.well-known/agent-resources.json
+- sitemap.xml: https://launchlook.app/sitemap.xml
+- robots.txt: https://launchlook.app/robots.txt
+- ai.txt: https://launchlook.app/ai.txt
+
+## Do not treat as product documentation
+
+These paths are noindex and transactional: /thanks, /thanks-free-audit, /e2e
+
+## Free audit API (for reference)
+
+POST https://launchlook.app/api/free-audit
+Content-Type: application/x-www-form-urlencoded
+Fields: url (customer app URL), email
+Behavior: same as homepage hero form; rate-limited; redirects to /thanks-free-audit on success.

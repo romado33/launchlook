@@ -103,9 +103,7 @@ def parse_repo_url(url: str) -> tuple[str, str]:
 
     match = _GITHUB_OWNER_REPO_RE.match(parsed.path)
     if not match:
-        raise ValueError(
-            f"github.repo path must look like /owner/repo (got {parsed.path!r})"
-        )
+        raise ValueError(f"github.repo path must look like /owner/repo (got {parsed.path!r})")
 
     owner, repo = match.group(1), match.group(2)
     if not owner or not repo:
@@ -128,9 +126,7 @@ def authenticated_session(token: str) -> requests.Session:
     silently when GitHub ships a new default.
     """
     if not token or not isinstance(token, str):
-        raise ValueError(
-            "github PAT is empty — set the env var named in github.token_env"
-        )
+        raise ValueError("github PAT is empty — set the env var named in github.token_env")
 
     session = requests.Session()
     session.headers.update(
@@ -246,9 +242,7 @@ def _redact_token_in_text(text: str, token: str) -> str:
     return text.replace(token, "***REDACTED-PAT***")
 
 
-def _raise_for_github_error(
-    response: requests.Response, token: str, context: str
-) -> None:
+def _raise_for_github_error(response: requests.Response, token: str, context: str) -> None:
     """Convert GitHub error responses into helpful, PAT-safe exceptions."""
     if response.ok:
         return
@@ -276,9 +270,7 @@ def _raise_for_github_error(
             "is not a collaborator.\n"
             f"GitHub said: {body_excerpt}"
         )
-    raise RuntimeError(
-        f"{context}: GitHub returned HTTP {status}. Body: {body_excerpt}"
-    )
+    raise RuntimeError(f"{context}: GitHub returned HTTP {status}. Body: {body_excerpt}")
 
 
 def create_issue(
@@ -310,9 +302,7 @@ def create_issue(
     return response.json()
 
 
-def _format_finding_preview(
-    finding: dict[str, Any], audit_metadata: dict[str, Any]
-) -> str:
+def _format_finding_preview(finding: dict[str, Any], audit_metadata: dict[str, Any]) -> str:
     """Single-block dry-run preview: title + first lines of the body."""
     title = issue_title_from_finding(finding)
     body = issue_body_from_finding(finding, audit_metadata)
@@ -329,9 +319,7 @@ def _load_yaml(path: Path) -> dict[str, Any]:
     try:
         import yaml
     except ImportError as exc:  # pragma: no cover - dependency missing
-        raise RuntimeError(
-            "pyyaml not installed. Run: pip install -r requirements.txt"
-        ) from exc
+        raise RuntimeError("pyyaml not installed. Run: pip install -r requirements.txt") from exc
 
     if not path.exists():
         raise FileNotFoundError(f"customer YAML not found: {path}")
@@ -358,8 +346,7 @@ def _audit_metadata_from_yaml(yaml_path: Path, data: dict[str, Any]) -> dict[str
 
     return {
         "audit_id": audit_id,
-        "audit_timestamp": github_block.get("audit_timestamp")
-        or date.today().isoformat(),
+        "audit_timestamp": github_block.get("audit_timestamp") or date.today().isoformat(),
         "customer_name": customer.get("first_name", ""),
         "app_name": customer.get("app_name", ""),
         "commit_sha": github_block.get("commit_sha"),
@@ -427,9 +414,7 @@ def create_all_issues(
         if i > 1:
             # Polite delay between POSTs. See module docstring for the math.
             sleep_fn(sleep_seconds)
-        response = create_issue(
-            session, owner, repo, finding, audit_metadata, labels=labels
-        )
+        response = create_issue(session, owner, repo, finding, audit_metadata, labels=labels)
         results.append(
             {
                 "title": issue_title_from_finding(finding),
@@ -489,9 +474,7 @@ def add_pr_comment(
     session = authenticated_session(token)
     url = f"{GITHUB_API}/repos/{owner}/{repo}/issues/{int(pr_number)}/comments"
     response = session.post(url, json={"body": body}, timeout=30)
-    token_for_redaction = (
-        session.headers.get("Authorization", "").removeprefix("Bearer ").strip()
-    )
+    token_for_redaction = session.headers.get("Authorization", "").removeprefix("Bearer ").strip()
     _raise_for_github_error(
         response, token_for_redaction, f"add_pr_comment({owner}/{repo}#{pr_number})"
     )

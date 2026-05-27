@@ -134,9 +134,7 @@ def load_customer_from_notion(customer_id: str) -> Customer:
 
     cursor = None
     while True:
-        resp = client.data_sources.query(
-            data_source_id=ds_id, page_size=100, start_cursor=cursor
-        )
+        resp = client.data_sources.query(data_source_id=ds_id, page_size=100, start_cursor=cursor)
         for row in resp.get("results", []):
             if row.get("archived") or row.get("in_trash"):
                 continue

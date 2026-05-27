@@ -38,9 +38,8 @@ LaunchLook — 20-minute Starter workflow
 4. Logged-out probe (2 min)
    - Incognito → /dashboard, /admin, /settings — should redirect, not show data
 
-5. Write-up (5 min)
-   - Starter (priority triage): the top 5 findings, severity order
-   - Full (comprehensive audit): up to 20 findings, severity order
+5. Write-up (5–7 min)
+   - 5–7 findings, severity order
    - Substitute {ACTUAL_NAME}, {PAGE}, {BUTTON_NAME} in fix prompts
    - Verdict: Ready / Needs fixes / Don't ship
 

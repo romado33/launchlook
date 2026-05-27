@@ -3,20 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LaunchLook: One last look before you launch</title>
-  <meta name="description" content="Pre-launch checkup for vibe-coded web apps: Lovable, Bolt, Base44, Replit, v0, Cursor, Webflow, and similar builders. Plain-English findings and fix prompts. From $19." />
+  <title>LaunchLook — Human-reviewed pre-launch checkup for vibe-coded apps</title>
+  <meta name="description" content="Send your live URL. We test at desktop and mobile width, run key workflows (forms, signup, emails that should follow), and a founder reviews every finding. Free 2-finding audit; paid from $19." />
 
-  <meta property="og:title" content="LaunchLook: One last look before you launch" />
-  <meta property="og:description" content="A human checkup before strangers see your vibe-coded app. Findings + fix prompts. From $19." />
+  <meta property="og:site_name" content="LaunchLook" />
+  <meta property="og:title" content="LaunchLook — Human-reviewed pre-launch checkup" />
+  <meta property="og:description" content="Human-tested workflows and human-reviewed findings. Free 2-finding audit; paid tiers from $19." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://launchlook.app/" />
   <meta property="og:image" content="https://launchlook.app/images/og.png" />
   <link rel="canonical" href="https://launchlook.app/" />
+  <link rel="alternate" type="text/markdown" href="https://launchlook.app/index.md" title="LaunchLook (markdown)" />
+  <link rel="alternate" type="text/plain" href="https://launchlook.app/llms.txt" title="LLM site summary" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
-  <meta name="twitter:title" content="LaunchLook: One last look before you launch" />
-  <meta name="twitter:description" content="Pre-launch checkup for vibe-coded web apps. From $19." />
+  <meta name="twitter:title" content="LaunchLook — Human-reviewed pre-launch checkup" />
+  <meta name="twitter:description" content="Free 2-finding audit. Desktop + mobile width testing, real workflow checks, founder-reviewed findings. Paid from $19." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://launchlook.app/#organization",
+        "name": "LaunchLook",
+        "url": "https://launchlook.app/",
+        "logo": "https://launchlook.app/images/og.png",
+        "email": "hello@launchlook.app",
+        "description": "Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://launchlook.app/#website",
+        "url": "https://launchlook.app/",
+        "name": "LaunchLook",
+        "description": "One last look before you launch.",
+        "publisher": { "@id": "https://launchlook.app/#organization" }
+      },
+      {
+        "@type": "Service",
+        "name": "Pre-launch checkup",
+        "provider": { "@id": "https://launchlook.app/#organization" },
+        "serviceType": "Website quality audit",
+        "description": "Tests at desktop and mobile width, real workflow checks (forms, signup, confirmation emails), and founder review on every finding. Plain-English fixes and paste-ready builder prompts.",
+        "areaServed": "Worldwide",
+        "url": "https://launchlook.app/",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Free audit — 2 findings",
+            "price": "0",
+            "priceCurrency": "USD",
+            "url": "https://launchlook.app/#hero"
+          },
+          {
+            "@type": "Offer",
+            "name": "Starter — 10 findings",
+            "price": "19",
+            "priceCurrency": "USD",
+            "url": "https://launchlook.app/#pricing"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
 
@@ -37,7 +90,7 @@
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
         <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
-      <nav class="flex items-center gap-5 text-sm text-muted">
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
         <a href="#pricing" class="nav-link">Pricing</a>
         <a href="/faq" class="nav-link">FAQ</a>
         <a href="/webflow" class="nav-link">Webflow</a>
@@ -47,12 +100,12 @@
 
   <section id="hero" class="border-b border-line bg-paper">
     <div class="page-wrap px-6 section-inner-tight">
-      <p class="text-sm text-muted-strong">For Lovable, Bolt, Cursor, v0, Webflow, and similar AI builders</p>
+      <p class="text-sm text-muted-strong">For Lovable, Bolt, Cursor, v0, Webflow, and similar platforms</p>
       <h1 class="font-serif text-4xl sm:text-5xl leading-[1.08] tracking-tight mt-3 max-w-4xl">
-        Find the embarrassing bugs and trust gaps before your first users do.
+        Find the embarrassing bugs before your first users do.
       </h1>
       <p class="mt-4 text-lg text-muted leading-relaxed max-w-3xl">
-        Send your live URL. A human reviewer emails back a shareable report with screenshots, ranked fixes, and paste-ready prompts for your AI builder.
+        Send your live URL. We load it at desktop and mobile width in the browser, run the workflows that matter (signup, forms, checkout), and check whether confirmation and thank-you emails actually arrive. A founder reviews every finding before you see it: screenshots, ranked fixes, and paste-ready prompts for your builder.
       </p>
 
       <form data-free-audit-form action="/api/free-audit" method="POST" class="card-elevated mt-6 px-4 py-4 sm:px-6 sm:py-6">
@@ -66,12 +119,12 @@
             <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" class="launchlook-input" />
           </label>
         </div>
-        <button type="submit" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-4">Get my free 3 findings</button>
+        <button type="submit" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-4">Get my free 2 findings</button>
         <p data-free-audit-status class="mt-2 text-sm text-muted hidden" role="status" aria-live="polite"></p>
-        <p class="mt-3 text-xs text-footnote">Free, no credit card. We email when it&rsquo;s ready, usually within a few days. <a href="#pricing" class="underline decoration-line hover:text-ink">Starter ($19)</a> adds 7 more findings on top of your free 3.</p>
+        <p class="mt-3 text-xs text-footnote">Free, no credit card. We email when it&rsquo;s ready, usually within a few days. <a href="#pricing" class="underline decoration-line hover:text-ink">Starter ($19)</a> adds 8 more findings on top of your free 2.</p>
       </form>
 
-      <div class="mt-5 flex flex-wrap gap-3 text-sm text-muted">
+      <div class="mt-5 w-full flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted">
         <a href="/sample" class="underline decoration-line hover:text-ink">Sample report</a>
         <span class="text-muted/40" aria-hidden="true">·</span>
         <span>No repo access needed · 7-day refund on paid tiers</span>
@@ -107,10 +160,11 @@
         <p class="mt-2 text-sm text-muted">Illustrative, not exhaustive — these show up constantly on AI-built apps:</p>
         <ul class="mt-3 list-disc pl-5 space-y-1.5 text-sm text-muted">
           <li>Dead buttons and broken links</li>
-          <li>Layout breaks on phone width</li>
+          <li>Layout breaks at mobile width</li>
           <li>Placeholder or generic AI copy still on the page</li>
           <li>Missing privacy or terms pages</li>
           <li>Signup or contact forms that fail silently</li>
+          <li>Confirmation or thank-you emails that never arrive</li>
           <li>Test data or dev shortcuts visible in production</li>
           <li>Login or checkout pages that show &ldquo;Not Secure&rdquo; in the browser</li>
         </ul>
@@ -119,8 +173,8 @@
 
         <h3 class="font-serif text-lg">The human difference</h3>
         <ul class="mt-3 grid sm:grid-cols-3 gap-4 text-sm text-muted">
+          <li><strong class="text-ink font-medium">Tested, not just scanned.</strong> Desktop and mobile width in the browser, plus real form submits and inbox checks.</li>
           <li><strong class="text-ink font-medium">Reviewed, not dumped.</strong> False positives cut before delivery.</li>
-          <li><strong class="text-ink font-medium">Plain English.</strong> No severity codes to Google.</li>
           <li><strong class="text-ink font-medium">Builder prompts.</strong> Paste into Lovable, Bolt, Cursor, v0, and more.</li>
         </ul>
       </div>
@@ -130,7 +184,7 @@
   <section id="pricing" class="border-b border-line bg-paper">
     <div class="page-wrap px-6 section-inner-tight">
       <h2 class="font-serif text-2xl sm:text-3xl">Pricing</h2>
-      <p class="text-sm text-muted mt-2">Same human review on every tier. Every tier includes paste-ready fix prompts.</p>
+      <p class="text-sm text-muted mt-2">Desktop and mobile width testing, real workflow checks, and founder-reviewed findings on every tier. Paste-ready fix prompts included.</p>
 
       <div class="grid md:grid-cols-3 gap-4 mt-6">
         <div class="card-elevated p-5 flex flex-col">
@@ -177,18 +231,16 @@
   </section>
 
   <footer class="border-t border-line">
-    <div class="page-wrap px-6 py-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+    <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
-        <p>Human-reviewed reports · 7-day refund on paid tiers</p>
-        <div data-launchlook-linkedin-wrap class="mt-3 pt-3 border-t border-line hidden">
-          <p class="text-xs font-medium text-ink">Connect with the founder</p>
-          <p class="text-xs text-muted mt-1">Built by Rob — human-reviewed audits for vibe-coded apps before you launch.</p>
-          <a data-launchlook-linkedin href="#" class="text-xs text-ink hover:text-accent underline mt-1.5 inline-block">LinkedIn profile &rarr;</a>
-        </div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
-        <li><a href="#hero" class="hover:text-ink">Free audit</a></li>
         <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
         <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
@@ -201,6 +253,7 @@
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
+  <script src="/assets/personalize.js"></script>
   <script src="/assets/site.js" defer></script>
   <script src="/assets/free-audit.js" defer></script>
 </body>

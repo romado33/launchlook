@@ -247,7 +247,7 @@
                 "mt-2 text-sm text-muted leading-relaxed report-body-copy";
               var label1 = document.createElement("strong");
               label1.className = "text-ink";
-              label1.textContent = "What we saw. ";
+              label1.textContent = "What I saw. ";
               p1.appendChild(label1);
               p1.appendChild(document.createTextNode(flowText(f.what_we_saw)));
               card.appendChild(p1);
@@ -324,7 +324,19 @@
       });
   }
 
+  function applyReviewerFooter() {
+    var cfg = window.LAUNCHLOOK_CONFIG || {};
+    var name = ((cfg.reviewerName || cfg.founderName || "") + "").trim();
+    var line = name
+      ? "Reviewed by " + name + " before delivery."
+      : "Reviewed by a human reviewer.";
+    document.querySelectorAll("[data-r-reviewer-line]").forEach(function (el) {
+      el.textContent = line;
+    });
+  }
+
   function init() {
+    applyReviewerFooter();
     var slug = readSlug();
     if (!slug) {
       show("missing");

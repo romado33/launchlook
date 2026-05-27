@@ -48,7 +48,7 @@ When in doubt: cut, don't add.
 5. **Maximum 5 sections in the report:** verdict (1 paragraph), findings (sorted by severity), one-page "if you only fix three things" summary, comprehensive checklist (Scale Up and Pro only), Handoff Report (Pro only).
 6. **No glossary, no appendix, no caveats wall.** If a buyer needs to learn what a term means in order to read the report, the term doesn't belong in the report.
 7. **Maximum 1 page per finding.** If a finding wants more, split it or simplify it.
-8. **Brand voice is founder, plainspoken, never corporate.** "I saw that..." over "Our analysis indicates..." First person. The buyer is hearing from Rob, not from a platform.
+8. **Brand voice is founder, plainspoken, never corporate.** "I saw that..." over "Our analysis indicates..." First person. Informal beats polished: contractions, short sentences, no consultant or AI-tell phrasing (see §6). Drafts should read human-reviewed on first pass so Rob is editing, not rewriting.
 
 ---
 

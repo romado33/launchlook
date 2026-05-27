@@ -194,8 +194,7 @@ INTAKE_FORM = {
             "key": "support_email_for_qsg",
             "title": "Your support email (for the Quick Start Guide)",
             "description": (
-                "We'll put this in your one-page user guide so people know how to "
-                "reach you."
+                "We'll put this in your one-page user guide so people know how to reach you."
             ),
             "type": "INPUT_EMAIL",
             "required": True,
@@ -300,9 +299,7 @@ def build_title_html(title: str, description: str | None) -> str:
     if not description:
         return title
     return (
-        f"{title}<br>"
-        f'<span style="font-weight:400;opacity:0.7;font-size:0.9em">'
-        f"{description}</span>"
+        f'{title}<br><span style="font-weight:400;opacity:0.7;font-size:0.9em">{description}</span>'
     )
 
 
@@ -459,14 +456,11 @@ def _auth_headers(api_key: str) -> dict:
 
 
 def create_form(payload: dict, api_key: str) -> dict:
-    resp = requests.post(
-        TALLY_API_URL, headers=_auth_headers(api_key), json=payload, timeout=30
-    )
+    resp = requests.post(TALLY_API_URL, headers=_auth_headers(api_key), json=payload, timeout=30)
     if resp.status_code >= 400:
         body = resp.text[:2000]
         sys.exit(
-            f"ERROR: Tally API returned {resp.status_code}\n"
-            f"Response body (first 2 KB):\n{body}"
+            f"ERROR: Tally API returned {resp.status_code}\nResponse body (first 2 KB):\n{body}"
         )
     return resp.json()
 
@@ -475,9 +469,7 @@ def delete_form(form_id: str, api_key: str) -> None:
     url = f"{TALLY_API_URL}/{form_id}"
     resp = requests.delete(url, headers=_auth_headers(api_key), timeout=30)
     if resp.status_code in (200, 202, 204):
-        print(
-            f"Deleted Tally form {form_id} (HTTP {resp.status_code}).", file=sys.stderr
-        )
+        print(f"Deleted Tally form {form_id} (HTTP {resp.status_code}).", file=sys.stderr)
         return
     if resp.status_code == 404:
         print(
@@ -487,8 +479,7 @@ def delete_form(form_id: str, api_key: str) -> None:
         return
     body = resp.text[:2000]
     sys.exit(
-        f"ERROR: DELETE {url} returned {resp.status_code}\n"
-        f"Response body (first 2 KB):\n{body}"
+        f"ERROR: DELETE {url} returned {resp.status_code}\nResponse body (first 2 KB):\n{body}"
     )
 
 
@@ -498,8 +489,7 @@ def get_form(form_id: str, api_key: str) -> dict:
     if resp.status_code >= 400:
         body = resp.text[:2000]
         sys.exit(
-            f"ERROR: GET {url} returned {resp.status_code}\n"
-            f"Response body (first 2 KB):\n{body}"
+            f"ERROR: GET {url} returned {resp.status_code}\nResponse body (first 2 KB):\n{body}"
         )
     return resp.json()
 
@@ -510,9 +500,7 @@ def summarize_local_payload(payload: dict) -> dict:
     for b in payload["blocks"]:
         counts[b["groupType"]] = counts.get(b["groupType"], 0) + 1
     question_groups = sum(
-        1
-        for b in payload["blocks"]
-        if b["type"] == "TITLE" and b["groupType"] == "QUESTION"
+        1 for b in payload["blocks"] if b["type"] == "TITLE" and b["groupType"] == "QUESTION"
     )
     return {"counts": counts, "question_groups": question_groups}
 

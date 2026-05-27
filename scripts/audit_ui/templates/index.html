@@ -309,6 +309,7 @@
       platforms: {{ platforms | tojson }},
       default_platform: {{ default_platform | tojson }},
       review_ai: {{ (review_ai | tojson) if review_ai is defined else 'false' }},
+      review_slug: {{ (review_slug | tojson) if review_slug is defined else 'null' }},
     };
   </script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>

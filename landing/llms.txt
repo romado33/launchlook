@@ -1,0 +1,50 @@
+# LaunchLook
+
+> Human-tested workflows and human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites. Real submits, inbox checks, and curated findings before delivery.
+
+LaunchLook (https://launchlook.app) helps founders ship Lovable, Bolt, Base44, Replit, v0, Cursor, and Webflow projects without embarrassing UI bugs or silent failures reaching first users.
+
+Important for agents:
+
+- Canonical site: https://launchlook.app
+- Machine index: https://launchlook.app/.well-known/agent-resources.json
+- Expanded context (single file): https://launchlook.app/llms-full.txt
+- Sitemap: https://launchlook.app/sitemap.xml
+- AI usage preferences: https://launchlook.app/ai.txt
+
+## Docs (markdown)
+
+- [Home](https://launchlook.app/index.md): Product summary, pricing, how it works, free audit.
+- [FAQ](https://launchlook.app/faq.md): Tiers, human review, platforms, data safety, refunds.
+- [Webflow](https://launchlook.app/webflow.md): Webflow-specific scope and pricing.
+- [vs PageLens](https://launchlook.app/vs-pagelens.md): Neutral comparison for buyers choosing an audit tool.
+
+## Primary pages (HTML)
+
+- [Home — free 2-finding audit](https://launchlook.app/): Main offer for vibe-coded web apps. URL-only; no repo access.
+- [Webflow checkup](https://launchlook.app/webflow): Forms, noindex/robots, JSON-LD, Designer-to-live mismatches, breakpoints.
+- [FAQ](https://launchlook.app/faq): Tiers, platforms, data handling, refunds, human review.
+- [Sample report](https://launchlook.app/sample): Example shareable HTML report deliverable.
+
+## Pricing (USD)
+
+- Free: top 2 findings by email (no credit card)
+- Starter ($19): 10 prioritized findings + fix prompts
+- Scale Up ($49): up to 30 findings, user data isolation check (vibe-coded apps), Quick Start Guide PDF
+- Pro ($99): up to 40 findings, integrations review, Loom walkthrough
+
+## What we check (plain English)
+
+Broken flows and dead buttons, placeholder copy, missing privacy/terms/contact pages, mobile layout issues, dev tools visible on production, form failures, and Webflow-specific launch risks (forms, noindex, schema, breakpoints).
+
+## Contact
+
+- Email: hello@launchlook.app
+
+## Optional
+
+- [LaunchLook vs PageLens (HTML)](https://launchlook.app/vs-pagelens): Comparison page.
+- [Privacy policy](https://launchlook.app/privacy)
+- [Terms of service](https://launchlook.app/terms)
+- Pages marked noindex (not product docs): /thanks, /thanks-free-audit, /e2e
+- Free audit signup API: POST https://launchlook.app/api/free-audit (fields: url, email). Same as the homepage form; rate-limited.

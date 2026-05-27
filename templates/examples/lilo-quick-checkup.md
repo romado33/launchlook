@@ -10,7 +10,7 @@
 
 LiLo looks polished at first glance — custom branding, booking modal, search, and auth. Development-only features are still visible on the live URL, and the main booking flow dead-ends. Fix the critical items before sharing outside your test circle.
 
-**5 findings** below, sorted by severity (Starter priority triage).
+**7 findings** below, sorted by severity.
 
 ---
 
@@ -92,10 +92,26 @@ Fix Quick Book so available slots appear, OR hide Quick Book when no slots exist
 
 ---
 
+## 🟡 Medium
+
+### Finding 6 — Ratings show 4.5 with (0) reviews
+
+**What I saw**  
+Cards display **4.5 (0)** — a rating with zero reviews.
+
+**Fix prompt for Lovable**
+
+```
+When review count is 0, show "New" or "No reviews yet" instead of a numeric rating.
+```
+
+---
+
 ## What's next
 
 1. **Today** — hide dev tools and fix auth bypass (Finding 1–2).  
-2. **Before public launch** — privacy/terms, host names, booking flow (Findings 3–5).
+2. **Before public launch** — privacy/terms, host names, booking flow (3–5).  
+3. **Polish** — ratings display (6).
 
 ---
 

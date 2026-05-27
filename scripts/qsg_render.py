@@ -102,10 +102,7 @@ def render(
     size_kb = len(html.encode("utf-8")) / 1024
     print(f"Wrote {output_path} ({size_kb:.1f} KB)", file=sys.stderr)
     if size_kb > 50:
-        print(
-            "WARN: HTML exceeds 50KB target — consider trimming the QSG.",
-            file=sys.stderr,
-        )
+        print("WARN: HTML exceeds 50KB target — consider trimming the QSG.", file=sys.stderr)
 
     flagged = check_forbidden(md_text)
     if flagged:

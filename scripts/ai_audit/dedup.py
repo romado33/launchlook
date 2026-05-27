@@ -179,9 +179,7 @@ def fingerprint(finding: dict[str, Any], *, base_url: str | None = None) -> str:
     return hashlib.sha256(blob).hexdigest()[:_DIGEST_LEN]
 
 
-def fingerprints(
-    findings: Iterable[dict[str, Any]], *, base_url: str | None = None
-) -> list[str]:
+def fingerprints(findings: Iterable[dict[str, Any]], *, base_url: str | None = None) -> list[str]:
     """Fingerprint each finding, preserving input order. Skips non-dicts."""
     out: list[str] = []
     for f in findings or []:

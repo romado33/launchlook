@@ -1,0 +1,16 @@
+# LaunchLook — AI usage preferences
+# https://launchlook.app
+
+# Public marketing site. We welcome AI assistants, answer engines, and
+# search tools citing accurate information about LaunchLook.
+
+User-agent: *
+Allow: /
+
+# Start here for structured site context:
+# https://launchlook.app/llms.txt
+# https://launchlook.app/llms-full.txt
+# https://launchlook.app/.well-known/agent-resources.json
+
+# Transactional / noindex pages (low value for training or answers):
+# /thanks, /thanks-free-audit, /e2e

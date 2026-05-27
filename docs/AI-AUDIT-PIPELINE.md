@@ -402,7 +402,7 @@ surfaces).
 The `tier_min` field gates visibility: a category is excluded from the
 prompt for any tier below its `tier_min`. The tier rank order is
 `Starter Package` (1) â†’ `Scale Up Package` (2) â†’ `Pro Package` (3).
-Free tier audits cap at 3 findings total across all categories and
+Free tier delivers 2 findings to the customer (FREE_AUDIT_DELIVER_COUNT); the pipeline runs at Starter cap (10) and you pick the top 2 after review. Tier caps across all categories and
 are filtered after generation, not at the category-list step.
 
 Active category IDs (as of q14+q16, May 26 2026):
@@ -431,9 +431,9 @@ list stays a one-stop read.
 
 ## Free â†’ Starter deduplication
 
-When a buyer used the free 3-finding hook and then upgrades to Starter
+When a buyer used the free 2-finding hook and then upgrades to Starter
 for the same email + URL within 90 days, the paid pipeline MUST surface
-**10 NEW findings**, excluding the prior 3. This is non-negotiable per
+**10 NEW findings**, excluding the prior 2. This is non-negotiable per
 `docs/PRODUCT-DECISIONS.md` Â§2: the Free â†’ Starter conversion is the
 funnel's most fragile moment; re-reading the free preview would burn it.
 
@@ -461,7 +461,7 @@ funnel's most fragile moment; re-reading the free preview would burn it.
 ### Where the fingerprints come from
 
 The free-audit Notion row stores `Finding Fingerprints` AFTER Rob
-approves the 3 free findings via the audit UI. The helper
+approves the 2 free findings via the audit UI. The helper
 `free_audit_lookup.persist_free_audit_fingerprints(row_id, fps, summaries)`
 writes them back. Hook it from the free-tier deliver step (queued in
 `ROB-REMAINING-TODO.md` until that script lands; in the meantime Rob
@@ -718,7 +718,7 @@ inside the PDF after purchase.
 
 ## Related docs
 
-* `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 3-finding
+* `docs/FREE-AUDIT-WORKFLOW.md`: daily flow for the free 2-finding
   hook â€” queue triage, manual pipeline run, dedup write-back, abuse
   watch.
 * `docs/MANUAL-REVIEW-WORKFLOW.md`: the previous (pre-AI) workflow,

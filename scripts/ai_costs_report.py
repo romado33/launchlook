@@ -114,9 +114,7 @@ def revenue_from_cost_rows(rows: list[dict[str, Any]]) -> tuple[float, dict[str,
             continue
         seen_per_tier[tier].add(cid)
     counts = {tier: len(ids) for tier, ids in seen_per_tier.items()}
-    revenue = sum(
-        TIER_PRICE_USD.get(tier, 0.0) * len(ids) for tier, ids in seen_per_tier.items()
-    )
+    revenue = sum(TIER_PRICE_USD.get(tier, 0.0) * len(ids) for tier, ids in seen_per_tier.items())
     return revenue, counts
 
 
@@ -198,9 +196,7 @@ def mode_daily(date: str) -> int:
     print(f"  Unique customers:  {summary['customer_count']}")
     print(f"  Input tokens:      {summary['input_tokens']:,}")
     print(f"  Output tokens:     {summary['output_tokens']:,}")
-    print(
-        f"  Latency p50/p95:   {summary['p50_latency_ms']} ms / {summary['p95_latency_ms']} ms"
-    )
+    print(f"  Latency p50/p95:   {summary['p50_latency_ms']} ms / {summary['p95_latency_ms']} ms")
     print()
     print("  Calls by model:")
     for model, count in sorted(summary["models"].items(), key=lambda x: -x[1]):
@@ -402,9 +398,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument(
-        "--date", help="YYYY-MM-DD (UTC). Daily totals + per-model breakdown."
-    )
+    parser.add_argument("--date", help="YYYY-MM-DD (UTC). Daily totals + per-model breakdown.")
     parser.add_argument("--customer", help="Aggregate cost for one customer slug.")
     parser.add_argument(
         "--summary",

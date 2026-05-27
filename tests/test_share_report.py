@@ -151,9 +151,7 @@ def test_set_public_is_idempotent(tmp_reports_dir, jane_yaml):
 def test_handoff_share_requires_pro_eligibility(tmp_reports_dir, jane_yaml):
     _gen_shareable(jane_yaml, has_handoff=False)
     with pytest.raises(SystemExit):
-        share_report.main(
-            ["--slug", "jane-sparkle-marketplace", "--share-handoff", "--no-commit"]
-        )
+        share_report.main(["--slug", "jane-sparkle-marketplace", "--share-handoff", "--no-commit"])
 
 
 def test_handoff_share_round_trip_for_pro(tmp_reports_dir, pro_yaml):
@@ -234,9 +232,7 @@ def test_generated_html_bakes_in_og_tags(tmp_reports_dir, jane_yaml):
         assert needed in html, f"missing {needed!r} in shareable HTML"
     # And the OG URL points back at /r/{slug}
     assert (
-        '<meta property="og:url" content="https://launchlook.app/r/'
-        "jane-sparkle-marketplace"
-        '" />'
+        '<meta property="og:url" content="https://launchlook.app/r/jane-sparkle-marketplace" />'
     ) in html
 
 
@@ -262,9 +258,7 @@ def test_generated_html_does_not_load_plausible(tmp_reports_dir, jane_yaml):
         ("example-pro-package.yaml", "mira-tessera-boards"),
     ],
 )
-def test_each_example_generates_matching_files(
-    tmp_reports_dir, yaml_name, expected_slug
-):
+def test_each_example_generates_matching_files(tmp_reports_dir, yaml_name, expected_slug):
     yaml_path = REPO_ROOT / "customers" / yaml_name
     json_path, html_path = _gen_shareable(yaml_path)
     assert json_path.name == f"{expected_slug}.json"
@@ -289,8 +283,7 @@ def test_redelivery_preserves_public_state(tmp_reports_dir, jane_yaml):
     _gen_shareable(jane_yaml)
     data = json.loads(json_path.read_text(encoding="utf-8"))
     assert data["is_public"] is True, (
-        "Re-running deliver_report.py must not silently flip a live "
-        "public report back to private."
+        "Re-running deliver_report.py must not silently flip a live public report back to private."
     )
 
 
@@ -324,13 +317,9 @@ def test_no_commit_flag_suppresses_git_commit(tmp_reports_dir, jane_yaml, monkey
 
     monkeypatch.setattr(share_report, "git_commit", _spy_git_commit)
 
-    rc = share_report.main(
-        ["--slug", "jane-sparkle-marketplace", "--public", "--no-commit"]
-    )
+    rc = share_report.main(["--slug", "jane-sparkle-marketplace", "--public", "--no-commit"])
     assert rc == 0
-    assert (
-        calls == []
-    ), f"--no-commit must skip git_commit(), but it was called: {calls!r}"
+    assert calls == [], f"--no-commit must skip git_commit(), but it was called: {calls!r}"
 
 
 def test_default_behavior_still_commits(tmp_reports_dir, jane_yaml, monkeypatch):
@@ -348,8 +337,6 @@ def test_default_behavior_still_commits(tmp_reports_dir, jane_yaml, monkeypatch)
 
     rc = share_report.main(["--slug", "jane-sparkle-marketplace", "--public"])
     assert rc == 0
-    assert (
-        len(calls) == 1
-    ), f"default behavior must call git_commit() once, got: {calls!r}"
+    assert len(calls) == 1, f"default behavior must call git_commit() once, got: {calls!r}"
     _, message = calls[0]
     assert "public" in message.lower()

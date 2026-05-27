@@ -136,9 +136,7 @@ def calculate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
         pricing = PRICING["claude-sonnet-4-5-20250929"]
         _warn_unknown_model_once(model)
     in_cost = (max(0, int(input_tokens)) / 1_000_000.0) * pricing["input_per_million"]
-    out_cost = (max(0, int(output_tokens)) / 1_000_000.0) * pricing[
-        "output_per_million"
-    ]
+    out_cost = (max(0, int(output_tokens)) / 1_000_000.0) * pricing["output_per_million"]
     return round(in_cost + out_cost, 6)
 
 
@@ -383,9 +381,7 @@ _tier_var: contextvars.ContextVar[str] = contextvars.ContextVar(
 )
 
 
-def set_context(
-    customer_id: str, tier: str
-) -> tuple[contextvars.Token, contextvars.Token]:
+def set_context(customer_id: str, tier: str) -> tuple[contextvars.Token, contextvars.Token]:
     """Set the customer_id + tier visible to every LLM call until reset.
 
     Returns the ``contextvars.Token`` pair so the caller can ``reset`` them

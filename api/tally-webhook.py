@@ -67,10 +67,16 @@ LABEL_RULES: list[tuple[re.Pattern[str], str]] = [
 
 # Tally option strings -> Customers DB Tier select values.
 # Includes legacy ($9 / $29) keys so old form responses still map cleanly.
+# Also includes the hidden-field slug values forwarded from the Stripe success
+# URL (?tier=starter / scale_up / pro), which replace the explicit Q8 question.
 TIER_MAP = {
+    # Hidden-field slugs (from ?tier= in Stripe success URL — new path, no Q8)
+    "starter": "Starter Package",
+    "scale_up": "Scale Up Package",
+    "pro": "Pro Package",
+    # Q8 display text (old path — keep until Q8 is deleted in Tally)
     "starter package ($19)": "Starter Package",
     "starter package ($9)": "Starter Package",
-    "starter": "Starter Package",
     "scale up package ($49)": "Scale Up Package",
     "scale up": "Scale Up Package",
     "full package ($49)": "Scale Up Package",
@@ -78,7 +84,6 @@ TIER_MAP = {
     "full": "Scale Up Package",
     "launch package": "Scale Up Package",
     "pro package ($99)": "Pro Package",
-    "pro": "Pro Package",
 }
 
 
@@ -171,9 +176,18 @@ def _notes_from_extras(flat: dict[str, Any]) -> str:
 def _test_accounts_checkbox(flat: dict[str, Any]) -> bool:
     """True iff Scale Up / Pro tier + Q9 answered "Yes -- I'll provide ...".
 
+    Accepts both the normalised Notion values ("Scale Up Package", "Pro Package")
+    and the raw hidden-field slugs ("scale_up", "pro") so the check works
+    regardless of whether Q8 still exists or has been replaced by a hidden field.
     Tally lower-cases option text inconsistently, so we just look for "yes".
     """
-    if flat.get("tier") not in ("Scale Up Package", "Pro Package"):
+    tier = flat.get("tier") or ""
+    tier_lower = tier.strip().lower()
+    is_scale_up_or_pro = tier in ("Scale Up Package", "Pro Package") or tier_lower in (
+        "scale_up",
+        "pro",
+    )
+    if not is_scale_up_or_pro:
         return False
     answer = (flat.get("_test_accounts_q") or "").strip().lower()
     return answer.startswith("yes")
@@ -211,8 +225,7 @@ def process_payload(payload: dict[str, Any]) -> dict[str, Any]:
     # The schema currently has no "Test accounts provided" checkbox; signal via Notes.
     if _test_accounts_checkbox(flat):
         fields["notes"] = (
-            f"[{flat.get('tier', 'Scale Up/Pro')} — test accounts provided]\n"
-            f"{fields['notes']}"
+            f"[{flat.get('tier', 'Scale Up/Pro')} — test accounts provided]\n{fields['notes']}"
         ).strip()
 
     client = get_client()

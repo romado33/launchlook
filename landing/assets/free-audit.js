@@ -1,5 +1,5 @@
 /*
- * free-audit.js — progressive enhancement for the free 3-finding audit form.
+ * free-audit.js — progressive enhancement for the free 2-finding audit form.
  *
  * Hijacks the form's submit so the page can POST JSON to /api/free-audit,
  * show a friendly error inline if rate-limited or invalid, and redirect to
@@ -60,6 +60,18 @@
         credentials: "same-origin",
       })
         .then(function (res) {
+          var ct = (res.headers.get("content-type") || "").toLowerCase();
+          if (ct.indexOf("application/json") === -1) {
+            return {
+              ok: false,
+              status: res.status,
+              data: {
+                status: "error",
+                message:
+                  "Something went wrong on our end. Email hello@launchlook.app and we'll sort it.",
+              },
+            };
+          }
           return res.json().then(function (data) {
             return { ok: res.ok, status: res.status, data: data };
           });
@@ -70,7 +82,22 @@
             resp.data &&
             (resp.data.status === "queued" || resp.data.status === "duplicate")
           ) {
-            window.location.assign("/thanks-free-audit");
+            if (window.LaunchLookPersonalize && window.LaunchLookPersonalize.saveContext) {
+              window.LaunchLookPersonalize.saveContext({
+                url: payload.url,
+                email: payload.email,
+                platform: payload.platform || "",
+              });
+            }
+            var host = "";
+            if (window.LaunchLookPersonalize && window.LaunchLookPersonalize.hostnameFromUrl) {
+              host = window.LaunchLookPersonalize.hostnameFromUrl(payload.url);
+            }
+            var dest = "/thanks-free-audit";
+            if (host) {
+              dest += "?site=" + encodeURIComponent(host);
+            }
+            window.location.assign(dest);
             return;
           }
           var msg =
@@ -80,7 +107,7 @@
           if (submitBtn) {
             submitBtn.removeAttribute("aria-disabled");
             submitBtn.textContent =
-              submitBtn.dataset.label || "Get my free 3 findings";
+              submitBtn.dataset.label || "Get my free 2 findings";
           }
         })
         .catch(function () {

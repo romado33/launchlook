@@ -622,9 +622,7 @@ async def fill_form(page: Any, form_info: dict[str, Any]) -> dict[str, str]:
         if not ident:
             continue
         target_selector = (
-            f'{selector} [id="{ident}"]'
-            if field.get("id")
-            else f'{selector} [name="{ident}"]'
+            f'{selector} [id="{ident}"]' if field.get("id") else f'{selector} [name="{ident}"]'
         )
         try:
             await page.fill(target_selector, value, timeout=2_000)
@@ -892,12 +890,7 @@ def run_form_smoke_test_raw(
 
 
 def _check_id(form_info: dict[str, Any], outcome: str) -> str:
-    raw_id = (
-        form_info.get("id")
-        or form_info.get("name")
-        or form_info.get("selector")
-        or "form"
-    )
+    raw_id = form_info.get("id") or form_info.get("name") or form_info.get("selector") or "form"
     safe = re.sub(r"[^a-z0-9]+", "-", raw_id.lower()).strip("-") or "form"
     return f"form_submit_smoke.{safe}.{outcome}"
 
@@ -1023,17 +1016,13 @@ def to_findings(
         form_info = entry.get("form") or {}
         form_name = _form_display_name(form_info)
         description = PLAIN_ENGLISH["no_confirmation_email"].format(form_name=form_name)
-        fix_prompt = _fix_prompt_for(
-            "no_confirmation_email", platform, form_name=form_name
-        )
+        fix_prompt = _fix_prompt_for("no_confirmation_email", platform, form_name=form_name)
         check_id = _check_id(form_info, "no_confirmation_email")
         actionable.append(
             {
                 "id": check_id,
                 "category": CATEGORY_ID,
-                "title": _OUTCOME_TITLES["no_confirmation_email"].format(
-                    form_name=form_name
-                ),
+                "title": _OUTCOME_TITLES["no_confirmation_email"].format(form_name=form_name),
                 "severity": "high",
                 "what_we_saw": description,
                 "why_it_matters": _why_it_matters(True),
@@ -1119,9 +1108,7 @@ def run_form_smoke_test(
         "pro package",
     } and email_roundtrip is not None:
         try:
-            email_results = (
-                email_roundtrip(raw_results=raw, customer_email=customer_email) or []
-            )
+            email_results = email_roundtrip(raw_results=raw, customer_email=customer_email) or []
         except Exception:  # noqa: BLE001
             email_results = []
 

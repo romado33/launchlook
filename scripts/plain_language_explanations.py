@@ -53,18 +53,11 @@ PLAIN: dict[str, str] = {
         "The app calls the same type of person different names "
         "(e.g. customer, client, user). That feels confusing."
     ),
-    "FL-008": (
-        "There is no privacy policy page. People expect one before they sign up or pay."
-    ),
-    "FL-009": (
-        "There is no Terms of Service page. Users have nothing clear to agree to."
-    ),
-    "FL-017": (
-        "On a phone, the page scrolls sideways — something is wider than the screen."
-    ),
+    "FL-008": ("There is no privacy policy page. People expect one before they sign up or pay."),
+    "FL-009": ("There is no Terms of Service page. Users have nothing clear to agree to."),
+    "FL-017": ("On a phone, the page scrolls sideways — something is wider than the screen."),
     "FL-018": (
-        "Text on mobile is hard to read (about {SIZE}px). "
-        "Most apps use at least 16px on phones."
+        "Text on mobile is hard to read (about {SIZE}px). Most apps use at least 16px on phones."
     ),
     "FL-019": ("Some buttons on mobile are too small to tap comfortably."),
 }
@@ -77,9 +70,7 @@ def main() -> None:
         if f["id"] in PLAIN:
             f["explanation"] = PLAIN[f["id"]]
             n += 1
-    PATH.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Updated {n} explanations in {PATH}")
 
 

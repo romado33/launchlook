@@ -1,8 +1,8 @@
 # LaunchLook
 
-A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. AI drafts the audit, a founder personally reviews and curates every finding before delivery. Tiers: **Starter $19** (top 7 fixes), **Full $49** (up to 25 + cross-user check + QSG), **Pro $99** (up to 40 + integrations review + 30-min Loom walkthrough).
+A friendly pre-launch checkup for vibe-coded apps. **Site:** [launchlook.app](https://launchlook.app). Founders building with Lovable, Bolt, Base44, and Replit send their URL and get back a plain-English fix list plus an AI-generated Quick Start Guide for their users. AI drafts the audit, a founder personally reviews and curates every finding before delivery. $9 to start.
 
-> **Status**: pre-launch. Zero paying customers yet. AI-first delivery shipped (`scripts/ai_audit.py`), with founder spot-check via `scripts/audit_ui.py --review-ai` before each report goes out. See `docs/AI-AUDIT-PIPELINE.md`. Pricing bumped to $19 / $49 / $99 with the Pro tier introducing an integrations review + Loom walkthrough — Stripe products + Tally + Notion still need manual updates per `docs/MANUAL-TASKS-PRICE-BUMP.md`.
+> **Status**: pre-launch. Zero paying customers yet. AI-first delivery shipped (`scripts/ai_audit.py`), with founder spot-check via `scripts/audit_ui.py --review-ai` before each report goes out. See `docs/AI-AUDIT-PIPELINE.md`.
 
 **Rob — everything left for you:** [`docs/ROB-REMAINING-TODO.md`](docs/ROB-REMAINING-TODO.md)  
 **Build Tally intake (manual):** [`docs/TALLY-INTAKE-PASTE.txt`](docs/TALLY-INTAKE-PASTE.txt)  

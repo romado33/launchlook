@@ -4,8 +4,8 @@ High-impact checks that match what we sell. **Not** a security pentest or code r
 
 **Setup (1 min):** Public URL in Chrome (not builder preview). Notion template open. `findings_library/findings.json` or `python scripts/findings_lookup.py <keyword>`.
 
-**Starter Package (priority triage):** do sections 1–5 → write the top **5** findings (ranked by impact — these are the things a first-time visitor would notice and need fixed before launch).  
-**Full Package (comprehensive audit):** add section 6 → up to **20** findings across all categories.
+**Starter Package:** do sections 1–5 → write up to **7** findings.  
+**Full Package:** add section 6 → up to **20** findings.
 
 ---
 

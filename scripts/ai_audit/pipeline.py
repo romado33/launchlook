@@ -30,18 +30,12 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.audit_ui import yaml_writer  # noqa: E402
 
+from . import feedback as feedback_log  # noqa: E402
 from . import (  # noqa: E402
-    accessibility_axe,  # noqa: E402  -- pre-generated axe-core findings
-    cost_tracker,  # noqa: E402
-    form_smoke_test,  # noqa: E402  -- pre-generated form-submit smoke test (q15)
-    free_audit_lookup,  # noqa: E402  -- Notion lookup for prior free-audit fingerprints
     html_extract,
     llm_client,
-    performance_speed,  # noqa: E402  -- pre-generated Core Web Vitals translator
     security_lite,  # noqa: E402
 )
-from . import dedup as dedup_module  # noqa: E402  -- free->Starter dedup helpers
-from . import feedback as feedback_log  # noqa: E402
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
@@ -96,9 +90,7 @@ def normalize_platform(value: str | None) -> str:
 
 DELIVER_REPORT = REPO_ROOT / "scripts" / "deliver_report.py"
 FINDINGS_CSV = REPO_ROOT / "findings_library" / "findings.csv"
-SCREENSHOTS_OUT_ROOT = (
-    REPO_ROOT / "output" / "customers"
-)  # capture_screenshots.py landing zone
+SCREENSHOTS_OUT_ROOT = REPO_ROOT / "output" / "customers"  # capture_screenshots.py landing zone
 SCREENSHOTS_MIRROR = REPO_ROOT / "screenshots"  # legacy + audit-UI lookup path
 
 
@@ -133,6 +125,9 @@ class PipelineResult:
     capture_meta: dict[str, Any] = field(default_factory=dict)
     prescreener_hits: list[dict[str, Any]] = field(default_factory=list)
     pages: list[dict[str, Any]] = field(default_factory=list)
+    form_smoke_ran: bool = False
+    form_smoke_failed_check_ids: list[str] = field(default_factory=list)
+    email_roundtrip_attempted: bool = False
 
 
 # ---------------------------------------------------------------------------
@@ -207,9 +202,7 @@ def render_categories_for_prompt(
         if min_tier and customer_rank < tier_rank.get(min_tier, 0):
             continue
         cid = cat.get("id", "?")
-        display = (
-            cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
-        )
+        display = cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
         sev = cat.get("severity_default", "medium")
         desc = (cat.get("description_for_llm") or "").strip()
         source = cat.get("source", "llm")
@@ -251,9 +244,7 @@ def _format_findings_library(library: list[dict[str, Any]]) -> str:
         return "(findings.csv unavailable)"
     lines = []
     for f in library:
-        lines.append(
-            f"  - [{f['severity']:<8}] {f['id']}  {f['name']}  ({f['category']})"
-        )
+        lines.append(f"  - [{f['severity']:<8}] {f['id']}  {f['name']}  ({f['category']})")
     return "\n".join(lines)
 
 
@@ -270,15 +261,12 @@ def stage_capture(customer_ctx: CustomerContext) -> dict[str, Any]:
     customer = Customer(
         page_id=None,
         slug=customer_ctx.slug,
-        name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip()
-        or customer_ctx.slug,
+        name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip() or customer_ctx.slug,
         email=customer_ctx.email,
         app_url=customer_ctx.url,
     )
 
-    meta = capture_screenshots.capture(
-        customer, list(capture_screenshots.DEFAULT_PATHS)
-    )
+    meta = capture_screenshots.capture(customer, list(capture_screenshots.DEFAULT_PATHS))
     try:
         capture_screenshots.render_index(customer, meta)
     except Exception as exc:  # noqa: BLE001
@@ -310,10 +298,7 @@ def _mirror_screenshots(customer) -> None:
         try:
             shutil.copyfile(shot, out_path)
         except Exception as exc:  # noqa: BLE001
-            print(
-                f"  [capture] WARN: mirror copy failed for {shot}: {exc}",
-                file=sys.stderr,
-            )
+            print(f"  [capture] WARN: mirror copy failed for {shot}: {exc}", file=sys.stderr)
 
 
 # ---------------------------------------------------------------------------
@@ -356,8 +341,8 @@ def _format_prescreener_hits(hits: list[dict[str, Any]]) -> str:
         matches = hit.get("matches") or []
         sample = matches[0].get("text", "")[:60] if matches else ""
         lines.append(
-            f"  - {finding.get('id','?')} [{finding.get('severity','?')}] "
-            f"{finding.get('name','?')}  on {page.get('url','?')}  sample='{sample}'"
+            f"  - {finding.get('id', '?')} [{finding.get('severity', '?')}] "
+            f"{finding.get('name', '?')}  on {page.get('url', '?')}  sample='{sample}'"
         )
     return "\n".join(lines)
 
@@ -411,9 +396,7 @@ def collect_screenshots(slug: str, *, max_shots: int = 8) -> list[tuple[str, Pat
             candidate = src / viewport / f"{name}.png"
             if candidate.exists() and candidate not in seen:
                 seen.add(candidate)
-                found.append(
-                    (f"{viewport} /{('' if name=='home' else name)}", candidate)
-                )
+                found.append((f"{viewport} /{('' if name == 'home' else name)}", candidate))
             if len(found) >= max_shots:
                 break
 
@@ -433,90 +416,6 @@ def collect_screenshots(slug: str, *, max_shots: int = 8) -> list[tuple[str, Pat
 # ---------------------------------------------------------------------------
 # Stage 5: LLM generation
 # ---------------------------------------------------------------------------
-
-
-# ---------------------------------------------------------------------------
-# Persona tagging (q5/q13 - extend Snoop's pattern to all 7 personas)
-# ---------------------------------------------------------------------------
-#
-# The 7 canonical personas live in docs/TESTERS-CAST.md. Each finding
-# category in finding_categories.yaml declares which tester ("The Skeptic",
-# "The Klutz", ...) owns it. The LLM is asked to emit a ``tag`` of the form
-# "Caught by The {Persona}" on every finding (see prompts/system.txt). This
-# helper validates / repairs the field so a missing or stale tag never leaks
-# into the report PDF, per SIMPLICITY-GUARDRAILS section 3.4.
-
-PERSONA_TAG_PREFIX = "Caught by "
-FALLBACK_PERSONA = "The Skeptic"
-FALLBACK_TAG = f"{PERSONA_TAG_PREFIX}{FALLBACK_PERSONA}"
-
-
-def _build_category_tester_map(categories: list[dict[str, Any]]) -> dict[str, str]:
-    """Return ``{category_id: 'The Persona'}`` from the loaded categories."""
-    out: dict[str, str] = {}
-    for cat in categories or []:
-        cid = (cat.get("id") or "").strip()
-        tester = (cat.get("tester") or "").strip()
-        if cid and tester:
-            out[cid] = tester
-    return out
-
-
-def apply_persona_tags(
-    findings: list[dict[str, Any]],
-    categories: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    """Ensure every finding carries a ``tag: 'Caught by The {Persona}'``.
-
-    Pure helper: returns a new list of finding dicts; never mutates the
-    inputs. Falls back to ``FALLBACK_TAG`` (and prints a stderr warning)
-    when a finding has no recognisable category and no LLM-supplied tag.
-    Snoop's externally-generated findings (security_lite.py) already carry
-    a correct tag; this helper is a no-op for them.
-    """
-    cat_map = _build_category_tester_map(categories)
-    out: list[dict[str, Any]] = []
-    for finding in findings or []:
-        if not isinstance(finding, dict):
-            out.append(finding)
-            continue
-        f = dict(finding)
-        cid = (f.get("category") or "").strip()
-        existing_tag = (f.get("tag") or "").strip()
-
-        canonical_tag = ""
-        if cid:
-            tester = cat_map.get(cid)
-            if tester:
-                canonical_tag = f"{PERSONA_TAG_PREFIX}{tester}"
-            else:
-                print(
-                    f"[personas] WARN: category {cid!r} has no tester; "
-                    f"falling back to {FALLBACK_TAG!r} for finding "
-                    f"{f.get('title','?')!r}",
-                    file=sys.stderr,
-                )
-
-        if canonical_tag:
-            if existing_tag and existing_tag != canonical_tag:
-                print(
-                    f"[personas] WARN: LLM tag {existing_tag!r} did not "
-                    f"match category {cid!r} expected {canonical_tag!r}; "
-                    f"overriding for finding {f.get('title','?')!r}",
-                    file=sys.stderr,
-                )
-            f["tag"] = canonical_tag
-        elif existing_tag.startswith(PERSONA_TAG_PREFIX):
-            f["tag"] = existing_tag
-        else:
-            print(
-                f"[personas] WARN: finding {f.get('title','?')!r} has no "
-                f"category and no usable tag; defaulting to {FALLBACK_TAG!r}",
-                file=sys.stderr,
-            )
-            f["tag"] = FALLBACK_TAG
-        out.append(f)
-    return out
 
 
 def _read_prompt(name: str) -> str:
@@ -663,10 +562,9 @@ def build_finding_user_prompt(
     prescreener_hits: list[dict[str, Any]],
     pages: list[dict[str, Any]],
     library: list[dict[str, Any]],
-    exclude_block: str = "",
 ) -> str:
     template = _read_prompt("finding_generation.txt")
-    body = template.format(
+    return template.format(
         max_findings=cap,
         tier=customer_ctx.tier,
         customer_name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip(),
@@ -681,13 +579,6 @@ def build_finding_user_prompt(
         html_extracts=html_extract.render_pages_for_prompt(pages),
         page_status_summary=html_extract.render_status_summary(pages),
     )
-    if exclude_block:
-        # Appended below the rendered template so prompt files keep
-        # working without a placeholder edit. See
-        # docs/AI-AUDIT-PIPELINE.md (Free -> Starter dedup) for the
-        # full contract.
-        body = body.rstrip() + "\n\n" + exclude_block.strip() + "\n"
-    return body
 
 
 def build_verdict_user_prompt(
@@ -698,12 +589,10 @@ def build_verdict_user_prompt(
     template = _read_prompt("verdict_generation.txt")
     summary_lines = []
     for f in findings:
-        summary_lines.append(f"  - [{f.get('severity','?'):<8}] {f.get('title','?')}")
+        summary_lines.append(f"  - [{f.get('severity', '?'):<8}] {f.get('title', '?')}")
     return template.format(
         app_name=customer_ctx.app_name,
-        findings_summary=(
-            "\n".join(summary_lines) if summary_lines else "  (no findings)"
-        ),
+        findings_summary="\n".join(summary_lines) if summary_lines else "  (no findings)",
     )
 
 
@@ -728,9 +617,7 @@ def _default_verdict(findings: list[dict[str, Any]], app_name: str) -> dict[str,
     finding mix. The label is the customer-facing hero phrase; the
     emoji is a small accent.
     """
-    has_critical = any(
-        (f.get("severity") or "").lower() == "critical" for f in findings
-    )
+    has_critical = any((f.get("severity") or "").lower() == "critical" for f in findings)
     high_count = sum(1 for f in findings if (f.get("severity") or "").lower() == "high")
     has_security = any(
         (f.get("category") or "") == security_lite.CATEGORY_ID
@@ -803,7 +690,6 @@ def compute_passed_checks(
     snoop_passed_ids: list[str],
     categories: list[dict[str, Any]],
     tier: str,
-    external_passed_ids: dict[str, list[str]] | None = None,
 ) -> list[str]:
     """Build the customer-facing "What's working" list.
 
@@ -829,31 +715,21 @@ def compute_passed_checks(
 
     passed: list[str] = []
     for cat in categories:
-        cid = str(cat.get("id") or "")
-        if not cid:
-            continue
+        cid = cat.get("id")
         min_tier = cat.get("tier_min")
         if min_tier and customer_rank < tier_rank.get(min_tier, 0):
             continue
         cat_findings = by_category.get(cid, [])
-        has_blocker = any(
-            (f.get("severity") or "").lower() in blocking for f in cat_findings
-        )
+        has_blocker = any((f.get("severity") or "").lower() in blocking for f in cat_findings)
         if has_blocker:
             continue
-        # External-source categories must have actually run cleanly (not
-        # just be absent from findings because the LLM didn't tag anything
-        # with this category). The security_lite gate is kept for back-compat;
-        # q14 + q16 categories are gated via external_passed_ids.
+        # Security-lite also has to actually run cleanly (not just be
+        # absent from findings because the LLM didn't tag anything with
+        # this category).
         if cid == security_lite.CATEGORY_ID:
             if not snoop_passed_ids:
                 continue
-        elif (cat.get("source") == "external") and external_passed_ids is not None:
-            if not external_passed_ids.get(cid):
-                continue
-        display = str(
-            cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
-        )
+        display = cat.get("display_name_buyer") or cat.get("display_name_internal") or cid
         passed.append(display.strip().rstrip("."))
     return passed[:8]
 
@@ -861,56 +737,6 @@ def compute_passed_checks(
 # ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
-
-
-def _form_smoke_config(customer_ctx: CustomerContext) -> dict[str, object]:
-    """Read the optional ``form_smoke_test`` block from the customer YAML.
-
-    The customer YAML can opt out of the form-smoke-test runner (q15) or
-    block specific selectors that the runner must never submit (for
-    example, a real production checkout form). Both knobs default to
-    safe values when the block is missing or invalid::
-
-        form_smoke_test:
-          enabled: false          # default true; flip to skip the runner
-          blocked_forms:           # selectors the runner must never submit
-            - "#prod-checkout"
-          customer_email: ...     # only set for Pro tier round-trips
-
-    The block lives on the customer YAML alongside ``customer:`` and is
-    read here lazily so we don't drag YAML state through every layer.
-    Returns the fully populated config dict (with defaults filled in).
-    """
-    cfg: dict[str, object] = {
-        "enabled": True,
-        "blocked_forms": [],
-        "customer_email": None,
-    }
-    if not customer_ctx or not getattr(customer_ctx, "slug", ""):
-        return cfg
-    yaml_path = REPO_ROOT / "customers" / f"{customer_ctx.slug}.yaml"
-    if not yaml_path.exists():
-        return cfg
-    try:
-        import yaml as _yaml  # local import: dependency already pinned
-
-        data = _yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}
-    except Exception as exc:  # noqa: BLE001
-        print(
-            f"[form-smoke] WARN: could not read {yaml_path.name}: {exc}",
-            file=sys.stderr,
-        )
-        return cfg
-    block = (data or {}).get("form_smoke_test")
-    if not isinstance(block, dict):
-        return cfg
-    if "enabled" in block:
-        cfg["enabled"] = bool(block.get("enabled"))
-    if isinstance(block.get("blocked_forms"), list):
-        cfg["blocked_forms"] = [str(s) for s in block["blocked_forms"] if s]
-    if isinstance(block.get("customer_email"), str) and block["customer_email"].strip():
-        cfg["customer_email"] = block["customer_email"].strip()
-    return cfg
 
 
 def run(
@@ -971,102 +797,6 @@ def run(
         f"passed: {snoop['passed_check_ids']}; failed: {snoop['failed_check_ids']}"
     )
 
-    # ---- 3c. Performance & speed (Core Web Vitals translator, q14) ----
-    # Pre-generated by performance_speed.py from the PageSpeed Insights
-    # API (24h cached so re-runs do not burn the 25K daily quota).
-    # Buyer-facing name is "performance & speed"; internal acronyms
-    # never cross the customer surface per SIMPLICITY-GUARDRAILS section 6.
-    try:
-        perf = performance_speed.run_performance_speed(
-            base_url=customer_ctx.url,
-            tier=customer_ctx.tier,
-            platform=(customer_ctx.builder or customer_ctx.platform or "generic"),
-        )
-    except Exception as exc:  # noqa: BLE001
-        print(f"[performance] WARN: skipped: {exc}", file=sys.stderr)
-        perf = {
-            "findings": [],
-            "passed_check_ids": [],
-            "failed_check_ids": [],
-            "fetched": False,
-        }
-    print(
-        f"[performance] fetched={perf.get('fetched')} "
-        f"{len(perf['findings'])} finding(s); "
-        f"passed: {perf['passed_check_ids']}; failed: {perf['failed_check_ids']}"
-    )
-
-    # ---- 3d. Accessibility checks (axe-core, q16) ----
-    # Pre-generated by accessibility_axe.py loading axe-core into a
-    # headless Playwright tab. Buyer-facing name is "accessibility
-    # checks"; "axe-core" and "WCAG" never appear on customer surfaces
-    # per SIMPLICITY-GUARDRAILS section 6.
-    try:
-        a11y = accessibility_axe.run_accessibility_axe(
-            base_url=customer_ctx.url,
-            tier=customer_ctx.tier,
-            platform=(customer_ctx.builder or customer_ctx.platform or "generic"),
-        )
-    except Exception as exc:  # noqa: BLE001
-        print(f"[a11y] WARN: skipped: {exc}", file=sys.stderr)
-        a11y = {
-            "findings": [],
-            "passed_check_ids": [],
-            "failed_check_ids": [],
-            "ran": False,
-        }
-    print(
-        f"[a11y] ran={a11y.get('ran')} "
-        f"{len(a11y['findings'])} finding(s); "
-        f"passed: {a11y['passed_check_ids']}; failed: {a11y['failed_check_ids']}"
-    )
-
-    # ---- 3e. Form-submit smoke test (q15: The Stranger Who Tried to Sign Up) ----
-    # Pre-generated by form_smoke_test.py: detects forms, fills with safe
-    # synthetic fixtures (LaunchLook smoke-test values so the customer can
-    # spot them in their inbox), submits, and watches for confirmation or
-    # error. Checkout / payment / destructive forms are skipped on purpose
-    # (a separate 'we saw it but didn't submit' finding is surfaced so the
-    # customer knows we noticed). Buyer-facing name is 'form & signup
-    # flows' -- internal jargon ('smoke test', 'synthetic values',
-    # 'round-trip') never appears on customer surfaces per
-    # SIMPLICITY-GUARDRAILS section 6.
-    form_cfg = _form_smoke_config(customer_ctx)
-    # form_cfg values are typed dict[str, object]; coerce to the concrete
-    # parameter types the runner expects.
-    _form_email = form_cfg.get("customer_email")
-    _form_blocked = form_cfg.get("blocked_forms") or []
-    _form_enabled = form_cfg.get("enabled", True)
-    try:
-        form_smoke = form_smoke_test.run_form_smoke_test(
-            base_url=customer_ctx.url,
-            tier=customer_ctx.tier,
-            platform=(customer_ctx.builder or customer_ctx.platform or "generic"),
-            customer_email=_form_email if isinstance(_form_email, str) else None,
-            blocked_selectors=(
-                list(_form_blocked) if isinstance(_form_blocked, list) else []
-            ),
-            enabled=bool(_form_enabled),
-            email_roundtrip=(
-                form_smoke_test.default_email_roundtrip
-                if (customer_ctx.tier or "").strip().lower() in {"pro", "pro package"}
-                else None
-            ),
-        )
-    except Exception as exc:  # noqa: BLE001
-        print(f"[form-smoke] WARN: skipped: {exc}", file=sys.stderr)
-        form_smoke = {
-            "findings": [],
-            "passed_check_ids": [],
-            "failed_check_ids": [],
-            "ran": False,
-        }
-    print(
-        f"[form-smoke] ran={form_smoke.get('ran')} "
-        f"{len(form_smoke['findings'])} finding(s); "
-        f"passed: {form_smoke['passed_check_ids']}; failed: {form_smoke['failed_check_ids']}"
-    )
-
     # ---- 4. Screenshots for vision ----
     screenshots = collect_screenshots(customer_ctx.slug)
     print(f"[vision] {len(screenshots)} screenshot(s) ready for LLM")
@@ -1083,19 +813,6 @@ def run(
     library = load_findings_library()
     system_prompt = build_system_prompt(customer_ctx.platform, tier=customer_ctx.tier)
 
-    # ---- 4b. Free -> Starter dedup lookup (PRODUCT-DECISIONS.md section 2) ----
-    # Same email + same URL host within 90 days -> exclude the prior 3
-    # free-audit fingerprints so the LLM is forced to surface NEW issues.
-    excluded_fps, prior_summaries, _free_row_id = (
-        free_audit_lookup.load_excluded_fingerprints(
-            email=customer_ctx.email,
-            url=customer_ctx.url,
-        )
-    )
-    if excluded_fps:
-        print(f"[dedup] {len(excluded_fps)} prior free-audit fingerprint(s) to exclude")
-    exclude_block = dedup_module.render_exclude_block(excluded_fps, prior_summaries)
-
     finding_prompt = build_finding_user_prompt(
         customer_ctx,
         cap=cap,
@@ -1103,154 +820,57 @@ def run(
         prescreener_hits=prescreener_hits,
         pages=pages,
         library=library,
-        exclude_block=exclude_block,
     )
     finding_prompt = _maybe_append_webflow_checks(finding_prompt, customer_ctx.platform)
 
-    with cost_tracker.customer_context(customer_ctx.slug, customer_ctx.tier):
-        findings = client.generate_findings(
+    findings = client.generate_findings(
+        system_prompt=system_prompt,
+        user_prompt=finding_prompt,
+        screenshots=screenshots,
+        max_findings=cap,
+    )
+
+    # Merge Snoop's pre-generated security-lite findings before the cap is
+    # applied so a critical exposed credential isn't dropped because the
+    # LLM filled the cap with lower-severity items.
+    snoop_findings = list(snoop.get("findings") or [])
+    if snoop_findings:
+        findings = snoop_findings + list(findings or [])
+        print(f"[merge] +{len(snoop_findings)} Snoop finding(s) merged")
+
+    findings = yaml_writer.sort_findings(findings)[:cap]
+    print(f"[llm] {len(findings)} finding(s) after merge + cap")
+
+    # ---- 6. Verdict ----
+    verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
+    try:
+        verdict = client.generate_verdict(
             system_prompt=system_prompt,
-            user_prompt=finding_prompt,
-            screenshots=screenshots,
-            max_findings=cap,
+            user_prompt=verdict_prompt,
         )
-
-        # Merge Snoop's pre-generated security-lite findings before the cap
-        # is applied so a critical exposed credential isn't dropped because
-        # the LLM filled the cap with lower-severity items. The performance
-        # & accessibility runners (q14 + q16) follow the same pattern: their
-        # findings are already tier-capped internally, so we prepend them
-        # here and let the global cap run after the merge.
-        snoop_findings = list(snoop.get("findings") or [])
-        perf_findings = list(perf.get("findings") or [])
-        a11y_findings = list(a11y.get("findings") or [])
-        form_findings = list(form_smoke.get("findings") or [])
-        external_findings = (
-            snoop_findings + perf_findings + a11y_findings + form_findings
+        if not verdict.get("summary") or not verdict.get("narrative"):
+            raise RuntimeError("verdict missing summary or narrative")
+    except Exception as exc:  # noqa: BLE001
+        print(
+            f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr
         )
-        if external_findings:
-            findings = external_findings + list(findings or [])
-            print(
-                f"[merge] +{len(snoop_findings)} Snoop / "
-                f"+{len(perf_findings)} performance / "
-                f"+{len(a11y_findings)} accessibility / "
-                f"+{len(form_findings)} form-smoke finding(s) merged"
-            )
+        verdict = _default_verdict(findings, customer_ctx.app_name)
 
-        findings = yaml_writer.sort_findings(findings)[:cap]
-        print(f"[llm] {len(findings)} finding(s) after merge + cap")
-
-        # ---- 5b. Dedup pass against the prior free-audit fingerprints ----
-        if excluded_fps:
-            clashes = dedup_module.collisions(
-                findings, excluded_fps, base_url=customer_ctx.url
-            )
-            if clashes:
-                clash_titles = [c.get("title", "?") for c in clashes]
-                print(
-                    f"[dedup] {len(clashes)} finding(s) collide with prior free audit; re-prompting once"
-                )
-                kept = dedup_module.filter_out_collisions(
-                    findings, excluded_fps, base_url=customer_ctx.url
-                )
-                needed = cap - len(kept)
-                if needed > 0:
-                    retry_block = exclude_block + (
-                        "\n\n### COLLISION_RETRY\n\n"
-                        f"The following {len(clashes)} candidate finding(s) overlap with the "
-                        "prior free-audit findings above. REPLACE them with genuinely different "
-                        "issues (different category or different specific instance). Do not "
-                        "return any of these titles again:\n"
-                        + "\n".join(f"  - {t}" for t in clash_titles)
-                        + "\n"
-                    )
-                    retry_prompt = build_finding_user_prompt(
-                        customer_ctx,
-                        cap=needed,
-                        n_screenshots=len(screenshots),
-                        prescreener_hits=prescreener_hits,
-                        pages=pages,
-                        library=library,
-                        exclude_block=retry_block,
-                    )
-                    retry_prompt = _maybe_append_webflow_checks(
-                        retry_prompt, customer_ctx.platform
-                    )
-                    try:
-                        replacements = client.generate_findings(
-                            system_prompt=system_prompt,
-                            user_prompt=retry_prompt,
-                            screenshots=screenshots,
-                            max_findings=needed,
-                        )
-                    except Exception as exc:  # noqa: BLE001
-                        print(
-                            f"[dedup] WARN: re-prompt failed ({exc}); shipping with collisions filtered out",
-                            file=sys.stderr,
-                        )
-                        replacements = []
-                    # Drop any re-prompt response that ALSO collides; soft
-                    # constraint per task spec, ship even if imperfect.
-                    fresh = dedup_module.filter_out_collisions(
-                        replacements or [], excluded_fps, base_url=customer_ctx.url
-                    )
-                    findings = yaml_writer.sort_findings(kept + fresh)[:cap]
-                    remaining_clash = dedup_module.collisions(
-                        findings, excluded_fps, base_url=customer_ctx.url
-                    )
-                    if remaining_clash:
-                        print(
-                            f"[dedup] WARN: {len(remaining_clash)} collision(s) still present after re-prompt; shipping anyway (soft constraint)",
-                            file=sys.stderr,
-                        )
-                    print(f"[dedup] post-retry: {len(findings)} finding(s) total")
-                else:
-                    findings = yaml_writer.sort_findings(kept)
-                    print(
-                        f"[dedup] removed {len(clashes)} colliding finding(s); cap already met"
-                    )
-
-        # ---- 5c. Persona tags (q5/q13) ----
-        # Validates / repairs the per-finding ``tag`` field so every
-        # finding ships with one of the 7 Testers personas. Cites
-        # docs/SIMPLICITY-GUARDRAILS.md section 3.4.
-        findings = apply_persona_tags(findings, load_finding_categories())
-
-        # ---- 6. Verdict ----
-        verdict_prompt = build_verdict_user_prompt(customer_ctx, findings=findings)
-        try:
-            verdict = client.generate_verdict(
-                system_prompt=system_prompt,
-                user_prompt=verdict_prompt,
-            )
-            if not verdict.get("summary") or not verdict.get("narrative"):
-                raise RuntimeError("verdict missing summary or narrative")
-        except Exception as exc:  # noqa: BLE001
-            print(
-                f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default",
-                file=sys.stderr,
-            )
-            verdict = _default_verdict(findings, customer_ctx.app_name)
-
-        # Constrain to the four canonical labels regardless of LLM drift.
-        verdict = _normalize_verdict(verdict)
+    # Constrain to the four canonical labels regardless of LLM drift.
+    verdict = _normalize_verdict(verdict)
 
     # ---- 7. QSG (every paid tier per PRODUCT-DECISIONS.md §8) ----
     qsg = None
     if customer_ctx.tier in ("Starter Package", "Scale Up Package", "Pro Package"):
         qsg_prompt = build_qsg_user_prompt(customer_ctx, pages=pages)
         try:
-            with cost_tracker.customer_context(customer_ctx.slug, customer_ctx.tier):
-                qsg = client.generate_qsg(
-                    system_prompt=system_prompt,
-                    user_prompt=qsg_prompt,
-                    screenshots=screenshots[:4],  # fewer images for the QSG call
-                )
-        except Exception as exc:  # noqa: BLE001
-            print(
-                f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty",
-                file=sys.stderr,
+            qsg = client.generate_qsg(
+                system_prompt=system_prompt,
+                user_prompt=qsg_prompt,
+                screenshots=screenshots[:4],  # fewer images for the QSG call
             )
+        except Exception as exc:  # noqa: BLE001
+            print(f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty", file=sys.stderr)
 
     # ---- 8. Payload + YAML ----
     categories = load_finding_categories()
@@ -1259,11 +879,6 @@ def run(
         snoop_passed_ids=list(snoop.get("passed_check_ids") or []),
         categories=categories,
         tier=customer_ctx.tier,
-        external_passed_ids={
-            performance_speed.CATEGORY_ID: list(perf.get("passed_check_ids") or []),
-            accessibility_axe.CATEGORY_ID: list(a11y.get("passed_check_ids") or []),
-            form_smoke_test.CATEGORY_ID: list(form_smoke.get("passed_check_ids") or []),
-        },
     )
 
     payload: dict[str, Any] = {
@@ -1296,9 +911,7 @@ def run(
                     "The AI pipeline ran but produced zero grounded findings. "
                     "Review the screenshots and HTML extracts manually."
                 ),
-                "why_it_matters": (
-                    "Either the app is clean, or the LLM lacked enough evidence."
-                ),
+                "why_it_matters": ("Either the app is clean, or the LLM lacked enough evidence."),
                 "fix_prompt": (
                     "Review the prescreener output and screenshots. "
                     "Add findings manually or rerun with --provider gpt."
@@ -1388,16 +1001,12 @@ def regenerate_finding(
         "same issue with sharper wording. Apply the same voice rules."
     )
 
-    with cost_tracker.customer_context(customer_ctx.slug, customer_ctx.tier):
-        finding = client.regenerate_finding(
-            system_prompt=system_prompt,
-            user_prompt=base + regen_hint,
-            screenshots=screenshots,
-        )
-    # Apply the same persona-tag fallback so a regenerated finding ships
-    # with a valid Tester tag even if the LLM forgets the field.
-    repaired = apply_persona_tags([finding], load_finding_categories())
-    return repaired[0] if repaired else finding
+    finding = client.regenerate_finding(
+        system_prompt=system_prompt,
+        user_prompt=base + regen_hint,
+        screenshots=screenshots,
+    )
+    return finding
 
 
 # ---------------------------------------------------------------------------
@@ -1426,9 +1035,7 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
 
     tier = (kwargs.get("tier") or "").strip()
     if tier not in {"Starter Package", "Scale Up Package", "Pro Package"}:
-        sys.exit(
-            "ERROR: --tier must be 'Starter Package', 'Scale Up Package', or 'Pro Package'"
-        )
+        sys.exit("ERROR: --tier must be 'Starter Package', 'Scale Up Package', or 'Pro Package'")
 
     builder = (kwargs.get("builder") or "").strip() or "Lovable"
     platform = normalize_platform(kwargs.get("platform"))
@@ -1452,156 +1059,3 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         intake_notes=(kwargs.get("intake_notes") or "").strip(),
         platform=platform,
     )
-
-
-# ---------------------------------------------------------------------------
-# Handoff Report (q18)
-# ---------------------------------------------------------------------------
-
-HANDOFF_PRO_TIER = "Pro Package"
-
-
-def _format_findings_for_handoff(findings: list[dict[str, Any]]) -> str:
-    """Compact human-readable summary used as LLM context for handoff prompts.
-
-    Output looks like::
-
-        - [high] Stripe webhook URL points at staging (caught by The Klutz)
-        - [medium] No accessibility statement (caught by The Doubter)
-
-    The LLM gets enough signal to prioritize and group findings without
-    re-reading the full audit YAML.
-    """
-    lines: list[str] = []
-    for f in findings or []:
-        severity = (f.get("severity") or "").strip().lower() or "low"
-        title = (f.get("title") or f.get("name") or "").strip() or "Untitled finding"
-        tag = (f.get("tag") or f.get("persona") or "").strip()
-        suffix = f" (caught by {tag})" if tag else ""
-        lines.append(f"- [{severity}] {title}{suffix}")
-    return "\n".join(lines) if lines else "(no findings)"
-
-
-def _customer_full_name(customer: dict[str, Any]) -> str:
-    first = (customer.get("first_name") or "").strip()
-    last = (customer.get("last_name") or "").strip()
-    name = (first + " " + last).strip()
-    if name:
-        return name
-    email = (customer.get("email") or "").strip()
-    return email.split("@", 1)[0] if email else "the customer"
-
-
-def _build_handoff_context_prompt(
-    *,
-    customer: dict[str, Any],
-    findings: list[dict[str, Any]],
-    audit_date: str,
-    tier: str,
-) -> str:
-    template = _read_prompt("handoff_context_paragraph.txt")
-    return template.format(
-        app_name=(customer.get("app_name") or "").strip() or "the app",
-        builder=(customer.get("builder") or "").strip() or "Lovable",
-        customer_name=_customer_full_name(customer),
-        customer_email=(customer.get("email") or "").strip() or "(no email on file)",
-        audit_date=audit_date,
-        app_url=(customer.get("app_url") or "").strip() or "(no URL on file)",
-        tier=tier,
-        findings_summary=_format_findings_for_handoff(findings),
-    )
-
-
-def _build_handoff_order_prompt(
-    *,
-    findings: list[dict[str, Any]],
-) -> str:
-    template = _read_prompt("handoff_recommended_order.txt")
-    return template.format(
-        findings_summary=_format_findings_for_handoff(findings),
-    )
-
-
-def _build_handoff_code_review_prompt(
-    *,
-    customer: dict[str, Any],
-    findings: list[dict[str, Any]],
-) -> str:
-    template = _read_prompt("handoff_code_review_notes.txt")
-    return template.format(
-        app_name=(customer.get("app_name") or "").strip() or "the app",
-        builder=(customer.get("builder") or "").strip() or "Lovable",
-        app_url=(customer.get("app_url") or "").strip() or "(no URL on file)",
-        findings_summary=_format_findings_for_handoff(findings),
-    )
-
-
-def run_handoff_report(
-    *,
-    audit_payload: dict[str, Any],
-    effective_tier: str,
-    audit_date: str,
-    provider: str = "auto",
-) -> dict[str, str]:
-    """Generate the three Handoff Report narrative sections.
-
-    ``audit_payload`` is the customer YAML dict that has already been
-    produced by ``run(...)`` (so findings, verdict, passed_checks are all
-    populated). ``effective_tier`` is the tier the customer paid for
-    *plus* any add-ons applied (e.g. Starter + Handoff). The code-review
-    section is only generated when the customer is on Pro Package per
-    PRODUCT-DECISIONS.md section 8.
-
-    Returns ``{"context_paragraph", "recommended_order", "code_review_notes"}``.
-    ``code_review_notes`` is the empty string for non-Pro tiers; the
-    template gates that section so the empty string is never rendered.
-    """
-    customer = (audit_payload or {}).get("customer") or {}
-    findings = (audit_payload or {}).get("findings") or []
-
-    stub_context = {
-        "app_name": (customer.get("app_name") or "").strip() or "your app",
-        "builder": (customer.get("builder") or "Lovable").strip() or "Lovable",
-    }
-    client = llm_client.build_client(provider=provider, stub_context=stub_context)
-
-    system_prompt = build_system_prompt(
-        (customer.get("platform") or "").strip() or "lovable",
-        tier=effective_tier,
-    )
-
-    context_prompt = _build_handoff_context_prompt(
-        customer=customer,
-        findings=findings,
-        audit_date=audit_date,
-        tier=effective_tier,
-    )
-    order_prompt = _build_handoff_order_prompt(findings=findings)
-
-    context_text = client.generate_handoff_text(
-        system_prompt=system_prompt,
-        user_prompt=context_prompt,
-        section="context_paragraph",
-    )
-    order_text = client.generate_handoff_text(
-        system_prompt=system_prompt,
-        user_prompt=order_prompt,
-        section="recommended_order",
-    )
-
-    code_review_text = ""
-    if effective_tier == HANDOFF_PRO_TIER:
-        code_review_prompt = _build_handoff_code_review_prompt(
-            customer=customer, findings=findings
-        )
-        code_review_text = client.generate_handoff_text(
-            system_prompt=system_prompt,
-            user_prompt=code_review_prompt,
-            section="code_review_notes",
-        )
-
-    return {
-        "context_paragraph": context_text,
-        "recommended_order": order_text,
-        "code_review_notes": code_review_text,
-    }

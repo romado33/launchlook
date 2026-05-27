@@ -86,9 +86,16 @@
   async function boot() {
     bindStaticHandlers();
 
+    // /review/<slug> passes review_slug via the page bootstrap; fetch with it so
+    // api/bootstrap loads customer data even if the server wasn't started with --review-ai.
+    const pageReviewSlug = window.AUDIT_UI_BOOTSTRAP?.review_slug || null;
+    const bootstrapUrl = pageReviewSlug
+      ? `/api/bootstrap?slug=${encodeURIComponent(pageReviewSlug)}&review_ai=1`
+      : "/api/bootstrap";
+
     let bootstrap = null;
     try {
-      bootstrap = await fetch("/api/bootstrap").then((r) => r.json());
+      bootstrap = await fetch(bootstrapUrl).then((r) => r.json());
     } catch (err) {
       setStatus("Failed to load bootstrap: " + err.message, "error");
       return;

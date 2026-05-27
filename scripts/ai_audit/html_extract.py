@@ -62,10 +62,7 @@ def _clean_html_to_extract(html: str, url: str) -> dict[str, Any]:
     try:
         from bs4 import BeautifulSoup
     except ImportError:
-        sys.exit(
-            "ERROR: beautifulsoup4 not installed.\n"
-            "Run: pip install -r requirements-ai.txt"
-        )
+        sys.exit("ERROR: beautifulsoup4 not installed.\nRun: pip install -r requirements-ai.txt")
 
     soup = BeautifulSoup(html or "", "html.parser")
 
@@ -92,16 +89,10 @@ def _clean_html_to_extract(html: str, url: str) -> dict[str, Any]:
 
     buttons: list[str] = []
     seen_buttons: set[str] = set()
-    for el in soup.select(
-        "button, [role='button'], input[type='submit'], input[type='button']"
-    ):
+    for el in soup.select("button, [role='button'], input[type='submit'], input[type='button']"):
         # See comment above re: BeautifulSoup AttributeValueList; coerce to str.
         label = _collapse_ws(
-            str(
-                el.get_text(" ", strip=True)
-                or el.get("value", "")
-                or el.get("aria-label", "")
-            )
+            str(el.get_text(" ", strip=True) or el.get("value", "") or el.get("aria-label", ""))
         )
         if label and label not in seen_buttons:
             seen_buttons.add(label)
@@ -171,18 +162,14 @@ def extract_pages(
                 page = context.new_page()
                 entry: dict[str, Any] = {"path": path, "url": url}
                 try:
-                    response = page.goto(
-                        url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle"
-                    )
+                    response = page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
                     status = response.status if response else None
                     entry["status"] = status
                     if status and 200 <= status < 400:
                         html = page.content()
                         cleaned = _clean_html_to_extract(html, url)
                         entry.update(cleaned)
-                        print(
-                            f"  [html] {status} {path} ({len(cleaned['text'])} chars)"
-                        )
+                        print(f"  [html] {status} {path} ({len(cleaned['text'])} chars)")
                     else:
                         entry["title"] = ""
                         entry["meta"] = {}
@@ -248,9 +235,7 @@ def render_pages_for_prompt(pages: list[dict[str, Any]]) -> str:
             lines.append("  buttons: " + " | ".join(buttons[:20]))
         links = p.get("links") or []
         if links:
-            link_lines = ", ".join(
-                f"{link['text']}->{link['href']}" for link in links[:15]
-            )
+            link_lines = ", ".join(f"{link['text']}->{link['href']}" for link in links[:15])
             lines.append("  links: " + link_lines)
         text = p.get("text") or ""
         if text:

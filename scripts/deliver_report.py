@@ -136,9 +136,7 @@ def validate(data: dict[str, Any]) -> None:
 
     tier = customer["tier"]
     if tier not in VALID_TIERS:
-        sys.exit(
-            f"ERROR: customer.tier must be one of {sorted(VALID_TIERS)}, got: {tier!r}"
-        )
+        sys.exit(f"ERROR: customer.tier must be one of {sorted(VALID_TIERS)}, got: {tier!r}")
 
     findings = data.get("findings") or []
     if not isinstance(findings, list) or not findings:
@@ -155,9 +153,7 @@ def validate(data: dict[str, Any]) -> None:
         if not f.get("title"):
             sys.exit(f"ERROR: findings[{i}].title is required")
 
-    cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(
-        tier, 30
-    )
+    cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
     if len(findings) > cap:
         print(
             f"WARN: {tier} caps at {cap} findings, this YAML has {len(findings)}.",
@@ -366,9 +362,7 @@ def deliver_handoff_report(
     html = render_handoff_html(env, data, narrative, delivered_at)
     pdf_path = out_dir / "handoff-report.pdf"
     try:
-        html_to_pdf(
-            html, pdf_path, data.get("customer", {}).get("first_name", "customer")
-        )
+        html_to_pdf(html, pdf_path, data.get("customer", {}).get("first_name", "customer"))
         print(f"  âœ“ wrote {pdf_path.name} ({pdf_path.stat().st_size / 1024:.1f} KB)")
     except SystemExit as exc:
         print(f"  ! Handoff PDF skipped: {exc}", file=sys.stderr)
@@ -412,9 +406,7 @@ def render_qsg_html(env, data: dict[str, Any], delivered_at: str) -> str | None:
     )
 
 
-def render_pre_launch_checklist_html(
-    env, data: dict[str, Any], delivered_at: str
-) -> str:
+def render_pre_launch_checklist_html(env, data: dict[str, Any], delivered_at: str) -> str:
     """Render the bundled Pre-Launch Checklist PDF.
 
     The content is generic (same for every paid customer); we only
@@ -479,9 +471,8 @@ def html_to_pdf(html: str, out_path: Path, customer_name: str) -> None:
 # Email send (Resend)
 # ---------------------------------------------------------------------------
 
-def render_email_bodies(
-    env, data: dict[str, Any], delivered_at: str
-) -> tuple[str, str, str]:
+
+def render_email_bodies(env, data: dict[str, Any], delivered_at: str) -> tuple[str, str, str]:
     customer = data["customer"]
     n_findings = len(data["findings"])
     subject = f"Your LaunchLook report is ready, {customer['first_name']}"
@@ -682,9 +673,7 @@ def deliver_confidence_check(args) -> int:
     if not args.send:
         if not args.no_open:
             open_in_viewer(pdf_path)
-        subject, html_body, text_body = render_confidence_check_email(
-            env, data, delivered_at
-        )
+        subject, html_body, text_body = render_confidence_check_email(env, data, delivered_at)
         preview_path = out_dir / "email-preview.txt"
         preview_path.write_text(
             f"Subject: {subject}\n\n--- TEXT ---\n{text_body}\n\n--- HTML ---\n{html_body}\n",
@@ -699,9 +688,7 @@ def deliver_confidence_check(args) -> int:
         )
         return 0
 
-    subject, html_body, text_body = render_confidence_check_email(
-        env, data, delivered_at
-    )
+    subject, html_body, text_body = render_confidence_check_email(env, data, delivered_at)
 
     to_email = cc.get("customer_email", "")
     if not to_email:
@@ -804,9 +791,7 @@ def _build_public_report_dict(
     verdict = data.get("verdict") or {}
     findings = data.get("findings") or []
 
-    share_metadata = _build_share_metadata(
-        customer, verdict, len(findings), delivered_at
-    )
+    share_metadata = _build_share_metadata(customer, verdict, len(findings), delivered_at)
 
     return {
         "customer_slug": slug,
@@ -869,8 +854,7 @@ def _generate_shareable_page(
             raw_report["is_public"] = bool(existing.get("is_public", False))
             prior_handoff = existing.get("handoff_report") or {}
             raw_report["handoff_report"]["shared"] = bool(
-                raw_report["handoff_report"]["available"]
-                and prior_handoff.get("shared", False)
+                raw_report["handoff_report"]["available"] and prior_handoff.get("shared", False)
             )
             if existing.get("share_history"):
                 raw_report["share_history"] = existing["share_history"]
@@ -920,20 +904,14 @@ def main() -> int:
         action="store_true",
         help="Send via Resend (default is dry-run preview)",
     )
-    parser.add_argument(
-        "--dry-run", action="store_true", help="Force dry-run (default behavior)"
-    )
-    parser.add_argument(
-        "--no-open", action="store_true", help="Skip auto-opening PDFs in dry-run"
-    )
+    parser.add_argument("--dry-run", action="store_true", help="Force dry-run (default behavior)")
+    parser.add_argument("--no-open", action="store_true", help="Skip auto-opening PDFs in dry-run")
     parser.add_argument(
         "--qsg-link",
         default=None,
         help="Optional public URL of the QSG PDF (for the report cross-link)",
     )
-    parser.add_argument(
-        "--yes", action="store_true", help="Skip the send confirmation prompt"
-    )
+    parser.add_argument("--yes", action="store_true", help="Skip the send confirmation prompt")
     parser.add_argument(
         "--confidence-check",
         action="store_true",
@@ -1034,10 +1012,7 @@ def main() -> int:
     checklist_pdf = out_dir / "pre-launch-checklist.pdf"
     checklist_html = render_pre_launch_checklist_html(env, data, delivered_at)
     html_to_pdf(checklist_html, checklist_pdf, customer["first_name"])
-    print(
-        f"  - wrote {checklist_pdf.name} "
-        f"({checklist_pdf.stat().st_size / 1024:.1f} KB)"
-    )
+    print(f"  - wrote {checklist_pdf.name} ({checklist_pdf.stat().st_size / 1024:.1f} KB)")
     attachments.append(checklist_pdf)
 
     # q22: shareable hosted report page. Default is private (no

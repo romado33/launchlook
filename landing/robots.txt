@@ -2,3 +2,9 @@ User-agent: *
 Allow: /
 
 Sitemap: https://launchlook.app/sitemap.xml
+
+# Agent / LLM discovery (start here):
+# https://launchlook.app/llms.txt
+# https://launchlook.app/llms-full.txt
+# https://launchlook.app/.well-known/agent-resources.json
+# https://launchlook.app/ai.txt

@@ -160,9 +160,7 @@ def crawl(base_url: str, max_pages: int = MAX_PAGES) -> list[dict[str, Any]]:
                 url = queue.pop(0)
                 page = context.new_page()
                 try:
-                    response = page.goto(
-                        url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle"
-                    )
+                    response = page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
                     status = response.status if response else None
                     html = page.content() if status and 200 <= status < 400 else ""
                     print(f"  [crawl] {status} {url} ({len(html)} chars)")
@@ -208,18 +206,14 @@ def crawl(base_url: str, max_pages: int = MAX_PAGES) -> list[dict[str, Any]]:
 # ---------------------------------------------------------------------------
 
 
-def context_snippet(
-    text: str, match: re.Match[str], before: int = 5, after: int = 50
-) -> str:
+def context_snippet(text: str, match: re.Match[str], before: int = 5, after: int = 50) -> str:
     start = max(0, match.start() - before)
     end = min(len(text), match.end() + after)
     snippet = text[start:end].replace("\n", " ").replace("\r", " ")
     return re.sub(r"\s+", " ", snippet).strip()
 
 
-def scan(
-    pages: list[dict[str, Any]], findings: list[dict[str, Any]]
-) -> list[dict[str, Any]]:
+def scan(pages: list[dict[str, Any]], findings: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Return one record per (finding, page) where the regex matches."""
     hits: list[dict[str, Any]] = []
     for finding in findings:
@@ -330,13 +324,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument(
-        "--customer-id", help="Notion Customers DB page id (or unique prefix)"
-    )
+    parser.add_argument("--customer-id", help="Notion Customers DB page id (or unique prefix)")
     parser.add_argument("--url", help="Override URL - smoke test without Notion")
-    parser.add_argument(
-        "--max-pages", type=int, default=MAX_PAGES, help="Cap on pages crawled"
-    )
+    parser.add_argument("--max-pages", type=int, default=MAX_PAGES, help="Cap on pages crawled")
     args = parser.parse_args()
 
     max_pages = max(1, args.max_pages)

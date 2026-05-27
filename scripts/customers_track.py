@@ -84,9 +84,7 @@ def normalize_tier(raw: str) -> str:
 
 def load_store() -> dict:
     if not CUSTOMERS_PATH.exists():
-        sys.exit(
-            f"ERROR: {CUSTOMERS_PATH} not found. Run: python scripts/customers_track.py init"
-        )
+        sys.exit(f"ERROR: {CUSTOMERS_PATH} not found. Run: python scripts/customers_track.py init")
     return json.loads(CUSTOMERS_PATH.read_text(encoding="utf-8"))
 
 
@@ -109,9 +107,7 @@ def delivery_due_from_payment(payment_date: str, tier: str) -> str:
 
 
 def counts_paying(store: dict, cfg: dict) -> int:
-    exclude = set(
-        cfg.get("counts_as_paying", {}).get("exclude_statuses", ["lead", "refunded"])
-    )
+    exclude = set(cfg.get("counts_as_paying", {}).get("exclude_statuses", ["lead", "refunded"]))
     require_payment = cfg.get("counts_as_paying", {}).get("requires_payment_date", True)
     n = 0
     for c in store.get("customers", []):
@@ -211,8 +207,8 @@ def cmd_list(args: argparse.Namespace) -> int:
     for c in sorted(rows, key=lambda x: x.get("payment_date") or "", reverse=True):
         intake = "✓" if c.get("intake_received") else "·"
         print(
-            f"{c['id']}  {c.get('payment_date','?')}  {c.get('tier','?'):7}  "
-            f"{c.get('status','?'):16}  intake{intake}  {c.get('name')}  <{c.get('email')}>"
+            f"{c['id']}  {c.get('payment_date', '?')}  {c.get('tier', '?'):7}  "
+            f"{c.get('status', '?'):16}  intake{intake}  {c.get('name')}  <{c.get('email')}>"
         )
     return 0
 
@@ -226,15 +222,11 @@ def cmd_stats(_: argparse.Namespace) -> int:
     paying = counts_paying(store, cfg)
     delivered = sum(1 for c in store["customers"] if c.get("status") == "delivered")
     auditing = sum(
-        1
-        for c in store["customers"]
-        if c.get("status") in ("auditing", "intake_received")
+        1 for c in store["customers"] if c.get("status") in ("auditing", "intake_received")
     )
     print(f"Paying customers (milestone count): {paying}")
     print(f"Delivered: {delivered}  |  In progress: {auditing}")
-    print(
-        f"60-day target: {paying}/{target_8}  |  Automation unlock: {paying}/{target_10}"
-    )
+    print(f"60-day target: {paying}/{target_8}  |  Automation unlock: {paying}/{target_10}")
     ms = store.get("milestones", {})
     if paying >= target_10:
         if ms.get("customer_10_unlock_acknowledged"):
@@ -321,9 +313,7 @@ def cmd_acknowledge_milestone_10(_: argparse.Namespace) -> int:
     target_10 = cfg.get("goals", {}).get("paying_customers_automation_unlock", 10)
     paying = counts_paying(store, cfg)
     if paying < target_10:
-        sys.exit(
-            f"ERROR: only {paying} paying customers — need {target_10} before acknowledging"
-        )
+        sys.exit(f"ERROR: only {paying} paying customers — need {target_10} before acknowledging")
     store.setdefault("milestones", {})
     store["milestones"]["customer_10_unlock_acknowledged"] = True
     store["milestones"]["customer_10_unlocked_at"] = utc_now_iso()
@@ -391,9 +381,7 @@ def build_parser() -> argparse.ArgumentParser:
     lst.add_argument("--status", choices=sorted(VALID_STATUSES))
     lst.set_defaults(func=cmd_list)
 
-    sub.add_parser("stats", help="Paying count + milestone progress").set_defaults(
-        func=cmd_stats
-    )
+    sub.add_parser("stats", help="Paying count + milestone progress").set_defaults(func=cmd_stats)
 
     show = sub.add_parser("show", help="JSON for one customer")
     show.add_argument("customer_id")

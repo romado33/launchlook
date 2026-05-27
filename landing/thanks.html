@@ -10,68 +10,121 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
-<body class="bg-paper text-ink font-sans antialiased">
-  <header class="border-b border-line">
-    <div class="page-wrap px-6 py-3">
+<body class="bg-paper text-ink font-sans antialiased" data-launchlook-personalize="thanks">
+  <header id="site-header" class="site-header border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="page-wrap px-6 py-3 flex items-center justify-between">
       <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
         <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
+        <a href="/#pricing" class="nav-link">Pricing</a>
+        <a href="/faq" class="nav-link">FAQ</a>
+        <a href="/webflow" class="nav-link">Webflow</a>
+      </nav>
     </div>
   </header>
-  <main class="page-wrap px-6 py-16 sm:py-24">
+
+  <main class="page-wrap px-6 section-inner">
     <h1 class="font-serif text-3xl sm:text-4xl text-center">You're in. One more step.</h1>
-    <p class="mt-6 text-muted leading-relaxed text-center max-w-prose mx-auto">
-      Thanks for your purchase. Complete the short intake so we can start your checkup (about 3 minutes).
+    <p data-launchlook-thanks-lead class="mt-4 text-muted leading-relaxed text-center max-w-prose mx-auto">
+      Thanks for your purchase. Complete the short intake so we can start your <span data-launchlook-tier-label>checkup</span> (about 3 minutes).
     </p>
+    <p data-launchlook-intake-prefill-note class="mt-2 text-sm text-muted text-center max-w-prose mx-auto hidden"></p>
 
-    <ol class="mt-8 max-w-md mx-auto space-y-3 text-sm text-muted">
-      <li class="flex gap-3"><span class="font-medium text-ink">1.</span><span>Submit intake (app URL, builder, what it does)</span></li>
-      <li class="flex gap-3"><span class="font-medium text-ink">2.</span><span>We walk every screen, surface the issues that matter, and a founder personally reviews every finding before it ships</span></li>
-      <li class="flex gap-3"><span class="font-medium text-ink">3.</span><span>You get your Main Report, Quick Start Guide, and Pre-Launch Checklist as PDFs by email when it's ready, usually within a few days. Pro Package customers also get a Loom walkthrough scheduled separately. Opens in any PDF reader, no extra account needed.</span></li>
-    </ol>
+    <div class="thanks-intake-layout mt-6 max-w-3xl mx-auto md:grid md:grid-cols-[minmax(0,1fr)_auto] md:gap-8 md:items-start">
+      <div class="thanks-intake-copy min-w-0">
+        <ol class="space-y-2.5 text-sm text-muted">
+          <li class="flex gap-3"><span class="font-medium text-ink shrink-0">1.</span><span>Submit intake (app URL, builder, what it does)</span></li>
+          <li class="flex gap-3"><span class="font-medium text-ink shrink-0">2.</span><span>We test the workflows that matter (forms, signup, follow-up emails), surface what breaks, and a founder reviews every finding before it ships</span></li>
+          <li class="flex gap-3"><span class="font-medium text-ink shrink-0">3.</span><span>Main Report, Quick Start Guide, and Pre-Launch Checklist arrive as PDFs by email, usually within a few days. Pro includes a Loom walkthrough. No extra account needed.</span></li>
+        </ol>
 
-    <div class="mt-8 max-w-prose mx-auto card-elevated px-4 py-3 text-sm text-muted">
-      <p class="font-medium text-ink text-xs uppercase tracking-wide mb-2">Before you submit</p>
-      <ul class="list-disc pl-5 space-y-1">
-        <li><strong class="text-ink">Only submit temporary test accounts.</strong> Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.</li>
-        <li>Scale Up ($49) and Pro ($99) only: temporary test accounts, not real users or production admin logins.</li>
-        <li>Submit credentials through the intake form only, not in a separate email.</li>
+        <div class="mt-5 card-elevated px-4 py-2.5 text-sm text-muted">
+          <p class="font-medium text-ink text-xs uppercase tracking-wide mb-1.5">Before you submit</p>
+          <ul class="list-disc pl-5 space-y-1 text-[0.8125rem] leading-snug">
+            <li><strong class="text-ink">Only temporary test accounts.</strong> No personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.</li>
+            <li>Scale Up ($49) and Pro ($99): temporary test accounts only, not production admin logins.</li>
+            <li>Credentials through the intake form only, not email.</li>
+          </ul>
+        </div>
+
+        <div class="thanks-intake-cta-mobile mt-5 text-center md:hidden">
+          <a
+            href="#"
+            data-launchlook-intake
+            class="launchlook-btn launchlook-btn-primary w-full sm:w-auto"
+          >
+            Complete intake form
+          </a>
+          <p class="mt-3 text-sm text-muted max-w-prose mx-auto">
+            After you submit, we start on your live URL. PDFs by email when ready.
+          </p>
+        </div>
+      </div>
+
+      <div class="thanks-intake-cta mt-6 hidden md:block text-center md:sticky md:top-6 md:self-start shrink-0">
+        <a
+          id="intake-cta"
+          href="#"
+          data-launchlook-intake
+          class="launchlook-btn launchlook-btn-primary w-full sm:w-auto"
+        >
+          Complete intake form
+        </a>
+        <p class="mt-3 text-sm text-muted max-w-xs mx-auto md:max-w-[14rem]">
+          After you submit, we start on your live URL. PDFs by email when ready. Nothing else for you to do until then.
+        </p>
+        <p data-launchlook-intake-email-hint class="mt-3 text-sm text-muted max-w-xs mx-auto hidden">
+          No form link yet? Tap the button to send a pre-filled email to <strong class="text-ink" data-launchlook-email-display>hello@launchlook.app</strong>. We reply within a few hours if anything is missing.
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-line">
+    <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
+        <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>
     </div>
-
-    <div class="mt-10 text-center">
-      <a
-        id="intake-cta"
-        href="#"
-        data-launchlook-intake
-        class="launchlook-btn launchlook-btn-primary"
-      >
-        Complete intake form
-      </a>
-      <p class="mt-4 text-sm text-muted max-w-prose mx-auto">
-        After you submit, you'll see a confirmation page and we'll start reviewing your live URL. Your PDFs arrive by email when it's ready, usually within a few days. Nothing more for you to do until then.
-      </p>
-      <p data-launchlook-intake-email-hint class="mt-4 text-sm text-muted max-w-prose mx-auto hidden">
-        No form link yet? Tap the button to send a pre-filled email to <strong class="text-ink" data-launchlook-email-display>hello@launchlook.app</strong>. We reply within a few hours if anything is missing.
-      </p>
-    </div>
-
-    <p class="mt-8 text-sm text-center">
-      <a href="https://launchlook.app/" class="text-muted underline hover:text-ink transition">← Back to launchlook.app</a>
-    </p>
-
-    <p class="mt-6 text-sm text-muted text-center">
-      Questions? <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
-      · <a href="/privacy" class="underline hover:text-ink">Privacy</a>
-    </p>
-  </main>
+  </footer>
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
   <script src="/assets/apply-config.js"></script>
+  <script src="/assets/personalize.js"></script>
+  <script src="/assets/site.js" defer></script>
+  <script>
+    // Render tier label from ?tier= query param (e.g. "Starter checkup").
+    (function () {
+      var LABELS = { starter: "Starter checkup", scale_up: "Scale Up checkup", pro: "Pro checkup" };
+      try {
+        var tier = new URLSearchParams(window.location.search).get("tier") || "";
+        var label = LABELS[tier.toLowerCase()];
+        if (label) {
+          document.querySelectorAll("[data-launchlook-tier-label]").forEach(function (el) {
+            el.textContent = label;
+          });
+        }
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>

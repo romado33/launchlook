@@ -1,6 +1,6 @@
 # Findings Library
 
-The findings seed library (38 entries as of v2) that powers LaunchLook audits. Source of truth for both manual work today and (eventually) the BL-15 scanner that auto-populates Notion reports.
+The findings seed library (38 entries as of v2) that powers Onceover audits. Source of truth for both manual work today and (eventually) the BL-15 scanner that auto-populates Notion reports.
 
 ## Files
 
@@ -11,7 +11,7 @@ The findings seed library (38 entries as of v2) that powers LaunchLook audits. S
 
 ## How to import into Notion (BL-03)
 
-1. Open the `LaunchLook Ops` Notion workspace (create it if you haven't yet).
+1. Open the `Onceover Ops` Notion workspace (create it if you haven't yet).
 2. New page → choose **Database — Full page** → name it `Findings Library`.
 3. Top-right `...` menu → **Merge with CSV** → upload `findings.csv`.
 4. Adjust column types after import:
@@ -61,7 +61,7 @@ The most common substitutions:
 | Variable | Source |
 |---|---|
 | `{ACTUAL_NAME}` | Intake form field 4 ("What does your app do?") → product name from URL |
-| `{ACTUAL_EMAIL}` | Intake form field 11 (support email, Launch+) |
+| `{ACTUAL_EMAIL}` | Intake form field 11 (support email, Launch Pack+) |
 | `{ONE_LINE_DESCRIPTION}` | Intake form field 4 |
 | `{PAGE}` | Per-finding — the page where the issue appears |
 

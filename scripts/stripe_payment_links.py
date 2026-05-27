@@ -25,7 +25,14 @@ import urllib.request
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_PATH = os.path.join(REPO_ROOT, ".env")
-SUCCESS_URL = "https://launchlook.app/thanks"
+# Each main-tier Payment Link redirects to /thanks?tier=<slug> so the page
+# can forward the tier into the Tally hidden field, removing the need for Q8.
+SUCCESS_URL = "https://launchlook.app/thanks"  # fallback / add-on links
+TIER_SUCCESS_URLS: dict[str, str] = {
+    "starter_package": "https://launchlook.app/thanks?tier=starter",
+    "scale_up_package": "https://launchlook.app/thanks?tier=scale_up",
+    "pro_package": "https://launchlook.app/thanks?tier=pro",
+}
 
 # Fields applied on create (see _create_stripe*.py) — tax off by default.
 PAYMENT_LINK_TAX_OFF: dict[str, str] = {
@@ -166,9 +173,7 @@ def deactivate_link(key: str, plink_id: str, dry_run: bool) -> tuple[bool, str]:
     return not data.get("active", True), "deactivated"
 
 
-def cmd_enable_tax(
-    key: str, dry_run: bool, deactivate_reverify: bool, all_active: bool
-) -> int:
+def cmd_enable_tax(key: str, dry_run: bool, deactivate_reverify: bool, all_active: bool) -> int:
     links = list_all(key, "payment_links", {"active": "true"})
     if not links:
         print("No active payment links found.")
@@ -259,6 +264,49 @@ def cmd_disable_tax(key: str, dry_run: bool, all_active: bool) -> int:
     return 1 if tax_fail else 0
 
 
+def cmd_update_success_urls(key: str, dry_run: bool) -> int:
+    """Point each main-tier Payment Link at its tier-specific success URL.
+
+    Starter  -> /thanks?tier=starter
+    Scale Up -> /thanks?tier=scale_up
+    Pro      -> /thanks?tier=pro
+    Add-ons (confidence_check, handoff_report) keep the flat /thanks URL.
+    """
+    links = list_all(key, "payment_links", {"active": "true"})
+    ok_count = fail_count = skip_count = 0
+    for pl in links:
+        md = pl.get("metadata") or {}
+        product = md.get("product", "")
+        if product not in TIER_SUCCESS_URLS:
+            skip_count += 1
+            continue
+        target_url = TIER_SUCCESS_URLS[product]
+        current = (pl.get("after_completion") or {}).get("redirect", {}).get("url", "")
+        if current == target_url:
+            print(f"  already set  {pl['id']}  {product}  {target_url}")
+            skip_count += 1
+            continue
+        if dry_run:
+            print(f"  [dry-run] would set  {pl['id']}  {product}  {current!r} -> {target_url!r}")
+            ok_count += 1
+            continue
+        status, data = stripe_request(
+            key,
+            "POST",
+            f"payment_links/{pl['id']}",
+            {"after_completion[type]": "redirect", "after_completion[redirect][url]": target_url},
+        )
+        if status == 200:
+            print(f"  updated  {pl['id']}  {product}  -> {target_url}")
+            ok_count += 1
+        else:
+            err = data.get("error", data)
+            print(f"  FAIL  {pl['id']}  {product}: {err}")
+            fail_count += 1
+    print(f"\nDone: updated={ok_count}, failed={fail_count}, skipped/unchanged={skip_count}")
+    return 1 if fail_count else 0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="LaunchLook Stripe Payment Link maintenance")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -292,6 +340,15 @@ def main() -> None:
         help="Deactivate active links with metadata product=reverify (feature removed)",
     )
 
+    sub.add_parser(
+        "update-success-urls",
+        help="Set tier-specific success URLs on main-tier Payment Links (?tier=starter etc.)",
+    ).add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print what would change without calling Stripe",
+    )
+
     args = parser.parse_args()
     key = load_env()
 
@@ -301,6 +358,8 @@ def main() -> None:
         raise SystemExit(
             cmd_enable_tax(key, args.dry_run, args.deactivate_reverify, args.all_active)
         )
+    if args.command == "update-success-urls":
+        raise SystemExit(cmd_update_success_urls(key, args.dry_run))
 
 
 if __name__ == "__main__":

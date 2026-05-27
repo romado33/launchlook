@@ -309,9 +309,7 @@ STALE_CAP_FLAGS: tuple[tuple[re.Pattern[str], str], ...] = (
 # ---------------------------------------------------------------------------
 
 # Each entry: (regex, suggested-replacement description, severity, optional auto-fix pair).
-FORBIDDEN_VOCAB: tuple[
-    tuple[re.Pattern[str], str, str, tuple[str, str] | None], ...
-] = (
+FORBIDDEN_VOCAB: tuple[tuple[re.Pattern[str], str, str, tuple[str, str] | None], ...] = (
     (
         re.compile(r"\bCore Web Vitals\b"),
         "Use 'performance & speed' per SIMPLICITY-GUARDRAILS section 6.",
@@ -614,9 +612,7 @@ def relative(path: Path) -> str:
         return str(path).replace("\\", "/")
 
 
-def trim_snippet(
-    line: str, span: tuple[int, int] | None = None, max_len: int = 160
-) -> str:
+def trim_snippet(line: str, span: tuple[int, int] | None = None, max_len: int = 160) -> str:
     snippet = line.rstrip("\n").strip()
     if len(snippet) <= max_len:
         return snippet
@@ -624,11 +620,7 @@ def trim_snippet(
         return snippet[:max_len] + "..."
     start = max(0, span[0] - 30)
     end = min(len(snippet), span[1] + 60)
-    return (
-        ("..." if start > 0 else "")
-        + snippet[start:end]
-        + ("..." if end < len(snippet) else "")
-    )
+    return ("..." if start > 0 else "") + snippet[start:end] + ("..." if end < len(snippet) else "")
 
 
 # ---------------------------------------------------------------------------
@@ -1189,7 +1181,9 @@ def render_report(
                     f"| `{issue.file}` | {issue.line} | `{old}` -> `{new}` | {issue.kind} |"
                 )
     if not auto_fixed_log_rows:
-        auto_fixed_log_body = "_No auto-safe fixes were applied (none qualified, or run was --report-only)._\n"
+        auto_fixed_log_body = (
+            "_No auto-safe fixes were applied (none qualified, or run was --report-only)._\n"
+        )
     else:
         auto_fixed_log_body = (
             "| File | Line | Fix | Kind |\n"
@@ -1205,9 +1199,7 @@ def render_report(
     )
     parts.append("")
     parts.append("Canonical truth sources audited against:")
-    parts.append(
-        "- `docs/SIMPLICITY-GUARDRAILS.md` section 6 (forbidden vocab, em-dash rule)"
-    )
+    parts.append("- `docs/SIMPLICITY-GUARDRAILS.md` section 6 (forbidden vocab, em-dash rule)")
     parts.append(
         "- `docs/PRODUCT-DECISIONS.md` section 1 (tier ladder, finding caps), section 7 (pricing)"
     )
@@ -1235,11 +1227,7 @@ def render_report(
     parts.append("")
     parts.append(_render_group(KIND_STALE_TIER, "Stale tier names + finding caps"))
     parts.append(_render_group(KIND_STALE_PRICE, "Stale prices"))
-    parts.append(
-        _render_group(
-            KIND_FORBIDDEN_VOCAB, "Forbidden vocab still on customer surfaces"
-        )
-    )
+    parts.append(_render_group(KIND_FORBIDDEN_VOCAB, "Forbidden vocab still on customer surfaces"))
     parts.append(_render_group(KIND_EM_DASH, "Em-dashes on customer-facing surfaces"))
     parts.append(_render_group(KIND_PERSONA_TYPO, "Persona typos"))
     parts.append(_render_group(KIND_CATEGORY_TYPO, "Stale internal category names"))

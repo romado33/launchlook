@@ -46,9 +46,7 @@ def _make_data(tier: str, n_findings: int = 1) -> dict[str, Any]:
             "tier": tier,
             "builder": "lovable",
         },
-        "findings": [
-            {"severity": "high", "title": f"finding {i}"} for i in range(n_findings)
-        ],
+        "findings": [{"severity": "high", "title": f"finding {i}"} for i in range(n_findings)],
         "verdict": {"summary": "test verdict"},
     }
 
@@ -80,9 +78,9 @@ def test_validate_rejects_unknown_tier() -> None:
 def test_alias_map_normalises_legacy_names_to_scale_up(alias: str) -> None:
     """Old "Full Package" YAMLs + every scale-up variant route to canonical."""
     canonical = TIER_ALIAS_TO_CANONICAL.get(alias.lower())
-    assert (
-        canonical == "Scale Up Package"
-    ), f"Alias {alias!r} must normalise to 'Scale Up Package', got {canonical!r}"
+    assert canonical == "Scale Up Package", (
+        f"Alias {alias!r} must normalise to 'Scale Up Package', got {canonical!r}"
+    )
 
 
 @pytest.mark.parametrize(
@@ -100,6 +98,6 @@ def test_tier_caps_match_canonical_pipeline_values(
     data = _make_data(tier, n_findings=expected_cap + 1)
     validate(data)
     captured = capsys.readouterr()
-    assert (
-        f"caps at {expected_cap}" in captured.err
-    ), f"Expected '{tier}' cap of {expected_cap} in WARN stderr; got: {captured.err!r}"
+    assert f"caps at {expected_cap}" in captured.err, (
+        f"Expected '{tier}' cap of {expected_cap} in WARN stderr; got: {captured.err!r}"
+    )

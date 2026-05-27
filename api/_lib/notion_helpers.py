@@ -1,5 +1,5 @@
 """
-notion_helpers.py - thin wrapper around notion_client for the Customers DB.
+notion_helpers.py — thin wrapper around notion_client for the Customers DB.
 
 Both webhooks (Tally + Stripe) reuse these. The Customers DB schema is defined
 in templates/notion/customers-db.csv; the property names hard-coded here match
@@ -59,7 +59,7 @@ FIELD_TO_NOTION: dict[str, tuple[str, str]] = {
 # Status values used in the Customers DB Status select column.
 # Keep in sync with scripts/dashboard.py.
 STATUS_PAID = "Paid"
-STATUS_INTAKE = "Intake received"
+STATUS_INTAKE = "Intake Received"
 STATUS_IN_PROGRESS = "In progress"
 STATUS_DELIVERED = "Delivered"
 STATUS_REFUNDED = "Refunded"
@@ -179,11 +179,7 @@ def find_customer_by_email(
         )
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
-    rows = [
-        r
-        for r in resp.get("results", [])
-        if not (r.get("archived") or r.get("in_trash"))
-    ]
+    rows = [r for r in resp.get("results", []) if not (r.get("archived") or r.get("in_trash"))]
     return rows[0] if rows else None
 
 

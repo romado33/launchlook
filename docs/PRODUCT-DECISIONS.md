@@ -14,7 +14,7 @@ The tier ladder is **fixed at 4 tiers**: Free / Starter / Scale Up / Pro. Do not
 
 | Tier | Price | Findings cap | Key deliverables |
 |---|---|---|---|
-| Free | $0 | 3 (top severity only) | Email-gated. Used as lead magnet. No bundled PDFs. |
+| Free | $0 | 2 (top severity only) | Email-gated. Used as lead magnet. No bundled PDFs. |
 | Starter | $19 | 10 | Main Report PDF, Pre-Launch Checklist PDF |
 | Scale Up | $49 | 30 | + cross-user data isolation check, Quick Start Guide PDF, Pre-Launch Checklist PDF |
 | Pro | $99 | 40 | + integrations review, recorded Loom walkthrough, Handoff Report, Pre-Launch Checklist PDF, deep links in QSG |
@@ -34,7 +34,7 @@ Identical tier structure and identical pricing as the main SKU. Different `/webf
 
 ## §2 Free → Starter deduplication rule
 
-When a buyer used the free hook (top 3 findings) and then upgrades to Starter for the same email + URL within 90 days, the AI must surface **10 NEW findings**, excluding the original 3.
+When a buyer used the free hook (top 2 findings) and then upgrades to Starter for the same email + URL within 90 days, the AI must surface **10 NEW findings**, excluding the original 2.
 
 - UX promise: "You're not paying $19 just to re-read your free preview."
 - Storage: finding fingerprints (severity + brief description hash + element selector hash) per email + URL combo, kept in Notion.
@@ -166,7 +166,7 @@ When you change anything in this file:
 
 Conversion measurement via Plausible (privacy-friendly, no cookie banner needed per `SIMPLICITY-GUARDRAILS.md` §2). Goals wired into the code as CSS classes on every relevant CTA:
 
-- `FreeAuditSignup` — free 3-finding audit form submission
+- `FreeAuditSignup` — free 2-finding audit form submission
 - `StarterCheckout` — Starter $19 button click
 - `ScaleUpCheckout` — Scale Up $49 button click
 - `ProCheckout` — Pro $99 button click

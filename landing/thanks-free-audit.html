@@ -3,62 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Got it. Your 3 findings are queued (LaunchLook)</title>
+  <title>Got it. Your 2 findings are queued (LaunchLook)</title>
   <meta name="robots" content="noindex" />
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
   <script src="/assets/tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
-<body class="bg-paper text-ink font-sans antialiased">
-  <header class="border-b border-line">
-    <div class="page-wrap px-6 py-3">
+<body class="bg-paper text-ink font-sans antialiased" data-launchlook-personalize="thanks">
+  <header id="site-header" class="site-header border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="page-wrap px-6 py-3 flex items-center justify-between">
       <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
         <span class="site-brand-tagline">One last look before you launch.</span>
       </a>
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
+        <a href="/#pricing" class="nav-link">Pricing</a>
+        <a href="/faq" class="nav-link">FAQ</a>
+        <a href="/webflow" class="nav-link">Webflow</a>
+      </nav>
     </div>
   </header>
 
-  <main class="page-wrap px-6 py-16 sm:py-24">
-    <h1 class="font-serif text-3xl sm:text-4xl text-center">Got it. Your 3 findings are queued.</h1>
-    <p class="mt-6 text-muted leading-relaxed text-center max-w-prose mx-auto">
-      A founder will walk through your site and email you the top 3 things to fix <strong class="text-ink">when it's ready, usually within a few days</strong>.
+  <main class="page-wrap px-6 section-inner">
+    <h1 class="font-serif text-3xl sm:text-4xl text-center">Got it. Your 2 findings for <span data-launchlook-site-host>your site</span> are queued.</h1>
+    <p data-launchlook-thanks-lead class="mt-6 text-muted leading-relaxed text-center max-w-prose mx-auto">
+      A founder will load your site at desktop and mobile width, run the main workflows, review every finding, and email you the top 2 things to fix <strong class="text-ink">when it's ready, usually within a few days</strong>.
     </p>
 
     <div class="mt-10 max-w-prose mx-auto card-elevated p-6 sm:p-8">
       <p class="text-sm font-medium text-ink">What happens next</p>
       <ol class="mt-3 space-y-3 text-sm text-muted">
         <li class="flex gap-3"><span class="font-medium text-ink">1.</span><span>You'll get a quick confirmation email at the address you just gave us. If you don't see it in 10 minutes, check spam.</span></li>
-        <li class="flex gap-3"><span class="font-medium text-ink">2.</span><span>A human reviewer reads your live site like a first-time visitor on desktop and phone.</span></li>
-        <li class="flex gap-3"><span class="font-medium text-ink">3.</span><span>When the review is ready (usually within a few days), you'll get one email back with the 3 highest-impact things to fix before you share publicly. Plain English, no jargon.</span></li>
+        <li class="flex gap-3"><span class="font-medium text-ink">2.</span><span>We load <strong class="text-ink" data-launchlook-site-host>your site</strong> at desktop and mobile width, run signup/forms/checkout, and check the emails that should follow.</span></li>
+        <li class="flex gap-3"><span class="font-medium text-ink">3.</span><span>When the review is ready (usually within a few days), you'll get one email with the 2 highest-impact things to fix before you share publicly. Plain English, no jargon.</span></li>
       </ol>
     </div>
 
     <div class="mt-10 max-w-prose mx-auto rounded-lg border border-line bg-surface-tint px-5 py-5 text-sm text-muted">
       <p class="font-medium text-ink">Want all 10 issues, sorted by severity?</p>
-      <p class="mt-2 leading-relaxed">Your free preview is the top 3. The <a href="/#pricing" class="underline hover:text-ink">Starter Package ($19)</a> covers up to 10 findings across every category, with paste-ready fix prompts you can drop straight into your AI builder. Your Starter findings build on your free preview, so you're not paying $19 to re-read the same three things.</p>
+      <p class="mt-2 leading-relaxed">Your free preview is the top 2. The <a href="/#pricing" class="underline hover:text-ink">Starter Package ($19)</a> covers up to 10 findings across every category, with paste-ready fix prompts you can drop straight into your AI builder. Your Starter findings build on your free preview, so you're not paying $19 to re-read the same two things.</p>
       <p class="mt-4">
         <a href="/#pricing" class="launchlook-btn launchlook-btn-primary">See Starter ($19)</a>
       </p>
     </div>
 
-    <p class="mt-10 text-sm text-center">
-      <a href="https://launchlook.app/" class="text-muted underline hover:text-ink transition">← Back to launchlook.app</a>
-    </p>
-
-    <p class="mt-6 text-sm text-muted text-center">
-      Questions? <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a>
-      · <a href="/privacy" class="underline hover:text-ink">Privacy</a>
-    </p>
   </main>
+
+  <footer class="border-t border-line">
+    <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">LaunchLook</p>
+        <p class="mt-1">One last look before you launch.</p>
+        <p data-launchlook-linkedin-wrap class="mt-1.5 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></li>
+        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
+        <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-ink">Terms</a></li>
+      </ul>
+    </div>
+  </footer>
 
   <script src="/assets/config.js"></script>
   <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/personalize.js"></script>
   <script src="/assets/apply-config.js"></script>
+  <script src="/assets/site.js" defer></script>
 </body>
 </html>

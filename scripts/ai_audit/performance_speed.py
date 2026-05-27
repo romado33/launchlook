@@ -245,9 +245,7 @@ def fetch_psi(
     max_retries: int = 3,
 ) -> dict[str, Any] | None:
     """Call the PSI v5 API. Returns parsed JSON, or None on failure."""
-    key = (
-        api_key or os.environ.get("PSI_API_KEY") or os.environ.get("PAGESPEED_API_KEY")
-    )
+    key = api_key or os.environ.get("PSI_API_KEY") or os.environ.get("PAGESPEED_API_KEY")
     cache_key = _cache_key(url, strategy)
     if use_cache:
         cached = _read_cache(cache_key)

@@ -47,7 +47,7 @@ findings:
       lovable.app URL.
 
   - severity: critical
-    title: "Developer Tools" panel on the homepage customers see
+    title: '"Developer Tools" panel on the homepage customers see'
     what_we_saw: |
       After sign-in, Sparkle's homepage shows a "Developer Tools" card with
       "Seed Sample Data" and "Clear My Data" — visible on the public URL.
@@ -118,23 +118,12 @@ findings:
       display name from the database. If missing, show first name + last
       initial or hide the line.
 
-  - severity: low
-    title: Sparkle has no share preview image
-    what_we_saw: |
-      Sparkle Marketplace's og:image is unset, so Slack and iMessage previews
-      show a blank card when someone shares the app URL.
-    why_it_matters: |
-      First impression when someone shares Sparkle is blank, not branded.
-    fix_prompt: |
-      Add a 1200x630 og.png to /public, set og:image and twitter:image meta
-      tags in index.html to /og.png. Verify with opengraph.xyz after deploy.
-
 # Categories with no critical/high finding in this audit. Surfaced as a
 # "What's working" callout in the rendered report (templates/report/report.html.j2).
 passed_checks:
-  - Mobile layout on Sparkle's listing and booking screens
-  - Search, auth, and listing detail work aside from the dev-only UI
-  - No other obvious launch blockers beyond the findings below
+  - Search, filters, and listing detail pages feel production-ready
+  - Core branding and layout are ahead of most pre-launch vibe-coded apps
+  - Auth and navigation work once dev-only UI is removed
 
 quick_start_guide:
   title: Sparkle Marketplace, Getting Started

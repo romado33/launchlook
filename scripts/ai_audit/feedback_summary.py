@@ -60,9 +60,7 @@ def main(argv: list[str] | None = None) -> int:
 
     cutoff = _parse_iso(args.since) if args.since else None
     if args.since and not cutoff:
-        print(
-            f"WARN: could not parse --since {args.since!r}, ignoring", file=sys.stderr
-        )
+        print(f"WARN: could not parse --since {args.since!r}, ignoring", file=sys.stderr)
 
     actions_total: Counter = Counter()
     severity_drift: Counter = Counter()  # ai_sev -> final_sev
@@ -80,14 +78,8 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, json.JSONDecodeError):
             continue
 
-        reviewed_at = _parse_iso(
-            data.get("reviewed_at") or data.get("ai_generated_at") or ""
-        )
-        if (
-            cutoff
-            and reviewed_at
-            and reviewed_at < cutoff.replace(tzinfo=cutoff.tzinfo or UTC)
-        ):
+        reviewed_at = _parse_iso(data.get("reviewed_at") or data.get("ai_generated_at") or "")
+        if cutoff and reviewed_at and reviewed_at < cutoff.replace(tzinfo=cutoff.tzinfo or UTC):
             continue
 
         drafts_count += 1
@@ -146,9 +138,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     print(f"  Edited before ship:       {edited:>4}  {_pct(edited, total_actions)}")
     print(f"  Rejected (deleted):       {rejected:>4}  {_pct(rejected, total_actions)}")
-    print(
-        f"  Regeneration requests:    {regenerated:>4}  (cumulative, separate from above)"
-    )
+    print(f"  Regeneration requests:    {regenerated:>4}  (cumulative, separate from above)")
     print(f"  Avg regens per finding:   {avg_regens:.2f}")
 
     if severity_drift:

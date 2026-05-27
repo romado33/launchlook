@@ -12,25 +12,27 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 
 ## Two tiers (MVP)
 
-### Starter Package — $9 (priority triage)
+### Starter Package — $9
 
-- Top 5 prioritized findings — the most important things to fix before strangers see the app
+- Up to 7 prioritized findings
 - Desktop + phone-width layout check (responsive web app — not native iOS/Android)
 - Plain-language explanations
 - Copy-paste fix prompts
-- Delivered within 48 hours of intake submission (typically within 24)
+- AI-generated one-page Quick Start Guide for their users
+- Notion page delivery
+- 24-hour turnaround
 
-Used by: founders who want the top 5 critical fixes before launch. Different product from Full — this is a triage, not a smaller audit.
+Used by: founders about to share a link and want a fast sanity check plus user-facing docs.
 
-### Full Package — $29 (comprehensive audit)
+### Full Package — $29
 
-- Up to 20 findings across every category (not unlimited)
+- Everything in Starter Package, plus:
+- Up to 20 findings (deeper pass — not unlimited)
 - Cross-user data check (with two test accounts the founder provides)
-- AI-generated one-page Quick Start Guide PDF for their users
-- Delivered within 24 hours of intake submission (typically within 12)
-- Shareable report link they can send to teammates
+- 12-hour turnaround
+- Shareable Notion link they can send to teammates
 
-Used by: founders launching publicly this week who need a thorough audit plus the cross-user privacy sanity check.
+Used by: founders launching publicly this week who need depth and a privacy sanity check.
 
 ### Follow-up re-scan (not a listed tier)
 

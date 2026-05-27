@@ -129,6 +129,7 @@
   var intakeEls = $("[data-launchlook-intake]");
   if (intakeUrl) {
     intakeEls.forEach(function (el) {
+      el.setAttribute("data-launchlook-intake-base", intakeUrl);
       el.setAttribute("href", intakeUrl);
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener noreferrer");

@@ -39,9 +39,7 @@ from . import cost_tracker
 # Default model names (override via env var)
 # ---------------------------------------------------------------------------
 
-DEFAULT_CLAUDE_MODEL = os.getenv(
-    "LAUNCHLOOK_CLAUDE_MODEL", "claude-sonnet-4-5-20250929"
-)
+DEFAULT_CLAUDE_MODEL = os.getenv("LAUNCHLOOK_CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
 DEFAULT_CLAUDE_FALLBACKS = [
     "claude-sonnet-4-5-20250929",
     "claude-3-5-sonnet-20241022",
@@ -59,11 +57,15 @@ DEFAULT_GPT_FALLBACKS = ["gpt-4o", "gpt-4o-mini", "gpt-5-mini"]
 FINDING_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
+    # OpenAI strict mode requires every property key to be in required.
+    # screenshot_caption is optional in meaning but must be listed here;
+    # pass "" when the model has nothing to say about it.
     "required": [
         "severity",
         "title",
         "what_we_saw",
         "why_it_matters",
+        "screenshot_caption",
         "fix_prompt",
         "category",
         "tag",
@@ -336,8 +338,7 @@ class ClaudeClient(LLMClient):
             import anthropic
         except ImportError:
             sys.exit(
-                "ERROR: anthropic package not installed.\n"
-                "Run: pip install -r requirements-ai.txt"
+                "ERROR: anthropic package not installed.\nRun: pip install -r requirements-ai.txt"
             )
         key = api_key or os.getenv("ANTHROPIC_API_KEY")
         if not key:
@@ -388,9 +389,7 @@ class ClaudeClient(LLMClient):
         content_blocks = self._build_content_blocks(user_prompt, screenshots)
 
         last_err: Exception | None = None
-        candidates = [self.model] + [
-            m for m in DEFAULT_CLAUDE_FALLBACKS if m != self.model
-        ]
+        candidates = [self.model] + [m for m in DEFAULT_CLAUDE_FALLBACKS if m != self.model]
         for candidate in candidates:
             try:
                 with cost_tracker.track_call(call_type) as _tracker:
@@ -416,9 +415,7 @@ class ClaudeClient(LLMClient):
                         and getattr(block, "name", None) == tool_name
                     ):
                         return dict(block.input or {})
-                raise RuntimeError(
-                    f"Claude returned no tool_use block for {tool_name!r}"
-                )
+                raise RuntimeError(f"Claude returned no tool_use block for {tool_name!r}")
             except self._anthropic.NotFoundError as exc:
                 last_err = exc
                 continue
@@ -452,9 +449,7 @@ class ClaudeClient(LLMClient):
         )
         return _coerce_findings_payload(payload)[:max_findings]
 
-    def generate_verdict(
-        self, *, system_prompt: str, user_prompt: str
-    ) -> dict[str, Any]:
+    def generate_verdict(self, *, system_prompt: str, user_prompt: str) -> dict[str, Any]:
         payload = self._call_with_tool(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
@@ -524,8 +519,7 @@ class GPTClient(LLMClient):
             import openai
         except ImportError:
             sys.exit(
-                "ERROR: openai package not installed.\n"
-                "Run: pip install -r requirements-ai.txt"
+                "ERROR: openai package not installed.\nRun: pip install -r requirements-ai.txt"
             )
         key = api_key or os.getenv("OPENAI_API_KEY")
         if not key:
@@ -569,9 +563,7 @@ class GPTClient(LLMClient):
         ]
 
         last_err: Exception | None = None
-        candidates = [self.model] + [
-            m for m in DEFAULT_GPT_FALLBACKS if m != self.model
-        ]
+        candidates = [self.model] + [m for m in DEFAULT_GPT_FALLBACKS if m != self.model]
         for candidate in candidates:
             try:
                 with cost_tracker.track_call(call_type) as _tracker:
@@ -644,9 +636,7 @@ class GPTClient(LLMClient):
         )
         return _coerce_findings_payload(payload)[:max_findings]
 
-    def generate_verdict(
-        self, *, system_prompt: str, user_prompt: str
-    ) -> dict[str, Any]:
+    def generate_verdict(self, *, system_prompt: str, user_prompt: str) -> dict[str, Any]:
         payload = self._call_with_schema(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
@@ -790,8 +780,7 @@ class StubClient(LLMClient):
             out.append(
                 {
                     "severity": sev,
-                    "title": finding.get("name", fid)
-                    or "Issue detected by prescreener",
+                    "title": finding.get("name", fid) or "Issue detected by prescreener",
                     "what_we_saw": (
                         f"On {page.get('url', 'the live URL')}, the prescreener matched "
                         f"the pattern '{sample[:60]}' from {fid}."
@@ -830,9 +819,7 @@ class StubClient(LLMClient):
             )
         return out[:max_findings]
 
-    def generate_verdict(
-        self, *, system_prompt: str, user_prompt: str
-    ) -> dict[str, Any]:
+    def generate_verdict(self, *, system_prompt: str, user_prompt: str) -> dict[str, Any]:
         with cost_tracker.track_call("verdict_generation") as _t:
             _t.set_usage(
                 self.model,
@@ -944,9 +931,7 @@ def build_client(
 
     if provider == "claude":
         if not anthropic_key:
-            sys.exit(
-                "ERROR: --provider claude but ANTHROPIC_API_KEY is not set in .env"
-            )
+            sys.exit("ERROR: --provider claude but ANTHROPIC_API_KEY is not set in .env")
         return ClaudeClient(api_key=anthropic_key)
 
     if provider == "gpt":
@@ -966,7 +951,4 @@ def build_client(
             "(generates placeholder findings; useful for smoke tests)."
         )
 
-    sys.exit(
-        f"ERROR: unknown --provider {provider!r}. "
-        "Choose from: auto, claude, gpt, stub."
-    )
+    sys.exit(f"ERROR: unknown --provider {provider!r}. Choose from: auto, claude, gpt, stub.")

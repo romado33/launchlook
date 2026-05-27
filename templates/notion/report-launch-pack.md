@@ -1,8 +1,11 @@
-# LaunchLook — Full Package checkup for {APP_NAME}
+# LaunchLook — Scale Up Package checkup for {APP_NAME}
 
-> **Tier:** Full Package ($29) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
+> **Tier:** Scale Up Package ($49) · **Delivered:** {DATE} · **By:** Rob at LaunchLook  
+> **Also emailed:** Main Report PDF · Quick Start Guide PDF · Pre-Launch Checklist PDF
 
 **Audience:** Non-technical founder. Keep **What I saw** and **Why it matters** in plain English. Only the **Fix prompt** boxes should sound technical (those go straight into your AI builder).
+
+**What we tested:** Desktop + phone width on your live URL, key visitor workflows (forms, signup, emails that should follow), and **two temporary test accounts** for the cross-user check below.
 
 ---
 
@@ -12,7 +15,7 @@
 
 {2–3 sentences. Start with something that's working well. Then the main gaps — no jargon.}
 
-This report has **{N} findings** (most important first) and a **Quick Start Guide** you can give your users. Work through the findings first, then scroll to Part 2 for the guide.
+This report has **up to 30 findings** (this report shows **{N}**, most important first) and a **Quick Start Guide** you can give your users. Work through the findings first, then scroll to Part 2 for the guide.
 
 ---
 
@@ -58,17 +61,17 @@ This report has **{N} findings** (most important first) and a **Quick Start Guid
 
 ---
 
-(repeat for each finding: Critical → High → Medium → Low; up to 20 total)
+(repeat for each finding: Critical → High → Medium → Low; up to **30** total for Scale Up)
 
 ---
 
-## Two-account check (Full Package)
+## Two-account check (Scale Up Package)
 
 You gave me two temporary test accounts. I signed in as each person and looked for anything **User A shouldn't see from User B** (and what happens when you're **not signed in**).
 
 ### As test account 1
 
-{Plain description: "On the bookings page, I could see the other account's name…" — not "cross-user data on /bookings."}
+{Plain description: "On the bookings page, I could see the other account's name…"}
 
 ### As test account 2
 
@@ -86,8 +89,8 @@ You gave me two temporary test accounts. I signed in as each person and looked f
 
 A **one-page help doc** for people using your app — short, friendly, no developer jargon. You can put it on a Help page, in Notion, or link from your app menu.
 
-> 📄 **Styled version**: [link to HTML]  
-> 📝 **Copy-paste Markdown**: below
+> 📄 **Styled PDF** (emailed with this report)  
+> 📝 **Copy-paste version** (optional duplicate below for Notion)
 
 ---
 
@@ -101,14 +104,16 @@ A **one-page help doc** for people using your app — short, friendly, no develo
 2. **Before you promote** — 🟠 High  
 3. **After launch** — 🟡 / ⚪  
 4. **Before users arrive** — publish the Quick Start Guide somewhere they can find it  
+5. **Final pass** — use the Pre-Launch Checklist PDF from your delivery email  
 
-Questions or want a re-check after fixes? **hello@launchlook.app**
+Want more depth (integrations review, Loom walkthrough, Handoff Report bundled)? **Pro Package ($99)** on launchlook.app.  
+Questions or **recheck** after fixes? Reply to your delivery email — Fix Check is $19 (or $9 within 14 days).
 
 ---
 
-## Share this checkup (optional)
+## Share LaunchLook (optional)
 
-**Send a friend for 3 free findings:** https://launchlook.app/#hero
+**Free 3-finding audit for friends:** https://launchlook.app/#hero
 
 **One-line post** (edit as you like):
 > Full LaunchLook pass on {APP_NAME} before launch — plain English + fix prompts for {PLATFORM}. launchlook.app

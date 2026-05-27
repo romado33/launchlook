@@ -200,9 +200,7 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Revert the report to private (gentle message shown)",
     )
-    action.add_argument(
-        "--status", action="store_true", help="Print the current state and exit"
-    )
+    action.add_argument("--status", action="store_true", help="Print the current state and exit")
     action.add_argument(
         "--share-handoff",
         action="store_true",

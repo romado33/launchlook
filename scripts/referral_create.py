@@ -101,18 +101,14 @@ def update_notion_customer(page_id: str, referral_code: str) -> None:
     notion = Client(auth=require_env("NOTION_TOKEN"))
     notion.pages.update(
         page_id=page_id,
-        properties={
-            "Referral Code": {"rich_text": [{"text": {"content": referral_code}}]}
-        },
+        properties={"Referral Code": {"rich_text": [{"text": {"content": referral_code}}]}},
     )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--customer-id", help="Notion page ID of the customer row")
-    parser.add_argument(
-        "--first-name", help="Customer first name (used as coupon prefix)"
-    )
+    parser.add_argument("--first-name", help="Customer first name (used as coupon prefix)")
     parser.add_argument("--email", help="Customer email (stored in coupon metadata)")
     parser.add_argument(
         "--collision-suffix",
@@ -121,9 +117,7 @@ def main() -> int:
         help="Add a random N-char suffix (use 4 if you've hit a name collision)",
     )
     parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Print the would-be code without calling Stripe",
+        "--dry-run", action="store_true", help="Print the would-be code without calling Stripe"
     )
 
     args = parser.parse_args()
@@ -165,9 +159,7 @@ def main() -> int:
         update_notion_customer(args.customer_id, actual_code)
         print("Notion updated.")
     else:
-        print(
-            "\nManual step: copy this code into the customer's Notion row → Referral Code:"
-        )
+        print("\nManual step: copy this code into the customer's Notion row → Referral Code:")
         print(f"  {actual_code}")
 
     return 0

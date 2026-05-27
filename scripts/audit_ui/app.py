@@ -178,16 +178,99 @@ def _register_routes(app: Flask) -> None:
             review_ai=app.config["REVIEW_AI"],
         )
 
+    @app.route("/review/<slug>")
+    def review_slug(slug: str) -> str:
+        """Direct link from notification emails — opens the AI review UI for <slug>."""
+        return render_template(
+            "index.html",
+            tier_caps=app.config["TIER_CAPS"],
+            severities=yaml_writer.VALID_SEVERITIES,
+            tiers=yaml_writer.VALID_TIERS,
+            builders=yaml_writer.VALID_BUILDERS,
+            platforms=yaml_writer.VALID_PLATFORMS,
+            default_platform=yaml_writer.DEFAULT_PLATFORM,
+            review_ai=True,
+            review_slug=slug,
+        )
+
+    @app.route("/preview/<slug>")
+    def preview_slug(slug: str) -> Any:
+        """Live HTML preview of the main report — same template as the PDF."""
+        import sys
+
+        from flask import Response
+
+        safe = draft_store.safe_slug(slug)
+        yaml_path = app.config["CUSTOMERS_DIR"] / f"{safe}.yaml"
+        if not yaml_path.exists():
+            return Response(
+                f"<pre>No customers/{safe}.yaml found. Run the audit first.</pre>",
+                status=404,
+                mimetype="text/html",
+            )
+
+        doc = request.args.get("doc", "report")
+
+        try:
+            sys.path.insert(0, str(app.config["REPO_ROOT"]))
+            from scripts.deliver_report import (  # noqa: WPS433
+                build_jinja_env,
+                load_customer_yaml,
+                render_main_report_html,
+                render_pre_launch_checklist_html,
+                render_qsg_html,
+            )
+        except ImportError as exc:
+            return Response(f"<pre>Import error: {exc}</pre>", status=500, mimetype="text/html")
+
+        data = load_customer_yaml(yaml_path)
+        env = build_jinja_env()
+        now = (
+            datetime.now(UTC).strftime("%B %-d, %Y")
+            if sys.platform != "win32"
+            else datetime.now(UTC).strftime("%B %#d, %Y")
+        )
+
+        nav = (
+            '<div style="position:fixed;top:0;left:0;right:0;z-index:9999;'
+            "background:#1a1a2e;color:#fff;padding:8px 16px;font-family:sans-serif;"
+            'font-size:13px;display:flex;gap:16px;align-items:center;">'
+            f"<strong>LaunchLook Preview</strong> &nbsp;|&nbsp; slug: <code>{safe}</code>"
+            f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=report" style="color:#7eb8f7">Main Report</a>'
+            f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=qsg" style="color:#7eb8f7">Quick Start</a>'
+            f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=checklist" style="color:#7eb8f7">Checklist</a>'
+            f' &nbsp;|&nbsp; <a href="/review/{safe}" style="color:#a0d8a0">✎ Edit</a>'
+            "</div>"
+            '<div style="margin-top:48px;">'
+        )
+
+        if doc == "qsg":
+            html = render_qsg_html(env, data, now)
+            if not html:
+                return Response(
+                    "<pre>No Quick Start Guide in this YAML.</pre>",
+                    status=404,
+                    mimetype="text/html",
+                )
+        elif doc == "checklist":
+            html = render_pre_launch_checklist_html(env, data, now)
+        else:
+            html = render_main_report_html(env, data, now, qsg_link=None)
+
+        return Response(nav + html + "</div>", mimetype="text/html")
+
     @app.route("/api/bootstrap")
     def api_bootstrap() -> Any:
         prefill = app.config["PREFILL"]
         slug = (request.args.get("slug") or prefill.get("slug") or "").strip()
+        # Support ?review_ai=1 so /review/<slug> links work without restarting the server.
+        review_ai = app.config["REVIEW_AI"] or request.args.get("review_ai") == "1"
         existing_draft = None
         existing_customer = None
         feedback_record = None
         if slug:
             existing_draft = draft_store.load_draft(app.config["DRAFTS_DIR"], slug)
-            if app.config["REVIEW_AI"]:
+            if review_ai:
                 existing_customer = _load_customer_payload(app, slug)
                 feedback_record = _load_feedback(app, slug)
         return jsonify(
@@ -195,7 +278,7 @@ def _register_routes(app: Flask) -> None:
                 "slug": slug,
                 "prefill": prefill,
                 "draft": existing_draft,
-                "review_ai": app.config["REVIEW_AI"],
+                "review_ai": review_ai,
                 "customer": existing_customer,
                 "feedback": feedback_record,
                 "tier_caps": app.config["TIER_CAPS"],
@@ -299,9 +382,7 @@ def _register_routes(app: Flask) -> None:
                 {
                     "slug": path.stem,
                     "filename": path.name,
-                    "modified": datetime.fromtimestamp(
-                        stat.st_mtime, tz=UTC
-                    ).isoformat(),
+                    "modified": datetime.fromtimestamp(stat.st_mtime, tz=UTC).isoformat(),
                     "size": stat.st_size,
                 }
             )
@@ -369,9 +450,7 @@ def _register_routes(app: Flask) -> None:
         deliver_log: DeliverLog = app.config["DELIVER_LOG"]
         if deliver_log.running:
             return (
-                jsonify(
-                    {"ok": False, "error": "Another deliver job is already running."}
-                ),
+                jsonify({"ok": False, "error": "Another deliver job is already running."}),
                 409,
             )
 
@@ -555,9 +634,7 @@ _EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 _URL_RE = re.compile(r"^https?://", re.IGNORECASE)
 
 
-def _validate_payload(
-    payload: dict[str, Any], tier_caps: dict[str, int]
-) -> list[dict[str, str]]:
+def _validate_payload(payload: dict[str, Any], tier_caps: dict[str, int]) -> list[dict[str, str]]:
     errors: list[dict[str, str]] = []
 
     customer = payload.get("customer") or {}
@@ -568,9 +645,7 @@ def _validate_payload(
     if not email:
         errors.append({"field": "customer.email", "message": "Email is required."})
     elif not _EMAIL_RE.match(email):
-        errors.append(
-            {"field": "customer.email", "message": "Email format looks invalid."}
-        )
+        errors.append({"field": "customer.email", "message": "Email format looks invalid."})
 
     app_url = (customer.get("app_url") or "").strip()
     if not app_url:
@@ -588,21 +663,15 @@ def _validate_payload(
         errors.append({"field": "customer.tier", "message": "Choose a valid tier."})
 
     if not (customer.get("first_name") or "").strip():
-        errors.append(
-            {"field": "customer.first_name", "message": "First name is required."}
-        )
+        errors.append({"field": "customer.first_name", "message": "First name is required."})
 
     if not (customer.get("app_name") or "").strip():
-        errors.append(
-            {"field": "customer.app_name", "message": "App name is required."}
-        )
+        errors.append({"field": "customer.app_name", "message": "App name is required."})
 
     if not (customer.get("builder") or "").strip():
         errors.append({"field": "customer.builder", "message": "Pick a builder."})
 
-    platform = (
-        (customer.get("platform") or yaml_writer.DEFAULT_PLATFORM).strip().lower()
-    )
+    platform = (customer.get("platform") or yaml_writer.DEFAULT_PLATFORM).strip().lower()
     if platform and platform not in yaml_writer.VALID_PLATFORMS:
         errors.append(
             {
@@ -612,14 +681,10 @@ def _validate_payload(
         )
 
     if not (verdict.get("summary") or "").strip():
-        errors.append(
-            {"field": "verdict.summary", "message": "Verdict summary is required."}
-        )
+        errors.append({"field": "verdict.summary", "message": "Verdict summary is required."})
 
     if not (verdict.get("narrative") or "").strip():
-        errors.append(
-            {"field": "verdict.narrative", "message": "Verdict narrative is required."}
-        )
+        errors.append({"field": "verdict.narrative", "message": "Verdict narrative is required."})
 
     if not findings:
         errors.append({"field": "findings", "message": "Add at least one finding."})

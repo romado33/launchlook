@@ -135,9 +135,7 @@ def check_forbidden(text: str) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, help="Path to intake JSON file")
-    parser.add_argument(
-        "--output", required=True, help="Path to write the Markdown QSG"
-    )
+    parser.add_argument("--output", required=True, help="Path to write the Markdown QSG")
     parser.add_argument(
         "--provider",
         choices=["openai", "anthropic", "auto"],
@@ -176,10 +174,7 @@ def main() -> int:
 
     flagged = check_forbidden(markdown)
     if flagged:
-        print(
-            f"WARN: forbidden marketing words detected in output: {flagged}",
-            file=sys.stderr,
-        )
+        print(f"WARN: forbidden marketing words detected in output: {flagged}", file=sys.stderr)
         print("WARN: edit before sending to customer.", file=sys.stderr)
 
     output_path = Path(args.output)
@@ -188,7 +183,7 @@ def main() -> int:
 
     print(f"Wrote {output_path} ({len(markdown.split())} words)", file=sys.stderr)
     print(
-        "Next: open in editor, spot-edit, paste into customer's Notion Launch report.",
+        "Next: open in editor, spot-edit, paste into customer's Notion Launch Pack report.",
         file=sys.stderr,
     )
 

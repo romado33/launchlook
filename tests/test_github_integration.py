@@ -223,9 +223,7 @@ class CreateIssueTests(unittest.TestCase):
         # Verify the URL we POSTed to
         self.assertEqual(session.post.call_count, 1)
         args, kwargs = session.post.call_args
-        self.assertEqual(
-            args[0], "https://api.github.com/repos/jane-sparkle/main-site/issues"
-        )
+        self.assertEqual(args[0], "https://api.github.com/repos/jane-sparkle/main-site/issues")
 
         # Verify payload shape
         payload = kwargs["json"]
@@ -239,9 +237,7 @@ class CreateIssueTests(unittest.TestCase):
 
     def test_403_raises_helpful_error(self):
         session = gh.authenticated_session("dummy-token")
-        session.post = MagicMock(
-            return_value=_fake_response(403, {"message": "forbidden"})
-        )
+        session.post = MagicMock(return_value=_fake_response(403, {"message": "forbidden"}))
         with self.assertRaises(RuntimeError) as ctx:
             gh.create_issue(
                 session,
@@ -255,9 +251,7 @@ class CreateIssueTests(unittest.TestCase):
 
     def test_404_raises_helpful_error(self):
         session = gh.authenticated_session("dummy-token")
-        session.post = MagicMock(
-            return_value=_fake_response(404, {"message": "not found"})
-        )
+        session.post = MagicMock(return_value=_fake_response(404, {"message": "not found"}))
         with self.assertRaises(RuntimeError) as ctx:
             gh.create_issue(
                 session,
@@ -394,9 +388,7 @@ class TokenResolutionTests(unittest.TestCase):
 
     def test_token_resolved_from_env(self):
         with patch.dict("os.environ", {"Q19_TEST_PAT": "ghp_test"}, clear=False):
-            token, env_var = gh.resolve_token_from_yaml(
-                {"github": {"token_env": "Q19_TEST_PAT"}}
-            )
+            token, env_var = gh.resolve_token_from_yaml({"github": {"token_env": "Q19_TEST_PAT"}})
             self.assertEqual(token, "ghp_test")
             self.assertEqual(env_var, "Q19_TEST_PAT")
 

@@ -1,8 +1,11 @@
 # LaunchLook — Starter Package checkup for {APP_NAME}
 
-> **Tier:** Starter Package ($9) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
+> **Tier:** Starter Package ($19) · **Delivered:** {DATE} · **By:** Rob at LaunchLook  
+> **Also emailed:** Main Report PDF + Pre-Launch Checklist PDF
 
-**Audience:** You built this with an AI coding tool — you don't need to be technical to use this report. Technical wording only appears inside the gray **Fix prompt** boxes (paste those into Lovable, Bolt, etc.).
+**Audience:** You built this with an AI coding tool. You don't need to be technical to use this report. Technical wording only appears inside the gray **Fix prompt** boxes (paste those into Lovable, Bolt, Webflow, etc.).
+
+**What we tested:** Your live URL on desktop and phone width, plus the main workflows we could reach without logging in (contact/signup forms and whether follow-up emails arrived, when applicable).
 
 ---
 
@@ -12,7 +15,7 @@
 
 {1–2 sentences. Warm, plain English. Say what's good first if you can. Match how anxious they said they are in intake.}
 
-You have **{N} findings** below, starting with the most important. You don't have to fix everything at once — but fix anything marked 🔴 before you share the link widely.
+You have **up to 10 findings** below (this report shows **{N}**), starting with the most important. You don't have to fix everything at once — but fix anything marked 🔴 before you share the link widely.
 
 ---
 
@@ -46,10 +49,11 @@ Each finding has three parts:
 **What I saw**  
 {1–2 sentences. Quote the button or text exactly: **"Get started"**, **"Your Company Name"**. No code.}
 
-> 📸 [Screenshot]
+> 📸 [Screenshot — desktop]  
+> 📸 [Screenshot — phone, if different]
 
 **Why it matters**  
-{What a real visitor would think or what could go wrong — e.g. "People won't trust the app" or "Anyone could get in without signing up."}
+{What a real visitor would think or what could go wrong.}
 
 **Fix prompt for {PLATFORM}** *(paste into your builder)*
 
@@ -81,7 +85,7 @@ Each finding has three parts:
 
 ### Finding 3 — {short title}
 
-(repeat structure)
+(repeat structure — add findings until you hit the Starter cap of 10 or run out of real issues)
 
 ---
 
@@ -109,13 +113,15 @@ You have **{N} items** to work through. Suggested order:
 2. **Before you promote the link** — 🟠 High items
 3. **First couple of weeks live** — 🟡 and ⚪ when you have time
 
-After you fix things, click through the app yourself like a new visitor. Want a second look? Email **hello@launchlook.app** for a quoted follow-up re-scan.
+Use the **Pre-Launch Checklist PDF** we emailed with this report as a final pass before you share publicly.
+
+After you fix things, click through the app yourself like a new visitor. Paid customers can reply **recheck** to their delivery email for a Fix Check re-scan ($19, or $9 within 14 days).
 
 ---
 
-## Share this checkup (optional)
+## Share LaunchLook (optional)
 
-**Send a founder friend for 3 free findings:** https://launchlook.app/#hero
+**Free 3-finding audit for a founder friend:** https://launchlook.app/#hero
 
 **One-line you can post** (edit as you like):
 > Ran LaunchLook on {APP_NAME} before sharing the link — caught issues I'd have missed. launchlook.app

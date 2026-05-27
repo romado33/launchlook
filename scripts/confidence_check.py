@@ -188,8 +188,7 @@ def _saboteur_voice_still_present(finding: dict[str, Any]) -> str:
     """One-line Saboteur note for a still-present finding."""
     title = (finding.get("title") or "the issue").rstrip(".")
     return (
-        f"I tried the same broken bit you had before. Still broken. "
-        f"{title}: the fix didn't take."
+        f"I tried the same broken bit you had before. Still broken. {title}: the fix didn't take."
     )
 
 
@@ -215,9 +214,7 @@ def compare_findings(
     without a match in original is 'new'.
     """
     by_title = {
-        (f.get("title") or "").strip().lower(): f
-        for f in re_scanned
-        if isinstance(f, dict)
+        (f.get("title") or "").strip().lower(): f for f in re_scanned if isinstance(f, dict)
     }
 
     fixed: list[dict[str, Any]] = []
@@ -280,9 +277,7 @@ def _verdict_for(buckets: dict[str, list[dict[str, Any]]]) -> dict[str, str]:
     if any((i.get("severity") or "").lower() == "critical" for i in new):
         label = "Do not invite real users yet"
         emoji = "🔴"
-        summary = (
-            "A new critical issue turned up during the re-scan — that's the blocker."
-        )
+        summary = "A new critical issue turned up during the re-scan — that's the blocker."
     elif _has_severe(new) or _has_severe(still):
         label = "Needs fixes before launch"
         emoji = "🔴"

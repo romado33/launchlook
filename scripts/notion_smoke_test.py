@@ -17,6 +17,7 @@ Required env (load from .env):
     NOTION_CUSTOMERS_DB_ID
     NOTION_FINDINGS_DB_ID
     NOTION_OUTREACH_DB_ID         (optional; tested if set)
+    NOTION_FREE_AUDIT_DB_ID       (required for /api/free-audit hero form)
     NOTION_REPORTS_PARENT_PAGE_ID (optional; tested if set)
 
 Exit code 0 = all checks passed. Non-zero = at least one failed.
@@ -92,6 +93,7 @@ def main() -> int:
         ("Customers DB", "NOTION_CUSTOMERS_DB_ID", "database"),
         ("Findings DB", "NOTION_FINDINGS_DB_ID", "database"),
         ("Outreach DB", "NOTION_OUTREACH_DB_ID", "database"),
+        ("Free Audit Requests DB", "NOTION_FREE_AUDIT_DB_ID", "database"),
         ("Reports parent page", "NOTION_REPORTS_PARENT_PAGE_ID", "page"),
         ("Crawler Wishlist page", "NOTION_CRAWLER_WISHLIST_PAGE_ID", "page"),
     ]
@@ -111,6 +113,31 @@ def main() -> int:
         except APIResponseError as e:
             out(FAIL, f"{label}: {e.code} — {e}")
             fails.append(f"retrieve {label}")
+
+    # 2b. Free Audit DB schema (Email + data_sources required by api/free-audit.py)
+    print("\n2b. Free Audit Requests DB schema")
+    free_db = retrieved.get("Free Audit Requests DB")
+    if not free_db:
+        out(SKIP, "Free Audit Requests DB not retrieved earlier")
+    else:
+        try:
+            sources = free_db.get("data_sources") or []
+            if not sources:
+                out(FAIL, "no data_sources on Free Audit DB")
+                fails.append("free audit data_sources")
+            else:
+                ds = notion.data_sources.retrieve(data_source_id=sources[0]["id"])
+                props = ds.get("properties") or {}
+                required = {"Request", "Email", "URL", "Status"}
+                missing = sorted(required - set(props.keys()))
+                if missing:
+                    out(FAIL, f"missing properties: {', '.join(missing)}")
+                    fails.append("free audit schema")
+                else:
+                    out(PASS, f"schema OK ({len(props)} properties)")
+        except APIResponseError as e:
+            out(FAIL, f"schema check: {e}")
+            fails.append("free audit schema")
 
     # 3. Findings DB row count
     print("\n3. Findings DB row count >= 30")
@@ -154,10 +181,7 @@ def main() -> int:
             )
             rows = resp.get("results", [])
             if not rows:
-                out(
-                    FAIL,
-                    "no row matched Name='FL-001' (try checking the title column name)",
-                )
+                out(FAIL, "no row matched Name='FL-001' (try checking the title column name)")
                 fails.append("fl-001 lookup")
             else:
                 props = rows[0].get("properties", {})
@@ -179,9 +203,7 @@ def main() -> int:
         out(SKIP, "NOTION_REPORTS_PARENT_PAGE_ID not set or page unreachable")
     else:
         try:
-            children = notion.blocks.children.list(block_id=reports_page["id"]).get(
-                "results", []
-            )
+            children = notion.blocks.children.list(block_id=reports_page["id"]).get("results", [])
             out(PASS, f"{len(children)} child block(s) under Reports parent")
             for child in children[:5]:
                 ctype = child.get("type", "?")
@@ -221,9 +243,7 @@ def main() -> int:
             "Status": {"select": {"name": "Paid"}},
             "Payment Date": {"date": {"start": datetime.now(UTC).date().isoformat()}},
             "Intake Received": {"checkbox": False},
-            "Notes": {
-                "rich_text": [{"text": {"content": "Auto-deleted by smoke test."}}]
-            },
+            "Notes": {"rich_text": [{"text": {"content": "Auto-deleted by smoke test."}}]},
         }
         created = notion.pages.create(
             parent={"data_source_id": customers_ds_id},
@@ -244,16 +264,10 @@ def main() -> int:
         page = notion.pages.retrieve(page_id=page_id)
         props = page["properties"]
 
-        title_text = (
-            props["Name"]["title"][0]["plain_text"] if props["Name"]["title"] else ""
-        )
+        title_text = props["Name"]["title"][0]["plain_text"] if props["Name"]["title"] else ""
         email = props["Email"]["email"]
         tier = props["Tier"]["select"]["name"] if props["Tier"]["select"] else None
-        date_val = (
-            props["Payment Date"]["date"]["start"]
-            if props["Payment Date"]["date"]
-            else None
-        )
+        date_val = props["Payment Date"]["date"]["start"] if props["Payment Date"]["date"] else None
 
         ok = (
             title_text == test_marker
@@ -262,10 +276,7 @@ def main() -> int:
             and date_val
         )
         if ok:
-            out(
-                PASS,
-                f"all properties round-tripped: title, email, tier={tier}, date={date_val}",
-            )
+            out(PASS, f"all properties round-tripped: title, email, tier={tier}, date={date_val}")
         else:
             out(
                 FAIL,

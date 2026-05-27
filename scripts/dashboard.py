@@ -57,11 +57,14 @@ TIER_PRICE = {
     "Starter Package": 19,
     "Scale Up Package": 49,
     "Pro Package": 99,
+    # Retain legacy keys so a stale Notion record (pre-q3 rename) still
+    # contributes to dashboard totals at its original price point.
+    "Full Package": 29,
 }
 
 # Status values used in the Customers DB Status column
 STATUS_PAID = "Paid"
-STATUS_INTAKE = "Intake received"
+STATUS_INTAKE = "Intake Received"
 STATUS_IN_PROGRESS = "In progress"
 STATUS_DELIVERED = "Delivered"
 STATUS_REFUNDED = "Refunded"
@@ -179,22 +182,16 @@ def compute_metrics(customers: list[dict]) -> dict[str, Any]:
 
     real = [c for c in customers if not c["name"].startswith("EXAMPLE")]
 
-    total_revenue = sum(
-        revenue_for_tier(c["tier"]) for c in real if c["status"] != STATUS_REFUNDED
-    )
+    total_revenue = sum(revenue_for_tier(c["tier"]) for c in real if c["status"] != STATUS_REFUNDED)
     week_revenue = sum(
         revenue_for_tier(c["tier"])
         for c in real
-        if c["payment_date"]
-        and c["payment_date"] >= week_ago
-        and c["status"] != STATUS_REFUNDED
+        if c["payment_date"] and c["payment_date"] >= week_ago and c["status"] != STATUS_REFUNDED
     )
 
     delivered_count = sum(1 for c in real if c["status"] == STATUS_DELIVERED)
     in_flight_count = sum(
-        1
-        for c in real
-        if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS)
+        1 for c in real if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS)
     )
 
     by_status: dict[str, int] = {s: 0 for s in PIPELINE_STAGES + [STATUS_REFUNDED]}
@@ -210,13 +207,9 @@ def compute_metrics(customers: list[dict]) -> dict[str, Any]:
 
     # Action queue: paid but not delivered, sort by delivery_due ascending (overdue first)
     action_queue = [
-        c
-        for c in real
-        if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS)
+        c for c in real if c["status"] in (STATUS_PAID, STATUS_INTAKE, STATUS_IN_PROGRESS)
     ]
-    action_queue.sort(
-        key=lambda c: c["delivery_due"] or datetime.max.replace(tzinfo=UTC)
-    )
+    action_queue.sort(key=lambda c: c["delivery_due"] or datetime.max.replace(tzinfo=UTC))
 
     # Recent customers (last 10 by payment_date)
     recent = sorted(
@@ -268,9 +261,7 @@ def render_html(m: dict[str, Any], notion_db_id: str) -> str:
           <tbody>{queue_rows}</tbody>
         </table>"""
     else:
-        queue_table = (
-            '<p class="muted">No customers waiting on a report. Inbox zero.</p>'
-        )
+        queue_table = '<p class="muted">No customers waiting on a report. Inbox zero.</p>'
 
     # Recent customers
     if m["recent"]:
@@ -296,9 +287,7 @@ def render_html(m: dict[str, Any], notion_db_id: str) -> str:
 
     # Tier + platform breakdowns
     tier_summary = breakdown_html("By tier", m["by_tier"], total=m["total_customers"])
-    platform_summary = breakdown_html(
-        "By platform", m["by_platform"], total=m["total_customers"]
-    )
+    platform_summary = breakdown_html("By platform", m["by_platform"], total=m["total_customers"])
 
     example_warning = ""
     if m["example_count"]:
@@ -458,7 +447,7 @@ def due_label(due: datetime | None, now: datetime) -> str:
         if hrs < 24:
             txt = f"{hrs:.0f}h overdue"
         else:
-            txt = f"{hrs/24:.0f}d overdue"
+            txt = f"{hrs / 24:.0f}d overdue"
         return f'<span class="due-overdue">{txt}</span>'
     if delta < 12:
         return f'<span class="due-today">in {delta:.0f}h</span>'
@@ -490,11 +479,7 @@ def action_row_html(c: dict, now: datetime) -> str:
 
 def recent_row_html(c: dict) -> str:
     name = html.escape(c["name"])
-    paid = (
-        c["payment_date"].astimezone().strftime("%Y-%m-%d")
-        if c["payment_date"]
-        else "—"
-    )
+    paid = c["payment_date"].astimezone().strftime("%Y-%m-%d") if c["payment_date"] else "—"
     return f"""
         <tr>
           <td>{name}</td>
@@ -580,10 +565,7 @@ def main() -> int:
         help="Open the HTML in your default browser after generating.",
     )
     parser.add_argument(
-        "--watch",
-        type=int,
-        metavar="SECONDS",
-        help="Regenerate every N seconds. Ctrl+C to stop.",
+        "--watch", type=int, metavar="SECONDS", help="Regenerate every N seconds. Ctrl+C to stop."
     )
     args = parser.parse_args()
 
