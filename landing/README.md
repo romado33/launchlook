@@ -8,7 +8,6 @@ Static site for **LaunchLook** at [launchlook.app](https://launchlook.app). No b
 |------|---------|
 | `index.html` | Home — hero, what we check, sample, pricing, FAQ, footer (vibe-coder SKU: Lovable / Bolt / v0 / Cursor / Replit / Base44) |
 | `webflow.html` | **LaunchLook for Webflow** — parallel SKU at `/webflow`. Webflow-specific hero, finding categories, FAQ, $19/$49/$99 pricing. Reuses the same Stripe Payment Links and the same Tally intake form (customer picks "Webflow" in Q7). See `docs/WEBFLOW-EXPANSION.md`. |
-| `checklist.html` | Free pre-launch checklist (BL-06) |
 | `privacy.html`, `terms.html`, `thanks.html` | Legal + post-checkout |
 | `assets/config.js` | `LAUNCHLOOK_CONFIG` — Stripe links, `supportEmail`, `intakeFormUrl`, `linkedinUrl` |
 | `assets/config.local.js` | Optional overrides (gitignored) |

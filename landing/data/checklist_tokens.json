@@ -1,7 +1,0 @@
-{
-  "_comment": "Tokens that unlock the full /checklist page for paying Scale Up + Pro customers. Rob grants these manually after each Stripe purchase per docs/ROB-REMAINING-TODO.md. A token is any short opaque string (uuid prefix or stripe charge id) appended to the URL as ?token=<value>. The 'test' token below is for QA only; rotate or remove it before any aggressive launch.",
-  "_format": "tokens is a flat array of strings",
-  "tokens": [
-    "test"
-  ]
-}

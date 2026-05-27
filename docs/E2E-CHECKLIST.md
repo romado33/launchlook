@@ -25,17 +25,21 @@ Tiers: **Starter $19** · **Scale Up $49** · **Pro $99**.
 - [ ] Tally notifications → `hello@launchlook.app`
 - [ ] Tally after-submit redirect → `https://launchlook.app/thanks`
 - [ ] Tally webhook URL with `?t=` token; test event returns 200
+- [ ] Stripe **live mode** for real-money smoke (or use test mode knowingly)
+- [ ] Active Payment Links ($19 / $49 / $99): success URL → `https://launchlook.app/thanks`
+- [ ] **Stripe Tax** on active links (`python scripts/stripe_payment_links.py enable-tax` after Dashboard registrations)
+- [ ] Dead Payment Links **deactivated** in Stripe: $9 re-verify badge, old CAD $9/$29 tiers
 
 ---
 
 ## A. Site smoke (~5 min)
 
-- [ ] `/` loads; pricing shows $19 / $49 / $99
+- [ ] `/` loads; pricing shows $19 / $49 / $99 with **bulleted** tier features
 - [ ] `/faq`, `/webflow`, `/thanks`, `/privacy`, `/terms` → 200
-- [ ] `/r/jane-sparkle-marketplace.html` loads
-- [ ] `/sample` redirects to sample report
+- [ ] `/sample` shows **Sparkle Marketplace** sample audit (findings visible — not “report not found”)
+- [ ] `/data/reports/jane-sparkle-marketplace.json` → 200 (sample data deployed)
 - [ ] `/checklist` redirects to `/`
-- [ ] Footer GitHub link works
+- [ ] Footer **Sample report** link works; **no** GitHub link in footer
 - [ ] Pricing mentions fix prompts on all paid tiers
 
 ---
@@ -43,6 +47,7 @@ Tiers: **Starter $19** · **Scale Up $49** · **Pro $99**.
 ## B. Free audit path (~10 min)
 
 - [ ] Homepage form: URL + email submits successfully
+- [ ] Invalid URL (or rate limit) shows **inline error** on homepage — does not redirect to thanks
 - [ ] Success message or redirect to `/thanks-free-audit`
 - [ ] Resend confirmation email arrives
 - [ ] Notion Free Audit DB: new row (status queued)
@@ -106,6 +111,19 @@ python scripts/deliver_report.py --customer customers/<your-test>.yaml --send
 
 - [ ] Homepage free audit form works on phone
 - [ ] One Starter checkout + Tally intake on phone
+
+---
+
+## Not E2E blockers (track elsewhere)
+
+These came up in launch review but are **not** go-live gates:
+
+| Item | Where to track |
+|------|----------------|
+| Plausible / Vercel Analytics | Deferred — funnel in **Notion** (Free Audit + Customers DBs) |
+| Hero screenshot / testimonial quotes | After deliveries #1–5 on homepage |
+| Mobile header tagline hidden | Intentional below 640px width |
+| Webflow footer “Free 3-finding audit” | Intentional link to vibe-coder hero |
 
 ---
 

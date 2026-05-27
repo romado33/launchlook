@@ -80,7 +80,7 @@
   </main>
 
   <script>
-    var STORAGE_KEY = "launchlook-e2e-checklist-v1";
+    var STORAGE_KEY = "launchlook-e2e-checklist-v2";
 
     var SECTIONS = [
       {
@@ -94,18 +94,22 @@
           { id: "pf-tally-notify", label: "Tally notifications → hello@launchlook.app", hint: "" },
           { id: "pf-tally-thanks", label: "Tally after-submit redirect → https://launchlook.app/thanks", hint: "" },
           { id: "pf-tally-webhook", label: "Tally webhook URL with ?t= token; test event returns 200", hint: "GET /api/tally-webhook?t=… should return status ok" },
+          { id: "pf-stripe-live", label: "Stripe live mode for real-money smoke (or use test mode knowingly)", hint: "" },
+          { id: "pf-stripe-thanks", label: "Active Payment Links ($19/$49/$99): success URL → https://launchlook.app/thanks", hint: "Stripe Dashboard → each Payment Link" },
+          { id: "pf-stripe-tax", label: "Stripe Tax on active Payment Links (after Dashboard registrations)", hint: "python scripts/stripe_payment_links.py enable-tax" },
+          { id: "pf-stripe-dead", label: "Dead Payment Links deactivated: $9 re-verify, old CAD tiers", hint: "" },
         ],
       },
       {
         id: "smoke",
         title: "A. Site smoke (~5 min)",
         items: [
-          { id: "sm-home", label: "/ loads; pricing shows $19 / $49 / $99", hint: "" },
+          { id: "sm-home", label: "/ loads; pricing shows $19 / $49 / $99 with bulleted tier features", hint: "" },
           { id: "sm-pages", label: "/faq, /webflow, /thanks, /privacy, /terms → 200", hint: "" },
-          { id: "sm-sample", label: "/r/jane-sparkle-marketplace.html loads", hint: "" },
-          { id: "sm-redirect-sample", label: "/sample redirects to sample report", hint: "" },
+          { id: "sm-sample", label: "/sample shows Sparkle Marketplace sample audit (findings visible)", hint: "Not “We don't have a report at that link”" },
+          { id: "sm-sample-json", label: "/data/reports/jane-sparkle-marketplace.json → 200", hint: "" },
           { id: "sm-redirect-checklist", label: "/checklist redirects to /", hint: "" },
-          { id: "sm-github", label: "Footer GitHub link works", hint: "" },
+          { id: "sm-footer", label: "Footer Sample report link works; no GitHub link", hint: "" },
           { id: "sm-prompts", label: "Pricing mentions fix prompts on all paid tiers", hint: "" },
         ],
       },
@@ -114,6 +118,7 @@
         title: "B. Free audit path (~10 min)",
         items: [
           { id: "free-submit", label: "Homepage form: URL + email submits successfully", hint: "Use disposable email or +alias" },
+          { id: "free-inline-error", label: "Invalid URL shows inline error on homepage (no redirect to thanks)", hint: "Try not-a-url" },
           { id: "free-thanks", label: "Success message or redirect to /thanks-free-audit", hint: "" },
           { id: "free-resend", label: "Resend confirmation email arrives", hint: "Check spam" },
           { id: "free-notion", label: "Notion Free Audit DB: new row (status queued)", hint: "" },
