@@ -6,14 +6,18 @@ deterministic set of HTTP-header and HTML-content checks against the
 customer's live URL and emits *pre-generated findings* that get merged
 into the LLM-driven findings list.
 
-The checks (5 total, per docs/PRODUCT-DECISIONS.md and the q3 brief):
+The checks (8 total):
     1. HSTS header presence (HTTPS sites only).
     2. CSP header presence.
     3. X-Frame-Options presence (and not too permissive).
     4. X-Content-Type-Options nosniff.
     5. Exposed credentials / paths in the HTML extract:
        - AWS access keys, Google/Stripe API keys, RSA private key blocks.
+       - Supabase service_role JWTs (decoded to confirm role).
        - Visible /admin, /.env, /.git, firebase config dumps.
+    6. sitemap.xml reachable (GET /sitemap.xml returns 200).
+    7. robots.txt not blocking all crawlers (no bare Disallow: / for *).
+    8. noindex meta tag on the homepage (leftover staging setting).
 
 Each check returns a dict in the same shape as an LLM-generated finding
 (severity, title, what_we_saw, why_it_matters, fix_prompt) plus the
@@ -29,11 +33,13 @@ the customer-facing fields use plain English. The category id and the
 
 from __future__ import annotations
 
+import base64
+import json
 import re
 import urllib.error
 import urllib.request
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 SNOOP_PERSONA = "The Snoop"
 SNOOP_TAG = "Caught by The Snoop"
@@ -217,7 +223,7 @@ def _check_xcto(headers: dict[str, str]) -> dict[str, Any] | None:
 # ---------------------------------------------------------------------------
 
 
-# Each entry: (label, pattern, redact). Patterns are intentionally tight to
+# Each entry: (label, pattern). Patterns are intentionally tight to
 # minimize false positives on placeholder copy ("YOUR_API_KEY_HERE" etc.).
 _CRED_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("AWS access key id", re.compile(r"AKIA[0-9A-Z]{16}")),
@@ -227,6 +233,24 @@ _CRED_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("Slack token", re.compile(r"xox[baprs]-[0-9A-Za-z-]{10,}")),
     ("Private key block", re.compile(r"-----BEGIN (?:RSA |EC )?PRIVATE KEY-----")),
     ("Firebase config (apiKey)", re.compile(r'apiKey\s*:\s*"AIza[0-9A-Za-z\-_]{35}"')),
+    # Matches any JWT-shaped token; we decode and filter for service_role below.
+    ("JWT token", re.compile(r"eyJ[A-Za-z0-9+/=_-]{20,}\.[A-Za-z0-9+/=_-]{20,}\.[A-Za-z0-9+/=_-]{10,}")),
+]
+
+# Patterns that match assignment of a secret to a named variable in JS/HTML.
+# These catch Lovable / Cursor apps that inline env vars into client bundles.
+_ENV_VAR_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    (
+        "Supabase URL + key inline assignment",
+        re.compile(
+            r'supabase(?:Url|_url|URL)\s*[=:]\s*["\']https://[a-z0-9]+\.supabase\.co["\']',
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "NEXT_PUBLIC env var with a value in client HTML",
+        re.compile(r'NEXT_PUBLIC_[A-Z0-9_]{3,}\s*[=:]\s*["\'][^"\']{8,}["\']'),
+    ),
 ]
 
 
@@ -248,6 +272,19 @@ def _redact_match(match: str) -> str:
     return match[:4] + "…" + match[-4:]
 
 
+def _jwt_role(token: str) -> str | None:
+    """Return the ``role`` claim from a JWT payload, or None on any failure."""
+    try:
+        parts = token.split(".")
+        if len(parts) != 3:
+            return None
+        padding = (4 - len(parts[1]) % 4) % 4
+        payload = base64.urlsafe_b64decode(parts[1] + "=" * padding)
+        return json.loads(payload).get("role")
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     seen_keys: set[tuple[str, str]] = set()
@@ -258,14 +295,20 @@ def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
             body_blob_parts.append(text)
         for link in page.get("links") or []:
             href = link.get("href") or ""
-            label = link.get("text") or ""
+            link_label = link.get("text") or ""
             if href:
-                body_blob_parts.append(f"{label} -> {href}")
+                body_blob_parts.append(f"{link_label} -> {href}")
         body_blob = " ".join(body_blob_parts)
         path = page.get("path") or page.get("url") or "(unknown page)"
         for label, pattern in _CRED_PATTERNS:
             for hit in pattern.finditer(body_blob):
                 value = hit.group(0)
+                # For JWT matches: only flag if the decoded role is service_role.
+                # anon keys are intentionally public; service_role keys are not.
+                if label == "JWT token":
+                    if _jwt_role(value) != "service_role":
+                        continue
+                    label = "Supabase service_role key"
                 key = (label, value)
                 if key in seen_keys:
                     continue
@@ -291,15 +334,59 @@ def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
                             "HTML, or config that ships to the browser. Move "
                             "it to a server-side environment variable. After "
                             "removing, rotate the key in the issuing service "
-                            "(AWS / Google / Stripe / etc.) so the leaked "
-                            "value is no longer valid. Then redeploy and "
-                            "verify the live URL no longer contains the "
-                            "value."
+                            "(AWS / Google / Stripe / Supabase / etc.) so "
+                            "the leaked value is no longer valid. Then "
+                            "redeploy and verify the live URL no longer "
+                            "contains the value."
                         ),
                         "category": CATEGORY_ID,
                         "tagged_by_persona": SNOOP_PERSONA,
                         "tag": SNOOP_TAG,
                         "check_id": "exposed_credentials",
+                        "evidence_path": path,
+                    }
+                )
+
+        for label, pattern in _ENV_VAR_PATTERNS:
+            for hit in pattern.finditer(body_blob):
+                value = hit.group(0)
+                key = (label, value[:60])
+                if key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                findings.append(
+                    {
+                        "severity": "medium",
+                        "title": f"Possible secret variable visible in page source ({label})",
+                        "what_we_saw": (
+                            f"On {path}, the page source contains a pattern "
+                            f"matching {label}. This may indicate that "
+                            "environment variables or API credentials are "
+                            "being rendered into client-side HTML or "
+                            "JavaScript."
+                        ),
+                        "why_it_matters": (
+                            "Environment variables intended for server-side "
+                            "use only (database URLs, service keys) should "
+                            "never appear in the HTML a visitor can read. "
+                            "Even if the current value is safe, the pattern "
+                            "suggests credentials may be leaking."
+                        ),
+                        "fix_prompt": (
+                            "Review what your build tool inlines into the "
+                            "client bundle. In Lovable / Next.js, only "
+                            "variables prefixed NEXT_PUBLIC_ should ever "
+                            "reach the browser — and only non-sensitive ones "
+                            "(public Supabase anon key is fine; service_role "
+                            "key is not). Move any server-side secrets to "
+                            "environment variables that are not prefixed "
+                            "NEXT_PUBLIC_ and are never passed to "
+                            "client-side code."
+                        ),
+                        "category": CATEGORY_ID,
+                        "tagged_by_persona": SNOOP_PERSONA,
+                        "tag": SNOOP_TAG,
+                        "check_id": "env_var_in_client",
                         "evidence_path": path,
                     }
                 )
@@ -349,6 +436,152 @@ def _check_exposed_creds(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------------
+# 6-8: crawlability / discoverability checks
+# ---------------------------------------------------------------------------
+
+
+def _fetch_url_status(url: str) -> int | None:
+    """Return the HTTP status code for *url*, or None on network error."""
+    req = urllib.request.Request(url, method="GET", headers={"User-Agent": USER_AGENT})
+    try:
+        with urllib.request.urlopen(req, timeout=HEAD_TIMEOUT_SEC) as resp:
+            return resp.status
+    except urllib.error.HTTPError as exc:
+        return exc.code
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _fetch_text(url: str) -> str:
+    """Return the response body as a string, or '' on any error."""
+    req = urllib.request.Request(url, method="GET", headers={"User-Agent": USER_AGENT})
+    try:
+        with urllib.request.urlopen(req, timeout=HEAD_TIMEOUT_SEC) as resp:
+            return resp.read(32_768).decode("utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _check_sitemap(base_url: str) -> dict[str, Any] | None:
+    sitemap_url = urljoin(base_url, "/sitemap.xml")
+    status = _fetch_url_status(sitemap_url)
+    if status == 200:
+        return None
+    return {
+        "severity": "low",
+        "title": "No sitemap.xml found",
+        "what_we_saw": (
+            f"A GET request to {sitemap_url} returned "
+            f"{'HTTP ' + str(status) if status else 'no response'} "
+            "rather than 200."
+        ),
+        "why_it_matters": (
+            "A sitemap.xml tells search engines which pages exist and "
+            "when they were last updated. Without one, Google may take "
+            "longer to discover and index your pages. It is a one-line "
+            "config change on most platforms."
+        ),
+        "fix_prompt": (
+            "Enable automatic sitemap generation for your platform. "
+            "In Vercel with Next.js, add a sitemap.ts in the app/ "
+            "directory. In Lovable, check the SEO settings panel. "
+            "In Webflow, enable the sitemap in Site Settings > SEO. "
+            "After deploying, verify that /sitemap.xml returns 200 "
+            "and submit the URL to Google Search Console."
+        ),
+        "category": CATEGORY_ID,
+        "tagged_by_persona": SNOOP_PERSONA,
+        "tag": SNOOP_TAG,
+        "check_id": "sitemap_xml",
+    }
+
+
+def _check_robots(base_url: str) -> dict[str, Any] | None:
+    robots_url = urljoin(base_url, "/robots.txt")
+    body = _fetch_text(robots_url)
+    if not body:
+        return None  # missing robots.txt is low-noise; only flag active blocks
+
+    # Detect a bare "Disallow: /" under a User-agent: * block —
+    # this blocks all crawlers and is a common leftover from staging.
+    in_star_block = False
+    for raw_line in body.splitlines():
+        line = raw_line.strip()
+        if line.lower().startswith("user-agent:"):
+            agent = line.split(":", 1)[1].strip()
+            in_star_block = agent == "*"
+        elif in_star_block and re.match(r"(?i)disallow\s*:\s*/\s*$", line):
+            return {
+                "severity": "medium",
+                "title": "robots.txt is blocking all search engine crawlers",
+                "what_we_saw": (
+                    f"Your robots.txt at {robots_url} contains "
+                    "'User-agent: *' followed by 'Disallow: /' which "
+                    "tells every search engine not to crawl any page."
+                ),
+                "why_it_matters": (
+                    "This setting is commonly left over from a staging "
+                    "or development environment and is easy to miss. "
+                    "If left in place on your live domain, search "
+                    "engines will not index any of your pages."
+                ),
+                "fix_prompt": (
+                    "Open your robots.txt file and remove or replace "
+                    "the 'Disallow: /' line under 'User-agent: *'. "
+                    "To allow all crawlers: set 'Allow: /'. Then add "
+                    "a Sitemap: line pointing to your sitemap.xml. "
+                    "After deploying, use Google Search Console's "
+                    "robots.txt tester to confirm crawling is allowed."
+                ),
+                "category": CATEGORY_ID,
+                "tagged_by_persona": SNOOP_PERSONA,
+                "tag": SNOOP_TAG,
+                "check_id": "robots_disallow_all",
+            }
+    return None
+
+
+def _check_noindex(pages: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Flag a noindex meta tag on the homepage (common staging leftover)."""
+    noindex_re = re.compile(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex', re.IGNORECASE)
+    for page in pages or []:
+        raw_html = page.get("raw_html") or page.get("html") or ""
+        if noindex_re.search(raw_html):
+            path = page.get("path") or page.get("url") or "homepage"
+            return {
+                "severity": "high",
+                "title": "noindex tag is preventing search engines from indexing the site",
+                "what_we_saw": (
+                    f"The rendered HTML for {path} contains a "
+                    "<meta name='robots' content='noindex'> tag. "
+                    "This tag tells search engines to exclude this "
+                    "page from their index."
+                ),
+                "why_it_matters": (
+                    "A noindex tag is commonly added during development "
+                    "or staging to prevent Google from indexing an "
+                    "unfinished site. If it is still present on the "
+                    "live URL, your site will not appear in search "
+                    "results regardless of how good your content is."
+                ),
+                "fix_prompt": (
+                    "Search your codebase or CMS settings for the "
+                    "noindex meta tag and remove it. In Lovable, check "
+                    "the SEO settings. In Webflow, check Site Settings "
+                    "> SEO and also the individual page settings. In "
+                    "Next.js, check any robots metadata export. After "
+                    "removing, redeploy and use Google Search Console "
+                    "to request a recrawl."
+                ),
+                "category": CATEGORY_ID,
+                "tagged_by_persona": SNOOP_PERSONA,
+                "tag": SNOOP_TAG,
+                "check_id": "noindex_on_live_site",
+            }
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -358,7 +591,7 @@ def run_security_lite(
     base_url: str,
     pages: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Run all five Snoop checks. Always returns a dict; never raises.
+    """Run all Snoop checks. Always returns a dict; never raises.
 
     Returns::
 
@@ -397,6 +630,18 @@ def run_security_lite(
         findings.extend(cred_findings)
     else:
         passed_ids.append("exposed_credentials_or_paths")
+
+    crawl_checks = [
+        ("sitemap_xml", _check_sitemap(base_url)),
+        ("robots_disallow_all", _check_robots(base_url)),
+        ("noindex_on_live_site", _check_noindex(pages or [])),
+    ]
+    for check_id, finding in crawl_checks:
+        if finding is None:
+            passed_ids.append(check_id)
+        else:
+            failed_ids.append(check_id)
+            findings.append(finding)
 
     return {
         "findings": findings,

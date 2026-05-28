@@ -64,7 +64,14 @@ categories:
       Lorem ipsum or "Heading goes here" / "Your text here" placeholders
       still in production, confusing CTAs, jargon a first-time visitor
       won't decode, internal product names leaking onto the marketing
-      surface.
+      surface. Also check first-user orientation: can a cold visitor
+      identify their immediate next step from the hero section alone,
+      without scrolling? A hero CTA labelled "Get started" or "Try it
+      free" with no accompanying benefit statement or specifics is a
+      common gap — the visitor doesn't know what they're starting or
+      what "free" means. Flag if the primary CTA is vague and the
+      surrounding copy doesn't answer "what does this do and for whom?"
+      within the first viewport.
     tester: "The Tourist"
 
   - id: dev_artifacts
