@@ -53,8 +53,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $RepoRoot   = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$PythonExe  = (Get-Command python -ErrorAction SilentlyContinue)?.Source
-if (-not $PythonExe) { $PythonExe = 'python' }
+$_pyCmd = Get-Command python -ErrorAction SilentlyContinue
+$PythonExe = if ($_pyCmd) { $_pyCmd.Source } else { 'python' }
 $LogDir     = Join-Path $RepoRoot 'logs'
 
 # All tasks managed by this script
@@ -112,36 +112,49 @@ $Tasks = @(
 # ------------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------------
-function Get-TaskExists($Name) {
-    schtasks /query /tn $Name 2>&1 | Out-Null
-    return ($LASTEXITCODE -eq 0)
+function Get-TaskExists([string]$TaskName) {
+    try {
+        $null = schtasks /query /tn $TaskName 2>&1
+        return ($LASTEXITCODE -eq 0)
+    } catch {
+        return $false
+    }
 }
 
-function Remove-Task($Name) {
-    if (Get-TaskExists $Name) {
-        schtasks /delete /tn $Name /f | Out-Null
-        Write-Host "[scheduler] Removed '$Name'."
+function Remove-Task([string]$TaskName) {
+    if (Get-TaskExists $TaskName) {
+        schtasks /delete /tn $TaskName /f | Out-Null
+        Write-Host "[scheduler] Removed '$TaskName'."
     }
 }
 
 function Register-Task($t) {
-    $ScriptPath = Join-Path $RepoRoot $t.Script
-    $Args       = if ($t.Args) { " $($t.Args)" } else { '' }
-    $LogFile    = Join-Path $LogDir $t.LogFile
-    $CmdStr     = "cmd /c `"$PythonExe `"$ScriptPath`"$Args >> `"$LogFile`" 2>&1`""
+    $ScriptPath  = Join-Path $RepoRoot $t['Script']
+    $ExtraArgs   = if ($t['Args']) { $t['Args'] } else { '' }
+    $LogFile     = Join-Path $LogDir $t['LogFile']
 
-    # Build schtasks argument list dynamically
-    $sargs = @('/create', '/tn', $t.Name, '/tr', $CmdStr, '/sc', $t.Sc, '/f')
-    if ($t.Mo)  { $sargs += @('/mo', $t.Mo) }
-    if ($t.D)   { $sargs += @('/d',  $t.D) }
-    if ($t.St)  { $sargs += @('/st', $t.St) }
+    # Write a .bat launcher so schtasks only ever sees a simple path with no quoting issues
+    $SafeName = $t['Name'] -replace '\s+', '_'
+    $BatPath  = Join-Path $LogDir "$SafeName.bat"
+    $BatLines = @(
+        "@echo off",
+        "cd /d `"$RepoRoot`"",
+        "`"$PythonExe`" `"$ScriptPath`" $ExtraArgs >> `"$LogFile`" 2>&1"
+    )
+    $BatLines | Set-Content -Path $BatPath -Encoding ASCII
+
+    # Build schtasks argument list
+    $sargs = @('/create', '/tn', $t['Name'], '/tr', $BatPath, '/sc', $t['Sc'], '/f')
+    if ($t.ContainsKey('Mo') -and $t['Mo'])  { $sargs += @('/mo', $t['Mo']) }
+    if ($t.ContainsKey('D')  -and $t['D'])   { $sargs += @('/d',  $t['D']) }
+    if ($t.ContainsKey('St') -and $t['St'])  { $sargs += @('/st', $t['St']) }
 
     & schtasks @sargs
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "[scheduler] schtasks /create failed for '$($t.Name)' (exit $LASTEXITCODE)."
+        Write-Error "[scheduler] schtasks /create failed for '$($t['Name'])' (exit $LASTEXITCODE)."
         exit 1
     }
-    Write-Host "[scheduler] Registered '$($t.Name)' ($($t.Label)) -> $($t.LogFile)"
+    Write-Host "[scheduler] Registered '$($t['Name'])' ($($t['Label'])) -> $($t['LogFile'])"
 }
 
 # ------------------------------------------------------------------
@@ -149,10 +162,10 @@ function Register-Task($t) {
 # ------------------------------------------------------------------
 if ($Action -eq 'status') {
     foreach ($t in $Tasks) {
-        if (Get-TaskExists $t.Name) {
-            Write-Host "[scheduler] REGISTERED  : $($t.Name) ($($t.Label))"
+        if (Get-TaskExists $t['Name']) {
+            Write-Host "[scheduler] REGISTERED  : $($t['Name']) ($($t['Label']))"
         } else {
-            Write-Host "[scheduler] NOT FOUND   : $($t.Name)"
+            Write-Host "[scheduler] NOT FOUND   : $($t['Name'])"
         }
     }
     exit 0
@@ -162,7 +175,7 @@ if ($Action -eq 'status') {
 # remove
 # ------------------------------------------------------------------
 if ($Action -eq 'remove') {
-    foreach ($t in $Tasks) { Remove-Task $t.Name }
+    foreach ($t in $Tasks) { Remove-Task $t['Name'] }
     Write-Host "[scheduler] All LaunchLook tasks removed."
     exit 0
 }
@@ -176,7 +189,7 @@ if (-not (Test-Path $LogDir)) {
 
 Write-Host "[scheduler] Installing $($Tasks.Count) LaunchLook task(s)..."
 foreach ($t in $Tasks) {
-    Remove-Task $t.Name
+    Remove-Task $t['Name']
     Register-Task $t
 }
 
