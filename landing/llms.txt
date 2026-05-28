@@ -23,7 +23,6 @@ Important for agents:
 
 - [Home — free 2-finding audit](https://launchlook.app/): Main offer for vibe-coded web apps. URL-only; no repo access.
 - [Webflow checkup](https://launchlook.app/webflow): Forms, noindex/robots, JSON-LD, Designer-to-live mismatches, breakpoints. Same human review tailored to Webflow Designer language.
-- [Built with AI?](https://launchlook.app/built-with-ai): Why vibe-coded apps built with Lovable, Cursor, Bolt, or v0 still need a human review — the 5 things AI builders can't catch.
 - [FAQ](https://launchlook.app/faq): Tiers, platforms, data handling, refunds, human review.
 - [Sample report](https://launchlook.app/sample): Example shareable HTML report deliverable.
 
@@ -45,7 +44,6 @@ Broken flows and dead buttons, placeholder copy, missing privacy/terms/contact p
 ## Optional
 
 - [LaunchLook vs PageLens (HTML)](https://launchlook.app/vs-pagelens): Comparison page.
-- [Built with AI? (HTML)](https://launchlook.app/built-with-ai): Comparison / explainer for AI-builder founders.
 - [Privacy policy](https://launchlook.app/privacy)
 - [Terms of service](https://launchlook.app/terms)
 - Pages marked noindex (not product docs): /thanks, /thanks-free-audit, /e2e

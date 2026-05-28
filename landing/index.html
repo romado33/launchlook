@@ -222,29 +222,48 @@
 
         <hr class="my-5 border-line" />
 
-        <h3 class="font-serif text-lg">Real things we've caught on AI-built apps</h3>
-        <p class="mt-2 text-sm text-muted">Any of these sound familiar?</p>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">noindex still on after publishing</strong> &mdash; your app is invisible to Google because the &ldquo;block search engines&rdquo; toggle was never turned off.</span></li>
-          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Contact form looks fine, silently drops submissions</strong> &mdash; the form works in the builder preview but on the live site nothing arrives.</span></li>
-          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Test Stripe key still in production</strong> &mdash; charges work in your testing but real customers can&rsquo;t pay.</span></li>
-          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Login works on desktop, breaks at 375px</strong> &mdash; the submit button is hidden off-screen on every phone.</span></li>
-          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Confirmation email never arrives</strong> &mdash; users sign up, see nothing, assume it&rsquo;s broken, and don&rsquo;t come back.</span></li>
-          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Placeholder copy from the AI still on the page</strong> &mdash; &ldquo;Lorem ipsum&rdquo; or generated filler text visible to real visitors.</span></li>
-        </ul>
-        <p class="mt-3 text-sm">
-          <a href="/r/jane-sparkle-marketplace.html" class="text-accent font-medium underline decoration-accent/40 hover:decoration-accent" target="_blank" rel="noopener">See a real sample report &rarr;</a>
-          <span class="text-muted ml-2 text-xs">(3 findings, fix prompts included)</span>
-        </p>
-
-        <hr class="my-5 border-line" />
-
         <h3 class="font-serif text-lg">The human difference</h3>
         <ul class="mt-3 grid sm:grid-cols-3 gap-4 text-sm text-muted">
           <li><strong class="text-ink font-medium">Tested, not just scanned.</strong> Desktop and mobile width in the browser, plus real form submits and inbox checks.</li>
           <li><strong class="text-ink font-medium">Reviewed, not dumped.</strong> False positives cut before delivery.</li>
           <li><strong class="text-ink font-medium">Builder prompts.</strong> Paste into Lovable, Bolt, Cursor, v0, and more.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="five-things" class="border-b border-line bg-paper">
+    <div class="page-wrap px-6 section-inner">
+      <p class="section-label">What AI builders can&rsquo;t test</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-2">Five things your AI builder can&rsquo;t catch</h2>
+      <p class="text-muted mb-8 max-w-prose">These gaps only appear when a real person uses your app cold. They happen on almost every AI-built app we review.</p>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="card-elevated p-5">
+          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">1. Silent form failures</p>
+          <p class="text-sm text-muted leading-relaxed">Your signup or contact form looks fine. Click submit. Nothing arrives. No confirmation email, no error. Your builder generated the UI; it never tested the delivery. This is the most common launch blocker we find.</p>
+        </div>
+        <div class="card-elevated p-5">
+          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">2. Mobile layout problems</p>
+          <p class="text-sm text-muted leading-relaxed">AI builders preview on desktop. The button that can&rsquo;t be tapped on a phone, the text that overflows off the right edge, the navigation that hides the main CTA &mdash; these are invisible until a real device opens the link.</p>
+        </div>
+        <div class="card-elevated p-5">
+          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">3. Dev artifacts in production</p>
+          <p class="text-sm text-muted leading-relaxed">&ldquo;Dev Bypass&rdquo; sign-in buttons. &ldquo;Seed sample data.&rdquo; Placeholder team photos. A zero-review rating showing &ldquo;4.5 (0)&rdquo;. These erode trust instantly &mdash; and AI builders ship them by default.</p>
+        </div>
+        <div class="card-elevated p-5">
+          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">4. Missing trust pages</p>
+          <p class="text-sm text-muted leading-relaxed">No privacy policy. No terms. A contact email that goes nowhere. Dead footer links. These are the first things a skeptical visitor checks &mdash; and the most common reason they leave without buying.</p>
+        </div>
+        <div class="card-elevated p-5">
+          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">5. Copy that reads AI-written</p>
+          <p class="text-sm text-muted leading-relaxed">Tricolons (&ldquo;comprehensive, elegant, and powerful&rdquo;). Filler phrases (&ldquo;it&rsquo;s important to note that&rdquo;). Generic hero claims with no specifics. Visitors can&rsquo;t always name it, but they feel it and leave.</p>
+        </div>
+        <div class="card-elevated p-5">
+          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">+ more per tier</p>
+          <p class="text-sm text-muted leading-relaxed">Scale Up and Pro add: user data isolation (can one user see another&rsquo;s records?), analytics gaps, integrations review (Stripe, login, email), compliance basics, and a full mobile-width pass.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -341,6 +360,28 @@
     </div>
   </section>
 
+  <section id="faq-ai" class="border-b border-line bg-paper">
+    <div class="page-wrap px-6 section-inner">
+      <p class="section-label">Questions</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl mb-6">Common questions</h2>
+      <div class="card-elevated divide-y divide-line px-4 sm:px-5 max-w-2xl">
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">My app is still on a preview URL. Can you review it now?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes. Lovable preview URLs, Vercel staging URLs, and any publicly reachable URL work. We flag anything that will need to be different on your custom domain (like a missing canonical or noindex setting).</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Do you need my GitHub or builder login?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">No. We only need your live URL. We never ask for GitHub, your Lovable workspace, your Cursor project, or any access keys. Everything we find is visible on your public site.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How is this different from Lovable&rsquo;s built-in SEO check?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">SEO tools help Google find your page. We help the friend you just sent the link to: the dead button, the form that silently fails, the mobile layout that breaks, the &ldquo;Dev Bypass&rdquo; sign-in still showing in production.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <footer class="border-t border-line">
     <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
       <div>
@@ -355,7 +396,7 @@
         <li><a href="/r/jane-sparkle-marketplace.html" class="hover:text-ink">Sample report</a></li>
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
         <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
-        <li><a href="/built-with-ai" class="hover:text-ink">Built with AI?</a></li>
+        <li><a href="/vs-pagelens" class="hover:text-ink">vs PageLens</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

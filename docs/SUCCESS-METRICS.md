@@ -193,7 +193,7 @@ If you hit the ceiling before hitting $2,000/month, the blended price is too low
 | Month 4–12 | 300/mo | 1,000/mo |
 | Year 2+ | 1,000/mo | 5,000/mo |
 
-Primary organic levers: the /built-with-ai page, /webflow, comparison pages, and the Wall of Launches as link surface.
+Primary organic levers: /webflow, comparison pages (/vs-pagelens), and the Wall of Launches as link surface. (Note: /built-with-ai was retired May 2026; its content was merged into the main landing page.)
 
 ### Referral-sourced audits
 
