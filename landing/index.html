@@ -367,18 +367,27 @@
       <h2 class="font-serif text-2xl mb-6">Common questions</h2>
       <div class="card-elevated divide-y divide-line px-4 sm:px-5 max-w-2xl">
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">What&rsquo;s the difference between Starter, Scale Up, and Pro?<span class="text-muted text-lg">+</span></summary>
+          <summary class="flex justify-between items-center font-medium text-sm">What do we mean by human-tested workflows and human review?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
-            <p><strong class="text-ink">Starter ($19)</strong> covers up to 10 of the most impactful issues a first-time visitor would notice before launch, ranked by impact. Best for: founders within a week of launching who want fast targeted fixes.</p>
-            <p><strong class="text-ink">Scale Up ($49)</strong> is the full audit (up to 30 findings across every category), plus a user data isolation check using 2 test accounts to verify users can&rsquo;t see each other&rsquo;s data, plus a Quick Start Guide PDF you can give your users. Best for: founders 1&ndash;4 weeks out who want thorough coverage including the user data isolation check.</p>
-            <p><strong class="text-ink">Pro ($99)</strong> is the deep audit (everything in Scale Up, plus up to 40 findings), a review of your operational integrations (Stripe, auth, email, analytics setup) to catch infrastructure gaps that aren&rsquo;t visible from the app itself, and <strong class="text-ink">Ask Rob anything</strong> &mdash; reply with up to 5 questions about your findings and get a personal answer within 24 hours. Best for: founders who want maximum confidence before paid traffic or investor demos.</p>
+            <p><strong class="text-ink">Human-tested workflows.</strong> We do not only look at screenshots. A real person clicks through signup, booking, contact, and checkout paths, submits forms, and checks whether confirmation, thank-you, and notification emails actually arrive. That is how we catch &ldquo;the form looked fine but nothing ever emailed anyone.&rdquo;</p>
+            <p><strong class="text-ink">Human-reviewed findings.</strong> AI helps surface issues quickly. Every finding still goes through a person before you see it: false positives dropped, unclear wording rewritten, and gaps added when something matters for your app.</p>
+            <p>You get a curated list from real walkthroughs, not a raw tool dump.</p>
           </div>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Do you need my code, GitHub, or any account access?<span class="text-muted text-lg">+</span></summary>
+          <summary class="flex justify-between items-center font-medium text-sm">How is this different from a security scanner?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">We focus on what visitors <em>see</em>: broken UI, placeholders, trust pages. For deep security, use something like <a href="https://vibeappscanner.com" class="underline hover:text-ink" rel="noopener noreferrer">VAS</a>. Use both if you can.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps. Also v0, Cursor-built apps, Webflow sites, and others. If your builder outputs a shareable link, we can usually review it.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">I built my app with Lovable / Cursor / Bolt. Why do I still need a review?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
-            <p>No. We only need your public URL (and for Scale Up / Pro Package, two temporary test accounts to check data isolation). We never ask for GitHub access, your codebase, your builder login, or any access keys. If a tool ever asks for those things just to spot broken UI, be wary.</p>
-            <p>We don&rsquo;t request database access or store credentials. Anything you provide through the intake form is deleted promptly after delivery. See our <a href="/privacy" class="underline hover:text-ink">privacy policy</a>.</p>
+            <p>Your AI builder was optimized to generate code quickly. It wasn&rsquo;t designed to walk your app as a confused first-time visitor, test whether your confirmation emails arrive, or notice the button that stops working at mobile width.</p>
+            <p>Those gaps only appear when a real person uses your app cold. LaunchLook is that person: someone who has never seen your app, trying to do the thing you built it for. Most vibe-coded apps have 5&ndash;15 things a first user would notice before you do.</p>
+            <p>Lovable&rsquo;s built-in SEO check and similar tools help Google find your page. We help the friend you just sent the link to: the dead button, the form that silently fails, the mobile layout that breaks, the &ldquo;Dev Bypass&rdquo; sign-in still showing in production.</p>
           </div>
         </details>
         <details class="py-4">
@@ -386,21 +395,14 @@
           <p class="mt-2 text-muted text-sm leading-relaxed">Yes. Lovable preview URLs, Vercel staging URLs, and any publicly reachable URL work. We flag anything that will need to be different on your custom domain (like a missing canonical or noindex setting). localhost won&rsquo;t work.</p>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">I built my app with Lovable / Cursor / Bolt. Why do I still need a review?<span class="text-muted text-lg">+</span></summary>
+          <summary class="flex justify-between items-center font-medium text-sm">I&rsquo;m worried you&rsquo;ll steal my idea or pass it off as your own. How do I know you won&rsquo;t?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
-            <p>Your AI builder was optimized to generate code quickly. It wasn&rsquo;t designed to walk your app as a confused first-time visitor, test whether your confirmation emails arrive, or notice the button that stops working at mobile width.</p>
-            <p>Those gaps only appear when a real person uses your app cold. LaunchLook is that person: someone who has never seen your app, trying to do the thing you built it for. Most vibe-coded apps have 5&ndash;15 things a first user would notice before you do.</p>
+            <p>That&rsquo;s a fair thing to worry about, and I want to be direct about it.</p>
+            <p><strong class="text-ink">We only see what anyone on the internet can see.</strong> We visit your live public URL — the same thing a first-time visitor would see. We never ask for your source code, your Lovable / Cursor / Webflow account, your GitHub, or any internal data. If your unreleased features aren&rsquo;t publicly visible yet, we can&rsquo;t see them either.</p>
+            <p><strong class="text-ink">One person reviews your audit: me (Rob), the founder.</strong> Your URL and findings aren&rsquo;t passed to a team, outsourced, or stored in a shared system. Screenshots are kept only until the report is delivered, then deleted.</p>
+            <p><strong class="text-ink">I&rsquo;m a technical writer, not a developer or a competitor.</strong> I&rsquo;m not in a position to rebuild what you&rsquo;ve built, and I have no interest in doing so. My reputation depends entirely on being trustworthy — one bad experience goes public immediately in the vibe-coder community.</p>
+            <p>If you still want something in writing before sharing your URL, email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> and I&rsquo;ll send a one-page mutual NDA by return. No questions asked.</p>
           </div>
-        </details>
-        <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to PageLens AI?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">
-            Both scan your live site. PageLens is built for SEO marketers who want fast, recurring scans.
-            LaunchLook is built for vibe coders shipping with Lovable, Cursor, or Bolt who want a one-off pre-launch checkup:
-            a real person tests forms and emails, reviews every finding, and you get paste-ready fix prompts for your builder.
-            See our side-by-side breakdown on the
-            <a href="/vs-pagelens" class="underline hover:text-ink font-medium">LaunchLook vs PageLens</a> page.
-          </p>
         </details>
       </div>
       <p class="mt-4 text-sm text-muted">
