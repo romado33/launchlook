@@ -3,7 +3,7 @@
  * Bump STORAGE_KEY when item ids change so progress resets intentionally.
  */
 window.LAUNCHLOOK_E2E = {
-  STORAGE_KEY: "launchlook-e2e-checklist-v4",
+  STORAGE_KEY: "launchlook-e2e-checklist-v5",
   SECTIONS: [
     {
       id: "preflight",
@@ -332,6 +332,97 @@ window.LAUNCHLOOK_E2E = {
           id: "mob-paid",
           label: "One Starter checkout + Tally intake on phone",
           hint: "",
+        },
+      ],
+    },
+    {
+      id: "edge",
+      title: "I. Edge cases (~15 min)",
+      items: [
+        {
+          id: "ec-bare-domain",
+          label: "Free form: submit bare domain without https:// (e.g. mysite.com) → queues normally",
+          hint: "Normalization runs both client-side (free-audit.js) and server-side (api/free-audit.py)",
+        },
+        {
+          id: "ec-http",
+          label: "Free form: submit http:// URL → queues normally (http scheme is accepted)",
+          hint: "",
+        },
+        {
+          id: "ec-dedup",
+          label: "Free form: same email + same URL submitted twice within 30 days → upsell email, NO second Notion row",
+          hint: "Check Notion Free Audit DB — row count must stay at 1",
+        },
+        {
+          id: "ec-rate-email",
+          label: "Free form: same email submitted 3 times in 30 days → 4th submission blocked with email-rate message",
+          hint: "Use 3 different URLs for first 3. 4th with same email returns 429.",
+        },
+        {
+          id: "ec-nojs",
+          label: "Free form with JS disabled → native POST redirects to /thanks-free-audit (no blank screen)",
+          hint: "Disable JS in DevTools → Network tab, submit form, expect HTTP 303",
+        },
+        {
+          id: "ec-tally-tier-starter",
+          label: "Click Starter buy button → land on /thanks?tier=starter → Tally intake pre-fills tier=starter (hidden field)",
+          hint: "Confirm hidden field is set in Tally's URL params",
+        },
+        {
+          id: "ec-tally-tier-scaleup",
+          label: "Click Scale Up buy button → /thanks?tier=scale_up → Tally tier=scale_up",
+          hint: "",
+        },
+        {
+          id: "ec-tally-tier-pro",
+          label: "Click Pro buy button → /thanks?tier=pro → Tally tier=pro",
+          hint: "",
+        },
+        {
+          id: "ec-tally-no-tier",
+          label: "Open /thanks (no ?tier= param) → Tally intake still opens; tier field empty in Notion (not a crash)",
+          hint: "Simulates customer who bookmarked the page without the tier param",
+        },
+        {
+          id: "ec-stripe-duplicate",
+          label: "Stripe Dashboard: resend the same checkout.session.completed webhook twice → Notion shows 1 row (updated), not 2",
+          hint: "Dashboard → Developers → Webhooks → click event → Resend",
+        },
+        {
+          id: "ec-stripe-unknown-amount",
+          label: "Stripe test checkout for an unusual amount (e.g. $77.77 gift) → Notion row created with Notes hint about unknown amount",
+          hint: "Would need a test Stripe Price. Just verify the webhook code path via the existing unit test if skipping live.",
+        },
+        {
+          id: "ec-email-html",
+          label: "Open draft-ready founder email in Gmail → HTML version renders with 3 clickable buttons (Refine, Preview, Open delivery draft)",
+          hint: "Plain-text fallback in the same email should show compact mailto, not a broken long URL",
+        },
+        {
+          id: "ec-email-mailto",
+          label: "Click 'Open delivery draft →' button in HTML email → Gmail compose opens with subject + findings pre-filled",
+          hint: "mailto: body may be truncated by browser URL limits; subject + first finding is the minimum",
+        },
+        {
+          id: "ec-form-smoke-ran",
+          label: "Run audit worker on a site with a contact form → founder email shows 'Form smoke: ran ✓'",
+          hint: "Playwright must be installed. Use a test site with a visible <form>.",
+        },
+        {
+          id: "ec-form-smoke-skipped",
+          label: "Run audit on a site with no detectable forms → founder email shows 'not run (Playwright unavailable or no forms detected)'",
+          hint: "Not an error — just confirms the status message is correct",
+        },
+        {
+          id: "ec-slug-collision",
+          label: "Known limitation documented: two customers with same email local-part + same hostname get the same slug (YAML overwrite risk)",
+          hint: "Do not test destructively. Mitigate by processing one customer at a time. See docs/LESSONS-LEARNED.md Part 2 (slug collision).",
+        },
+        {
+          id: "ec-resend-domain",
+          label: "FROM_EMAIL domain is verified in Resend → send a test free-audit submission and confirm delivery (not bounced)",
+          hint: "If FROM_EMAIL ever changes, re-verify the domain in Resend before pushing to production",
         },
       ],
     },

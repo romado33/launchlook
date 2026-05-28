@@ -95,6 +95,40 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 ---
 
+## Edge case testing (manual — E2E section I)
+
+These can't be unit-tested automatically. Run them once before your first real customer, then spot-check after any change to the form, webhook, or email code. Full steps are in the E2E checklist at `launchlook.app/e2e` section I.
+
+**Free audit form**
+- [ ] Submit bare domain `mysite.com` (no `https://`) → queues normally
+- [ ] Submit `http://` URL → queues normally (not rejected)
+- [ ] Same email + same URL within 30 days → upsell email arrives, Notion row count stays at 1
+- [ ] Same email submitted 4th time in 30 days → blocked with email-rate message (not generic error)
+- [ ] Submit with JavaScript disabled → 303 redirect to `/thanks-free-audit` (no blank page)
+
+**Tally hidden tier**
+- [ ] Starter buy button → `/thanks?tier=starter` → Tally hidden field receives `starter`
+- [ ] Scale Up buy button → `/thanks?tier=scale_up` → Tally hidden field receives `scale_up`
+- [ ] Pro buy button → `/thanks?tier=pro` → Tally hidden field receives `pro`
+- [ ] Open `/thanks` with no `?tier=` param → Tally still opens, tier is blank in Notion (not a crash)
+
+**Stripe webhook**
+- [ ] Resend same `checkout.session.completed` webhook twice from Stripe Dashboard → Notion shows 1 updated row, not 2 rows
+
+**Emails**
+- [ ] Open draft-ready founder email in Gmail → HTML renders with 3 clickable buttons; plain-text shows compact mailto (no broken long URL)
+- [ ] Click "Open delivery draft →" button → Gmail compose opens with subject + findings pre-filled
+- [ ] `FROM_EMAIL` domain verified in Resend → test free-audit submission delivers (not bounced)
+
+**Pipeline / form smoke**
+- [ ] Run worker on a site with a contact form → founder email shows `Form smoke: ran ✓`
+- [ ] Run worker on a site with no forms → founder email shows `not run (no forms detected)` (not an error)
+
+**Known limitation (no fix needed, just be aware)**
+- ⚠️ Two customers with the same email local-part + same hostname get the same YAML slug → second run overwrites first. Mitigation: process one customer at a time, or rename the YAML before queuing the second.
+
+---
+
 ## Optional / deferred
 
 - [ ] **Plausible** — only if you want conversion data at ≥10 customers
