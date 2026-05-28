@@ -1,68 +1,87 @@
-PRE-LAUNCH CHECKLIST FOR AI-BUILDER APPS
-LaunchLook · ~20 minutes
+IS YOUR APP CUSTOMER-READY? -- PRE-LAUNCH CHECKLIST
+LaunchLook · 30-45 minutes
 {% if customer and customer.app_name %}Prepared for {{ customer.app_name }}{% if customer.tier %} (bundled with {{ customer.tier }}){% endif %}{% endif %}
 
-A short list for founders about to share a real link, built with Lovable,
-Bolt, Base44, Replit, v0, Cursor, or similar. Open your app in a normal
-browser tab (not the builder preview). Mark each line done / problem /
-not sure, and turn the problems into your fix list.
+Work through this in order on your live site (not your editor preview).
+If you fail an item, fix it before moving on.
 
-This is what visitors notice. It is not a deep code review or security
-audit -- it complements your LaunchLook report, it does not replace it.
+LaunchLook checks many of these automatically as part of your audit --
+your job is to confirm each one is actually true on the live site.
+
+Total time: 30-45 minutes, plus the "watch someone use it" step at the end.
 
 ---
 
-1. FIRST LOOK (~5 minutes -- homepage and footer)
-[ ] The live link loads without feeling broken or endlessly spinning.
-[ ] Your URL bar shows a padlock (or no warning), not "Not Secure".
-[ ] The browser tab shows your app name, not "My App" or generic builder text.
-[ ] A stranger can tell what your app does within a few seconds of reading the homepage.
-[ ] No placeholder text left behind (lorem ipsum, "Your Company Name", "[insert tagline]", obvious TODO notes).
-[ ] No default "welcome to your new app" copy from the builder -- it sounds like your product.
-[ ] Your product name appears in the header, not the platform's logo as the star.
-[ ] Nothing obviously "for developers only" on the public site (test data buttons, skip-login, seed sample data).
-[ ] The main button on the homepage does what it promises when you click it.
+1. FIRST LOOK (~5 min -- homepage and footer)
+[ ] Live link loads quickly, no spinning.
+[ ] Padlock in URL bar (no "Not Secure" warning).
+[ ] Browser tab shows your app name and a real favicon -- not a generic globe or builder default.
+[ ] A stranger can tell what the app does within a few seconds from the homepage alone.
+[ ] No placeholder text (lorem ipsum, "Your Company Name," TODO notes).
+[ ] No default "welcome to your new app" builder copy.
+[ ] Your product name in the header, not the platform's logo.
+[ ] Nothing "developer only" visible (test buttons, skip-login, seed data).
+[ ] Main homepage button does what it promises.
 
-2. TRUST & CONTACT (~3 minutes)
-[ ] Privacy policy page works (often at /privacy).
-[ ] Terms page works (often at /terms).
-[ ] Visitors can find how to reach you (support email in footer or a contact page).
-[ ] That email is real and one you check -- not support@example.com.
-[ ] Footer links to privacy and terms work (no "page not found").
+2. DATA HYGIENE (~3 min -- the most common pre-launch miss)
+[ ] Test accounts, fake users, and seed data deleted (or clearly labelled "Demo").
+[ ] No real names, emails, or photos from beta testers visible to new visitors.
+[ ] Your own admin/dev account isn't showing up in any public list.
+[ ] Any "example" content reads like real content a customer would expect to see.
 
-3. DOES THE MAIN FLOW WORK? (~10 minutes -- the one thing users come to do)
-[ ] Buttons and menu links you tried actually do something (no dead ends).
-[ ] If people sign up: confirmation email arrives (check spam).
-[ ] If people sign up: you can log in afterward with that account.
-[ ] If people sign up: you can log out.
-[ ] If you have a public signup or contact form: it has some "prove you're human" step (checkbox, image puzzle, or similar) so a bot can't flood your inbox and database overnight.
-[ ] The core workflow finishes: book, pay, submit, save, whatever your app is for.
-[ ] After submitting a form, you see a clear "it worked" or "something went wrong" message.
-[ ] If you charge money: a test payment completes and shows a sensible thank-you page.
-[ ] A brand-new user isn't staring at a totally blank screen with no hint what to do next.
+3. TRUST & CONTACT (~3 min)
+[ ] /privacy page exists and describes what data you actually collect (not a blank template).
+[ ] /terms page exists and reflects your actual terms (not a blank template).
+[ ] Visitors can find how to reach you.
+[ ] That email is real and monitored -- not support@example.com.
+[ ] Footer privacy/terms links work (no 404).
 
-4. ON A PHONE (~5 minutes)
-[ ] No sideways scrolling. Everything fits the screen width.
-[ ] Text is readable without pinching to zoom.
-[ ] Buttons are easy to tap (not tiny).
-[ ] The main workflow is usable on phone, not only on desktop.
+4. DOES THE MAIN FLOW WORK? (~10 min)
+[ ] Buttons and links do something -- no dead ends.
+[ ] Signup confirmation email arrives within a minute (check spam too).
+[ ] Email from your app lands in the inbox, not spam.
+[ ] You can log in after signing up.
+[ ] You can log out.
+[ ] Contact and signup forms aren't getting flooded by spam submissions.
+[ ] Core workflow completes end-to-end (book, pay, submit, save).
+[ ] Form submission shows a clear success or failure message.
+[ ] Test payment completes with a sensible thank-you page.
+[ ] New user isn't staring at a blank screen with no guidance.
 
-5. SHARING YOUR LINK (~2 minutes)
-[ ] Paste your URL into Slack, iMessage, or LinkedIn: the preview shows the right title and description, not generic builder fluff.
+5. WHEN THINGS GO WRONG (~5 min)
+[ ] Wrong password shows a clear message, not a crash or generic error.
+[ ] A made-up URL (yoursite.com/asdf) shows a 404 page with a link back home.
+[ ] Refreshing mid-workflow doesn't wipe the user's progress without warning.
+[ ] Closing the tab and coming back: signed-in state behaves sensibly.
 
-6. IF PEOPLE CAN SIGN IN (optional -- skip if your app has no accounts)
-[ ] Signed in as person A, you cannot see person B's private stuff (messages, files, bookings, etc.).
-[ ] When signed out, opening "dashboard" or "settings" asks you to log in. It does not show someone else's data.
+6. ON A PHONE (~5 min)
+[ ] No sideways scrolling.
+[ ] Text readable without pinching to zoom.
+[ ] Buttons easy to tap, not tiny.
+[ ] Main workflow usable on phone, not only desktop.
+[ ] Email field shows the @ key, number fields show the number pad.
 
-7. GUT CHECK (~2 minutes)
+7. SHARING YOUR LINK (~2 min)
+[ ] Paste URL into Slack, iMessage, or LinkedIn -- preview shows the right title, description, and image, not builder default.
+
+8. IF YOUR APP HAS USER ACCOUNTS (required if applicable -- skip only if your app has no accounts at all)
+[ ] Signed in as person A, you cannot see person B's private data.
+[ ] When signed out, protected pages ask you to log in instead of showing someone else's data.
+[ ] Password reset flow works end-to-end: request email, receive it, set new password, log in successfully.
+
+9. THE REAL TEST (~10-15 min -- highest-value step on this list -- don't skip it)
+[ ] You've watched one person who isn't you try to use the app, without coaching them.
+[ ] They got through the main workflow without asking for help.
 [ ] You'd be comfortable sending this link to a friend today.
 [ ] You wouldn't be embarrassed if someone screenshotted the homepage.
 
 ---
 
 WHAT TO DO NEXT
-- Fix before you share widely: broken signup, missing privacy/terms, placeholder text, dev-only buttons still visible, one user seeing another's data.
-- Fix soon after launch: mobile layout quirks, weak link previews, empty screens without guidance.
+- Fix before you share widely: broken signup, missing privacy/terms, placeholder text,
+  dev-only buttons visible, seed data exposed, one user seeing another's data.
+- Fix soon after launch: mobile layout quirks, weak link previews, empty screens
+  without guidance, error messages that crash instead of explain.
 - More than ~5 serious problems? Pause the launch push until the worst ones are handled.
 
 ---
