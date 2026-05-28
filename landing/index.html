@@ -181,6 +181,16 @@
     </div>
   </section>
 
+  <section class="border-b border-line bg-surface-warm">
+    <div class="page-wrap px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <p class="font-medium text-sm">Building with Webflow?</p>
+        <p class="text-sm text-muted mt-0.5">Same human review, tailored to Webflow's Designer panels and breakpoints (991 / 767 / 478). Fix prompts use Webflow language, not AI builder prompts.</p>
+      </div>
+      <a href="/webflow" class="launchlook-btn launchlook-btn-secondary shrink-0">Webflow pricing &rarr;</a>
+    </div>
+  </section>
+
   <section id="pricing" class="border-b border-line bg-paper">
     <div class="page-wrap px-6 section-inner-tight">
       <h2 class="font-serif text-2xl sm:text-3xl">Pricing</h2>
@@ -224,9 +234,17 @@
         </div>
       </div>
 
-      <p class="mt-4 text-xs text-footnote">
-        Handoff Report: <a href="#" data-launchlook-stripe="handoff_report" class="underline decoration-line hover:text-ink">$49 add-on</a> on Starter/Scale Up (included on Pro).
-        Paid reports include a <strong class="text-ink font-medium">Fix Check</strong> offer in the footer — reply &ldquo;recheck&rdquo; after you ship fixes ($19, or $9 within 14 days).
+      <div class="mt-5 card-elevated p-4 sm:p-5">
+        <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+          <div class="flex-1">
+            <p class="font-medium text-sm">Handoff Report <span class="text-xs font-normal text-muted ml-1">$49 add-on on Starter / Scale Up. Included on Pro.</span></p>
+            <p class="text-sm text-muted mt-1.5">If you're passing fixes to a developer (or running a second AI builder session), the Handoff Report gives them a running start: a prioritized fix order, 3 to 5 architecture notes from the audit, and a one-paragraph context brief so they don't have to read the whole report first.</p>
+          </div>
+          <a href="#" data-launchlook-stripe="handoff_report" class="launchlook-btn launchlook-btn-secondary shrink-0 self-start">Add Handoff Report</a>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-footnote">
+        Paid reports include a <strong class="text-ink font-medium">Fix Check</strong> offer in the footer. Reply &ldquo;recheck&rdquo; after you ship fixes ($19, or $9 within 14 days).
       </p>
       <p class="mt-3 text-xs text-footnote text-center">
         We only visit your public URL — no source code, no builder login, no GitHub.
