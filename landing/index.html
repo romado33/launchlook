@@ -104,8 +104,11 @@
       <h1 class="font-serif text-4xl sm:text-5xl leading-[1.08] tracking-tight mt-3 max-w-4xl">
         Find the embarrassing bugs before your first users do.
       </h1>
-      <p class="mt-4 text-lg text-muted leading-relaxed max-w-3xl">
-        Send your live URL. We load it at desktop and mobile width in the browser, run the workflows that matter (signup, forms, checkout), and check whether confirmation and thank-you emails actually arrive. A founder reviews every finding before you see it: screenshots, ranked fixes, and paste-ready prompts for your builder.
+      <p class="mt-3 text-base sm:text-lg text-ink leading-snug max-w-2xl">
+        You get a plain-English list of the specific things that will make visitors leave or not trust your app&nbsp;&mdash; reviewed by a real person, in your inbox within a few days.
+      </p>
+      <p class="mt-2 text-sm text-muted leading-relaxed max-w-3xl hidden sm:block">
+        We load your live URL at desktop and mobile width, run the workflows that matter (signup, forms, checkout), and check whether confirmation emails actually arrive. Every finding is reviewed by a founder before you see it.
       </p>
 
       <form data-free-audit-form action="/api/free-audit" method="POST" class="card-elevated mt-6 px-4 py-4 sm:px-6 sm:py-6">
@@ -121,10 +124,14 @@
         </div>
         <button type="submit" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-4">Get my free 2 findings</button>
         <p data-free-audit-status class="mt-2 text-sm text-muted text-center hidden" role="status" aria-live="polite"></p>
-        <p class="mt-3 text-xs text-footnote text-center">Free, no credit card. We email when it&rsquo;s ready, usually within a few days. <a href="#pricing" class="underline decoration-line hover:text-ink">Starter ($19)</a> adds 8 more findings on top of your free 2.</p>
+        <p class="mt-3 text-xs text-footnote text-center">Free, no credit card. Rob personally reviews every audit and emails when it&rsquo;s ready. <a href="#pricing" class="underline decoration-line hover:text-ink">Starter ($19)</a> adds 8 more findings on top of your free 2.</p>
       </form>
 
-      <div class="mt-5 w-full flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted">
+      <p class="mt-4 text-xs text-center text-muted/70 italic">
+        LaunchLook is new&nbsp;&mdash; be one of the first founders to try it. Your feedback shapes what gets built next.
+      </p>
+
+      <div class="mt-3 w-full flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted">
         <a href="/sample" class="underline decoration-line hover:text-ink">Sample report</a>
         <span class="text-muted/40" aria-hidden="true">·</span>
         <span>No repo access needed · 7-day refund on paid tiers</span>
@@ -185,7 +192,8 @@
     <div class="page-wrap px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <p class="font-medium text-sm">Building with Webflow?</p>
-        <p class="text-sm text-muted mt-0.5">Same human review, tailored to Webflow's Designer panels and breakpoints (991 / 767 / 478). Fix prompts use Webflow language, not AI builder prompts.</p>
+        <p class="text-sm text-muted mt-0.5">Same human review, tailored to Webflow&rsquo;s Designer panels and breakpoints (991&thinsp;/&thinsp;767&thinsp;/&thinsp;478). Fix prompts use Webflow language, not AI builder prompts.</p>
+        <p class="text-xs text-muted/70 mt-1">Common catch: noindex left on after publishing, or a form that looks fine in Designer but silently drops submissions on the live site.</p>
       </div>
       <a href="/webflow" class="launchlook-btn launchlook-btn-secondary shrink-0">Webflow pricing &rarr;</a>
     </div>
