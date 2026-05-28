@@ -163,6 +163,40 @@
 
     .verdict-meta strong { color: var(--ink); font-weight: 500; }
 
+    /* ---------- Readiness score badge ---------- */
+    .score-badge {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 3pt;
+      margin-top: 8pt;
+      padding: 5pt 10pt;
+      border-radius: 4pt;
+      background: var(--surface-tint);
+      border: 1px solid var(--line);
+    }
+
+    .score-badge__number {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 18pt;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .score-badge__denom {
+      font-size: 10pt;
+      color: var(--muted);
+    }
+
+    .score-badge__label {
+      margin-left: 8pt;
+      font-size: 9pt;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
     /* ---------- Severity section headers ---------- */
     h2.severity {
       font-family: 'Fraunces', Georgia, serif;
@@ -383,7 +417,7 @@
     </header>
 
     <section class="verdict">
-      <p class="verdict-label">Overall verdict</p>
+      <p class="verdict-label">Launch Readiness</p>
       {% if verdict.label %}
       <p class="verdict-summary">
         <span class="verdict-emoji" aria-hidden="true">{{ verdict.emoji }}</span>
@@ -395,12 +429,21 @@
       {% else %}
       <p class="verdict-summary">{{ verdict.emoji }} {{ verdict.summary }}</p>
       {% endif %}
+
+      {% if readiness_score is defined %}
+      <div class="score-badge">
+        <span class="score-badge__number">{{ readiness_score }}</span>
+        <span class="score-badge__denom">&thinsp;/ 10</span>
+        <span class="score-badge__label">Launch Readiness Score</span>
+      </div>
+      {% endif %}
+
       {% if verdict.narrative %}
-      <p class="verdict-narrative">{{ verdict.narrative }}</p>
+      <p class="verdict-narrative" style="margin-top:8pt;">{{ verdict.narrative }}</p>
       {% endif %}
       <p class="verdict-meta">
-        <strong>{{ findings|length }} finding{{ '' if findings|length == 1 else 's' }}</strong>
-        below, sorted by severity. Each one includes what we saw, why it matters,
+        <strong>{{ findings|length }} thing{{ '' if findings|length == 1 else 's' }} your first users will hit</strong>
+        below, sorted by severity. Each one includes what we saw, why it matters to a real visitor,
         and a paste-ready fix
         {%- if is_webflow %} instruction for the Webflow Designer.
         {%- else %} prompt for {{ customer.builder }}.
@@ -408,11 +451,12 @@
       </p>
     </section>
 
+    {# Section heading labels use "first-user" framing per PRODUCT-DECISIONS.md #}
     {% set severity_order = [
-      ('critical', '🔴 Critical'),
-      ('high',     '🟠 High'),
-      ('medium',   '🟡 Medium'),
-      ('low',      '🟢 Low'),
+      ('critical', '🔴 Stop — fix before any real users'),
+      ('high',     '🟠 Fix before launch'),
+      ('medium',   '🟡 First users will notice this'),
+      ('low',      '🟢 Polish — worth fixing soon'),
     ] %}
 
     {% set ns = namespace(idx=0) %}
@@ -470,8 +514,8 @@
 
     {% if passed_checks %}
     <section class="passed-checks">
-      <h2>What's working</h2>
-      <p class="intro">No critical or high-severity issues turned up in these areas.</p>
+      <h2>What your first users won't hit</h2>
+      <p class="intro">These areas checked out — no critical or high-severity issues in:</p>
       <ul>
         {% for item in passed_checks %}
         <li>{{ item }}</li>

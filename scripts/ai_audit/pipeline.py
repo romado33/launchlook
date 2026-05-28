@@ -660,6 +660,32 @@ def build_user_guide_prompt(
     )
 
 
+def compute_readiness_score(findings: list[dict[str, Any]]) -> float:
+    """Return a Launch Readiness Score from 1.0–10.0 based on finding severity.
+
+    Deductions per finding:
+      critical  -2.0
+      high      -1.0
+      medium    -0.4
+      low       -0.1
+
+    Score is floored at 1.0 and rounded to one decimal place.
+    An empty findings list returns 10.0.
+    """
+    score = 10.0
+    for f in findings:
+        sev = (f.get("severity") or "").lower()
+        if sev == "critical":
+            score -= 2.0
+        elif sev == "high":
+            score -= 1.0
+        elif sev == "medium":
+            score -= 0.4
+        elif sev == "low":
+            score -= 0.1
+    return max(1.0, round(score, 1))
+
+
 def _default_verdict(findings: list[dict[str, Any]], app_name: str) -> dict[str, Any]:
     """Heuristic fallback when the LLM verdict call fails.
 
@@ -979,6 +1005,9 @@ def run(
 
     if user_guide and user_guide.get("sections"):
         payload["user_guide"] = user_guide
+
+    # Score is computed from the raw findings list before placeholder injection
+    payload["readiness_score"] = compute_readiness_score(findings)
 
     if not findings:
         # form_to_yaml requires at least one finding to round-trip; emit a

@@ -131,10 +131,11 @@
         LaunchLook is new&nbsp;&mdash; be one of the first founders to try it. Your feedback shapes what gets built next.
       </p>
 
-      <div class="mt-3 w-full flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted">
-        <a href="/sample" class="underline decoration-line hover:text-ink">Sample report</a>
-        <span class="text-muted/40" aria-hidden="true">·</span>
-        <span>No repo access needed · 7-day refund on paid tiers</span>
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <a href="/r/jane-sparkle-marketplace.html" target="_blank" rel="noopener" class="launchlook-btn launchlook-btn-secondary text-sm">
+          See a sample report &rarr;
+        </a>
+        <span class="text-xs text-muted">No repo access needed &middot; 7-day refund on paid tiers</span>
       </div>
     </div>
   </section>
@@ -163,18 +164,20 @@
 
         <hr class="my-5 border-line" />
 
-        <h3 class="font-serif text-lg">Examples of what we catch</h3>
-        <p class="mt-2 text-sm text-muted">Illustrative, not exhaustive — these show up constantly on AI-built apps:</p>
-        <ul class="mt-3 list-disc pl-5 space-y-1.5 text-sm text-muted">
-          <li>Dead buttons and broken links</li>
-          <li>Layout breaks at mobile width</li>
-          <li>Placeholder or generic AI copy still on the page</li>
-          <li>Missing privacy or terms pages</li>
-          <li>Signup or contact forms that fail silently</li>
-          <li>Confirmation or thank-you emails that never arrive</li>
-          <li>Test data or dev shortcuts visible in production</li>
-          <li>Login or checkout pages that show &ldquo;Not Secure&rdquo; in the browser</li>
+        <h3 class="font-serif text-lg">Real things we've caught on AI-built apps</h3>
+        <p class="mt-2 text-sm text-muted">Any of these sound familiar?</p>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">noindex still on after publishing</strong> &mdash; your app is invisible to Google because the &ldquo;block search engines&rdquo; toggle was never turned off.</span></li>
+          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Contact form looks fine, silently drops submissions</strong> &mdash; the form works in the builder preview but on the live site nothing arrives.</span></li>
+          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Test Stripe key still in production</strong> &mdash; charges work in your testing but real customers can&rsquo;t pay.</span></li>
+          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Login works on desktop, breaks at 375px</strong> &mdash; the submit button is hidden off-screen on every phone.</span></li>
+          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Confirmation email never arrives</strong> &mdash; users sign up, see nothing, assume it&rsquo;s broken, and don&rsquo;t come back.</span></li>
+          <li class="flex gap-2"><span class="text-amber-600 shrink-0 mt-0.5">&#10003;</span><span><strong class="text-ink font-medium">Placeholder copy from the AI still on the page</strong> &mdash; &ldquo;Lorem ipsum&rdquo; or generated filler text visible to real visitors.</span></li>
         </ul>
+        <p class="mt-3 text-sm">
+          <a href="/r/jane-sparkle-marketplace.html" class="text-accent font-medium underline decoration-accent/40 hover:decoration-accent" target="_blank" rel="noopener">See a real sample report &rarr;</a>
+          <span class="text-muted ml-2 text-xs">(3 findings, fix prompts included)</span>
+        </p>
 
         <hr class="my-5 border-line" />
 
@@ -273,7 +276,8 @@
         </p>
       </div>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
-        <li><a href="/sample" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/r/jane-sparkle-marketplace.html" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/wall" class="hover:text-ink">Wall of Launches</a></li>
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
         <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
         <li><a href="/built-with-ai" class="hover:text-ink">Built with AI?</a></li>

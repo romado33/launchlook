@@ -392,6 +392,7 @@ def render_main_report_html(
         findings=data["findings"],
         delivered_at=delivered_at,
         qsg_link=qsg_link,
+        readiness_score=data.get("readiness_score"),
     )
 
 
@@ -821,6 +822,7 @@ def _build_public_report_dict(
         "app_name": customer.get("app_name", ""),
         "customer_url": customer.get("app_url", ""),
         "verdict": dict(verdict),
+        "readiness_score": data.get("readiness_score"),
         "passed_checks": list(data.get("passed_checks") or []),
         "findings": [dict(f) for f in findings if isinstance(f, dict)],
         "share_metadata": share_metadata,

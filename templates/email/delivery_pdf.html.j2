@@ -22,7 +22,7 @@
               <p style="margin:0 0 14px; color:#1F1B16;">Hi {{ customer.first_name }},</p>
 
               <p style="margin:0 0 14px; color:#1F1B16;">
-                Your LaunchLook checkup for <strong>{{ customer.app_name }}</strong> is attached{% if customer.tier in ('Scale Up Package', 'Pro Package') %} as {{ 4 if customer.tier == 'Pro Package' else 4 }} PDFs{% else %} as three PDFs{% endif %}:
+                Here's what your first users will hit on <strong>{{ customer.app_name }}</strong>. The findings are attached as{% if customer.tier in ('Scale Up Package', 'Pro Package') %} four{% else %} three{% endif %} PDFs, sorted by who encounters what first:
               </p>
 
               <ul style="margin:0 0 18px; padding-left:18px; color:#1F1B16;">
@@ -65,6 +65,13 @@
                 <p style="margin:0 0 6px; font-weight:600; color:#1F1B16;">Applied your fixes? Get a Fix Check.</p>
                 <p style="margin:0; font-size:13px; color:#1F1B16;">
                   Reply with &ldquo;recheck&rdquo; once you&rsquo;ve worked through the report and we&rsquo;ll re-walk your site for $19 &mdash; or $9 if you book within 14 days of this report. Confirms what&rsquo;s fixed and catches anything new that broke along the way.
+                </p>
+              </div>
+
+              <div style="border:1px solid #E7E0D6; padding:14px 16px; margin-top:16px; background:#FFFFFF; border-radius:4px;">
+                <p style="margin:0 0 4px; font-weight:600; font-size:13px; color:#1F1B16;">Know another founder who&rsquo;s about to launch?</p>
+                <p style="margin:0; font-size:13px; color:#6B6359;">
+                  Forward this email and mention your name. I&rsquo;ll give you <strong style="color:#1F1B16;">$10 off a future audit</strong> &mdash; no referral codes, just a reply.
                 </p>
               </div>
 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wall of Launches — LaunchLook</title>
+  <meta name="description" content="Apps that got a LaunchLook audit and shipped. If your app was audited and you've launched, ask to be added." />
+
+  <meta property="og:title" content="Wall of Launches — LaunchLook" />
+  <meta property="og:description" content="Apps that got a LaunchLook pre-launch checkup and shipped." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://launchlook.app/wall" />
+  <meta property="og:image" content="https://launchlook.app/images/og.png" />
+  <link rel="canonical" href="https://launchlook.app/wall" />
+  <link rel="alternate" type="text/plain" href="https://launchlook.app/llms.txt" title="LLM site summary" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
+  <meta name="twitter:title" content="Wall of Launches — LaunchLook" />
+  <meta name="twitter:description" content="Apps that got a LaunchLook pre-launch checkup and shipped." />
+
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+  <script src="/assets/tailwind-brand.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+  <header id="site-header" class="site-header border-b border-line sticky top-0 bg-paper/95 backdrop-blur-sm z-10">
+    <div class="page-wrap px-6 py-3 flex items-center justify-between">
+      <a href="/" class="site-brand">
+        <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
+        <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
+        <span class="site-brand-tagline">One last look before you launch.</span>
+      </a>
+      <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
+        <a href="/#pricing" class="nav-link">Pricing</a>
+        <a href="/faq" class="nav-link">FAQ</a>
+        <a href="/webflow" class="nav-link">Webflow</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="border-b border-line bg-paper">
+    <div class="page-wrap px-6 section-inner-tight">
+      <h1 class="font-serif text-3xl sm:text-4xl leading-tight">Wall of Launches</h1>
+      <p class="mt-3 text-base text-muted max-w-xl">
+        Apps that got a LaunchLook audit and shipped. Listed with permission, builder noted so you can see what we've tested on.
+      </p>
+      <p class="mt-2 text-sm text-muted">
+        Got audited and launched? <a href="mailto:hello@launchlook.app?subject=Add me to the Wall of Launches" class="underline decoration-line hover:text-ink">Email to be added.</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-paper">
+    <div class="page-wrap px-6 section-inner-tight">
+
+      <!-- Launch entries -------------------------------------------------- -->
+      <!-- To add an entry: duplicate one .launch-card div below.            -->
+      <!-- Fields: App name, URL (optional), Builder, Tier, Launch month.    -->
+      <!-- Keep entries in reverse-chronological order (newest first).       -->
+      <!-- ------------------------------------------------------------------ -->
+
+      <div id="launches" class="space-y-3">
+
+        <!-- Empty state — remove once first real entry is added -->
+        <div id="empty-state" class="card-elevated p-8 text-center">
+          <p class="font-serif text-xl text-ink">Be the first.</p>
+          <p class="mt-2 text-sm text-muted max-w-sm mx-auto">
+            LaunchLook is new. If you got an audit and launched your app,
+            <a href="mailto:hello@launchlook.app?subject=Add me to the Wall of Launches" class="underline decoration-line hover:text-ink">email to be listed here.</a>
+            Your app name, builder, and launch month is all that's needed.
+          </p>
+          <a href="/#hero" class="launchlook-btn launchlook-btn-primary mt-5 inline-block">Get your free audit first</a>
+        </div>
+
+        <!--
+        TEMPLATE — copy/paste and fill in:
+
+        <div class="launch-card card-elevated p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <p class="font-medium text-ink">App Name</p>
+            <p class="text-sm text-muted mt-0.5">
+              Built with <strong class="text-ink font-medium">Lovable</strong>
+              &middot; Launched May 2026
+            </p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="launch-verdict-badge launch-verdict-badge--ready">Launch-ready</span>
+            <a href="https://app-url.com" target="_blank" rel="noopener" class="launchlook-btn launchlook-btn-secondary text-xs py-1.5 px-3">Visit &rarr;</a>
+          </div>
+        </div>
+        -->
+
+      </div>
+
+      <!-- Add-your-app CTA -->
+      <div class="mt-8 card-elevated p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+        <div>
+          <p class="font-medium text-sm">Want to be here?</p>
+          <p class="text-sm text-muted mt-1">Get a LaunchLook audit before you launch. If the report is useful and you ship, you're welcome on the wall.</p>
+        </div>
+        <a href="/#hero" class="launchlook-btn launchlook-btn-primary shrink-0">Get the free 2-finding audit</a>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="border-t border-line">
+    <div class="page-wrap px-6 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
+      <div>
+        <p class="font-serif text-ink">Made by Rob Dods</p>
+        <p class="mt-1 max-w-xs">Senior technical writer with 15+ years in software docs and APIs. I personally review every LaunchLook audit before it ships.</p>
+        <p class="mt-2"><a href="#" data-launchlook-email="support" class="hover:text-ink">hello@launchlook.app</a></p>
+        <p data-launchlook-linkedin-wrap class="mt-1 hidden">
+          <a data-launchlook-linkedin href="#" class="text-xs text-muted/80 hover:text-muted transition">LinkedIn</a>
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/r/jane-sparkle-marketplace.html" class="hover:text-ink">Sample report</a></li>
+        <li><a href="/wall" class="text-ink font-medium">Wall of Launches</a></li>
+        <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
+        <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
+        <li><a href="/built-with-ai" class="hover:text-ink">Built with AI?</a></li>
+        <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-ink">Terms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/assets/config.js"></script>
+  <script src="/assets/config.local.js" onerror=""></script>
+  <script src="/assets/apply-config.js"></script>
+  <script src="/assets/site.js" defer></script>
+
+  <style>
+    .launch-verdict-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .launch-verdict-badge--ready {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+    .launch-verdict-badge--caveats {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+  </style>
+
+</body>
+</html>

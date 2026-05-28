@@ -1,6 +1,6 @@
 Hi {{ customer.first_name }},
 
-Your LaunchLook checkup for {{ customer.app_name }} is attached as {% if customer.tier in ('Scale Up Package', 'Pro Package') %}four{% else %}three{% endif %} PDFs:
+Here's what your first users will hit on {{ customer.app_name }}. Findings attached as {% if customer.tier in ('Scale Up Package', 'Pro Package') %}four{% else %}three{% endif %} PDFs, sorted by who encounters what first:
 - Main Report ({{ n_findings }} finding{{ '' if n_findings == 1 else 's' }}, sorted by severity)
 - Quick Start Guide (a one-page card you can hand to your first users)
 {% if customer.tier in ('Scale Up Package', 'Pro Package') %}- User Guide (a 2-3 page doc for onboarding emails or a help centre)
@@ -18,6 +18,10 @@ LaunchLook
 ---
 APPLIED YOUR FIXES? GET A FIX CHECK.
 Reply with "recheck" once you've worked through the report and we'll re-walk your site for $19 -- or $9 if you book within 14 days of this report. Confirms what's fixed and catches anything new that broke along the way.
+
+---
+KNOW ANOTHER FOUNDER WHO'S ABOUT TO LAUNCH?
+Forward this email and mention your name -- I'll give you $10 off a future audit. No referral codes, just a reply.
 
 ---
 LaunchLook · launchlook.app · prepared {{ delivered_at }}
