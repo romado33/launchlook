@@ -1,6 +1,6 @@
 # Everything left for Rob — LaunchLook
 
-**Last updated:** May 28, 2026 (cleanup + value-scaling + competitive session)
+**Last updated:** May 28, 2026 (live test run + edge-case hardening)
 **Site:** https://launchlook.app · **Repo:** `romado33/launchlook`
 
 This file is the **source of truth** for what you still need to do manually. Product/code decisions live in [`PRODUCT-DECISIONS.md`](PRODUCT-DECISIONS.md).
@@ -165,8 +165,8 @@ These can't be unit-tested automatically. Run them once before your first real c
 - [ ] Run worker on a site with a contact form → founder email shows `Form smoke: ran ✓`
 - [ ] Run worker on a site with no forms → founder email shows `not run (no forms detected)` (not an error)
 
-**Known limitation (no fix needed, just be aware)**
-- ⚠️ Two customers with the same email local-part + same hostname get the same YAML slug → second run overwrites first. Mitigation: process one customer at a time, or rename the YAML before queuing the second.
+**Known limitation (mitigated — new slugs safe, old slugs grandfathered)**
+- ⚠️ Slug de-collision deployed May 28: new slugs include a 6-char email hash suffix so same-hostname collisions no longer occur. Existing `customers/{slug}.yaml` files from before this change keep their old (no-suffix) names — do NOT rename/migrate them.
 
 ---
 

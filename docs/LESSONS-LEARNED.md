@@ -812,5 +812,27 @@ Historical agent logs (`AGENT-ACTION-LOG-2026-05-26.md`), approval queues (`MANU
 
 ---
 
+## Part 12 — Live integration test lessons (May 28, 2026)
+
+### 12.1 Type mismatches between code field mappings and live Notion column types are silent until a live write
+
+The `intake_received_at` field was mapped as `"date"` in `FIELD_TO_NOTION` (the right intent — it stores a timestamp). But the live Notion column was created as a **Rich Text** column, not a Date column. Notion's API accepted `build_properties()` output for every read-only operation without complaint, so unit tests, schema checks, and dry runs all passed. The 400 error only appeared on the first real `pages.create` / `pages.update` call in the live environment.
+
+**Rule: after adding or renaming a Notion column, do a `pages.create` against the real DB (with a throwaway test email) before shipping. Don't trust the schema CSV or the field-mapping dict alone.**
+
+### 12.2 "Stale job blocks re-submission" is a silent customer-loss bug
+
+The original `recent_delivery()` function returned any prior row regardless of status. A `queued` row from a crashed or never-processed job permanently prevented the same customer from re-submitting. The symptom was a `duplicate` response with no delivery ever arriving — invisible to the operator, silently killing new leads.
+
+**Rule: gate-keepers based on prior state should always ask "did the prior thing actually complete?" not just "does a prior thing exist?" Filter to terminal/completed states (`delivered`, `draft_ready`) and let non-terminal states fall through.**
+
+### 12.3 Concurrent pipeline runs on the same job need an immediate lock, not a status update
+
+The automation worker originally wrote a "processing" status via a Notion `pages.update` after starting work, but Notion's eventual-consistency model means a second scheduler tick could pick up the same row before the update propagated. The fix: write the lock (a `[automation:processing]` token in the Notes field) as the very first action after deciding to process a job, and check the Notes field — not just the Status field — in the scheduler's eligibility filter.
+
+**Rule: use a field that is checked by the scheduler (Notes text here) as the lock token, and write it before doing any real work. Status fields lag behind real state.**
+
+---
+
 _Last updated: 2026-05-28. Update this file whenever you learn something that
 would have saved you time building LaunchLook, or would save time on the next app._

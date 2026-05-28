@@ -153,6 +153,7 @@ When you change anything in this file:
 
 | Date | Change |
 |---|---|
+| 2026-05-28 | **Edge-case hardening (live test run).** `notion_helpers.py`: `intake_received_at` remapped as `rich_text` (was `date` — live Notion column is not a Date field; the type mismatch caused a 400 on every Tally intake write). `free_audit_lookup.recent_delivery()` now skips non-delivered rows so stale/crashed jobs don't permanently block new lead capture. Slug de-collision: SHA-256 hex suffix appended so two accounts on the same hostname get distinct YAML slugs. Paid pipeline lock (`[automation:processing]` in Notes) written immediately and reclaimed after 2 h if stale. Dedup fingerprint exclusion injected into finding prompt for paid re-runs. Attachment size guard in `deliver_report.py` (strips if base64 > 9 MB). 34 new edge-case tests; all 280 pass. |
 | 2026-05-28 | Tier cards on `landing/index.html` and `landing/webflow.html` rewritten: all deliverables now listed, cumulative "Everything in X, plus:" framing, intent question under each tier name, Scale Up badged "Most popular", Handoff Report save shown on Pro. |
 | 2026-05-28 | `SUCCESS-METRICS.md` created. §0 Lorelight problem-validation test added as the primary gate before all revenue metrics. |
 | 2026-05-28 | VibeDoctor positioned as complementary (requires GitHub repo, code scanner) not direct competitor. LaunchLook's wedge: URL-only, live UX + workflow testing, no repo needed. |
