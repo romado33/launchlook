@@ -80,15 +80,25 @@
         placeholder="Imperative, concrete instructions the customer can paste into Lovable / Bolt / v0 / etc."
       ></textarea>
     </label>
+
+    <label class="block text-xs font-medium text-muted mt-3">
+      Category (taxonomy id from finding_categories.yaml)
+      <input type="text" data-field="category" placeholder="e.g. trust_gaps"
+             class="mt-1 w-full rounded border border-line bg-white px-2 py-1 text-sm" />
+    </label>
+
+    <label class="block text-xs font-medium text-muted mt-3">
+      Persona tag <span class="font-normal text-muted">(defaults from category; override during review)</span>
+      <select data-field="tag" class="mt-1 w-full rounded border border-line bg-white px-2 py-1 text-sm">
+        <option value="">(auto from category)</option>
+        <option>Caught by The Tourist</option>
+        <option>Caught by The Skeptic</option>
+        <option>Caught by The Klutz</option>
+        <option>Caught by The Snoop</option>
+        <option>Caught by The Phone-First Friend</option>
+        <option>Caught by The Saboteur</option>
+        <option>Caught by The Stranger Who Tried to Sign Up</option>
+      </select>
+    </label>
   </div>
 </div>
-  <label class="block text-xs font-medium text-muted mt-3">
-    Category (taxonomy id from finding_categories.yaml)
-    <input type="text" data-field="category" placeholder="e.g. trust_gaps"
-           class="mt-1 w-full rounded border border-line bg-white px-2 py-1 text-sm" />
-  </label>
-  <label class="block text-xs font-medium text-muted mt-3">
-    Persona tag (defaults from category; override during review)
-    <select data-field="tag" class="mt-1 w-full rounded border border-line bg-white px-2 py-1 text-sm"><option value="">(auto from category)</option><option>Caught by The Tourist</option><option>Caught by The Skeptic</option><option>Caught by The Klutz</option><option>Caught by The Snoop</option><option>Caught by The Phone-First Friend</option><option>Caught by The Saboteur</option><option>Caught by The Stranger Who Tried to Sign Up</option></select>
-  </label>
-

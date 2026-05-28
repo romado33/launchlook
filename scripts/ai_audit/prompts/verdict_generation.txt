@@ -50,12 +50,15 @@ verdict block that goes at the top of the report.
     - Do not invite real users yet: "Dev login bypass on the live URL
       is the blocker."
 
-* **narrative** (required): 3-5 sentences. Acknowledge what is already
-  working (be specific, reference at least one concrete strength you
-  saw in the evidence). Then name the top one or two issues that drove
-  the label, in plain language. Close with a forward-looking sentence
-  on pacing the rest. Do not mention severities by code; talk about the
-  fix in human terms.
+* **narrative** (required): 3-5 sentences. If the app has genuine
+  strengths visible in the evidence, name one specifically (e.g. "The
+  onboarding flow is clear and the copy is clean"). If the app is
+  genuinely broken or unfinished across the board, skip the positive
+  opener and start with what the label is based on — forced positivity
+  sounds worse than silence when the findings are severe. Then name the
+  top one or two issues that drove the label, in plain language. Close
+  with a forward-looking sentence on pacing the rest. Do not mention
+  severities by code; talk about the fix in human terms.
 
 ### Voice rules
 

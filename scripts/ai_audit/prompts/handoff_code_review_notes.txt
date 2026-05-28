@@ -38,6 +38,17 @@ questions about but didn't fully resolve. Examples of the right shape:
 - "Email deliverability: from-address doesn't match the verified domain
   in Resend, which lands signups in spam on Gmail. A 30-minute DNS fix,
   but the developer should know."
+- "Unsubscribe link missing from transactional emails: the form
+  confirmation email we received during the smoke test had no unsubscribe
+  link and no sender address in the footer. Most email providers start
+  throttling senders who hit abuse reports; a developer should add a
+  one-click unsubscribe header and a footer unsubscribe link before
+  sending to any volume list."
+- "Supabase service_role key exposed: the page source contains what looks
+  like a Supabase JWT with role=service_role. That key bypasses row-level
+  security entirely. A developer needs to rotate it immediately, move it
+  to a server-side environment variable, and audit which operations were
+  using it from the browser."
 
 ### Rules
 

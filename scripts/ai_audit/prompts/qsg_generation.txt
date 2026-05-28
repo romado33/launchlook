@@ -35,8 +35,9 @@ Same plain-English LaunchLook voice as the audit:
   helps them do in the first five minutes.
 * steps: 4-7 steps. Each has:
     - title (short, imperative: "Create your account")
-    - body (1-3 sentences, concrete, references what the user actually
-      sees on the page)
+    - body (1-3 short sentences, concrete, references what the user
+      actually sees on the page; aim for 15-25 words per step — this
+      is a quick-reference card, not a manual)
 * footer_note: 1-2 sentences. How to get help, plus the customer's real
   support email if you can infer it from the HTML / intake. Otherwise a
   generic "Reply to your delivery email" works.
@@ -45,6 +46,10 @@ Same plain-English LaunchLook voice as the audit:
 
 * Only describe flows you saw working in the audit. If signup looked
   broken, do NOT include a "Sign up" step. Pivot to a flow that did work.
+* If most core flows looked broken or unfinished, write a minimal 3-step
+  guide covering only what clearly worked (e.g. browsing the homepage,
+  reading a feature page, filling a waitlist form). Do not fabricate steps
+  for flows that didn't load or errored during the audit.
 * Do not reference findings or the audit. The QSG is for end users, not
   for the founder. It should read as if produced by the customer.
 * No filler. No "Congratulations on choosing X". Start with action.

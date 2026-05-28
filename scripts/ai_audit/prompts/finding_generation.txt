@@ -37,7 +37,7 @@ coverage, not just a ceiling.
 
 ### Findings library context
 
-The 38 most common pre-launch issues are below as a reference. Use these
+The most common pre-launch issues are below as a reference. Use these
 to ground your severity calibration and fix-prompt style. Do not feel
 obligated to use one; do feel obligated to NOT invent a finding category
 that doesn't match the library's spirit.
@@ -72,7 +72,10 @@ Coverage check before you return:
 * Are you under the tier's target minimum? If yes, revisit the
   screenshots and HTML extracts — common misses are mobile breakpoint
   polish, accessibility (contrast, focus, alt text), copy quality,
-  performance hints, SEO basics, trust signals, and footer/legal pages.
+  performance hints, SEO basics, trust signals, footer/legal pages,
+  compliance basics (consent checkbox, order reference, unsubscribe link
+  in transactional emails), and first-user orientation (is it obvious
+  what the app does and what to do first?).
 * You may NOT invent findings to pad the count. If a category truly does
   not apply, skip it. But the target minimum exists because most live
   apps genuinely have that many real issues — being well under usually

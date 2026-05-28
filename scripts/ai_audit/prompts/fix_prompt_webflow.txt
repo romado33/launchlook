@@ -67,7 +67,7 @@ Webflow user can follow without external help.
 
 | Finding category | Where to fix in Designer |
 |---|---|
-| Form silently dropping submissions (post-Nov 2024) | Project Settings → Forms → add a notification email and verify Form Notifications recipient is set |
+| Form silently dropping submissions | Project Settings → Forms → add a notification email and verify Form Notifications recipient is set |
 | Accidental noindex on a page | Page Settings → SEO tab → toggle Search engine indexing → Allow |
 | Site-wide robots.txt blocking | Project Settings → SEO → robots.txt → remove `Disallow: /` |
 | Missing JSON-LD schema | Page Settings → Custom Code → Inside `<head>` tag, paste a `<script type="application/ld+json">` block |
