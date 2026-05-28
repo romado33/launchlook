@@ -9,6 +9,7 @@ a fallback for clients that don't render HTML.
 
 from __future__ import annotations
 
+import datetime
 import html
 import json
 import os
@@ -22,6 +23,36 @@ from scripts.audit_automation.jobs import AuditJob
 from scripts.launchlook_constants import FREE_AUDIT_DELIVER_COUNT
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+_LOG_PATH = REPO_ROOT / "logs" / "email_sends.jsonl"
+
+
+def _append_send_log(
+    *,
+    slug: str,
+    tier: str,
+    email: str,
+    findings_count: int,
+    status: str,
+    status_code: int | None = None,
+    context: str = "draft-ready",
+) -> None:
+    """Append one JSON line to logs/email_sends.jsonl. Never raises."""
+    try:
+        _LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        record = {
+            "ts": datetime.datetime.now(datetime.UTC).isoformat(),
+            "context": context,
+            "slug": slug,
+            "tier": tier,
+            "email": email,
+            "findings_count": findings_count,
+            "status": status,
+            "status_code": status_code,
+        }
+        with _LOG_PATH.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(record) + "\n")
+    except Exception:  # noqa: BLE001
+        pass  # log failure must never crash the caller
 
 
 def _load_findings(yaml_rel: str) -> list[dict[str, Any]]:
@@ -109,9 +140,7 @@ def _build_mailto(
     """Full mailto: link with pre-composed subject AND body. Used in HTML email."""
     subject = _build_delivery_subject(job)
     body = _build_delivery_body(job, findings, deliver_count)
-    params = urllib.parse.urlencode(
-        {"subject": subject, "body": body}, quote_via=urllib.parse.quote
-    )
+    params = urllib.parse.urlencode({"subject": subject, "body": body}, quote_via=urllib.parse.quote)
     return f"mailto:{job.email}?{params}"
 
 
@@ -167,20 +196,16 @@ def _render_html_email(
     Finding {i}/{findings_count} &middot; {e(sev.upper())}
   </div>
   <div style="font-weight:600;color:#111;margin-top:2px;">{title}</div>
-  {f'<div style="margin-top:6px;color:#333;font-size:13px;"><b>What we saw:</b> {saw}</div>' if saw else ""}
-  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Why it matters:</b> {matters}</div>' if matters else ""}
-  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Fix prompt:</b> {fix}</div>' if fix else ""}
+  {f'<div style="margin-top:6px;color:#333;font-size:13px;"><b>What we saw:</b> {saw}</div>' if saw else ''}
+  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Why it matters:</b> {matters}</div>' if matters else ''}
+  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Fix prompt:</b> {fix}</div>' if fix else ''}
 </div>"""
         )
     findings_html = "".join(findings_html_parts) or "<p><em>No findings in YAML.</em></p>"
 
     smoke_line = (
         f"<li><b>Form smoke:</b> {'ran &#10003;' if form_smoke_ran else 'not run (Playwright unavailable or no forms detected)'}"
-        + (
-            f" &mdash; issues flagged: {e(', '.join(form_smoke_failed[:5]))}"
-            if form_smoke_failed
-            else ""
-        )
+        + (f" &mdash; issues flagged: {e(', '.join(form_smoke_failed[:5]))}" if form_smoke_failed else "")
         + "</li>"
     )
     roundtrip_line = (
@@ -232,7 +257,8 @@ def _render_html_email(
 </body></html>"""
 
 
-def _post_resend(payload: dict[str, Any], context: str) -> bool:
+def _post_resend(payload: dict[str, Any], context: str) -> tuple[bool, int | None]:
+    """POST to Resend API. Returns (ok, http_status_code)."""
     api_key = (os.getenv("RESEND_API_KEY") or "").strip()
     if not api_key:
         print(f"[automation] WARN: RESEND_API_KEY missing; skip {context}", flush=True)
@@ -253,15 +279,16 @@ def _post_resend(payload: dict[str, Any], context: str) -> bool:
     try:
         with urllib.request.urlopen(req, timeout=12) as resp:  # noqa: S310
             resp.read()
-        return True
+        return True, 200
     except urllib.error.HTTPError as exc:
         print(
             f"[automation] WARN: Resend HTTP {exc.code} on {context}: {exc.read()[:200]!r}",
             flush=True,
         )
+        return False, exc.code
     except urllib.error.URLError as exc:
         print(f"[automation] WARN: Resend error on {context}: {exc}", flush=True)
-    return False
+    return False, None
 
 
 def send_draft_ready_email(
@@ -307,7 +334,15 @@ def send_draft_ready_email(
             "text": body,
             "reply_to": job.email,
         }
-        _post_resend(payload, "draft-ready")
+        ok, code = _post_resend(payload, "draft-ready")
+        _append_send_log(
+            slug=job.slug,
+            tier=job.tier,
+            email=job.email,
+            findings_count=findings_count,
+            status="ok" if ok else "failed",
+            status_code=code,
+        )
         return
 
     subject = f"[LaunchLook] Draft ready for review: {job.slug}"
@@ -383,4 +418,12 @@ def send_draft_ready_email(
         "html": html_body,
         "reply_to": job.email,
     }
-    _post_resend(payload, "draft-ready")
+    ok, code = _post_resend(payload, "draft-ready")
+    _append_send_log(
+        slug=job.slug,
+        tier=job.tier,
+        email=job.email,
+        findings_count=findings_count,
+        status="ok" if ok else "failed",
+        status_code=code,
+    )

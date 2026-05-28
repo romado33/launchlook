@@ -66,6 +66,10 @@ data/ai_feedback/
 data/ai_costs/*
 !data/ai_costs/.gitkeep
 
+# Automation email-send log (per-send JSONL; local runtime, contains PII).
+logs/*
+!logs/.gitkeep
+
 # Accessibility (axe) per-URL response cache; pure runtime, regenerated.
 data/axe_cache/
 
