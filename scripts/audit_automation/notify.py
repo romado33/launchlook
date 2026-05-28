@@ -262,7 +262,7 @@ def _post_resend(payload: dict[str, Any], context: str) -> tuple[bool, int | Non
     api_key = (os.getenv("RESEND_API_KEY") or "").strip()
     if not api_key:
         print(f"[automation] WARN: RESEND_API_KEY missing; skip {context}", flush=True)
-        return False
+        return False, None
     req = urllib.request.Request(
         "https://api.resend.com/emails",
         data=json.dumps(payload).encode("utf-8"),
@@ -427,3 +427,31 @@ def send_draft_ready_email(
         status="ok" if ok else "failed",
         status_code=code,
     )
+
+
+def send_plain_admin_email(
+    subject: str,
+    html_body: str,
+    text_body: str,
+    *,
+    context: str = "admin",
+) -> bool:
+    """Send an arbitrary HTML+text email to ADMIN_EMAIL. Returns True on success.
+
+    Used by maintenance scripts (heartbeat, stale-queue, digest) that don't
+    operate on a specific AuditJob. Never raises; logs on failure.
+    """
+    admin = (os.getenv("ADMIN_EMAIL") or "").strip()
+    from_email = (os.getenv("FROM_EMAIL") or "hello@launchlook.app").strip()
+    if not admin:
+        print(f"[automation] WARN: ADMIN_EMAIL missing; skip {context}", flush=True)
+        return False
+    payload: dict[str, Any] = {
+        "from": f"LaunchLook Automation <{from_email}>",
+        "to": [admin],
+        "subject": subject,
+        "text": text_body,
+        "html": html_body,
+    }
+    ok, _ = _post_resend(payload, context)
+    return ok

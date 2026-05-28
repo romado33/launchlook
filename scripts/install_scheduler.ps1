@@ -1,35 +1,39 @@
 <#
 .SYNOPSIS
-    Idempotently registers, updates, or removes the LaunchLook audit-queue
-    scheduled task in Windows Task Scheduler.
+    Idempotently registers, updates, or removes ALL LaunchLook scheduled
+    tasks in Windows Task Scheduler.
 
 .DESCRIPTION
-    Wraps schtasks.exe so you never have to hand-write the command again.
-    Safe to run multiple times: deletes and re-creates if the task already
-    exists, so config changes always take effect.
+    Wraps schtasks.exe so you never have to hand-write the commands again.
+    Safe to run multiple times: deletes and re-creates tasks that already
+    exist, so config changes always take effect.
+
+    Tasks registered:
+      LaunchLook Audit Queue    - process_audit_queue.py    every 30 min
+      LaunchLook Stale Alert    - stale_queue_alert.py      every 6 hours
+      LaunchLook Follow-up      - followup_email.py         daily at 09:00
+      LaunchLook Heartbeat      - queue_heartbeat.py        weekly Sunday 08:00
+      LaunchLook Weekly Digest  - weekly_digest.py          weekly Sunday 08:15
 
 .PARAMETER Action
-    install  - Register (or update) the task. Default.
-    remove   - Delete the task.
-    status   - Print current task state without modifying anything.
+    install  - Register (or update) all tasks. Default.
+    remove   - Delete all tasks.
+    status   - Print current task states without modifying anything.
 
 .PARAMETER Interval
-    How often the task fires, in minutes. Default: 30.
+    How often the audit queue task fires, in minutes. Default: 30.
 
 .PARAMETER Provider
     LLM provider to pass to process_audit_queue.py. Default: gpt.
 
 .PARAMETER Limit
-    Max jobs per run. Default: 3.
+    Max jobs per audit queue run. Default: 3.
 
 .EXAMPLE
-    # Register the task (runs every 30 min, up to 3 jobs)
+    # Register all tasks
     .\scripts\install_scheduler.ps1
 
-    # Change interval to 60 min
-    .\scripts\install_scheduler.ps1 -Interval 60
-
-    # Remove the task entirely
+    # Remove all tasks
     .\scripts\install_scheduler.ps1 -Action remove
 
     # Check current state
@@ -48,34 +52,108 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$TaskName   = 'LaunchLook Audit Queue'
 $RepoRoot   = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $PythonExe  = (Get-Command python -ErrorAction SilentlyContinue)?.Source
 if (-not $PythonExe) { $PythonExe = 'python' }
-
-$ScriptPath = Join-Path $RepoRoot 'scripts\process_audit_queue.py'
 $LogDir     = Join-Path $RepoRoot 'logs'
-$LogFile    = Join-Path $LogDir   'scheduler.log'
+
+# All tasks managed by this script
+$Tasks = @(
+    @{
+        Name    = 'LaunchLook Audit Queue'
+        Script  = 'scripts\process_audit_queue.py'
+        Args    = "--provider $Provider --limit $Limit"
+        Sc      = 'MINUTE'
+        Mo      = "$Interval"
+        LogFile = 'scheduler.log'
+        Label   = "every $Interval min"
+    },
+    @{
+        Name    = 'LaunchLook Stale Alert'
+        Script  = 'scripts\stale_queue_alert.py'
+        Args    = '--hours 48'
+        Sc      = 'HOURLY'
+        Mo      = '6'
+        LogFile = 'stale_alert.log'
+        Label   = 'every 6 hours'
+    },
+    @{
+        Name    = 'LaunchLook Follow-up'
+        Script  = 'scripts\followup_email.py'
+        Args    = ''
+        Sc      = 'DAILY'
+        Mo      = '1'
+        St      = '09:00'
+        LogFile = 'followup.log'
+        Label   = 'daily 09:00'
+    },
+    @{
+        Name    = 'LaunchLook Heartbeat'
+        Script  = 'scripts\queue_heartbeat.py'
+        Args    = ''
+        Sc      = 'WEEKLY'
+        D       = 'SUN'
+        St      = '08:00'
+        LogFile = 'heartbeat.log'
+        Label   = 'weekly Sun 08:00'
+    },
+    @{
+        Name    = 'LaunchLook Weekly Digest'
+        Script  = 'scripts\weekly_digest.py'
+        Args    = ''
+        Sc      = 'WEEKLY'
+        D       = 'SUN'
+        St      = '08:15'
+        LogFile = 'weekly_digest.log'
+        Label   = 'weekly Sun 08:15'
+    }
+)
 
 # ------------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------------
-function Get-TaskExists {
-    $result = schtasks /query /tn $TaskName 2>&1
+function Get-TaskExists($Name) {
+    schtasks /query /tn $Name 2>&1 | Out-Null
     return ($LASTEXITCODE -eq 0)
+}
+
+function Remove-Task($Name) {
+    if (Get-TaskExists $Name) {
+        schtasks /delete /tn $Name /f | Out-Null
+        Write-Host "[scheduler] Removed '$Name'."
+    }
+}
+
+function Register-Task($t) {
+    $ScriptPath = Join-Path $RepoRoot $t.Script
+    $Args       = if ($t.Args) { " $($t.Args)" } else { '' }
+    $LogFile    = Join-Path $LogDir $t.LogFile
+    $CmdStr     = "cmd /c `"$PythonExe `"$ScriptPath`"$Args >> `"$LogFile`" 2>&1`""
+
+    # Build schtasks argument list dynamically
+    $sargs = @('/create', '/tn', $t.Name, '/tr', $CmdStr, '/sc', $t.Sc, '/f')
+    if ($t.Mo)  { $sargs += @('/mo', $t.Mo) }
+    if ($t.D)   { $sargs += @('/d',  $t.D) }
+    if ($t.St)  { $sargs += @('/st', $t.St) }
+
+    & schtasks @sargs
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "[scheduler] schtasks /create failed for '$($t.Name)' (exit $LASTEXITCODE)."
+        exit 1
+    }
+    Write-Host "[scheduler] Registered '$($t.Name)' ($($t.Label)) -> $($t.LogFile)"
 }
 
 # ------------------------------------------------------------------
 # status
 # ------------------------------------------------------------------
 if ($Action -eq 'status') {
-    if (Get-TaskExists) {
-        Write-Host "[scheduler] Task '$TaskName' is registered."
-        schtasks /query /tn $TaskName /fo LIST /v 2>&1 |
-            Where-Object { $_ -match 'Status|Next Run|Last Run|Last Result|Task To Run' } |
-            ForEach-Object { Write-Host "  $_" }
-    } else {
-        Write-Host "[scheduler] Task '$TaskName' is NOT registered."
+    foreach ($t in $Tasks) {
+        if (Get-TaskExists $t.Name) {
+            Write-Host "[scheduler] REGISTERED  : $($t.Name) ($($t.Label))"
+        } else {
+            Write-Host "[scheduler] NOT FOUND   : $($t.Name)"
+        }
     }
     exit 0
 }
@@ -84,54 +162,27 @@ if ($Action -eq 'status') {
 # remove
 # ------------------------------------------------------------------
 if ($Action -eq 'remove') {
-    if (Get-TaskExists) {
-        schtasks /delete /tn $TaskName /f | Out-Null
-        Write-Host "[scheduler] Task '$TaskName' removed."
-    } else {
-        Write-Host "[scheduler] Task '$TaskName' was not registered; nothing to remove."
-    }
+    foreach ($t in $Tasks) { Remove-Task $t.Name }
+    Write-Host "[scheduler] All LaunchLook tasks removed."
     exit 0
 }
 
 # ------------------------------------------------------------------
-# install (idempotent: delete first if exists, then create)
+# install (idempotent: remove first, then create all)
 # ------------------------------------------------------------------
-if (Get-TaskExists) {
-    Write-Host "[scheduler] Task '$TaskName' already exists — deleting before re-create."
-    schtasks /delete /tn $TaskName /f | Out-Null
-}
-
-# Ensure log directory exists
 if (-not (Test-Path $LogDir)) {
     New-Item -ItemType Directory -Path $LogDir | Out-Null
 }
 
-# Build the command string that schtasks will run.
-# We wrap the python call in cmd /c so we can redirect output to the log file.
-$PythonArgs = "`"$ScriptPath`" --provider $Provider --limit $Limit"
-$CmdStr     = "cmd /c `"$PythonExe $PythonArgs >> `"$LogFile`" 2>&1`""
-
-Write-Host "[scheduler] Registering task:"
-Write-Host "  Name    : $TaskName"
-Write-Host "  Trigger : every $Interval minutes"
-Write-Host "  Command : $PythonExe $PythonArgs"
-Write-Host "  Log     : $LogFile"
-
-schtasks /create `
-    /tn  $TaskName `
-    /tr  $CmdStr `
-    /sc  MINUTE `
-    /mo  $Interval `
-    /f
-
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "[scheduler] schtasks /create failed (exit $LASTEXITCODE)."
-    exit 1
+Write-Host "[scheduler] Installing $($Tasks.Count) LaunchLook task(s)..."
+foreach ($t in $Tasks) {
+    Remove-Task $t.Name
+    Register-Task $t
 }
 
-Write-Host "[scheduler] Task '$TaskName' registered successfully."
 Write-Host ""
-Write-Host "Quick reference:"
-Write-Host "  Check state  : .\scripts\install_scheduler.ps1 -Action status"
-Write-Host "  Remove task  : .\scripts\install_scheduler.ps1 -Action remove"
-Write-Host "  Run now      : python scripts\process_audit_queue.py --provider $Provider --limit $Limit"
+Write-Host "[scheduler] All tasks registered. Quick reference:"
+Write-Host "  Check state : .\scripts\install_scheduler.ps1 -Action status"
+Write-Host "  Remove all  : .\scripts\install_scheduler.ps1 -Action remove"
+Write-Host "  Run queue   : python scripts\process_audit_queue.py --provider $Provider --limit $Limit"
+Write-Host "  Run digest  : python scripts\weekly_digest.py --dry-run"

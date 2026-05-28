@@ -52,6 +52,8 @@ FIELD_TO_NOTION: dict[str, tuple[str, str]] = {
     "intake_received": ("Intake Received", "checkbox"),
     "intake_received_at": ("Intake Received At", "date"),
     "stripe_payment_id": ("Stripe Payment ID", "rich_text"),
+    "delivered_at": ("Delivered At", "date"),
+    "followup_sent_at": ("Follow-up Sent At", "date"),
     "notes": ("Notes", "rich_text"),
 }
 

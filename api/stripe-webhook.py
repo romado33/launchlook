@@ -36,6 +36,8 @@ import json
 import os
 import sys
 import traceback
+import urllib.error
+import urllib.request
 from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
@@ -153,6 +155,15 @@ def process_checkout_session(session: dict[str, Any]) -> dict[str, Any]:
         fields["tier"] = tier
 
     page_id, action = upsert_customer(client, ds_id, fields, email_for_match=email)
+
+    if tier:
+        _send_purchase_alert(
+            email=email,
+            tier=tier,
+            amount_usd=amount_dollars,
+            session_id=session_id,
+        )
+
     return {
         "status": action,
         "page_id": page_id,
@@ -286,6 +297,58 @@ def handle_handoff_report_purchase(session: dict[str, Any]) -> dict[str, Any]:
         "customer_email": customer_email,
         "session_id": session.get("id"),
     }
+
+
+def _send_purchase_alert(*, email: str, tier: str, amount_usd: float, session_id: str) -> None:
+    """Email the founder immediately when a paid purchase comes in."""
+    admin = (os.getenv("ADMIN_EMAIL") or "").strip()
+    api_key = (os.getenv("RESEND_API_KEY") or "").strip()
+    from_email = (os.getenv("FROM_EMAIL") or "hello@launchlook.app").strip()
+    if not admin or not api_key:
+        return
+    subject = f"[LaunchLook] New purchase: {tier} — {email}"
+    text = (
+        f"New paid audit purchase.\n\n"
+        f"Customer: {email}\n"
+        f"Tier: {tier}\n"
+        f"Amount: ${amount_usd:.2f}\n"
+        f"Stripe session: {session_id}\n\n"
+        "Next: wait for the Tally intake form, then the automation will queue the job."
+    )
+    html = (
+        f"<p><b>New paid audit purchase.</b></p>"
+        f"<table style='font-size:14px;border-collapse:collapse;'>"
+        f"<tr><td style='padding:2px 12px 2px 0;color:#666;'>Customer</td><td>{email}</td></tr>"
+        f"<tr><td style='padding:2px 12px 2px 0;color:#666;'>Tier</td><td><b>{tier}</b></td></tr>"
+        f"<tr><td style='padding:2px 12px 2px 0;color:#666;'>Amount</td><td>${amount_usd:.2f}</td></tr>"
+        f"<tr><td style='padding:2px 12px 2px 0;color:#666;'>Session</td>"
+        f"<td><code style='font-size:12px;'>{session_id}</code></td></tr>"
+        f"</table>"
+        f"<p style='color:#555;font-size:13px;'>Next: wait for the Tally intake form, "
+        f"then the automation will queue the job.</p>"
+    )
+    payload = {
+        "from": f"LaunchLook Automation <{from_email}>",
+        "to": [admin],
+        "subject": subject,
+        "text": text,
+        "html": html,
+    }
+    try:
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "LaunchLook-Automation/1.0 (+https://launchlook.app)",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:  # noqa: S310
+            resp.read()
+    except Exception as exc:  # noqa: BLE001
+        sys.stderr.write(f"[stripe-webhook] purchase alert email failed: {exc}\n")
 
 
 def process_event(event: dict[str, Any]) -> dict[str, Any]:
