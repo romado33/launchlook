@@ -20,6 +20,33 @@
     </div>
   </header>
 
+  <!-- ---------------------------------------------------------------- -->
+  <!-- Queue status panel                                              -->
+  <!-- ---------------------------------------------------------------- -->
+  <div class="queue-panel" id="queue-panel" data-queue-panel>
+    <div class="queue-panel__bar">
+      <span class="queue-panel__label">Queue</span>
+      <span class="queue-panel__summary" data-queue-summary>Loading…</span>
+      <div class="queue-panel__actions">
+        <button type="button" class="queue-panel__refresh btn-ghost-sm" data-action="refresh-queue" title="Refresh queue status">↻</button>
+        <button type="button" class="queue-panel__toggle btn-ghost-sm" data-action="toggle-queue" aria-expanded="false" title="Expand queue">▾</button>
+      </div>
+    </div>
+    <div class="queue-panel__detail" data-queue-detail hidden>
+      <table class="queue-table" data-queue-table>
+        <thead>
+          <tr>
+            <th>Kind</th><th>Email</th><th>Tier</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody data-queue-tbody>
+          <tr><td colspan="4" class="queue-table__empty">Loading…</td></tr>
+        </tbody>
+      </table>
+      <p class="queue-panel__checked" data-queue-checked></p>
+    </div>
+  </div>
+
   {% if review_ai %}
   <div class="ai-banner" data-ai-banner>
     <div class="ai-banner__icon" aria-hidden="true">◆</div>

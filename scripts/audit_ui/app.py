@@ -26,7 +26,7 @@ import re
 import threading
 import time
 from collections import deque
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -225,17 +225,13 @@ def _register_routes(app: Flask) -> None:
 
         data = load_customer_yaml(yaml_path)
         env = build_jinja_env()
-        now = (
-            datetime.now(UTC).strftime("%B %-d, %Y")
-            if sys.platform != "win32"
-            else datetime.now(UTC).strftime("%B %#d, %Y")
-        )
+        now = datetime.now(UTC).strftime("%B %-d, %Y") if sys.platform != "win32" else datetime.now(UTC).strftime("%B %#d, %Y")
 
         nav = (
             '<div style="position:fixed;top:0;left:0;right:0;z-index:9999;'
-            "background:#1a1a2e;color:#fff;padding:8px 16px;font-family:sans-serif;"
+            'background:#1a1a2e;color:#fff;padding:8px 16px;font-family:sans-serif;'
             'font-size:13px;display:flex;gap:16px;align-items:center;">'
-            f"<strong>LaunchLook Preview</strong> &nbsp;|&nbsp; slug: <code>{safe}</code>"
+            f'<strong>LaunchLook Preview</strong> &nbsp;|&nbsp; slug: <code>{safe}</code>'
             f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=report" style="color:#7eb8f7">Main Report</a>'
             f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=qsg" style="color:#7eb8f7">Quick Start</a>'
             f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=checklist" style="color:#7eb8f7">Checklist</a>'
@@ -491,6 +487,98 @@ def _register_routes(app: Flask) -> None:
         except ValueError:
             since = 0
         return jsonify(deliver_log.snapshot(since=since))
+
+    @app.route("/api/queue-status")
+    def api_queue_status() -> Any:
+        """Return live queue state from Notion for the dashboard panel.
+
+        Gracefully returns an error key (never raises) so the UI can show
+        a 'Notion unavailable' message without crashing the portal.
+        """
+        try:
+            from scripts.audit_automation.discover import (  # noqa: PLC0415
+                discover_all,
+            )
+            from scripts.stale_queue_alert import (  # noqa: PLC0415
+                DEFAULT_THRESHOLD_HOURS,
+                find_stale_rows,
+            )
+            from api._lib.notion_helpers import (  # noqa: PLC0415
+                STATUS_DELIVERED,
+                get_client,
+                get_customers_ds_id,
+            )
+
+            # Pending jobs (same query the worker uses)
+            pending = discover_all()
+
+            # Stale rows
+            stale = find_stale_rows(DEFAULT_THRESHOLD_HOURS)
+            stale_ids = {r["page_id"] for r in stale}
+
+            # Delivered this week
+            client = get_client()
+            cust_ds = get_customers_ds_id(client)
+            now_utc = datetime.now(UTC)
+            week_start = (now_utc - timedelta(days=now_utc.weekday())).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+            resp = client.data_sources.query(
+                data_source_id=cust_ds,
+                filter={
+                    "and": [
+                        {"property": "Status", "select": {"equals": STATUS_DELIVERED}},
+                        {
+                            "timestamp": "last_edited_time",
+                            "last_edited_time": {"on_or_after": week_start.isoformat()},
+                        },
+                    ]
+                },
+                page_size=50,
+            )
+            delivered_this_week = len([
+                r for r in resp.get("results", [])
+                if not (r.get("archived") or r.get("in_trash"))
+            ])
+
+            rows = []
+            for job in pending:
+                rows.append({
+                    "slug": job.slug,
+                    "email": job.email,
+                    "tier": job.tier,
+                    "kind": job.kind.value,
+                    "notion_db": job.notion_db,
+                    "stale": job.notion_page_id in stale_ids,
+                })
+
+            # Also include stale paid rows that aren't in pending
+            # (Paid/In Progress rows don't appear in discover_all)
+            pending_page_ids = {j.notion_page_id for j in pending}
+            for r in stale:
+                if r["page_id"] not in pending_page_ids:
+                    rows.append({
+                        "slug": "",
+                        "email": r["email"],
+                        "tier": r["tier"],
+                        "kind": "paid",
+                        "notion_db": r["db"],
+                        "stale": True,
+                        "status": r["status"],
+                    })
+
+            return jsonify({
+                "ok": True,
+                "pending": len(rows),
+                "stale": len(stale),
+                "delivered_this_week": delivered_this_week,
+                "threshold_hours": DEFAULT_THRESHOLD_HOURS,
+                "rows": rows,
+                "checked_at": datetime.now(UTC).isoformat(),
+            })
+
+        except Exception as exc:  # noqa: BLE001
+            return jsonify({"ok": False, "error": str(exc)}), 200
 
     # ---- AI review-mode endpoints -------------------------------------
 

@@ -85,6 +85,7 @@
 
   async function boot() {
     bindStaticHandlers();
+    initQueuePanel();
 
     // /review/<slug> passes review_slug via the page bootstrap; fetch with it so
     // api/bootstrap loads customer data even if the server wasn't started with --review-ai.
@@ -1154,6 +1155,99 @@
     const reviewed = state.reviewStatus.filter((s) => s === "approved" || s === "edited").length;
     stats.textContent = `${reviewed} / ${total} reviewed`;
     stats.classList.toggle("is-complete", total > 0 && reviewed === total);
+  }
+
+  // -----------------------------------------------------------------------
+  // Queue status panel
+  // -----------------------------------------------------------------------
+
+  async function loadQueueStatus() {
+    const panel = document.getElementById("queue-panel");
+    if (!panel) return;
+    const summary = panel.querySelector("[data-queue-summary]");
+    const tbody = panel.querySelector("[data-queue-tbody]");
+    const checked = panel.querySelector("[data-queue-checked]");
+
+    try {
+      const res = await fetch("/api/queue-status");
+      const data = await res.json();
+
+      if (!data.ok) {
+        if (summary) summary.textContent = "Notion unavailable";
+        panel.classList.add("queue-panel--error");
+        return;
+      }
+
+      panel.classList.remove("queue-panel--error");
+
+      // Summary bar
+      const staleFlag = data.stale > 0
+        ? ` · <span class="queue-panel__stale-count">${data.stale} stale</span>`
+        : "";
+      if (summary) summary.innerHTML =
+        `${data.pending} pending · ${data.delivered_this_week} delivered this week${staleFlag}`;
+      if (data.stale > 0) panel.classList.add("queue-panel--has-stale");
+      else panel.classList.remove("queue-panel--has-stale");
+
+      // Detail table
+      if (tbody) {
+        if (!data.rows.length) {
+          tbody.innerHTML = `<tr><td colspan="4" class="queue-table__empty">Queue is empty.</td></tr>`;
+        } else {
+          tbody.innerHTML = data.rows.map((r) => {
+            const staleClass = r.stale ? " queue-row--stale" : "";
+            const staleTag = r.stale
+              ? ` <span class="queue-tag queue-tag--stale">stale</span>`
+              : "";
+            const status = r.status || (r.kind === "free" ? "queued" : "pending");
+            return `<tr class="queue-row${staleClass}">
+              <td><span class="queue-tag queue-tag--${r.kind}">${r.kind}</span></td>
+              <td>${r.email}${staleTag}</td>
+              <td>${r.tier}</td>
+              <td>${status}</td>
+            </tr>`;
+          }).join("");
+        }
+      }
+
+      if (checked) {
+        const ts = new Date(data.checked_at).toLocaleTimeString();
+        checked.textContent = `Checked at ${ts} · threshold ${data.threshold_hours}h`;
+      }
+    } catch (err) {
+      if (summary) summary.textContent = "Queue check failed";
+      panel.classList.add("queue-panel--error");
+      console.warn("[queue]", err);
+    }
+  }
+
+  function initQueuePanel() {
+    const panel = document.getElementById("queue-panel");
+    if (!panel) return;
+
+    panel.addEventListener("click", (e) => {
+      const action = e.target.closest("[data-action]")?.dataset.action;
+      if (action === "refresh-queue") {
+        const summary = panel.querySelector("[data-queue-summary]");
+        if (summary) summary.textContent = "Refreshing…";
+        loadQueueStatus();
+      }
+      if (action === "toggle-queue") {
+        const detail = panel.querySelector("[data-queue-detail]");
+        const btn = panel.querySelector("[data-action='toggle-queue']");
+        if (!detail) return;
+        const open = detail.hidden;
+        detail.hidden = !open;
+        if (btn) {
+          btn.setAttribute("aria-expanded", String(open));
+          btn.textContent = open ? "▴" : "▾";
+        }
+      }
+    });
+
+    // Load immediately, then refresh every 5 minutes
+    loadQueueStatus();
+    setInterval(loadQueueStatus, 5 * 60 * 1000);
   }
 
   async function approveAllAndShip() {

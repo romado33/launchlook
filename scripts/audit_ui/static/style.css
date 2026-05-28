@@ -1112,3 +1112,140 @@ code {
 body.mode-review-ai .actionbar {
   background: linear-gradient(180deg, var(--bg-card), #11151B 60%);
 }
+
+/* ===================================================================
+   Queue status panel
+   =================================================================== */
+
+.queue-panel {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.queue-panel--has-stale {
+  border-bottom-color: var(--warning);
+}
+
+.queue-panel--error {
+  border-bottom-color: var(--danger);
+}
+
+.queue-panel__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 16px;
+}
+
+.queue-panel__label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+}
+
+.queue-panel__summary {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.queue-panel__stale-count {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.queue-panel__actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-ghost-sm {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 6px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-ghost-sm:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* Detail table */
+.queue-panel__detail {
+  padding: 0 16px 12px;
+}
+
+.queue-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.queue-table th {
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.queue-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-primary);
+}
+
+.queue-table tr:last-child td {
+  border-bottom: none;
+}
+
+.queue-table__empty {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.queue-row--stale td {
+  color: var(--warning);
+}
+
+.queue-tag {
+  display: inline-block;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  text-transform: uppercase;
+}
+
+.queue-tag--free {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--sev-medium);
+}
+
+.queue-tag--paid {
+  background: rgba(52, 199, 89, 0.15);
+  color: var(--success);
+}
+
+.queue-tag--stale {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  margin-left: 6px;
+}
+
+.queue-panel__checked {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
