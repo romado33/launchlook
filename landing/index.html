@@ -79,6 +79,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .delivery-sla {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    .footer-byline {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 1rem;
+    }
+    .footer-byline a {
+      color: inherit;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body class="bg-paper text-ink font-sans antialiased">
@@ -122,6 +140,14 @@
             <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" class="launchlook-input" />
           </label>
         </div>
+        <textarea
+          name="launch_concern"
+          id="launch_concern"
+          placeholder="What's your biggest concern about launching? (optional)"
+          rows="2"
+          maxlength="500"
+          style="width:100%; padding:0.6rem 0.75rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.9rem; font-family:inherit; resize:vertical; color:#374151; background:#fff; margin-top:0.5rem;"
+        ></textarea>
         <button type="submit" class="launchlook-btn launchlook-btn-accent launchlook-btn-block mt-4">Get my free 2 findings</button>
         <p data-free-audit-status class="mt-2 text-sm text-muted text-center hidden" role="status" aria-live="polite"></p>
         <p class="mt-3 text-xs text-footnote text-center">Free, no credit card. Rob personally reviews every audit and emails when it&rsquo;s ready. <a href="#pricing" class="underline decoration-line hover:text-ink">Starter ($19)</a> adds 8 more findings on top of your free 2.</p>
@@ -244,6 +270,8 @@
         <p><strong class="text-ink font-medium">Already ran a scanner?</strong> Tools like PageLens and VibeDoctor catch metadata and code-level issues automatically. What they can&rsquo;t do: run your actual signup form, check whether your confirmation email arrives, or notice the submit button that&rsquo;s hidden off-screen on a phone. LaunchLook is the human pass that covers the live-UX layer no scanner reaches.</p>
       </div>
 
+      <p class="delivery-sla">Reports delivered within 48 hours · 7-day full refund if it's not useful</p>
+
       <div class="grid md:grid-cols-3 gap-4 mt-6">
 
         <!-- Starter -->
@@ -331,6 +359,7 @@
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>
     </div>
+    <p class="footer-byline">Built by <a href="https://x.com/robdods" target="_blank" rel="noopener">Rob</a> — a technical writer who got tired of watching good apps launch with avoidable problems.</p>
   </footer>
 
   <script src="/assets/config.js"></script>

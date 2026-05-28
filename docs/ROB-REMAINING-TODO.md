@@ -128,6 +128,7 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 ## Delivery ops
 
+- [ ] Add "Launch Concern" rich_text column to Notion Free Audit DB (to receive `launch_concern` field from free audit form — column must exist before deploying the updated API)
 - [ ] Unsuppress `rob@launchlook.app` in Resend dashboard if needed (bounced during testing — safe to ignore since we're using `romado33@gmail.com` as ADMIN_EMAIL now)
 - [ ] Old CAD $9 / $29 Stripe Payment Links — deactivate in Dashboard if still active
 - [ ] Spot-check checkout: **$19 total only** (no tax line)
@@ -177,6 +178,8 @@ These can't be unit-tested automatically. Run them once before your first real c
 - [ ] **GitHub PAT** for Pro — only if a Pro buyer asks
 - [ ] **PSI_API_KEY** — only at higher audit volume
 - [ ] Wire `persist_free_audit_fingerprints` into free-delivery flow (currently manual)
+- [ ] Add Wall of Launches opt-in checkbox to Tally intake form (TALLY-INTAKE-SETUP.md §Q_WALL_OPT_IN)
+- [ ] Record Twitter/X handle in Notion customer rows to DM for Wall of Launches listings
 
 ---
 

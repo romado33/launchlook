@@ -63,6 +63,16 @@ field equals `Scale Up Package` or `Pro Package`.
 
 ---
 
+## Wall of Launches opt-in
+
+**Q_WALL_OPT_IN** (Checkbox, optional)
+Label: "I'm happy for LaunchLook to list my app on the Wall of Launches after I ship."
+Tally field type: Checkbox (single, optional)
+Purpose: Grants permission to add the app to launchlook.app/wall
+Note: Add this as the last question in the form, clearly optional. No field ID yet — update this doc once added in Tally.
+
+---
+
 ## How these fields reach the pipeline
 
 When the Tally webhook (or Tally email) delivers responses to your intake

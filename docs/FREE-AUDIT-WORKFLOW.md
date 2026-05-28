@@ -15,7 +15,8 @@ Companion docs:
 
 `landing/index.html` and `landing/webflow.html` both have a free-audit form in the hero:
 
-- Two fields: URL + email
+- Two required fields: URL + email
+- One optional field: **launch_concern** (max 500 chars) — founder's biggest launch concern. Stored in Notion Free Audit DB; injected into findings generation prompt as a soft ranking hint. Captured on the homepage form.
 - Submit POSTs JSON to `/api/free-audit` (see `api/free-audit.py`)
 - Plausible goal `FreeAuditSignup` fires on click
 - The form's `free-audit.js` handler shows inline errors and redirects to `/thanks-free-audit` on success

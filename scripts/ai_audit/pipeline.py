@@ -116,6 +116,8 @@ class CustomerContext:
     user_audience: str = ""
     user_tone: str = ""
     user_content_constraints: str = ""
+    # Optional free-audit intake field (captured on the hero form)
+    launch_concern: str = ""
 
 
 @dataclass
@@ -599,7 +601,7 @@ def build_finding_user_prompt(
     library: list[dict[str, Any]],
 ) -> str:
     template = _read_prompt("finding_generation.txt")
-    return template.format(
+    prompt = template.format(
         max_findings=cap,
         tier=customer_ctx.tier,
         customer_name=f"{customer_ctx.first_name} {customer_ctx.last_name}".strip(),
@@ -614,6 +616,13 @@ def build_finding_user_prompt(
         html_extracts=html_extract.render_pages_for_prompt(pages),
         page_status_summary=html_extract.render_status_summary(pages),
     )
+    concern = (customer_ctx.launch_concern or "").strip()
+    if concern:
+        prompt += (
+            f'\n\nFounder\'s primary concern: "{concern}" -- weight findings relevant to'
+            " this concern slightly higher when ranking."
+        )
+    return prompt
 
 
 def build_verdict_user_prompt(
@@ -1195,4 +1204,5 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
         app_name=(kwargs.get("app_name") or "").strip() or kwargs.get("app_name", ""),
         intake_notes=(kwargs.get("intake_notes") or "").strip(),
         platform=platform,
+        launch_concern=(kwargs.get("launch_concern") or "").strip()[:500],
     )

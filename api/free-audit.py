@@ -234,10 +234,10 @@ def _get_free_audit_ds_id(client: Client) -> str:
 
 
 def _build_props(
-    *, email: str, url: str, ip: str, source: str, platform: str
+    *, email: str, url: str, ip: str, source: str, platform: str, launch_concern: str = ""
 ) -> dict[str, Any]:
     title = f"{email} -- {urlparse(url).hostname or 'unknown'}"
-    return {
+    props: dict[str, Any] = {
         "Request": {"title": [{"text": {"content": title[:2000]}}]},
         "Email": {"email": email},
         "URL": {"url": url},
@@ -246,6 +246,9 @@ def _build_props(
         "Source": {"select": {"name": source}},
         "Platform": {"select": {"name": platform}},
     }
+    if launch_concern:
+        props["Launch Concern"] = {"rich_text": [{"text": {"content": launch_concern[:500]}}]}
+    return props
 
 
 def _count_recent_requests_by_email(
@@ -450,6 +453,7 @@ def _send_ops_notification_email(
     source: str,
     platform: str,
     notion_page_id: str | None = None,
+    launch_concern: str = "",
 ) -> None:
     """Notify the founder when a new free-audit row is queued (TO admin, not BCC)."""
     admin_email = optional_env("ADMIN_EMAIL")
@@ -467,6 +471,7 @@ def _send_ops_notification_email(
         if notion_page_id
         else "Notion: row created (open Free Audit Requests DB)\n"
     )
+    concern_line = f"Concern: {launch_concern}\n" if launch_concern else ""
     subject = f"[LaunchLook] Free audit queued: {host}"
     text_body = (
         "New free audit submission.\n\n"
@@ -475,6 +480,7 @@ def _send_ops_notification_email(
         f"IP: {ip or '(unknown)'}\n"
         f"Source page: {source or 'unknown'}\n"
         f"Platform: {platform or 'unknown'}\n"
+        f"{concern_line}"
         f"{notion_line}\n"
         "Next: filter Free Audit Requests by Status = queued.\n"
     )
@@ -543,6 +549,8 @@ def process_request(
     platform = (str(payload.get("platform") or "vibe-coder")).strip().lower()
     if platform not in {"vibe-coder", "webflow"}:
         platform = "vibe-coder"
+
+    launch_concern = (str(payload.get("launch_concern") or "")).strip()[:500]
 
     factory = notion_client_factory or (
         lambda: Client(auth=require_env("NOTION_TOKEN"))
@@ -624,7 +632,10 @@ def process_request(
         }
 
     # ---- Persist ----
-    props = _build_props(email=email, url=url, ip=ip, source=source, platform=platform)
+    props = _build_props(
+        email=email, url=url, ip=ip, source=source, platform=platform,
+        launch_concern=launch_concern,
+    )
     notion_page_id: str | None = None
     try:
         page = client.pages.create(parent={"data_source_id": ds_id}, properties=props)
@@ -649,6 +660,7 @@ def process_request(
             source=source,
             platform=platform,
             notion_page_id=notion_page_id,
+            launch_concern=launch_concern,
         )
     except Exception as exc:  # noqa: BLE001
         print(f"[free-audit] WARN: ops notification failed: {exc}", file=sys.stderr)
