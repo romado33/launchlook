@@ -175,8 +175,12 @@ def _render_html_email(
     findings_html = "".join(findings_html_parts) or "<p><em>No findings in YAML.</em></p>"
 
     smoke_line = (
-        f"<li><b>Form smoke:</b> {'ran' if form_smoke_ran else 'skipped/failed'}"
-        + (f" &mdash; issues: {e(', '.join(form_smoke_failed[:5]))}" if form_smoke_failed else "")
+        f"<li><b>Form smoke:</b> {'ran &#10003;' if form_smoke_ran else 'not run (Playwright unavailable or no forms detected)'}"
+        + (
+            f" &mdash; issues flagged: {e(', '.join(form_smoke_failed[:5]))}"
+            if form_smoke_failed
+            else ""
+        )
         + "</li>"
     )
     roundtrip_line = (
@@ -328,7 +332,7 @@ def send_draft_ready_email(
         f"Slug: {job.slug}\n"
         f"Findings in draft: {findings_count}\n"
     )
-    text_body += f"\nForm smoke: {'ran' if form_smoke_ran else 'skipped/failed'}\n"
+    text_body += f"\nForm smoke: {'ran' if form_smoke_ran else 'not run (Playwright unavailable or no forms detected)'}\n"
     if form_smoke_failed:
         text_body += f"Form smoke issues: {', '.join(form_smoke_failed[:5])}\n"
     if email_roundtrip_ran:
