@@ -12,7 +12,18 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 ---
 
-## Shipped May 28, 2026
+## Shipped May 28, 2026 — edge-case hardening (live test run)
+
+**Bug fix + P0/P1 pipeline hardening (automated):**
+- **`notion_helpers.py`**: `intake_received_at` field type changed from `"date"` to `"rich_text"` — live Notion column is a rich-text field, not a Date column; the old mapping caused a 400 on every Tally write (discovered during live integration test)
+- **`free_audit_lookup.py`**: `recent_delivery()` now skips rows with non-delivered status (`queued`, `processing`, `failed`, etc.). Stale/crashed jobs no longer permanently block new lead captures (P0 fix)
+- **`slug.py`**: Email-derived 6-char SHA-256 hex suffix appended to all new slugs — prevents two different accounts on the same hostname from colliding on disk (P0 fix)
+- **`discover.py`**: Stale `[automation:processing]` lock reclaim after 2 hours; paid jobs query now includes `processing` status so crashed runs are recovered; `_is_stale_processing()` helper added (P0 fix)
+- **`worker.py`**: `_mark_paid_processing()` writes `[automation:processing]` lock immediately so concurrent runs skip the job (P0 fix)
+- **`pipeline.py`**: Prior free-audit fingerprint exclusions injected into finding prompt for paid runs — prevents duplicate findings when same customer re-buys (P0 dedup fix)
+- **`deliver_report.py`**: Attachment size guard — strips PDFs and adds a "reply for transfer link" note when base64-encoded total exceeds 9 MB (P1 fix)
+- **`free_audit_lookup.py`**: `recent_delivery()` stale-status filter updated and tested
+- **Tests**: 34 new edge-case tests added (31 new + 3 revised), all 280 pass
 
 **Conversion + value-scaling pass:**
 - **Launch Readiness Score** (1.0–10.0) added to every report — `compute_readiness_score()` in `pipeline.py`, score badge on verdict block, stored in shareable page data

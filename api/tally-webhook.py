@@ -40,6 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _lib.env import optional_env, require_env  # noqa: E402
 from _lib.notion_helpers import (  # noqa: E402
     STATUS_INTAKE,
+    find_customer_by_email,
     get_client,
     get_customers_ds_id,
     upsert_customer,
@@ -230,6 +231,28 @@ def process_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
     client = get_client()
     ds_id = get_customers_ds_id(client)
+
+    # P1 #12: Do not overwrite a Stripe-set tier with the Tally value.
+    # If the existing Notion row already has a non-empty Tier (written by the
+    # Stripe webhook), preserve it. Tally tier is less authoritative than the
+    # Stripe payment amount. Add a note if there's a mismatch.
+    tally_tier = fields.get("tier") or ""
+    if tally_tier:
+        existing_row = find_customer_by_email(client, ds_id, email)
+        if existing_row:
+            existing_props = existing_row.get("properties") or {}
+            existing_tier_sel = (existing_props.get("Tier") or {}).get("select") or {}
+            existing_tier = (existing_tier_sel.get("name") or "").strip()
+            if existing_tier:
+                # Preserve the Stripe-set tier; only log a mismatch note.
+                fields.pop("tier", None)
+                if existing_tier != tally_tier:
+                    mismatch_note = (
+                        f"[tier_mismatch] Tally sent tier={tally_tier!r} but "
+                        f"Stripe already set tier={existing_tier!r} — keeping Stripe value."
+                    )
+                    fields["notes"] = f"{mismatch_note}\n{fields.get('notes', '')}".strip()
+
     page_id, action = upsert_customer(client, ds_id, fields, email_for_match=email)
     return {"status": action, "page_id": page_id, "email": email}
 
@@ -265,7 +288,12 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801 (Vercel convention)
                 return
 
             result = process_payload(payload)
-            self._respond(200, result)
+            # P1 #11: Return 400 on logical payload errors (e.g. no email).
+            # Keep 401 for auth failures and 200 for success/ignored.
+            if result.get("status") == "error":
+                self._respond(400, result)
+            else:
+                self._respond(200, result)
         except Exception as exc:  # noqa: BLE001
             print(
                 f"[tally-webhook] ERROR: {exc}\n{traceback.format_exc()}",

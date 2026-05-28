@@ -37,7 +37,7 @@ import json
 import os
 import re
 import sys
-from datetime import date
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -104,6 +104,10 @@ TIER_ALIAS_TO_CANONICAL = {
 
 VALID_SEVERITIES = {"critical", "high", "medium", "low"}
 VALID_TIERS = {"Starter Package", "Scale Up Package", "Pro Package"}
+
+# P1 #16: Maximum total attachment size (base64-encoded) before we strip
+# attachments and tell the customer to ask for a transfer link instead.
+ATTACHMENT_SIZE_WARN_MB = 9
 
 
 # ---------------------------------------------------------------------------
@@ -534,15 +538,38 @@ def send_via_resend(
     from_email = os.getenv("FROM_EMAIL", "hello@launchlook.app")
     admin_email = os.getenv("ADMIN_EMAIL")
 
+    # P1 #16: Guard total attachment size. Base64 inflates by ~33%, so we
+    # check the encoded size directly. If it exceeds ATTACHMENT_SIZE_WARN_MB
+    # we strip the attachments and note that in the email body so the
+    # customer knows to ask for a transfer link rather than receiving nothing.
     encoded_attachments = []
+    total_b64_bytes = 0
     for path in attachments:
+        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+        total_b64_bytes += len(encoded)
         encoded_attachments.append(
             {
                 "filename": path.name,
-                "content": base64.b64encode(path.read_bytes()).decode("ascii"),
+                "content": encoded,
                 "content_type": "application/pdf",
             }
         )
+
+    size_limit_bytes = ATTACHMENT_SIZE_WARN_MB * 1024 * 1024
+    if total_b64_bytes > size_limit_bytes:
+        total_mb = total_b64_bytes / (1024 * 1024)
+        print(
+            f"WARN: total attachment size {total_mb:.1f} MB exceeds "
+            f"{ATTACHMENT_SIZE_WARN_MB} MB limit — sending without attachments.",
+            file=sys.stderr,
+        )
+        size_note = (
+            "\n\nNote: The PDFs were too large to attach directly to this email. "
+            "Reply to this email and I'll send them via a file transfer link."
+        )
+        html_body = html_body + size_note.replace("\n", "<br>")
+        text_body = text_body + size_note
+        encoded_attachments = []
 
     payload: dict[str, Any] = {
         "from": f"LaunchLook <{from_email}>",
@@ -1130,6 +1157,78 @@ def main() -> int:
     )
     msg_id = result.get("id") if isinstance(result, dict) else None
     print(f"\nâœ“ Sent. Resend message id: {msg_id or '(none returned)'}")
+
+    # P0 #7: Auto-mark the Notion Customers DB row as Delivered + set Delivered At.
+    # Best-effort: a Notion blip must not fail the overall delivery.
+    try:
+        from api._lib.notion_helpers import (  # noqa: PLC0415
+            STATUS_DELIVERED,
+            find_customer_by_email,
+            get_client,
+            get_customers_ds_id,
+            update_customer_fields,
+        )
+        _nc = get_client()
+        _ds = get_customers_ds_id(_nc)
+        _existing = find_customer_by_email(_nc, _ds, customer["email"])
+        if _existing:
+            update_customer_fields(
+                _nc,
+                _existing["id"],
+                {
+                    "status": STATUS_DELIVERED,
+                    "delivered_at": datetime.now(UTC).isoformat(),
+                },
+            )
+            print("[deliver] Notion row marked as Delivered")
+        else:
+            print("[deliver] WARN: no Notion row found to mark Delivered", file=sys.stderr)
+    except Exception as _exc:  # noqa: BLE001
+        print(f"[deliver] WARN: could not mark Delivered in Notion: {_exc}", file=sys.stderr)
+
+    # P0 #2: For Starter Package deliveries, persist the fingerprints of the
+    # delivered findings back to the free-audit row (if one exists). This
+    # enables the dedup gate in future paid runs to skip already-seen findings.
+    # The function is a no-op when there is no matching free-audit row.
+    if customer.get("tier") == "Starter Package":
+        try:
+            from scripts.ai_audit.dedup import fingerprints as compute_fps  # noqa: PLC0415
+            from scripts.ai_audit.free_audit_lookup import (  # noqa: PLC0415
+                load_excluded_fingerprints,
+                persist_free_audit_fingerprints,
+            )
+            _delivered_findings = data.get("findings") or []
+            _fps_to_persist = compute_fps(
+                _delivered_findings, base_url=customer.get("app_url")
+            )
+            if _fps_to_persist:
+                _, _, _free_row_id = load_excluded_fingerprints(
+                    email=customer["email"],
+                    url=customer.get("app_url") or "",
+                    window_days=90,
+                )
+                if _free_row_id:
+                    _summaries = [
+                        f.get("title") or ""
+                        for f in _delivered_findings
+                        if f.get("title")
+                    ]
+                    _ok = persist_free_audit_fingerprints(
+                        row_id=_free_row_id,
+                        fingerprints=_fps_to_persist,
+                        summaries=_summaries or None,
+                    )
+                    if _ok:
+                        print(
+                            f"[deliver] persisted {len(_fps_to_persist)} free-audit "
+                            "fingerprint(s) to Notion"
+                        )
+        except Exception as _exc:  # noqa: BLE001
+            print(
+                f"[deliver] WARN: could not persist free-audit fingerprints: {_exc}",
+                file=sys.stderr,
+            )
+
     return 0
 
 

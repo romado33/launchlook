@@ -73,24 +73,22 @@ class SlugStabilityCase(unittest.TestCase):
 
 
 class SlugCollisionCase(unittest.TestCase):
-    """Document the known slug-collision limitation.
+    """Verify slug de-collision behaviour introduced May 2026.
 
-    Two different customers whose email local-part and hostname both normalise
-    to the same strings will get the same slug. This is an intentional
-    trade-off (slugs are human-readable) but it means a second customer with
-    the same slug silently overwrites the first customer's YAML on disk.
-
-    These tests document the *current* behaviour so any future de-collision
-    work (e.g. appending a counter suffix) is a deliberate, visible change.
+    A 6-char hex suffix derived from the email SHA-256 hash is appended so
+    two accounts that share the same hostname (e.g. john@myapp vs jane@myapp)
+    produce distinct slugs and never collide on disk.
     """
 
-    def test_same_local_same_host_produces_same_slug(self) -> None:
+    def test_same_email_same_host_idempotent(self) -> None:
+        slug_a = slug_from_email_url("rob@example.com", "https://myapp.io")
+        slug_b = slug_from_email_url("rob@example.com", "https://myapp.io")
+        self.assertEqual(slug_a, slug_b, "same inputs must always produce the same slug")
+
+    def test_different_email_same_host_produces_different_slug(self) -> None:
         slug_a = slug_from_email_url("rob@example.com", "https://myapp.io")
         slug_b = slug_from_email_url("rob@other.com", "https://myapp.io")
-        # Different emails but same local + same host → same slug
-        # (the host wins because it's the longer component).
-        # This test just asserts they ARE the same, documenting the collision.
-        self.assertEqual(slug_a, slug_b)
+        self.assertNotEqual(slug_a, slug_b, "different emails on same host must not collide")
 
     def test_same_local_different_host_produces_different_slug(self) -> None:
         slug_a = slug_from_email_url("rob@example.com", "https://appleone.io")
@@ -121,12 +119,10 @@ class TierGuidanceCase(unittest.TestCase):
         self.assertIn("Target", text)
         # Should contain at least one digit for the minimum.
         import re
-
         self.assertTrue(re.search(r"\d+-\d+", text), msg=f"no range in: {text!r}")
 
     def test_scale_up_guidance_minimum_is_at_least_two_thirds_cap(self) -> None:
         import re
-
         text = self._guidance("Scale Up Package", 30)
         m = re.search(r"Target\s+(\d+)-(\d+)", text)
         self.assertIsNotNone(m, msg=f"no 'Target X-Y' in guidance: {text!r}")
@@ -136,7 +132,6 @@ class TierGuidanceCase(unittest.TestCase):
 
     def test_pro_guidance_minimum_is_at_least_three_quarters_cap(self) -> None:
         import re
-
         text = self._guidance("Pro Package", 40)
         m = re.search(r"Target\s+(\d+)-(\d+)", text)
         self.assertIsNotNone(m, msg=f"no 'Target X-Y' in guidance: {text!r}")
@@ -149,7 +144,6 @@ class TierGuidanceCase(unittest.TestCase):
         the Starter Package cap (10). Verified by checking the DEFAULT_TIER_CAPS
         constant exported from the pipeline module."""
         from scripts.ai_audit.pipeline import DEFAULT_TIER_CAPS  # type: ignore[attr-defined]
-
         starter_cap = DEFAULT_TIER_CAPS["Starter Package"]
         self.assertEqual(starter_cap, 10, msg="Starter cap changed — update pricing copy too")
 

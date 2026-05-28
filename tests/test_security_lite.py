@@ -22,7 +22,7 @@ import json
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
@@ -34,7 +34,6 @@ from scripts.ai_audit.security_lite import (  # noqa: E402
     _jwt_role,
     run_security_lite,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers

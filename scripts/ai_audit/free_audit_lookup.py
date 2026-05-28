@@ -255,6 +255,15 @@ def recent_delivery(
         existing_host = (urlparse(existing_url).hostname or "").lower()
         if existing_host != host:
             continue
+        row_status = _select_value(props.get(PROP_STATUS))
+        # Only treat a prior row as blocking re-submission if it reached a
+        # completed state. Rows still in the pipeline (queued, processing,
+        # intake_received, paid, failed) should not prevent the customer
+        # from re-submitting — the audit may never actually be delivered.
+        # Without this filter, a crashed or never-processed job permanently
+        # blocks re-submission, silently killing new lead captures.
+        if row_status not in ("delivered", "draft_ready"):
+            continue
         created_at = _parse_created_at(row.get("created_time"))
         raw_fp = _rich_text_value(props.get(PROP_FINGERPRINTS))
         fps = [fp.strip() for fp in raw_fp.split(FINGERPRINT_SEPARATOR) if fp.strip()]
@@ -265,7 +274,7 @@ def recent_delivery(
             "row_id": row.get("id"),
             "created_at": created_at,
             "url": existing_url,
-            "status": _select_value(props.get(PROP_STATUS)),
+            "status": row_status,
             "fingerprints": fps,
             "summaries": summaries,
             "expires_at": expires_at,

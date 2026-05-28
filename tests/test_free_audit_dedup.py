@@ -120,7 +120,9 @@ class _DataSources:
             prop_name = spec["property"]
             prop = row.get("properties", {}).get(prop_name, {})
             if "email" in spec:
-                return (prop.get("email") or "").lower() == (spec["email"]["equals"] or "").lower()
+                return (prop.get("email") or "").lower() == (
+                    spec["email"]["equals"] or ""
+                ).lower()
             if "rich_text" in spec:
                 parts = prop.get("rich_text") or []
                 value = "".join(p.get("plain_text") or "" for p in parts)
@@ -133,10 +135,7 @@ class _Pages:
         self._parent = parent
 
     def create(
-        self,
-        *,
-        parent: dict[str, Any],
-        properties: dict[str, Any],  # noqa: ARG002
+        self, *, parent: dict[str, Any], properties: dict[str, Any]  # noqa: ARG002
     ) -> dict[str, Any]:
         # Mimic Notion-shaped row so subsequent queries via the same
         # stub return it (storage round-trip).
@@ -212,9 +211,13 @@ def _make_row(
         "Platform": {"select": {"name": "vibe-coder"}},
     }
     if fingerprints:
-        props["Finding Fingerprints"] = {"rich_text": [{"plain_text": ";".join(fingerprints)}]}
+        props["Finding Fingerprints"] = {
+            "rich_text": [{"plain_text": ";".join(fingerprints)}]
+        }
     if summaries:
-        props["Finding Summaries"] = {"rich_text": [{"plain_text": "\n".join(summaries)}]}
+        props["Finding Summaries"] = {
+            "rich_text": [{"plain_text": "\n".join(summaries)}]
+        }
     return {
         "id": row_id,
         "created_time": created_at.isoformat().replace("+00:00", "Z"),
@@ -398,7 +401,9 @@ class DifferentEmailSameUrlCase(unittest.TestCase):
 
         self.assertEqual(status, 200)
         self.assertEqual(body["status"], "queued")
-        self.assertEqual(len(client.created), 1, "different person -> writes its own row")
+        self.assertEqual(
+            len(client.created), 1, "different person -> writes its own row"
+        )
         self.assertEqual(len(confirm.calls), 1)
         self.assertEqual(len(upsell.calls), 0)
 
@@ -409,13 +414,19 @@ class DifferentEmailSameUrlCase(unittest.TestCase):
 
 
 class StorageRoundTripCase(unittest.TestCase):
-    def test_write_then_recent_delivery_finds_it(self) -> None:
+    def test_queued_row_not_returned_by_recent_delivery(self) -> None:
+        """recent_delivery must skip rows that are queued/processing/failed.
+
+        P0 fix (May 2026): only rows in 'delivered' or 'draft_ready' status
+        should block re-submission. A crashed or never-processed job used to
+        permanently prevent new lead captures; now those rows are transparently
+        skipped so the customer can re-submit.
+        """
         now = datetime(2026, 5, 26, 14, 0, tzinfo=UTC)
         client = FakeNotionClient(rows=[], now=now)
         confirm = _SenderRecorder()
         upsell = _SenderRecorder()
 
-        # 1. First submission writes the row.
         status, body = free_audit.process_request(
             payload={"url": TEST_URL, "email": TEST_EMAIL},
             ip="203.0.113.10",
@@ -428,8 +439,32 @@ class StorageRoundTripCase(unittest.TestCase):
         self.assertEqual(body["status"], "queued")
         self.assertEqual(len(client.rows), 1)
 
-        # 2. ``recent_delivery`` against the same stub client now reports
-        #    the prior row, in the same shape api/free-audit.py expects.
+        # A queued (unprocessed) row must NOT be returned — stale/crashed jobs
+        # should not block new submissions.
+        record = free_audit_lookup.recent_delivery(
+            url=TEST_URL,
+            email=TEST_EMAIL,
+            days=30,
+            client=client,
+            ds_id="ds-test",
+            now=now + timedelta(minutes=1),
+        )
+        self.assertIsNone(record, "queued rows must not block re-submission")
+
+    def test_delivered_row_found_by_recent_delivery(self) -> None:
+        """recent_delivery must return rows whose status is 'delivered' or 'draft_ready'."""
+        now = datetime(2026, 5, 26, 14, 0, tzinfo=UTC)
+        row = _make_row(
+            row_id="row-delivered",
+            email=TEST_EMAIL,
+            url=TEST_URL,
+            created_at=now,
+            status="delivered",
+            fingerprints=["fp-abc"],
+            summaries=["Missing auth"],
+        )
+        client = FakeNotionClient(rows=[row], now=now)
+
         record = free_audit_lookup.recent_delivery(
             url=TEST_URL,
             email=TEST_EMAIL,
@@ -439,27 +474,36 @@ class StorageRoundTripCase(unittest.TestCase):
             now=now + timedelta(minutes=1),
         )
         self.assertIsNotNone(record)
-        assert record is not None  # narrowing for type-checker
+        assert record is not None
         self.assertEqual(record["url"], TEST_URL)
-        self.assertEqual(record["status"], "queued")
+        self.assertEqual(record["status"], "delivered")
         self.assertIsNotNone(record["created_at"])
         self.assertIsNotNone(record["expires_at"])
         self.assertEqual(record["expires_at"] - record["created_at"], timedelta(days=30))
 
-        # 3. A second submission within the window now flips to upsell.
-        status2, body2 = free_audit.process_request(
-            payload={"url": TEST_URL, "email": TEST_EMAIL},
-            ip="203.0.113.10",
-            source="index",
-            now=now + timedelta(days=1),
-            notion_client_factory=lambda: client,
-            email_sender=confirm,
-            upsell_sender=upsell,
+    def test_draft_ready_row_found_by_recent_delivery(self) -> None:
+        """draft_ready rows (pipeline ran, pending human review) also block re-submission."""
+        now = datetime(2026, 5, 26, 14, 0, tzinfo=UTC)
+        row = _make_row(
+            row_id="row-draft",
+            email=TEST_EMAIL,
+            url=TEST_URL,
+            created_at=now,
+            status="draft_ready",
         )
-        self.assertEqual(status2, 200)
-        self.assertEqual(body2["status"], "duplicate")
-        self.assertEqual(len(client.created), 1, "still only one row written")
-        self.assertEqual(len(upsell.calls), 1, "upsell fires on the second visit")
+        client = FakeNotionClient(rows=[row], now=now)
+
+        record = free_audit_lookup.recent_delivery(
+            url=TEST_URL,
+            email=TEST_EMAIL,
+            days=30,
+            client=client,
+            ds_id="ds-test",
+            now=now + timedelta(minutes=1),
+        )
+        self.assertIsNotNone(record, "draft_ready rows must be returned by recent_delivery")
+        assert record is not None
+        self.assertEqual(record["status"], "draft_ready")
 
 
 # ---------------------------------------------------------------------------

@@ -65,6 +65,22 @@ def _set_free_audit_status(page_id: str, status: str) -> None:
     )
 
 
+def _mark_paid_processing(job: AuditJob) -> None:
+    """Write [automation:processing] to Notes immediately so concurrent runs skip this job (P0 #6)."""
+    client = get_client()
+    update_customer_fields(
+        client,
+        job.notion_page_id,
+        {
+            "status": STATUS_IN_PROGRESS,
+            "notes": (
+                f"[automation:processing] pipeline started — do not pick up.\n"
+                f"{job.intake_notes}"
+            ).strip(),
+        },
+    )
+
+
 def _mark_paid_draft_ready(job: AuditJob, *, findings_count: int) -> None:
     client = get_client()
     update_customer_fields(
@@ -90,6 +106,14 @@ def process_job(job: AuditJob, *, provider: str = "auto", dry_run: bool = False)
             _set_free_audit_status(job.notion_page_id, FREE_STATUS_PROCESSING)
         except Exception as exc:  # noqa: BLE001
             print(f"[automation] WARN: could not set processing: {exc}")
+
+    # Paid jobs: write [automation:processing] immediately so a concurrent
+    # scheduler run sees the lock in Notes and skips this row (P0 #6).
+    if job.kind == JobKind.PAID and not dry_run:
+        try:
+            _mark_paid_processing(job)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[automation] WARN: could not set paid processing lock: {exc}")
 
     if not dry_run:
         _write_form_smoke_stub(job)

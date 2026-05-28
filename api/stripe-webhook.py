@@ -251,6 +251,25 @@ def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
             sys.stderr.write(f"[q6] Notion write failed for {email}: {exc}\n")
             traceback.print_exc()
             notion_status = "error"
+            # P0 #5: Alert the founder so the payment can be manually reconciled.
+            _session_id = session.get("id") or "(unknown)"
+            _send_plain_admin_email(
+                subject="\u26a0\ufe0f Confidence Check payment \u2014 Notion write failed",
+                text=(
+                    f"A Confidence Check payment came in but the Notion row could not be written.\n\n"
+                    f"Customer: {email}\n"
+                    f"Stripe session: {_session_id}\n"
+                    f"Error: {exc}\n\n"
+                    "Manually create the row in NOTION_CONFIDENCE_CHECK_DB_ID."
+                ),
+                html=(
+                    f"<p><b>\u26a0\ufe0f Confidence Check payment \u2014 Notion write failed.</b></p>"
+                    f"<p>Customer: {email}<br>"
+                    f"Stripe session: <code>{_session_id}</code><br>"
+                    f"Error: {exc}</p>"
+                    "<p>Manually create the row in NOTION_CONFIDENCE_CHECK_DB_ID.</p>"
+                ),
+            )
     elif not db_id:
         sys.stderr.write(
             "[q6] NOTION_CONFIDENCE_CHECK_DB_ID not configured; "
@@ -285,18 +304,81 @@ def handle_handoff_report_purchase(session: dict[str, Any]) -> dict[str, Any]:
     docs/HANDOFF-REPORT-WORKFLOW.md.
     """
     amount_cents = (session.get("amount_total") or 0) or None
+    amount_dollars = round((amount_cents or 0) / 100, 2)
     customer_email = ((session.get("customer_details") or {}).get("email") or "").strip() or (
         session.get("customer_email") or ""
     ).strip()
+    session_id = session.get("id") or ""
     label = handoff_report_label(amount_cents)
+
+    # P0 #4: Upsert the customer row in Notion with a Handoff Report note.
+    notion_status = "skipped"
+    if customer_email:
+        try:
+            client = get_client()
+            ds_id = get_customers_ds_id(client)
+            upsert_customer(
+                client,
+                ds_id,
+                {
+                    "email": customer_email,
+                    "notes": f"[handoff_report_paid] stripe_session={session_id}",
+                },
+                email_for_match=customer_email,
+            )
+            notion_status = "updated"
+        except Exception as exc:  # noqa: BLE001
+            sys.stderr.write(f"[q18] Notion upsert failed for {customer_email}: {exc}\n")
+            notion_status = "error"
+
+    # P0 #4: Alert the founder immediately so they know to queue the Handoff Report.
+    _send_purchase_alert(
+        email=customer_email or "(unknown)",
+        tier=label,
+        amount_usd=amount_dollars,
+        session_id=session_id,
+    )
+
     return {
         "status": "handoff_report_recorded",
         "product": HANDOFF_REPORT_METADATA_VALUE,
         "label": label,
         "amount_cents": amount_cents,
         "customer_email": customer_email,
-        "session_id": session.get("id"),
+        "session_id": session_id,
+        "notion": notion_status,
     }
+
+
+def _send_plain_admin_email(*, subject: str, text: str, html: str) -> None:
+    """Send a plain admin email via Resend (best-effort, never raises)."""
+    admin = (os.getenv("ADMIN_EMAIL") or "").strip()
+    api_key = (os.getenv("RESEND_API_KEY") or "").strip()
+    from_email = (os.getenv("FROM_EMAIL") or "hello@launchlook.app").strip()
+    if not admin or not api_key:
+        return
+    payload = {
+        "from": f"LaunchLook Automation <{from_email}>",
+        "to": [admin],
+        "subject": subject,
+        "text": text,
+        "html": html,
+    }
+    try:
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "LaunchLook-Automation/1.0 (+https://launchlook.app)",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:  # noqa: S310
+            resp.read()
+    except Exception as exc:  # noqa: BLE001
+        sys.stderr.write(f"[stripe-webhook] admin email failed: {exc}\n")
 
 
 def _send_purchase_alert(*, email: str, tier: str, amount_usd: float, session_id: str) -> None:
@@ -351,11 +433,81 @@ def _send_purchase_alert(*, email: str, tier: str, amount_usd: float, session_id
         sys.stderr.write(f"[stripe-webhook] purchase alert email failed: {exc}\n")
 
 
+def handle_charge_refunded(charge: dict[str, Any]) -> dict[str, Any]:
+    """P2: Handle charge.refunded — set Notion status to Refunded + alert founder."""
+    email = (
+        (charge.get("billing_details") or {}).get("email")
+        or charge.get("receipt_email")
+        or ""
+    ).strip().lower()
+    charge_id = charge.get("id") or ""
+    amount_refunded = charge.get("amount_refunded") or 0
+    amount_usd = round(amount_refunded / 100, 2)
+
+    notion_status = "skipped"
+    if email:
+        try:
+            client = get_client()
+            ds_id = get_customers_ds_id(client)
+            from _lib.notion_helpers import (  # noqa: PLC0415
+                STATUS_REFUNDED,
+                find_customer_by_email,
+            )
+            existing = find_customer_by_email(client, ds_id, email)
+            if existing:
+                from _lib.notion_helpers import update_customer_fields  # noqa: PLC0415
+                update_customer_fields(
+                    client,
+                    existing["id"],
+                    {
+                        "status": STATUS_REFUNDED,
+                        "notes": f"[refunded] charge={charge_id} amount=${amount_usd:.2f}",
+                    },
+                )
+                notion_status = "updated"
+            else:
+                notion_status = "not_found"
+        except Exception as exc:  # noqa: BLE001
+            sys.stderr.write(f"[stripe-webhook] refund Notion update failed: {exc}\n")
+            notion_status = "error"
+
+    _send_plain_admin_email(
+        subject=f"[LaunchLook] Refund processed — {email or charge_id}",
+        text=(
+            f"A charge was refunded.\n\n"
+            f"Customer: {email or '(unknown)'}\n"
+            f"Charge: {charge_id}\n"
+            f"Amount refunded: ${amount_usd:.2f}\n"
+            f"Notion: {notion_status}\n"
+        ),
+        html=(
+            f"<p><b>Refund processed.</b></p>"
+            f"<p>Customer: {email or '(unknown)'}<br>"
+            f"Charge: <code>{charge_id}</code><br>"
+            f"Amount refunded: ${amount_usd:.2f}<br>"
+            f"Notion update: {notion_status}</p>"
+        ),
+    )
+    return {
+        "status": "refunded",
+        "email": email,
+        "charge_id": charge_id,
+        "amount_refunded_usd": amount_usd,
+        "notion": notion_status,
+    }
+
+
 def process_event(event: dict[str, Any]) -> dict[str, Any]:
     event_type = event.get("type") or ""
+    obj = (event.get("data") or {}).get("object") or {}
+
+    if event_type == "charge.refunded":
+        return handle_charge_refunded(obj)
+
     if event_type != "checkout.session.completed":
         return {"status": "ignored", "event_type": event_type}
-    session = (event.get("data") or {}).get("object") or {}
+
+    session = obj
     # q18: Handoff Report add-on ($49 as of 2026-05-26; $9900 legacy receipts
     # also still labeled). Metadata-first routing prevents the $4900 collision with Scale Up (and the legacy $9900 collision with Pro).
     if is_handoff_report_session(session):

@@ -36,6 +36,8 @@ from . import (  # noqa: E402
     llm_client,
     security_lite,  # noqa: E402
 )
+from .dedup import render_exclude_block  # noqa: E402
+from .free_audit_lookup import load_excluded_fingerprints  # noqa: E402
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
@@ -911,6 +913,28 @@ def run(
         library=library,
     )
     finding_prompt = _maybe_append_webflow_checks(finding_prompt, customer_ctx.platform)
+
+    # Load prior free-audit fingerprints for this customer (P0 #1+2).
+    # If a free audit was previously delivered to this email+URL, inject the
+    # exclusion block so the LLM avoids surfacing the same findings again.
+    # Degraded silently to a no-op when Notion is unavailable or no prior row exists.
+    if customer_ctx.email and customer_ctx.url:
+        try:
+            excluded_fps, prior_summaries, _row_id = load_excluded_fingerprints(
+                email=customer_ctx.email,
+                url=customer_ctx.url,
+                window_days=90,
+            )
+            if excluded_fps:
+                exclude_block = render_exclude_block(excluded_fps, prior_summaries or None)
+                if exclude_block:
+                    finding_prompt = finding_prompt + "\n" + exclude_block
+                    print(
+                        f"[dedup] injected {len(excluded_fps)} excluded fingerprint(s) "
+                        "into finding prompt"
+                    )
+        except Exception as exc:  # noqa: BLE001
+            print(f"[dedup] WARN: could not load excluded fingerprints: {exc}", file=sys.stderr)
 
     findings = client.generate_findings(
         system_prompt=system_prompt,

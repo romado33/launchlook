@@ -35,6 +35,7 @@ except ImportError:
 import os  # noqa: E402
 
 from api._lib.notion_helpers import (  # noqa: E402
+    STATUS_IN_PROGRESS,
     STATUS_INTAKE,
     STATUS_PAID,
     get_client,
@@ -107,7 +108,9 @@ def find_stale_rows(threshold_hours: int) -> list[dict]:
                 "page_id": row["id"],
             })
 
-    # Customers DB
+    # Customers DB — include Paid, Intake Received, and In Progress rows.
+    # In Progress rows indicate a pipeline run that started but never finished
+    # (crashed worker); they were added after the P0 #6 processing-lock fix.
     cust_ds = get_customers_ds_id(client)
     resp = client.data_sources.query(
         data_source_id=cust_ds,
@@ -117,6 +120,7 @@ def find_stale_rows(threshold_hours: int) -> list[dict]:
                     "or": [
                         {"property": "Status", "select": {"equals": STATUS_PAID}},
                         {"property": "Status", "select": {"equals": STATUS_INTAKE}},
+                        {"property": "Status", "select": {"equals": STATUS_IN_PROGRESS}},
                     ]
                 },
                 {

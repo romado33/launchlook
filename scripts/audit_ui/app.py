@@ -471,6 +471,7 @@ def _register_routes(app: Flask) -> None:
         data = request.get_json(silent=True) or {}
         slug = (data.get("slug") or "").strip()
         send = bool(data.get("send", False))
+        force = request.args.get("force") == "1"
         if not slug:
             return jsonify({"error": "slug is required"}), 400
 
@@ -486,6 +487,54 @@ def _register_routes(app: Flask) -> None:
                 ),
                 400,
             )
+
+        # P1 #14: Block send while the pipeline is still processing this job.
+        # If the Notion row Notes contain [automation:processing] without a
+        # subsequent [automation:draft_ready], the pipeline is in-flight.
+        # Allow override via ?force=1 so Rob can bypass a crashed-but-marked run.
+        if send and not force:
+            try:
+
+                from api._lib.notion_helpers import (  # noqa: PLC0415
+                    find_customer_by_email,
+                    get_client,
+                    get_customers_ds_id,
+                )
+                try:
+                    import yaml as _yaml  # noqa: PLC0415
+                    _cdata = _yaml.safe_load(customer_yaml.read_text(encoding="utf-8")) or {}
+                    _email = (_cdata.get("customer") or {}).get("email") or ""
+                except Exception:
+                    _email = ""
+                if _email:
+                    _nc = get_client()
+                    _ds = get_customers_ds_id(_nc)
+                    _row = find_customer_by_email(_nc, _ds, _email)
+                    if _row:
+                        _notes = ""
+                        _note_prop = (_row.get("properties") or {}).get("Notes") or {}
+                        _rt = _note_prop.get("rich_text") or []
+                        _notes = "".join(x.get("plain_text", "") for x in _rt)
+                        _notes_lower = _notes.lower()
+                        if (
+                            "[automation:processing]" in _notes_lower
+                            and "[automation:draft_ready]" not in _notes_lower
+                        ):
+                            return (
+                                jsonify(
+                                    {
+                                        "ok": False,
+                                        "error": (
+                                            "Pipeline still processing this job — "
+                                            "wait for draft_ready before sending. "
+                                            "Add ?force=1 to override."
+                                        ),
+                                    }
+                                ),
+                                409,
+                            )
+            except Exception:  # noqa: BLE001
+                pass  # Notion unavailable — allow send to proceed
 
         deliver_log.begin()
         deliver_runner.run_deliver_in_thread(

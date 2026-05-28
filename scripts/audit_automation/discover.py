@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import datetime
 from typing import Any
 from urllib.parse import urlparse
 
 from scripts.audit_automation.jobs import AuditJob, JobKind
 from scripts.audit_automation.slug import slug_from_email_url as make_slug
 from scripts.launchlook_constants import FREE_AUDIT_PIPELINE_TIER
+
+# How long before a stale [automation:processing] lock is reclaimed (P0 #6).
+_PROCESSING_LOCK_RECLAIM_HOURS = 2
 
 try:
     from dotenv import load_dotenv
@@ -59,12 +63,36 @@ def _platform_from_select(raw: str) -> tuple[str, str]:
     return "vibe-coder", raw.title() if raw else "Lovable"
 
 
+def _is_stale_processing(row: dict[str, Any]) -> bool:
+    """True if a row's last_edited_time is older than the reclaim threshold."""
+    raw = row.get("last_edited_time") or row.get("created_time") or ""
+    if not raw:
+        return True  # unknown age → treat as stale so we don't block forever
+    try:
+        if raw.endswith("Z"):
+            raw = raw[:-1] + "+00:00"
+        edited_at = datetime.datetime.fromisoformat(raw)
+        if edited_at.tzinfo is None:
+            edited_at = edited_at.replace(tzinfo=datetime.UTC)
+    except ValueError:
+        return True
+    age = datetime.datetime.now(datetime.UTC) - edited_at
+    return age > datetime.timedelta(hours=_PROCESSING_LOCK_RECLAIM_HOURS)
+
+
 def discover_free_jobs(client: Client | None = None) -> list[AuditJob]:
     client = client or get_client()
     ds_id = _get_free_audit_ds_id(client)
+    # Query both queued and processing rows; stale processing rows are
+    # reclaimed after _PROCESSING_LOCK_RECLAIM_HOURS (P0 #6).
     resp = client.data_sources.query(
         data_source_id=ds_id,
-        filter={"property": "Status", "select": {"equals": "queued"}},
+        filter={
+            "or": [
+                {"property": "Status", "select": {"equals": "queued"}},
+                {"property": "Status", "select": {"equals": "processing"}},
+            ]
+        },
         sorts=[{"timestamp": "created_time", "direction": "ascending"}],
         page_size=20,
     )
@@ -73,6 +101,11 @@ def discover_free_jobs(client: Client | None = None) -> list[AuditJob]:
         if row.get("archived") or row.get("in_trash"):
             continue
         props = row.get("properties") or {}
+        status = _prop_text(props, "Status")
+        # Skip processing rows that were modified recently (another run is
+        # still working). Only reclaim if older than the lock threshold.
+        if status.lower() == "processing" and not _is_stale_processing(row):
+            continue
         email = _prop_text(props, "Email").lower()
         url = _prop_text(props, "URL")
         if not email or not url:
@@ -147,8 +180,14 @@ def discover_paid_jobs(client: Client | None = None) -> list[AuditJob]:
         name = _prop_text(props, "Name")
         app_name = _prop_text(props, "App Name") or urlparse(url).hostname or "App"
         notes = _prop_text(props, "Notes")
-        # Skip if automation already marked draft ready in notes
-        if "[automation:draft_ready]" in notes.lower():
+        notes_lower = notes.lower()
+        # Skip if the pipeline already finished this job.
+        if "[automation:draft_ready]" in notes_lower:
+            continue
+        # Skip if another run is currently processing this job (P0 #6).
+        # Only reclaim the lock once it is older than the stale threshold,
+        # which catches crashed pipeline runs without blocking live ones.
+        if "[automation:processing]" in notes_lower and not _is_stale_processing(row):
             continue
         jobs.append(
             AuditJob(
