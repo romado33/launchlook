@@ -367,18 +367,45 @@
       <h2 class="font-serif text-2xl mb-6">Common questions</h2>
       <div class="card-elevated divide-y divide-line px-4 sm:px-5 max-w-2xl">
         <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">What&rsquo;s the difference between Starter, Scale Up, and Pro?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p><strong class="text-ink">Starter ($19)</strong> covers up to 10 of the most impactful issues a first-time visitor would notice before launch, ranked by impact. Best for: founders within a week of launching who want fast targeted fixes.</p>
+            <p><strong class="text-ink">Scale Up ($49)</strong> is the full audit (up to 30 findings across every category), plus a user data isolation check using 2 test accounts to verify users can&rsquo;t see each other&rsquo;s data, plus a Quick Start Guide PDF you can give your users. Best for: founders 1&ndash;4 weeks out who want thorough coverage including the user data isolation check.</p>
+            <p><strong class="text-ink">Pro ($99)</strong> is the deep audit (everything in Scale Up, plus up to 40 findings), a review of your operational integrations (Stripe, auth, email, analytics setup) to catch infrastructure gaps that aren&rsquo;t visible from the app itself, and <strong class="text-ink">Ask Rob anything</strong> &mdash; reply with up to 5 questions about your findings and get a personal answer within 24 hours. Best for: founders who want maximum confidence before paid traffic or investor demos.</p>
+          </div>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Do you need my code, GitHub, or any account access?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
+            <p>No. We only need your public URL (and for Scale Up / Pro Package, two temporary test accounts to check data isolation). We never ask for GitHub access, your codebase, your builder login, or any access keys. If a tool ever asks for those things just to spot broken UI, be wary.</p>
+            <p>We don&rsquo;t request database access or store credentials. Anything you provide through the intake form is deleted promptly after delivery. See our <a href="/privacy" class="underline hover:text-ink">privacy policy</a>.</p>
+          </div>
+        </details>
+        <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">My app is still on a preview URL. Can you review it now?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">Yes. Lovable preview URLs, Vercel staging URLs, and any publicly reachable URL work. We flag anything that will need to be different on your custom domain (like a missing canonical or noindex setting).</p>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes. Lovable preview URLs, Vercel staging URLs, and any publicly reachable URL work. We flag anything that will need to be different on your custom domain (like a missing canonical or noindex setting). localhost won&rsquo;t work.</p>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">Do you need my GitHub or builder login?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">No. We only need your live URL. We never ask for GitHub, your Lovable workspace, your Cursor project, or any access keys. Everything we find is visible on your public site.</p>
+          <summary class="flex justify-between items-center font-medium text-sm">I built my app with Lovable / Cursor / Bolt. Why do I still need a review?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
+            <p>Your AI builder was optimized to generate code quickly. It wasn&rsquo;t designed to walk your app as a confused first-time visitor, test whether your confirmation emails arrive, or notice the button that stops working at mobile width.</p>
+            <p>Those gaps only appear when a real person uses your app cold. LaunchLook is that person: someone who has never seen your app, trying to do the thing you built it for. Most vibe-coded apps have 5&ndash;15 things a first user would notice before you do.</p>
+          </div>
         </details>
         <details class="py-4">
-          <summary class="flex justify-between items-center font-medium text-sm">How is this different from Lovable&rsquo;s built-in SEO check?<span class="text-muted text-lg">+</span></summary>
-          <p class="mt-2 text-muted text-sm leading-relaxed">SEO tools help Google find your page. We help the friend you just sent the link to: the dead button, the form that silently fails, the mobile layout that breaks, the &ldquo;Dev Bypass&rdquo; sign-in still showing in production.</p>
+          <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to PageLens AI?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">
+            Both scan your live site. PageLens is built for SEO marketers who want fast, recurring scans.
+            LaunchLook is built for vibe coders shipping with Lovable, Cursor, or Bolt who want a one-off pre-launch checkup:
+            a real person tests forms and emails, reviews every finding, and you get paste-ready fix prompts for your builder.
+            See our side-by-side breakdown on the
+            <a href="/vs-pagelens" class="underline hover:text-ink font-medium">LaunchLook vs PageLens</a> page.
+          </p>
         </details>
       </div>
+      <p class="mt-4 text-sm text-muted">
+        <a href="/faq" class="underline decoration-line hover:text-ink">See all questions &rarr;</a>
+      </p>
     </div>
   </section>
 
