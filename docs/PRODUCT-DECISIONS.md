@@ -160,6 +160,7 @@ When you change anything in this file:
 | 2026-05-28 | Launch Readiness Score (1.0–10.0) added to pipeline and report template. `compute_readiness_score()` in `pipeline.py`. Score badge on verdict block. Stored in shareable page data. |
 | 2026-05-28 | First-user framing: severity headings and verdict meta in `report.html.j2` reframed as "what your first users will hit". Delivery email opens with same framing. |
 | 2026-05-28 | `landing/wall.html` created (Wall of Launches). Empty-state with opt-in CTA. Footer link added on `index.html`. |
+| 2026-05-28 | Wall of Launches: page live at /wall but nav link suppressed until 5 opt-in entries collected. Permission required per app owner — ask via delivery email opt-in block. |
 | 2026-05-28 | Referral credit block added to `delivery_pdf.html.j2` and `.txt.j2` ("Forward this, mention your name, I'll give you $10 off"). |
 | 2026-05-28 | Added User Guide PDF deliverable (Scale Up + Pro). Updated §1 tier table and §8 deliverable definitions. Fixed §8 QSG description (was incorrectly described as "paste-ready fix prompts" — it is an end-user getting-started card). Added Tally intake tone/audience fields (3 optional, Scale Up + Pro conditional). |
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
