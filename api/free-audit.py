@@ -78,7 +78,13 @@ from scripts.ai_audit.free_audit_lookup import (  # noqa: E402
     DEFAULT_RECENT_DELIVERY_DAYS,
     recent_delivery,
 )
-from scripts.launchlook_constants import FREE_AUDIT_DELIVER_COUNT  # noqa: E402
+
+# Inlined intentionally (NOT imported from scripts.launchlook_constants):
+# Vercel's Python runtime sometimes fails to bundle top-level modules in the
+# ``scripts/`` package even with ``scripts/__init__.py`` present, causing
+# FUNCTION_INVOCATION_FAILED at cold start. The single-value duplication is
+# enforced by ``tests/test_launchlook_constants.py`` so drift is caught in CI.
+FREE_AUDIT_DELIVER_COUNT = 2
 
 # notion_helpers does the heavy lifting for the Customers DB; for the
 # free-audit DB we use the bare client directly because the schema differs.
