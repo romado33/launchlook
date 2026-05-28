@@ -1,6 +1,6 @@
 # Everything left for Rob — LaunchLook
 
-**Last updated:** May 27, 2026 (evening — refactor + review session)
+**Last updated:** May 28, 2026 (cleanup + value-scaling + competitive session)
 **Site:** https://launchlook.app · **Repo:** `romado33/launchlook`
 
 This file is the **source of truth** for what you still need to do manually. Product/code decisions live in [`PRODUCT-DECISIONS.md`](PRODUCT-DECISIONS.md).
@@ -9,6 +9,36 @@ This file is the **source of truth** for what you still need to do manually. Pro
 > and copy [`.cursor/rules/launchlook-defaults.mdc`](../.cursor/rules/launchlook-defaults.mdc)
 > into the new repo (rename it). Those two files encode every recurring correction and pitfall
 > from building LaunchLook v1 so the next project ships faster.
+
+---
+
+## Shipped May 28, 2026
+
+**Conversion + value-scaling pass:**
+- **Launch Readiness Score** (1.0–10.0) added to every report — `compute_readiness_score()` in `pipeline.py`, score badge on verdict block, stored in shareable page data
+- **First-user framing** — severity headings and verdict meta reframed as "what your first users will hit"; delivery email opens with same frame
+- **Vibe-coding mistakes section** on landing (named, specific real examples replacing generic bullet list)
+- **Sample report** upgraded to a visible CTA button in the hero
+- **Urgency windows section** — four cards (Product Hunt / investor demo / beta users / real customers) between hero and How It Works
+- **"Already ran a scanner?" callout** — positions LaunchLook vs PageLens and VibeDoctor above pricing
+- **Tier cards rewritten** on both `index.html` and `webflow.html` — all deliverables listed, cumulative framing, Scale Up badged "Most popular"
+- **Wall of Launches** page created (`landing/wall.html`) — empty-state + opt-in CTA
+- **Referral credit** added to delivery email (`delivery_pdf.html.j2` + `.txt.j2`)
+- **SUCCESS-METRICS.md** created with §0 Lorelight problem-validation test as primary gate
+- **VibeDoctor competitive analysis** completed — positioned as complementary, not competing
+
+**Documentation cleanup:**
+- Deleted four stale one-time docs (`MANUAL-APPROVAL-2026-05-26.md`, `AGENT-ACTION-LOG-2026-05-26.md`, `SHIPMENT-VERIFICATION-PARTIAL-2026-05-26.md`, `MANUAL-TASKS-PRICE-BUMP.md`)
+- `LESSONS-LEARNED.md` updated with 7 new lessons (Part 11)
+- `PRODUCT-DECISIONS.md` §9 changelog updated
+
+---
+
+## Your next action (updated May 28, 2026)
+
+**Decide Loom walkthrough duration.** PRODUCT-DECISIONS.md §8 says "5 to 10 minutes" but the old landing page said "30-min". Pick one and update `docs/PRODUCT-DECISIONS.md` §8. The landing cards currently say "Rob walks you through the report on video" without a time — update to the chosen duration.
+
+**Second priority: record the Loom.** Once Pro is live with a real customer, record the Pro-tier Loom. Screen-capture: show the delivery email, click the review link, walk the top 3 findings. Post it above the pricing section on `/`. Estimated +30% Pro checkout conversion.
 
 ---
 

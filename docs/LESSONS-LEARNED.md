@@ -778,5 +778,39 @@ If instructions conflict, priority is:
 
 ---
 
+---
+
+## Part 11 — Conversion, positioning, and product-value lessons (May 28, 2026)
+
+### 11.1 Tier cards hide value unless every deliverable is listed
+
+The Starter tier on the landing page listed only "10 findings" and "Pre-Launch Checklist PDF" — omitting the Main Report PDF and Quick Start Guide PDF entirely. To a visitor, Starter looked like "8 more findings and a checklist." The actual deliverable is three PDFs plus a formatted report. **Rule: every tier card must list every physical deliverable that ships.** If a tier ships 3 PDFs, all 3 must appear in the bullet list.
+
+### 11.2 Cumulative framing ("Everything in X, plus:") is not optional on 3-tier grids
+
+Without the "Everything in Starter, plus:" scaffold, each tier card reads as a separate offer. The visitor has to mentally subtract lower tiers to understand the upgrade delta. **Always use cumulative framing on pricing grids with 3+ tiers.**
+
+### 11.3 The Webflow page had better tier UX than the main page
+
+The Webflow landing page was written later and had better pattern discipline: intent question under each tier name, cumulative framing, "Most popular" badge, more specific bullets. The main page was built earlier and never got the same polish. **Lesson: when you build a second SKU page, use it as a template to retroactively improve the first page.**
+
+### 11.4 Urgency windows convert better than abstract "pre-launch" framing
+
+"Find the embarrassing bugs before you launch" is accurate but abstract. "Launching on Product Hunt? An investor demo this week? Sharing with beta users?" — these are specific felt moments. Adding a four-card urgency-windows section between the hero and How It Works section directly names the founder's situation and converts anxiety into action. **Rule: on a service landing page, name the specific moment the customer is in, not just the general problem.**
+
+### 11.5 Scanners and human-review are complementary, not competing — say so
+
+VibeDoctor (code scanner, needs GitHub) and PageLens (URL scanner, automated) both check different things than LaunchLook (human, live workflows, UX). Rather than treating them as competitors, adding a "Already ran a scanner?" callout above pricing converts the savvy founder who already knows those tools and wonders why they need LaunchLook. **The positioning question is not "why us instead of X" but "what does X miss that we catch?"**
+
+### 11.6 The "problem didn't need solving" failure mode needs its own metric
+
+Conversion rate from free to paid is a lagging indicator of problem-market fit. The leading indicator is whether free users act on the findings (reply to the email, apply the fix) before any money changes hands. Track this manually for the first 20 deliveries. If fewer than 3 of 20 act, the problem isn't painful enough — stop optimising the funnel and run user interviews instead. See `docs/SUCCESS-METRICS.md` §0 for the full Lorelight test framework.
+
+### 11.7 One-time dated docs should be deleted when resolved, not kept
+
+Historical agent logs (`AGENT-ACTION-LOG-2026-05-26.md`), approval queues (`MANUAL-APPROVAL-2026-05-26.md`), and partial shipment verifications (`SHIPMENT-VERIFICATION-PARTIAL-2026-05-26.md`) accumulate quickly. Once all their action items are resolved and the Stripe inventory they contain is captured in `config.js` / `PRODUCT-DECISIONS.md`, delete them. Keeping them creates false "open item" anxiety on every re-read.
+
+---
+
 _Last updated: 2026-05-28. Update this file whenever you learn something that
 would have saved you time building LaunchLook, or would save time on the next app._

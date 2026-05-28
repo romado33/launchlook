@@ -153,6 +153,14 @@ When you change anything in this file:
 
 | Date | Change |
 |---|---|
+| 2026-05-28 | Tier cards on `landing/index.html` and `landing/webflow.html` rewritten: all deliverables now listed, cumulative "Everything in X, plus:" framing, intent question under each tier name, Scale Up badged "Most popular", Handoff Report save shown on Pro. |
+| 2026-05-28 | `SUCCESS-METRICS.md` created. §0 Lorelight problem-validation test added as the primary gate before all revenue metrics. |
+| 2026-05-28 | VibeDoctor positioned as complementary (requires GitHub repo, code scanner) not direct competitor. LaunchLook's wedge: URL-only, live UX + workflow testing, no repo needed. |
+| 2026-05-28 | Loom walkthrough duration conflict flagged in §8 — "5 to 10 minutes" (spec) vs "30-min" (landing). **Rob to confirm and update.** |
+| 2026-05-28 | Launch Readiness Score (1.0–10.0) added to pipeline and report template. `compute_readiness_score()` in `pipeline.py`. Score badge on verdict block. Stored in shareable page data. |
+| 2026-05-28 | First-user framing: severity headings and verdict meta in `report.html.j2` reframed as "what your first users will hit". Delivery email opens with same framing. |
+| 2026-05-28 | `landing/wall.html` created (Wall of Launches). Empty-state with opt-in CTA. Footer link added on `index.html`. |
+| 2026-05-28 | Referral credit block added to `delivery_pdf.html.j2` and `.txt.j2` ("Forward this, mention your name, I'll give you $10 off"). |
 | 2026-05-28 | Added User Guide PDF deliverable (Scale Up + Pro). Updated §1 tier table and §8 deliverable definitions. Fixed §8 QSG description (was incorrectly described as "paste-ready fix prompts" — it is an end-user getting-started card). Added Tally intake tone/audience fields (3 optional, Scale Up + Pro conditional). |
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
