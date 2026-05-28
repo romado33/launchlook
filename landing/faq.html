@@ -134,62 +134,37 @@
             <p>Lovable&rsquo;s built-in SEO review helps Google find your page. We help the friend you just sent the link to: dead buttons, dev tools still showing in production, missing legal pages, forms that silently fail.</p>
           </div>
         </details>
-        <!-- show-more hinge: questions below are hidden until toggled -->
-        <div id="faq-more" class="hidden">
-          <details class="py-4">
-            <summary class="flex justify-between items-center font-medium text-sm">Staging URLs OK?<span class="text-muted text-lg">+</span></summary>
-            <p class="mt-2 text-muted text-sm leading-relaxed">Yes if they're reachable on the internet (Lovable preview, Vercel staging, etc.). localhost won't work.</p>
-          </details>
-          <details class="py-4">
-            <summary class="flex justify-between items-center font-medium text-sm">Can I share my report publicly?<span class="text-muted text-lg">+</span></summary>
-            <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
-          </details>
-          <details class="py-4">
-            <summary class="flex justify-between items-center font-medium text-sm">How is a Webflow checkup different from a vibe-coded app checkup?<span class="text-muted text-lg">+</span></summary>
-            <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
-              <p>Webflow is a <strong class="text-ink">site builder</strong>, not an AI app generator. The same human review applies, but what we look for shifts to Webflow-specific launch risks: form submissions that silently fail, accidental noindex, missing JSON-LD, Designer-to-live mismatches, and breakage at Webflow&rsquo;s 991 / 767 / 478 breakpoints.</p>
-              <p>Fix prompts are written in <strong class="text-ink">Webflow Designer language</strong> (Pages, elements, settings), not &ldquo;paste this into Lovable.&rdquo; We still only need your <strong class="text-ink">live URL</strong>, never your Webflow account or Designer login. Scale Up and Pro tiers that include a user data isolation check are aimed at vibe-coded apps with logins; most marketing Webflow sites don&rsquo;t need test accounts.</p>
-              <p><a href="/webflow" class="underline hover:text-ink">Webflow pricing and scope &rarr;</a></p>
-            </div>
-          </details>
-          <details class="py-4">
-            <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
-            <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
-          </details>
-          <details class="py-4">
-            <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to PageLens AI?<span class="text-muted text-lg">+</span></summary>
-            <p class="mt-2 text-muted text-sm leading-relaxed">
-              Both scan your live site. PageLens is built for SEO marketers who want fast, recurring scans.
-              LaunchLook is built for vibe coders shipping with Lovable, Cursor, or Bolt who want a one-off pre-launch checkup:
-              a real person tests forms and emails, reviews every finding, and you get paste-ready fix prompts for your builder.
-              See our side-by-side breakdown on the
-              <a href="/vs-pagelens" class="underline hover:text-ink font-medium">LaunchLook vs PageLens</a> page.
-            </p>
-          </details>
-        </div>
-
-        <!-- show-more toggle button -->
-        <div class="py-3 text-center">
-          <button type="button" id="faq-toggle"
-            class="text-sm text-muted hover:text-ink underline decoration-line transition"
-            aria-expanded="false" aria-controls="faq-more">
-            Show 5 more questions
-          </button>
-        </div>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Staging URLs OK?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes if they're reachable on the internet (Lovable preview, Vercel staging, etc.). localhost won't work.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Can I share my report publicly?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Yes, opt-in. After delivery, every report has a private URL like <code class="text-xs bg-surface-tint px-1 py-0.5 rounded">launchlook.app/r/{your-slug}</code>. By default it's private (only you can see it). Reply 'share' to your delivery email and we'll flip it public so you can post the link on Reddit, Twitter, your site footer, anywhere. Reply 'unshare' to flip it back.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How is a Webflow checkup different from a vibe-coded app checkup?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p>Webflow is a <strong class="text-ink">site builder</strong>, not an AI app generator. The same human review applies, but what we look for shifts to Webflow-specific launch risks: form submissions that silently fail, accidental noindex, missing JSON-LD, Designer-to-live mismatches, and breakage at Webflow&rsquo;s 991 / 767 / 478 breakpoints.</p>
+            <p>Fix prompts are written in <strong class="text-ink">Webflow Designer language</strong> (Pages, elements, settings), not &ldquo;paste this into Lovable.&rdquo; We still only need your <strong class="text-ink">live URL</strong>, never your Webflow account or Designer login. Scale Up and Pro tiers that include a user data isolation check are aimed at vibe-coded apps with logins; most marketing Webflow sites don&rsquo;t need test accounts.</p>
+            <p><a href="/webflow" class="underline hover:text-ink">Webflow pricing and scope &rarr;</a></p>
+          </div>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to PageLens AI?<span class="text-muted text-lg">+</span></summary>
+          <p class="mt-2 text-muted text-sm leading-relaxed">
+            Both scan your live site. PageLens is built for SEO marketers who want fast, recurring scans.
+            LaunchLook is built for vibe coders shipping with Lovable, Cursor, or Bolt who want a one-off pre-launch checkup:
+            a real person tests forms and emails, reviews every finding, and you get paste-ready fix prompts for your builder.
+            See our side-by-side breakdown on the
+            <a href="/vs-pagelens" class="underline hover:text-ink font-medium">LaunchLook vs PageLens</a> page.
+          </p>
+        </details>
       </div>
-
-      <script>
-        (function () {
-          var btn = document.getElementById('faq-toggle');
-          var more = document.getElementById('faq-more');
-          if (!btn || !more) return;
-          btn.addEventListener('click', function () {
-            var open = more.classList.toggle('hidden');
-            btn.textContent = open ? 'Show 5 more questions' : 'Show fewer questions';
-            btn.setAttribute('aria-expanded', String(!open));
-          });
-        })();
-      </script>
     </div>
   </section>
 
