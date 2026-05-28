@@ -161,6 +161,30 @@ def _check_mail_tm(session: dict[str, Any]) -> bool:
     return len(members) > 0
 
 
+def _fetch_latest_mail_tm(session: dict[str, Any]) -> dict[str, Any] | None:
+    """Return the body of the most recent message in the mailbox, or None."""
+    auth = {"Authorization": f"Bearer {session['token']}"}
+    listing = _request(f"{_MAIL_TM_BASE}/messages", headers=auth)
+    if not listing:
+        return None
+    members = listing.get("hydra:member") if isinstance(listing, dict) else None
+    if not members:
+        return None
+    # members are newest-first in the mail.tm API
+    msg_id = members[0].get("id")
+    if not msg_id:
+        return None
+    detail = _request(f"{_MAIL_TM_BASE}/messages/{msg_id}", headers=auth)
+    if not detail:
+        return None
+    return {
+        "subject": detail.get("subject") or "",
+        "html": detail.get("html") or [""],
+        "text": detail.get("text") or "",
+        "headers": detail.get("headers") or {},
+    }
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -205,3 +229,28 @@ def cached_provider_address(address: str) -> str | None:
     if not session:
         return None
     return session.get("address")
+
+
+def fetch_latest_message(address: str) -> dict[str, Any] | None:
+    """Return the content of the most recently received message, or None.
+
+    Returns a dict::
+
+        {
+          "subject": str,
+          "html": list[str],   # mail.tm returns HTML parts as a list
+          "text": str,
+          "headers": dict,
+        }
+
+    Returns None if no message has arrived, the session is missing, or
+    the provider call fails for any reason. Callers must tolerate None.
+    """
+    provider = os.environ.get("LAUNCHLOOK_MAILBOX_PROVIDER") or _DEFAULT_PROVIDER
+    if provider != "mail.tm":
+        _log_warn(f"fetch_latest_message: unknown provider {provider!r}")
+        return None
+    session = _load_session(address)
+    if not session:
+        return None
+    return _fetch_latest_mail_tm(session)

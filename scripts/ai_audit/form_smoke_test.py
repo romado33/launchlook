@@ -47,6 +47,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from scripts.ai_audit.unsubscribe_check import run_unsubscribe_check
+
 CATEGORY_ID = "form_submit_smoke"
 
 # ---------------------------------------------------------------------------
@@ -221,6 +223,17 @@ PLAIN_ENGLISH: dict[str, str] = {
         "60 seconds. No confirmation email arrived. If your flow is supposed to "
         "send a welcome or verification email, it's silently broken right now."
     ),
+    "no_unsubscribe_link": (
+        "The confirmation email from your {form_name} arrived, but it had no "
+        "unsubscribe link. CAN-SPAM and GDPR both require a clear, working "
+        "unsubscribe mechanism in commercial emails."
+    ),
+    "broken_unsubscribe_link": (
+        "The confirmation email from your {form_name} had an unsubscribe link, "
+        "but clicking it returned an error ({status}). Visitors who click "
+        "Unsubscribe and land on a broken page will report the email as spam "
+        "instead, which hurts deliverability."
+    ),
 }
 
 
@@ -359,6 +372,33 @@ _FIX_PROMPT_LIBRARY: dict[tuple[str, str], str] = {
         "After {form_name} succeeds, send a confirmation email (welcome, "
         "verification, or a simple 'we got your message'). Verify your sending "
         "domain (SPF / DKIM / DMARC) so the email actually lands in real inboxes."
+    ),
+    ("no_unsubscribe_link", "lovable"): (
+        'Open Lovable and ask it: "Add an unsubscribe link to the confirmation '
+        "email sent after {form_name}. The link should route to a page that "
+        "removes the email address from your mailing list and shows a "
+        "'You've been unsubscribed' confirmation. CAN-SPAM and GDPR both require "
+        'this."'
+    ),
+    ("no_unsubscribe_link", "generic"): (
+        "Add an unsubscribe link to every marketing or transactional email sent "
+        "after {form_name}. The link should lead to a page that (1) immediately "
+        "removes the address from your list and (2) confirms the removal to the "
+        "visitor. Both CAN-SPAM (US) and GDPR (EU) require a working unsubscribe "
+        "mechanism."
+    ),
+    ("broken_unsubscribe_link", "lovable"): (
+        'Open Lovable and ask it: "Fix the unsubscribe route linked from the '
+        "{form_name} confirmation email. It currently returns an error. The route "
+        "should accept the token from the URL, remove the email from the mailing "
+        'list, and show a confirmation page."'
+    ),
+    ("broken_unsubscribe_link", "generic"): (
+        "The unsubscribe link in the {form_name} confirmation email is returning "
+        "an error. Fix the route so it: (1) accepts the unsubscribe token from "
+        "the URL query string, (2) removes the email from your list, and (3) "
+        "renders a confirmation page. Test by submitting the form, clicking the "
+        "link in the test email, and verifying the confirmation page loads."
     ),
 }
 
@@ -905,6 +945,8 @@ _OUTCOME_TITLES: dict[str, str] = {
     "checkout_skipped": "We saw your {form_name} but didn't submit it",
     "destructive_skipped": "We saw your {form_name} but didn't submit it",
     "no_confirmation_email": "Your {form_name} didn't send a confirmation email",
+    "no_unsubscribe_link": "Your {form_name} confirmation email has no unsubscribe link",
+    "broken_unsubscribe_link": "Your {form_name} unsubscribe link is broken",
 }
 
 
@@ -1012,7 +1054,78 @@ def to_findings(
     for entry in email_roundtrip or []:
         if entry.get("arrived"):
             passed_ids.append(_check_id(entry.get("form") or {}, "email_arrived"))
+            # --- unsubscribe check on the arrived email ---
+            email_html = entry.get("email_html") or ""
+            email_text = entry.get("email_text") or ""
+            list_unsub = entry.get("list_unsubscribe_header") or ""
+            form_info_u = entry.get("form") or {}
+            form_name_u = _form_display_name(form_info_u)
+            unsub = run_unsubscribe_check(email_html, email_text, list_unsub)
+            if not unsub["found"]:
+                unsub_check_id = _check_id(form_info_u, "no_unsubscribe_link")
+                actionable.append(
+                    {
+                        "id": unsub_check_id,
+                        "category": CATEGORY_ID,
+                        "title": _OUTCOME_TITLES["no_unsubscribe_link"].format(
+                            form_name=form_name_u
+                        ),
+                        "severity": "medium",
+                        "what_we_saw": PLAIN_ENGLISH["no_unsubscribe_link"].format(
+                            form_name=form_name_u
+                        ),
+                        "why_it_matters": (
+                            "CAN-SPAM (US) and GDPR (EU) both require a clear, "
+                            "working unsubscribe mechanism in commercial emails. "
+                            "Missing one is a compliance risk and increases spam "
+                            "reports, which damage your sending domain's "
+                            "reputation."
+                        ),
+                        "fix_prompt": _fix_prompt_for(
+                            "no_unsubscribe_link", platform, form_name=form_name_u
+                        ),
+                        "tester": "The Stranger Who Tried to Sign Up",
+                        "tag": "Caught by The Stranger Who Tried to Sign Up",
+                        "source": "external",
+                        "external_origin": "form_smoke_test",
+                    }
+                )
+                failed_ids.append(unsub_check_id)
+            elif not unsub["working"]:
+                unsub_check_id = _check_id(form_info_u, "broken_unsubscribe_link")
+                actionable.append(
+                    {
+                        "id": unsub_check_id,
+                        "category": CATEGORY_ID,
+                        "title": _OUTCOME_TITLES["broken_unsubscribe_link"].format(
+                            form_name=form_name_u
+                        ),
+                        "severity": "high",
+                        "what_we_saw": PLAIN_ENGLISH["broken_unsubscribe_link"].format(
+                            form_name=form_name_u,
+                            status=unsub.get("status") or "an error",
+                        ),
+                        "why_it_matters": (
+                            "A visitor who clicks Unsubscribe and lands on a "
+                            "broken page will report the email as spam instead. "
+                            "Spam reports damage your sending domain's "
+                            "reputation and can get your emails blocked by "
+                            "Gmail and Outlook."
+                        ),
+                        "fix_prompt": _fix_prompt_for(
+                            "broken_unsubscribe_link", platform, form_name=form_name_u
+                        ),
+                        "tester": "The Stranger Who Tried to Sign Up",
+                        "tag": "Caught by The Stranger Who Tried to Sign Up",
+                        "source": "external",
+                        "external_origin": "form_smoke_test",
+                    }
+                )
+                failed_ids.append(unsub_check_id)
+            else:
+                passed_ids.append(_check_id(form_info_u, "unsubscribe_link_works"))
             continue
+
         form_info = entry.get("form") or {}
         form_name = _form_display_name(form_info)
         description = PLAIN_ENGLISH["no_confirmation_email"].format(form_name=form_name)
