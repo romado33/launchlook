@@ -4,6 +4,53 @@
 
 ---
 
+## §0 Problem Validation — the Lorelight test
+
+> *"The problem didn't need solving."*
+> — Lorelight post-mortem, Oct 2025 (see `docs/PRODUCT-DECISIONS.md` §2)
+
+This is the test that must pass before any of the other metrics below mean anything. Revenue, conversion rates, and refund rates are lag indicators. By the time they signal "problem didn't need solving," you've already spent months building.
+
+The early signal is simpler: **do free users act on the findings before any money changes hands?**
+
+### What "acted on" looks like
+
+A free-tier user has acted if any of the following happen within 7 days of delivery:
+
+| Observable signal | How to track |
+|---|---|
+| Replies to the free findings email with a question, confirmation, or "I fixed this" | Read your inbox; log in `logs/email_sends.jsonl` |
+| Submits the upgrade form (even if they don't pay yet) | Stripe / Tally intake |
+| Forwards the email to a co-founder or developer | "A colleague mentioned" in a reply |
+| Mentions the finding in social/Indie Hackers/Discord | Google Alert on "LaunchLook" |
+
+You do NOT need analytics for this. At low volume, read every reply.
+
+### The failure threshold
+
+After **20 free deliveries**:
+
+- If **fewer than 3** (15%) have any observable action signal → the problem is not painful enough, or the findings are not credible enough. Do not invest further in paid acquisition. Run a user interview with at least 5 free-audit recipients and ask directly: "Did you check the finding? Why or why not?"
+- If **3–6** (15–30%) have action signal → the problem is real but findings quality or framing may be weak. Review the 5 most-delivered free findings for specificity and actionability.
+- If **6+** (30%+) have action signal → validated. The problem is real and painful. Scale the acquisition.
+
+### The deduplication corollary
+
+`PRODUCT-DECISIONS.md` §2 states: *"You're not paying $19 to re-read your free preview."* The free hook must deliver two findings that are **immediately actionable** — not vague observations. If a free user opens the email and the finding says "your mobile experience could be improved," they won't act on it and they won't upgrade. If it says "your signup button is hidden off-screen on a 375px iPhone — here is the exact fix prompt," they'll paste it in before closing the email.
+
+Review the quality of every free delivery manually for the first 30 free audits. The free findings are the product validation instrument, not just a marketing hook.
+
+### The false-positive trap
+
+A high free → paid conversion rate (Section 2) does **not** automatically prove the problem is real. Founders buy out of anxiety, FOMO, and the sunk-cost of having already submitted the form. A finding they never read but paid $19 to "have" is a refund waiting to happen, not problem validation. Watch for:
+
+- Refund requests that arrive without any engagement (no prior reply, no Fix Check)
+- Customers who can't describe what they fixed when you ask in a follow-up email
+
+Both are signs the purchase was anxiety-driven, not problem-driven.
+
+---
+
 ## How to read this document
 
 Metrics are split into three horizons:
@@ -166,6 +213,7 @@ The wall works as social proof once it has ~5 entries. Reaching out to every del
 
 | Signal | What it means | What to do |
 |---|---|---|
+| < 3 free users act on findings in first 20 deliveries | **Problem may not be painful enough** (Lorelight failure) | Run 5 user interviews before investing further; review finding specificity |
 | Free trial submit rate < 2% for 30 days | Hero/offer not landing | A/B test the H1 and form CTA copy |
 | Free → paid conversion < 8% for 30 days | Free findings aren't useful enough or upgrade friction | Review finding quality; check email copy |
 | Refund rate > 10% | Reports not meeting expectations | Review at least 5 refunded reports for patterns |
@@ -178,13 +226,16 @@ The wall works as social proof once it has ~5 entries. Reaching out to every del
 ## 7. When to declare it working
 
 **Minimum viable success (Month 6):**
+- At least 30% of first 20 free recipients showed an observable action signal (§0 Lorelight test)
 - At least 30 paid audits delivered
 - Blended revenue above $800/month for two consecutive months
 - Refund rate under 8%
 - At least one Fix Check repeat purchase
 - At least one unprompted referral
 
-**If all five are true by Month 6, the model is validated. Start raising prices and investing in SEO.**
+**If all six are true by Month 6, the model is validated. Start raising prices and investing in SEO.**
+
+**If the first criterion fails, stop all other investment and run user interviews first.** No amount of landing page optimisation fixes a problem that isn't painful enough.
 
 ---
 
