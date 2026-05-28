@@ -21,7 +21,7 @@ are ignored; None / empty values are skipped so we never blank out a column.
 from __future__ import annotations
 
 import sys
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .env import require_env
@@ -62,7 +62,7 @@ FIELD_TO_NOTION: dict[str, tuple[str, str]] = {
 # Keep in sync with scripts/dashboard.py.
 STATUS_PAID = "Paid"
 STATUS_INTAKE = "Intake Received"
-STATUS_IN_PROGRESS = "In progress"
+STATUS_IN_PROGRESS = "In Progress"
 STATUS_DELIVERED = "Delivered"
 STATUS_REFUNDED = "Refunded"
 
@@ -135,7 +135,7 @@ def build_properties(fields: dict[str, Any]) -> dict[str, Any]:
 def _to_iso(dt: Any) -> str:
     if isinstance(dt, datetime):
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=UTC)
+            dt = dt.replace(tzinfo=timezone.utc)
         return dt.isoformat()
     return str(dt)
 
@@ -168,7 +168,7 @@ def find_customer_by_email(
                 filter_clause,
                 {
                     "timestamp": "created_time",
-                    "created_time": {"on_or_after": since.astimezone(UTC).isoformat()},
+                    "created_time": {"on_or_after": since.astimezone(timezone.utc).isoformat()},
                 },
             ]
         }
@@ -200,7 +200,7 @@ def upsert_customer(
     treated as "the same customer". This stops us from clobbering an older
     completed customer record when the same email re-purchases.
     """
-    since = datetime.now(UTC) - match_window if match_window else None
+    since = datetime.now(timezone.utc) - match_window if match_window else None
     existing = find_customer_by_email(client, ds_id, email_for_match, since=since)
     props = build_properties(fields)
     if existing:
