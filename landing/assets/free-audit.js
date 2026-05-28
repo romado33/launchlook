@@ -50,6 +50,12 @@
         payload[el.name] = (el.value || "").trim();
       });
 
+      // Accept bare hostnames ("launchlook.app"). Prepend https:// when no
+      // scheme was typed so the API + downstream URL parsers all succeed.
+      if (payload.url && !/^https?:\/\//i.test(payload.url)) {
+        payload.url = "https://" + payload.url.replace(/^\/+/, "");
+      }
+
       fetch("/api/free-audit", {
         method: "POST",
         headers: {

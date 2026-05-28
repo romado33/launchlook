@@ -104,10 +104,12 @@ _MAX_BODY_BYTES = 8 * 1024
 
 # Plain-English error messages we feel comfortable showing customers.
 ERR_EMAIL = "That email doesn't look right. Double-check and try again."
-ERR_URL = "We couldn't reach that URL. Make sure it starts with https://, isn't localhost, and is reachable on the public internet."
+ERR_URL = "We couldn't reach that URL. Double-check the spelling — your site needs to be live on the public internet (not localhost)."
 ERR_RATE_EMAIL = "We've already queued a few free audits for this email recently. Try again in a few weeks, or pick up Starter ($19) to keep going."
 ERR_RATE_IP = "A few free audits have already gone in from your network today. Try again tomorrow."
-ERR_GENERIC = "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
+ERR_GENERIC = (
+    "Something went wrong on our end. Email hello@launchlook.app and we'll sort it."
+)
 
 # Where the upsell email + JSON response point. Mirrors the existing
 # free-audit confirmation email so the Plausible StarterCheckout goal
@@ -141,6 +143,10 @@ def validate_url(value: str) -> str | None:
     cleaned = value.strip()
     if len(cleaned) > 2048:
         return None
+    # Accept bare hostnames typed without a scheme ("launchlook.app").
+    # The form JS normalizes too, but covers the JS-disabled native-form path.
+    if not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", cleaned):
+        cleaned = "https://" + cleaned.lstrip("/")
     try:
         parsed = urlparse(cleaned)
     except Exception:
@@ -221,7 +227,9 @@ def _get_free_audit_ds_id(client: Client) -> str:
     return sources[0]["id"]
 
 
-def _build_props(*, email: str, url: str, ip: str, source: str, platform: str) -> dict[str, Any]:
+def _build_props(
+    *, email: str, url: str, ip: str, source: str, platform: str
+) -> dict[str, Any]:
     title = f"{email} -- {urlparse(url).hostname or 'unknown'}"
     return {
         "Request": {"title": [{"text": {"content": title[:2000]}}]},
@@ -234,7 +242,9 @@ def _build_props(*, email: str, url: str, ip: str, source: str, platform: str) -
     }
 
 
-def _count_recent_requests_by_email(client: Client, ds_id: str, email: str, since: datetime) -> int:
+def _count_recent_requests_by_email(
+    client: Client, ds_id: str, email: str, since: datetime
+) -> int:
     """Count free-audit rows for this email created at or after `since`."""
     try:
         resp = client.data_sources.query(
@@ -253,11 +263,15 @@ def _count_recent_requests_by_email(client: Client, ds_id: str, email: str, sinc
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
     return sum(
-        1 for r in resp.get("results", []) if not r.get("archived") and not r.get("in_trash")
+        1
+        for r in resp.get("results", [])
+        if not r.get("archived") and not r.get("in_trash")
     )
 
 
-def _count_recent_requests_by_ip(client: Client, ds_id: str, ip: str, since: datetime) -> int:
+def _count_recent_requests_by_ip(
+    client: Client, ds_id: str, ip: str, since: datetime
+) -> int:
     if not ip:
         return 0
     try:
@@ -277,7 +291,9 @@ def _count_recent_requests_by_ip(client: Client, ds_id: str, ip: str, since: dat
     except APIResponseError as exc:
         raise RuntimeError(f"Notion query failed: {exc}") from exc
     return sum(
-        1 for r in resp.get("results", []) if not r.get("archived") and not r.get("in_trash")
+        1
+        for r in resp.get("results", [])
+        if not r.get("archived") and not r.get("in_trash")
     )
 
 
@@ -306,7 +322,9 @@ def _post_resend_email(*, payload: dict[str, Any], context: str) -> bool:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=8) as resp:  # noqa: S310 - explicit trusted host
+        with urllib.request.urlopen(
+            req, timeout=8
+        ) as resp:  # noqa: S310 - explicit trusted host
             body = resp.read()
         email_id = ""
         try:
@@ -316,7 +334,8 @@ def _post_resend_email(*, payload: dict[str, Any], context: str) -> bool:
         except json.JSONDecodeError:
             pass
         print(
-            f"[free-audit] Resend OK ({context})" + (f" id={email_id}" if email_id else ""),
+            f"[free-audit] Resend OK ({context})"
+            + (f" id={email_id}" if email_id else ""),
             file=sys.stderr,
         )
         return True
@@ -519,7 +538,9 @@ def process_request(
     if platform not in {"vibe-coder", "webflow"}:
         platform = "vibe-coder"
 
-    factory = notion_client_factory or (lambda: Client(auth=require_env("NOTION_TOKEN")))
+    factory = notion_client_factory or (
+        lambda: Client(auth=require_env("NOTION_TOKEN"))
+    )
     try:
         client = factory()
         ds_id = _get_free_audit_ds_id(client)
@@ -724,7 +745,9 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801 (Vercel convention)
 
             self._respond_json(status, body)
         except Exception as exc:  # noqa: BLE001
-            print(f"[free-audit] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr)
+            print(
+                f"[free-audit] ERROR: {exc}\n{traceback.format_exc()}", file=sys.stderr
+            )
             self._respond_json(500, {"status": "error", "message": ERR_GENERIC})
 
     def do_GET(self) -> None:  # noqa: N802
