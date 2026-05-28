@@ -1,10 +1,23 @@
 # LaunchLook — Outreach Playbook
 
-**Last updated:** May 25, 2026
+**Last updated:** May 28, 2026
 **Owner:** Rob
 **Status:** Canonical reference for soft customer acquisition. Use this as your single source of truth for *where* to post, *what* to say, and *what not* to do.
 
 This consolidates every forum/community recommendation and every ready-to-paste pitch wording generated across the LaunchLook planning sessions. Mine it; don't re-derive it.
+
+---
+
+## 0. Pre-outreach blockers — complete these before any promotion
+
+> **Do not start broad outreach until all four are checked.** A founder clicking through to a site with zero social proof and no visible delivery SLA will bounce. These four items are the difference between wasted effort and a real conversion.
+
+- [ ] **Get 3 real testimonials.** Offer 3–5 free or $5 discounted audits to founders in your network or in the Lovable Discord. Ask for one-sentence feedback after delivery (`ask-for-quote.txt`). Add the quotes to `landing/index.html` and `landing/webflow.html`. One genuine "Found 2 things I would have missed" is worth more than any copy change.
+- [ ] **Add turnaround SLA to landing page.** Founders in a launch window need to know if you'll deliver in 24 hours or 2 weeks. Add "Reports delivered within 48 hours" (or same-day if you can commit) above the pricing grid. Without it, a time-pressured founder won't buy.
+- [ ] **Record the Loom or remove it from the Pro card.** The Pro tier card says "Rob walks you through the report on video." If that Loom doesn't exist yet, either record it now (see §3.11 for the 60-second script) or remove the line from the Pro card until it does. Promising something undeliverable on a $99 product will cause the first refund.
+- [ ] **Clear stale test rows from Notion.** The queue currently has `romado33@gmail.com` rows sitting "In Progress"/"Paid" since May 25–27, plus `tally-test@example.com` and `stripe-test@example.com` from live testing. Delete them so real orders don't get lost in the noise. Also verify the Windows Task Scheduler is running and processing the 7 pending free audits.
+
+**Once all four are checked:** the funnel is genuinely ready. Go to §7 (Week-1 game plan) and execute.
 
 **Related docs:**
 
@@ -21,7 +34,7 @@ This consolidates every forum/community recommendation and every ready-to-paste 
 
 ### The goal
 
-> **30 targeted messages → 3 strangers pay $9.**
+> **30 targeted messages → 3 strangers pay $19.**
 
 That's the only number that matters right now. Three paying strangers proves the wedge. Until you've hit it, every hour spent polishing the site is an hour stolen from outreach.
 
@@ -52,7 +65,7 @@ That's the only number that matters right now. Three paying strangers proves the
 
 - No ads (Google, Meta, X) — you don't have a CAC number yet.
 - No automation — manual delivery teaches you what the future scanner should check.
-- No Hacker News — wrong audience for $9/$29; they'll roast a non-technical product.
+- No Hacker News — wrong audience for $19/$49; they'll roast a non-technical product.
 - No broad LinkedIn / X promotion — earn the follow first with one value post.
 - No pre-buying domains, building dashboards, or "improving the funnel" before three strangers pay.
 
@@ -85,7 +98,7 @@ The order below is signal-to-effort for your first 5–10 customers. **Discord f
 | 6 | **Indie Hackers** | indiehackers.com | "Share your project" section; builders looking for feedback. Higher quality, slower. | Variant #1 |
 | 7 | **r/Replit** | reddit.com/r/Replit | Replit-built apps are often "almost ready" | Variant #1 / #3 |
 | 8 | **r/nextjs + r/webdev** | — | Catch v0 / Cursor users; less vibe-coded skew | Variant #1 |
-| 9 | **Twitter / X** | x.com | Search `built with lovable`, `lovable.app`, `v0.dev` (last 7 days) | **Variant #6** (single post). Earn the follow before pitching. |
+| 9 | **Twitter / X** | x.com | Search `built with lovable`, `lovable.app`, `v0.dev` (last 7 days). **Monitor launch-window signals** (see §2a below). | **Variant #6** (single post). Earn the follow before pitching. |
 | 10 | **LinkedIn** | linkedin.com | Build-in-public circles; one weekly post tied to a finding pattern | **Variant #4** (pure value, no offer). Builds long-term credibility. |
 
 ### Tier 3 — later / opportunistic
@@ -95,6 +108,39 @@ The order below is signal-to-effort for your first 5–10 customers. **Discord f
 - **Cursor community** — Discord + cursor.com/forum. Less direct-fit (Cursor users are more technical), but the free 3-finding audit link can land.
 - **Product Hunt** — AI tools filter, this week's launches. Mostly useful for prospecting (find pre-launch founders to DM), not for posting.
 - **Founder communities** (MicroConf, Tiny Seed, On Deck, Indie Worldwide) — Tier 3 unless you're already a member. Cold join doesn't work here.
+
+### §2a. Twitter/X real-time launch-window monitoring
+
+This is the highest-intent channel when a founder is actively counting down to launch. The buying signal is the *moment* they post about launching — not a week before or a week after.
+
+**Search queries to run daily (X Advanced Search → "Latest"):**
+
+| Query | Signal |
+|-------|--------|
+| `"launching on Product Hunt"` | Direct purchase intent — they have a date |
+| `"launching next week" (lovable OR bolt OR cursor OR v0)` | Urgency window open |
+| `"built with lovable" (launching OR launch OR "going live")` | Platform-specific launch moment |
+| `"just shipped" (lovable.app OR bolt.new OR v0.dev)` | Just-launched — ideal for free findings reply |
+| `"vibe coded" (launching OR launch OR feedback)` | General vibe-coder pre-launch |
+| `"built this with" (lovable OR cursor OR bolt) "feedback"` | Actively asking for review |
+
+**What to do when you find a signal:**
+1. Click the live URL. Spend 90 seconds. Find one real thing.
+2. Reply publicly: *"Congrats on the upcoming launch — I noticed {ONE_SPECIFIC_THING} on {PAGE}. Happy to send 2–3 more things if useful."*
+3. Do **not** link to launchlook.app in the first reply. Wait for the "yes please."
+4. If they say yes, DM the free findings. Then follow Variant #3.7 two days later.
+
+**Frequency:** 10 minutes/day. Set a recurring reminder. The signal is perishable — a founder who tweeted "launching next week" is no longer a hot prospect in two weeks.
+
+### §2b. Wall of Launches — when and how to use it
+
+The Wall of Launches (`launchlook.app/wall`) is hidden until you have 5 entries. Until then, don't reference it in outreach. Once you have 5:
+
+- Add it to the nav (`landing/index.html` header nav)
+- Reference it in delivery emails as social proof
+- Add a "Get listed on the Wall of Launches" CTA to the thanks page
+
+**Permission:** Yes, you need permission before listing anyone's app. The cleanest way is to add a checkbox to the Tally intake form: *"I'm happy for LaunchLook to list my app on the Wall of Launches after I ship."* Until that checkbox exists, ask individually via the delivery email referral block.
 
 ### How to work the Lovable Discord showcase efficiently
 
@@ -131,7 +177,7 @@ Every pitch below is ready to paste. Bracketed `{TOKENS}` are personalization va
 This is the cleanest single-paragraph pitch. Use it in DMs, short forum replies, and as the body of cold emails.
 
 ```
-I'm testing LaunchLook: a $9 pre-launch checkup for apps built with Lovable, Bolt, Replit, v0, Cursor, etc. You send your live URL. AI scans every screen and drafts findings, then I personally review and curate every one before it reaches you. You get back the 5 things a real first user would notice: broken buttons, placeholder text, trust gaps, mobile issues, confusing flows, plus paste-ready prompts to fix them in your builder. I'm looking for a few early users this week and will refund it if it's not useful.
+I'm testing LaunchLook: a $19 pre-launch checkup for apps built with Lovable, Bolt, Replit, v0, Cursor, etc. You send your live URL. AI scans every screen and drafts findings, then I personally review and curate every one before it reaches you. You get back the things a real first user would notice: broken buttons, placeholder text, trust gaps, mobile issues, confusing flows, plus paste-ready prompts to fix them in your builder. I'm looking for a few early users this week and will refund it if it's not useful.
 ```
 
 Use it when: you want one paragraph that explains the offer, signals "early / honest," and includes the risk reversal (refund).
@@ -240,7 +286,7 @@ Send by DM, never in the public thread. Wait until the founder has actually read
 ```
 Glad the {SPECIFIC_THING} catch was useful.
 
-If you want the full version, with 5 to 20 ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER}, that's what LaunchLook does ($9 Starter, $29 Full). AI scans every screen; I personally review and curate every finding before delivery. No GitHub access. 24-hour turnaround.
+If you want the full version, with ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER}, that's what LaunchLook does ($19 Starter, $49 Scale Up, $99 Pro). AI scans every screen; I personally review and curate every finding before delivery. No GitHub access. 48-hour turnaround.
 
 launchlook.app — or drop your URL on the home page for 3 free findings from a real person (24-hour turnaround, no credit card). No pressure either way.
 ```
@@ -298,7 +344,7 @@ No charge — would love your honest feedback on whether this is useful. Even on
 
 - Was anything in here something you'd actually fix?
 - Was anything obvious or trivial?
-- Would you have paid $9 for it?
+- Would you have paid $19 for it?
 
 Either way, thanks for letting me poke around. Good luck with the launch.
 
@@ -362,6 +408,10 @@ If they reply "sure," send the free findings via DM. Then use **Variant #3.7 (so
 
 ## 4. Tracking & measurement
 
+### Referral flywheel
+
+Every delivery email now includes a **$10 off a future audit** referral credit offer. This kicks in passively once you have paying customers — no outreach needed. Track referral conversions in the Outreach Tracker with a "Referral source" column. After you have 3–5 customers, add a "Referred by" Notion property so you can close the loop manually.
+
 ### What to track
 
 Your existing scripts handle the customer side. For outreach, use either:
@@ -380,7 +430,7 @@ Your existing scripts handle the customer side. For outreach, use either:
 | Reply (Y/N + date + summary) | Y 2026-05-27 "useful, will fix #2" |
 | Free findings sent | Y 2026-05-27 |
 | Soft pitch sent (date) | 2026-05-28 |
-| Converted ($9 / $29 / no) | $9 |
+| Converted ($19 / $49 / $99 / no) | $19 |
 | Notes | Wants to retest in 2 weeks |
 
 ### Metrics to watch (week-by-week)
@@ -395,7 +445,7 @@ Your existing scripts handle the customer side. For outreach, use either:
 ### When to revisit the playbook
 
 - **After 4 weeks of outreach:** drop the variants that produced zero replies. Keep the rest. Reread `docs/02-strategy-and-context.md` decision tree:
-  - **8+ paying customers?** Wedge is real. Begin light automation. Consider raising entry tier from $9 to $12.
+  - **8+ paying customers?** Wedge is real. Begin light automation. Consider adding a launch discount code or bundle offer to accelerate momentum.
   - **3–7 paying customers?** Wedge is unclear. Iterate the pitch. Run another 30 outreach attempts.
   - **0–2 paying customers?** The pitch, audience, or product is wrong. Don't build more. Investigate the funnel.
 
@@ -411,7 +461,7 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 | *"How is this different from PageLens AI?"* | Point them to the canonical comparison: [`launchlook.app/vs-pagelens`](https://launchlook.app/vs-pagelens). Short answer: PageLens is built for SEO marketers who want recurring dashboards; LaunchLook is built for vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-ready fix prompts and a real founder reviewing every finding. Both are real tools; they solve different problems. Do **not** trash PageLens in the conversation, let the comparison page (with its built-in "Honest trade-offs" section) do the heavy lifting. Stay neutral per `SIMPLICITY-GUARDRAILS.md` §6 (brand voice). |
 | *"Is the AI part going to fill my report with hallucinated issues?"* | "That's exactly why the founder review exists. I look at every AI-drafted finding against the actual screenshots before sending. If a finding isn't grounded in real evidence, it doesn't ship. Most reports end with fewer findings than the AI initially drafted; that's the curation working." |
 | *"I already know my app has issues — I don't need someone to tell me."* | "Probably true for the bugs you already see. The point is the ones you **stopped seeing** weeks ago — every founder has them. If you want, send the URL and I'll do a free 10-min pass; if it's all stuff you already knew, no harm done." |
-| *"$9 is too cheap to be any good. / $9 is too expensive for something automated."* | "It's AI-drafted, founder-curated. AI gives me scanner-speed; the founder review is what keeps the bar high. That's why it's $9 instead of free (a real human reads every finding) and $9 instead of $99 (the AI carries the volume work). Rather you buy it twice, Starter now and Full closer to launch, than once." |
+| *"$19 seems steep for something automated."* | "It's AI-drafted, founder-curated. AI gives me scanner-speed; the founder review is what keeps the bar high. That's why it's $19 instead of free (a real human reads every finding) and $19 instead of $99 (the AI carries the volume work). Rather you buy Starter now and Scale Up closer to launch, than pay once for something generic." |
 | *"Will this catch the scary security stuff?"* | "Not deep security (no pentest, no code review). I do catch obvious visible risks though — dev bypasses, exposed test controls, broken auth screens, and (Full Package only) one user seeing another user's data via cross-account checks." |
 | *"Why should I trust you?"* | "Two ways: drop your URL on [launchlook.app](https://launchlook.app/#hero) for a free 3-finding audit — that's a stripped-down sample of what a paid checkup looks like. Or read the [sample report](https://launchlook.app/sample) and decide if the output is worth $19. And there's a 7-day full refund if it isn't." |
 | *"Do I need to give you my GitHub / repo access?"* | "Never. Just the live URL. If your Full Package run needs to check cross-user data, you give me two temporary test accounts via the intake form. No code, no repo, no admin." |
@@ -564,19 +614,25 @@ Keep Webflow outreach separated in the tracker so you can compare reply rates to
 
 | Item | Value |
 |------|-------|
-| Primary goal | 30 messages → 3 paying ($9) strangers |
+| Primary goal | 30 messages → 3 paying ($19) strangers |
 | Site to share warm | https://launchlook.app/#hero (free 3-finding audit), then https://launchlook.app |
 | Sample report (for skeptics) | https://launchlook.app/sample |
-| Support email | hello@launchlook.app |
+| Support / sending email | hello@launchlook.app |
+| Tiers | Starter **$19** · Scale Up **$49** · Pro **$99** |
+| Intake form | https://tally.so/r/QKOX1A |
 | #1 channel | Lovable Discord `#show-and-tell` |
 | #1 variant | #3.4 (reply with 3 specific findings) |
+| Twitter monitoring queries | See §2a — run daily, 10 min |
 | Forbidden words | "security audit," "pentest," "raw AI scanner," "Notion report" |
 | Approved words | "checkup," "second pair of eyes," "polish layer," "what a first-time visitor would notice," "AI-drafted founder-curated" |
 | Loom day | Monday (3/week) |
 | LinkedIn day | Wednesday (1/week) |
 | Quote-ask day | Friday |
+| Wall of Launches | Hidden until 5 entries; need opt-in permission per app (see §2b) |
+| Referral credit | $10 off next audit — in every delivery email automatically |
 | Outreach tracker | Notion DB (schema: `templates/notion/outreach-db.csv`) |
 | Customer tracker | `python scripts/customers_track.py stats` |
+| Queue heartbeat | `python scripts/queue_heartbeat.py --dry-run` |
 | Cadence rules | Same day reply → +1 day free finding → +2 days soft pitch → +5 days drop |
 
 ---
