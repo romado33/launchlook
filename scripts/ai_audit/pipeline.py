@@ -18,6 +18,7 @@ helper returns a single dict that the caller patches into its own state.
 from __future__ import annotations
 
 import csv
+import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -31,11 +32,9 @@ if str(REPO_ROOT) not in sys.path:
 from scripts.audit_ui import yaml_writer  # noqa: E402
 
 from . import feedback as feedback_log  # noqa: E402
-from . import (  # noqa: E402
-    html_extract,
-    llm_client,
-    security_lite,  # noqa: E402
-)
+from . import html_extract, llm_client  # noqa: E402
+from . import security_lite  # noqa: E402
+
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
@@ -531,26 +530,52 @@ def _maybe_append_webflow_checks(prompt: str, platform: str) -> str:
 
 
 def _tier_guidance(tier: str, cap: int) -> str:
+    """Per-tier finding count guidance. Each tier has a TARGET range so the
+    model doesn't under-deliver against the customer's price expectation while
+    still respecting evidence-grounding (don't invent findings to hit a number).
+    """
     if tier == "Starter Package":
+        target_min = max(4, cap // 2)
         return (
-            f"Starter Package surfaces the most impactful pre-launch issues. "
-            f"Return at most {cap} findings: the things a first-time visitor "
-            "would notice within the first minute. Skew toward criticals and "
-            "highs. If the app is clean, return fewer."
+            f"Starter Package ($19) surfaces the most impactful pre-launch issues. "
+            f"Target {target_min}-{cap} findings: the things a first-time visitor "
+            f"would notice within the first minute. Skew toward criticals and "
+            f"highs. If the site is genuinely clean, return fewer rather than "
+            f"padding with invented findings."
         )
     if tier == "Scale Up Package":
+        target_min = max(15, cap * 2 // 3)
         return (
-            f"Scale Up Package is the deeper pass. Return up to {cap} findings "
-            "spanning trust, polish, mobile, security-lite, and broken "
-            "functionality. Includes the cross-user data isolation check. "
-            "Include lower-severity polish items the customer paid extra for. "
-            "Still drop any finding you cannot ground in real evidence."
+            f"Scale Up Package ($49) is the deeper pass. **Target {target_min}-{cap} "
+            f"findings.** This customer paid 2.5x the Starter price; if you return "
+            f"fewer than {target_min} findings, you have not looked hard enough — "
+            f"go back through the findings library and check every category that "
+            f"could plausibly apply. Cover trust signals, legal pages, polish, "
+            f"mobile/responsive issues at narrow widths, security-lite (HTTPS, "
+            f"headers, env leaks), broken or dead-end functionality, the cross-user "
+            f"data isolation check, AI-sounding copy, accessibility basics, "
+            f"performance issues, and any builder-specific pitfalls (e.g. Lovable "
+            f"dev-mode buttons still visible, Webflow 478/767/991 breakpoint "
+            f"breakage). Include lower-severity polish items the customer paid "
+            f"extra for. Still drop any finding you cannot ground in real evidence."
         )
+    # Pro Package
+    target_min = max(25, cap * 3 // 4)
     return (
-        f"Pro Package is the deepest pass. Return up to {cap} findings across "
-        "every category, plus an integrations review (auth, payments, email, "
-        "analytics) for misconfiguration. Drop any finding you cannot ground "
-        "in real evidence."
+        f"Pro Package ($99) is the deepest pass — the most thorough audit we ship. "
+        f"**Target {target_min}-{cap} findings.** This customer paid 5x the Starter "
+        f"price and expects to see issues across every category. If you return "
+        f"fewer than {target_min} findings, you have not looked hard enough — "
+        f"walk the findings library category by category. Cover everything a "
+        f"Scale Up audit covers, PLUS an integrations review (auth flows, "
+        f"payments wiring, email confirmations, analytics setup) for "
+        f"misconfiguration. Include micro-UX polish, accessibility (contrast, "
+        f"focus order, alt text, form labels), performance (image weight, "
+        f"render-blocking, long tasks), SEO basics (title, description, OG "
+        f"tags, canonical), copy quality (clarity, voice, AI-sounding "
+        f"phrasing), trust signals, and edge-case mobile breakpoint issues. "
+        f"Still drop any finding you cannot ground in real evidence — but "
+        f"err toward thoroughness, not minimalism."
     )
 
 
@@ -750,7 +775,17 @@ def run(
 ) -> PipelineResult:
     """Run the full pipeline. Returns the result (YAML text + payload)."""
     tier_caps = load_tier_caps()
-    cap = max_findings or tier_caps.get(customer_ctx.tier, 7)
+    # Fallback to Starter cap (10), not an arbitrary 7. A tier we don't
+    # recognise is almost certainly a typo in the Notion intake, so default
+    # to the smallest tier rather than under-delivering on a paid Pro.
+    cap = max_findings or tier_caps.get(customer_ctx.tier, DEFAULT_TIER_CAPS["Starter Package"])
+    if not max_findings and customer_ctx.tier not in tier_caps:
+        print(
+            f"[pipeline] WARN: tier {customer_ctx.tier!r} not in tier_caps "
+            f"{list(tier_caps)}; defaulting cap={cap}. "
+            "Check TIER_NORMALIZE in scripts/audit_automation/discover.py.",
+            file=sys.stderr,
+        )
     print(f"[pipeline] tier={customer_ctx.tier!r} cap={cap} provider={provider!r}")
 
     # ---- 1. Capture ----

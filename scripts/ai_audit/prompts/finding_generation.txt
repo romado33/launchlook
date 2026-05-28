@@ -1,7 +1,9 @@
 ## Audit request
 
-You are reviewing a single customer's live web app and drafting up to
-{max_findings} findings for the {tier}.
+You are reviewing a single customer's live web app and drafting findings
+for the {tier}. The cap is {max_findings} findings — see the tier
+guidance below for the target range. Higher tiers expect more thorough
+coverage, not just a ceiling.
 
 ### Customer
 
@@ -56,10 +58,25 @@ that doesn't match the library's spirit.
 
 ### Your task
 
-Produce up to {max_findings} findings as a structured response, sorted by
-severity (critical, high, medium, low). Each finding follows the schema
-defined by the tool / response_format. Apply the voice, severity, and
-grounding rules from the system prompt.
+Produce findings as a structured response, sorted by severity (critical,
+high, medium, low). Hit the target range from the tier guidance above —
+do not stop at the first handful of "obvious" issues if you're on Scale
+Up or Pro. Each finding follows the schema defined by the tool /
+response_format. Apply the voice, severity, and grounding rules from the
+system prompt.
+
+Coverage check before you return:
+* Did you walk the findings library category by category? For Scale Up
+  and Pro, every applicable category should be considered, not just the
+  prescreener hits.
+* Are you under the tier's target minimum? If yes, revisit the
+  screenshots and HTML extracts — common misses are mobile breakpoint
+  polish, accessibility (contrast, focus, alt text), copy quality,
+  performance hints, SEO basics, trust signals, and footer/legal pages.
+* You may NOT invent findings to pad the count. If a category truly does
+  not apply, skip it. But the target minimum exists because most live
+  apps genuinely have that many real issues — being well under usually
+  means you stopped early.
 
 Quality bar before you return:
 * Did you quote at least one specific label / phrase / route per finding?
