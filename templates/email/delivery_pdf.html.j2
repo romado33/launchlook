@@ -22,7 +22,7 @@
               <p style="margin:0 0 14px; color:#1F1B16;">Hi {{ customer.first_name }},</p>
 
               <p style="margin:0 0 14px; color:#1F1B16;">
-                Your LaunchLook checkup for <strong>{{ customer.app_name }}</strong> is attached as three PDFs:
+                Your LaunchLook checkup for <strong>{{ customer.app_name }}</strong> is attached{% if customer.tier in ('Scale Up Package', 'Pro Package') %} as {{ 4 if customer.tier == 'Pro Package' else 4 }} PDFs{% else %} as three PDFs{% endif %}:
               </p>
 
               <ul style="margin:0 0 18px; padding-left:18px; color:#1F1B16;">
@@ -32,16 +32,22 @@
                 </li>
                 <li style="margin-bottom:6px;">
                   <strong>Quick Start Guide</strong>
-                  (a one-pager you can hand to your first users)
+                  (a one-page card you can hand to your first users)
                 </li>
+                {% if customer.tier in ('Scale Up Package', 'Pro Package') %}
+                <li style="margin-bottom:6px;">
+                  <strong>User Guide</strong>
+                  (a 2-3 page doc you can use as onboarding material or share in a help centre)
+                </li>
+                {% endif %}
                 <li>
                   <strong>Pre-Launch Checklist</strong>
-                  (a generic 7-section list to run before sharing your live link)
+                  (a 7-section list to run before sharing your live link)
                 </li>
               </ul>
 
               <p style="margin:0 0 14px; color:#1F1B16;">
-                Both open in any PDF reader. No login or Notion account needed.
+                All open in any PDF reader. No login or Notion account needed.
               </p>
 
               <p style="margin:0 0 14px; color:#1F1B16;">

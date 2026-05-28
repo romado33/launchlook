@@ -571,6 +571,7 @@
     const el = $("[data-slug-display]");
     if (!el) return;
     el.textContent = state.slug ? `customers/${state.slug}.yaml` : "(no slug)";
+    refreshDocLinks();
   }
 
   // ---------------------------------------------------------------------
@@ -874,6 +875,36 @@
     $$("[data-pane]").forEach((pane) => {
       pane.hidden = pane.dataset.pane !== name;
     });
+    if (name === "docs") refreshDocLinks();
+  }
+
+  function refreshDocLinks() {
+    const container = $("[data-doc-links]");
+    if (!container) return;
+    const slug = (state.slug || "").trim();
+    if (!slug) {
+      container.innerHTML = '<span class="preview__docs-placeholder">Enter a slug above to enable previews.</span>';
+      return;
+    }
+    const tier = (state.payload?.customer?.tier || "").trim();
+    const isScaleUpPlus = tier === "Scale Up Package" || tier === "Pro Package";
+    const docs = [
+      { label: "Main Report", doc: "report" },
+      { label: "Quick Start Guide", doc: "qsg" },
+    ];
+    if (isScaleUpPlus) {
+      docs.push({ label: "User Guide", doc: "user_guide" });
+    }
+    docs.push({ label: "Pre-Launch Checklist", doc: "checklist" });
+
+    container.innerHTML = docs.map((d) =>
+      `<a href="/preview/${encodeURIComponent(slug)}?doc=${d.doc}"
+          target="_blank"
+          rel="noopener"
+          class="doc-preview-link">
+        ${d.label} ↗
+       </a>`
+    ).join("");
   }
 
   // ---------------------------------------------------------------------

@@ -67,6 +67,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_ROOT = REPO_ROOT / "templates"
 REPORT_TEMPLATE_DIR = TEMPLATE_ROOT / "report"
 QSG_TEMPLATE_DIR = TEMPLATE_ROOT / "qsg"
+USER_GUIDE_TEMPLATE_DIR = TEMPLATE_ROOT / "user_guide"
 EMAIL_TEMPLATE_DIR = TEMPLATE_ROOT / "email"
 CONFIDENCE_CHECK_TEMPLATE_DIR = TEMPLATE_ROOT / "confidence_check"
 HANDOFF_TEMPLATE_DIR = TEMPLATE_ROOT / "handoff"
@@ -202,6 +203,7 @@ def build_jinja_env():
             [
                 str(REPORT_TEMPLATE_DIR),
                 str(QSG_TEMPLATE_DIR),
+                str(USER_GUIDE_TEMPLATE_DIR),
                 str(EMAIL_TEMPLATE_DIR),
                 str(CONFIDENCE_CHECK_TEMPLATE_DIR),
                 str(HANDOFF_TEMPLATE_DIR),
@@ -402,6 +404,24 @@ def render_qsg_html(env, data: dict[str, Any], delivered_at: str) -> str | None:
     return template.render(
         customer=data["customer"],
         qsg=qsg,
+        delivered_at=delivered_at,
+    )
+
+
+def render_user_guide_html(env, data: dict[str, Any], delivered_at: str) -> str | None:
+    """Render the 2-3 page User Guide PDF (Scale Up and Pro only)."""
+    user_guide = data.get("user_guide")
+    if not user_guide or not user_guide.get("sections"):
+        return None
+
+    tier = (data.get("customer") or {}).get("tier", "")
+    if tier not in ("Scale Up Package", "Pro Package"):
+        return None
+
+    template = env.get_template("user_guide.html.j2")
+    return template.render(
+        customer=data["customer"],
+        user_guide=user_guide,
         delivered_at=delivered_at,
     )
 
@@ -969,6 +989,7 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     main_pdf = out_dir / "main-report.pdf"
     qsg_pdf = out_dir / "quick-start-guide.pdf"
+    user_guide_pdf = out_dir / "user-guide.pdf"
 
     env = build_jinja_env()
 
@@ -1002,9 +1023,18 @@ def main() -> int:
     else:
         print("  ! no quick_start_guide section in YAML, skipping QSG PDF")
 
+    ug_html = render_user_guide_html(env, data, delivered_at)
+    if ug_html:
+        html_to_pdf(ug_html, user_guide_pdf, customer["first_name"])
+        print(f"  wrote {user_guide_pdf.name} ({user_guide_pdf.stat().st_size / 1024:.1f} KB)")
+    elif customer.get("tier") in ("Scale Up Package", "Pro Package"):
+        print("  ! no user_guide section in YAML (Scale Up/Pro), skipping User Guide PDF")
+
     attachments = [main_pdf]
     if qsg_html:
         attachments.append(qsg_pdf)
+    if ug_html:
+        attachments.append(user_guide_pdf)
 
     # Pre-Launch Checklist is bundled with every paid tier; this script is
     # only ever invoked for paid deliveries (free 3-finding audits go through

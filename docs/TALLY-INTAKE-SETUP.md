@@ -1,128 +1,97 @@
-# LaunchLook — Build the Tally intake form (manual editor)
+# Tally Intake Form Setup
 
-**Time:** ~30–45 minutes (new form) · ~10 minutes (hidden-tier upgrade on existing form)
-
-## Copy file (plain text)
-
-**Paste text only:** [`TALLY-PASTE-ONLY.txt`](TALLY-PASTE-ONLY.txt) (no instructions in file)
-
-**Which block type each line is:** [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt)
-
-Thank-you page text is at the bottom of the same file (or use [`TALLY-THANK-YOU-PASTE.txt`](TALLY-THANK-YOU-PASTE.txt)).
-
-Do **not** paste from `.md` files — Tally will show formatting junk.
+This doc describes how to configure the Tally intake form fields, including
+the 3 optional tone/audience fields for Scale Up and Pro customers.
 
 ---
 
-## Before you open Tally
+## Standard fields (all paid tiers)
 
-| Prerequisite | Value |
-|--------------|--------|
-| Intake form (edit in Tally) | `https://tally.so/r/QKOX1A` — already in `config.js` |
-| After-submit redirect (set in Tally) | `https://launchlook.app/thanks` (static page) |
-| Stripe success URLs | Tier-specific — see "Hidden-tier setup" below |
-| Notification email | `hello@launchlook.app` |
+These are already wired into the pipeline via the hidden `tier` parameter
+in the Tally success URL. No changes needed.
+
+| Tally field label | Mapped to | Notes |
+|---|---|---|
+| First name | `customer.first_name` | Required |
+| Last name | `customer.last_name` | Optional |
+| Email | `customer.email` | Required |
+| App name | `customer.app_name` | Required |
+| App URL | `customer.app_url` | Required |
+| Builder / platform | `customer.builder` | Dropdown |
+| Anything you want the auditor to know | `customer.intake_notes` | Optional freetext |
+| Tier (hidden) | `customer.tier` | Set via `?tier=` in the success URL |
 
 ---
 
-## Hidden-tier setup (replaces Q8) — ~10 min
+## New optional fields (Scale Up and Pro only)
 
-The old Q8 ("Which tier did you buy?") asked customers to re-select what they already paid for on Stripe. Replace it with a Tally hidden field populated from the Stripe success URL. Cleaner for customers, same data in Notion.
+These 3 fields feed both the Quick Start Guide and the User Guide prompts.
+They should be shown **conditionally** in Tally — only when the hidden `tier`
+field equals `Scale Up Package` or `Pro Package`.
 
-### 1 — Update Stripe Payment Link success URLs (run once)
+### How to add conditional logic in Tally
 
-Each main-tier link now redirects to a tier-specific URL:
+1. In your Tally form, go to the field you want to show conditionally.
+2. Click **Conditional logic** (or the logic icon on that field block).
+3. Set: **Show this field when → Tier → is → Scale Up Package** (add an
+   OR condition for **Pro Package** as well).
+4. Add the field to the form, then apply the condition.
 
-| Tier | Success URL |
-|------|-------------|
-| Starter ($19) | `https://launchlook.app/thanks?tier=starter` |
-| Scale Up ($49) | `https://launchlook.app/thanks?tier=scale_up` |
-| Pro ($99) | `https://launchlook.app/thanks?tier=pro` |
+### The 3 fields to add
 
-```bash
-python scripts/stripe_payment_links.py update-success-urls --dry-run
-# looks correct? remove --dry-run to apply
-python scripts/stripe_payment_links.py update-success-urls
+**Field 1 — Primary user**
+- Label: `Who are your users?`
+- Type: Short text or paragraph
+- Placeholder: e.g. `Small business owners, 35-55, non-technical`
+- Mapped to: `customer_ctx.user_audience` in the pipeline
+- Conditional: Show for Scale Up and Pro only
+
+**Field 2 — Tone**
+- Label: `What tone fits your brand?`
+- Type: Short text (or a 3-option multiple choice: Friendly / Formal / Casual)
+- Placeholder: e.g. `Friendly and approachable, informal`
+- Mapped to: `customer_ctx.user_tone` in the pipeline
+- Conditional: Show for Scale Up and Pro only
+
+**Field 3 — Content notes**
+- Label: `Anything the guide must or must not mention?`
+- Type: Short text or paragraph
+- Placeholder: e.g. `We never use the word "dashboard" — we call it "your workspace"`
+- Mapped to: `customer_ctx.user_content_constraints` in the pipeline
+- Conditional: Show for Scale Up and Pro only
+- Mark as optional so it does not block form submission
+
+---
+
+## How these fields reach the pipeline
+
+When the Tally webhook (or Tally email) delivers responses to your intake
+processing script, map these three field answers onto the `CustomerContext`
+dataclass fields:
+
+```python
+CustomerContext(
+    # ... other fields ...
+    user_audience=intake.get("who_are_your_users", ""),
+    user_tone=intake.get("tone", ""),
+    user_content_constraints=intake.get("content_notes", ""),
+)
 ```
 
-Add-on links (Confidence Check, Handoff Report) keep the flat `/thanks` URL.
-
-### 2 — Add a hidden `tier` field in Tally (QKOX1A)
-
-1. Open `https://tally.so/r/QKOX1A` in edit mode.
-2. Click **+** → **Hidden field**.
-3. Set the field label to `tier` and the **URL parameter key** to `tier`.
-4. Save. Tally will now receive `?tier=starter` (or `scale_up` / `pro`) from the Stripe redirect and populate this field automatically.
-
-### 3 — Delete Q8 and update conditional logic
-
-1. Delete **Q8** ("Which tier?").
-2. For Q9, Q10, Q11, Q12 — change the conditional from:
-   - "Show when Q8 = Scale Up Package ($49) OR Pro Package ($99)"
-   - to: **"Show when [hidden tier] = scale_up OR pro"**
-
-That's it. The webhook (`api/tally-webhook.py`) already maps `scale_up` → `Scale Up Package` and `pro` → `Pro Package` in `TIER_MAP`.
-
-### Fallback / backward compatibility
-
-Old responses that still have Q8 data continue to work — the TIER_MAP keeps all legacy Q8 display-text keys. You can delete Q8 from the form without redeploying any code.
+The `build_user_guide_prompt()` function in `scripts/ai_audit/pipeline.py`
+picks them up automatically. If the fields are blank (Starter customers, or
+Scale Up/Pro customers who skipped them), the prompt defaults to neutral
+plain-English tone and a general adult audience.
 
 ---
 
-## Full form checklist (new form)
+## Tally field IDs
 
-- [ ] New form → **Start from scratch**
-- [ ] Form title: `LaunchLook — Post-purchase intake`
-- [ ] Block 0: **Text** (security notice) — paste from file
-- [ ] Questions 1–7, then 9–15 (Q8 removed — use hidden tier field instead)
-- [ ] **Q7 (Which platform built it?) — add `Webflow`** between `v0` and `Other`
-- [ ] **Hidden field** with URL-param key `tier` (see step 2 above)
-- [ ] Logic on Q9, Q10, Q11, Q12: show when hidden `tier` = `scale_up` OR `pro`
-- [ ] Q15 checkbox required, above Submit
-- [ ] Thank you page — paste from file
-- [ ] **After submit** → redirect to `https://launchlook.app/thanks`
-- [ ] Notifications → `hello@launchlook.app`, all answers
-- [ ] Test Starter path (Q9–12 hidden) and Scale Up/Pro path (Q9–12 visible)
-- [x] `intakeFormUrl` in `config.js` → `QKOX1A` (already deployed)
+After adding these fields in Tally, note their field IDs here so the intake
+processing script can map them by ID (more reliable than matching by label):
 
-### Webflow option for Q7 (5-min add)
-
-LaunchLook for Webflow (the `/webflow` SKU at `launchlook.app/webflow`) reuses this same intake form. Webflow customers will land here from the Webflow landing page, so Q7's dropdown needs to include `Webflow` so they can self-identify.
-
-Updated Q7 option list (in order):
-
-```
-Lovable
-Bolt
-Base44
-Replit
-v0
-Webflow
-Other
-```
-
-Open Tally → Q7 → **Edit options** → add `Webflow` between `v0` and `Other`. No conditional logic needs to change (Q9–Q12 trigger off hidden `tier`, not Q7 platform).
-
-When the Tally webhook fires into the AI pipeline, the platform value `Webflow` should be passed through to `scripts/ai_audit.py --platform webflow --builder Webflow`. See `docs/WEBFLOW-EXPANSION.md` for the full handoff.
-
----
-
-## Troubleshooting
-
-| Issue | Fix |
-|-------|-----|
-| Q9–12 never appear | Confirm hidden field URL-param key is exactly `tier`; check Stripe links use `?tier=scale_up` / `?tier=pro` |
-| Tier blank in Notion | Run `update-success-urls`; or check `tallyPrefill.tier = "tier"` in `config.js` |
-| Thanks page on site is mailto | Set `intakeFormUrl` in config and deploy |
-
----
-
-Site already points at **QKOX1A**. Only update `config.js` if you publish a new Tally URL.
-
-### Optional: pre-fill App URL from `/thanks`
-
-After a free audit, `/thanks` and `/thanks-free-audit` pass the customer's email (and App URL when configured) into the Tally link.
-
-1. In Tally, add a **hidden field** for the app URL (note the URL-param key).
-2. Set `tallyPrefill.appUrl` in `landing/assets/config.js` to that key (e.g. `"app_url"`).
-3. Email prefill uses `?email=` automatically on the standard email question.
+| Field | Tally field ID |
+|---|---|
+| Who are your users? | *(fill in after adding to form)* |
+| What tone fits your brand? | *(fill in after adding to form)* |
+| Anything the guide must or must not mention? | *(fill in after adding to form)* |

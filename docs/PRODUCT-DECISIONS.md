@@ -15,9 +15,9 @@ The tier ladder is **fixed at 4 tiers**: Free / Starter / Scale Up / Pro. Do not
 | Tier | Price | Findings cap | Key deliverables |
 |---|---|---|---|
 | Free | $0 | 2 (top severity only) | Email-gated. Used as lead magnet. No bundled PDFs. |
-| Starter | $19 | 10 | Main Report PDF, Pre-Launch Checklist PDF |
-| Scale Up | $49 | 30 | + cross-user data isolation check, Quick Start Guide PDF, Pre-Launch Checklist PDF |
-| Pro | $99 | 40 | + integrations review, recorded Loom walkthrough, Handoff Report, Pre-Launch Checklist PDF, deep links in QSG |
+| Starter | $19 | 10 | Main Report PDF, Quick Start Guide PDF (1-page end-user card), Pre-Launch Checklist PDF |
+| Scale Up | $49 | 30 | + cross-user data isolation check, Quick Start Guide PDF, User Guide PDF (2-3 page end-user doc), Pre-Launch Checklist PDF |
+| Pro | $99 | 40 | + integrations review, recorded Loom walkthrough, Handoff Report, Quick Start Guide PDF, User Guide PDF, Pre-Launch Checklist PDF, deep links in QSG |
 
 ### Add-ons (any paid tier)
 
@@ -129,7 +129,8 @@ Pricing is fixed across both the main SKU and the Webflow SKU. Do not introduce 
 So future workers don't quietly re-scope what each tier ships, here is the binding definition of every deliverable referenced in §1.
 
 - **Main Report PDF.** The customer-facing audit. Verdict, findings (sorted by severity), one-page "if you only fix three things" summary. Plain-English titles, founder voice. Bound by `SIMPLICITY-GUARDRAILS.md` §3. Ships at Starter, Scale Up, and Pro.
-- **QSG PDF.** Paste-ready fix prompts ordered by severity, self-contained. Deep links allowed at Pro tier when the buyer's AI builder supports them. Bound by `SIMPLICITY-GUARDRAILS.md` §4. Ships at Starter, Scale Up, and Pro.
+- **QSG PDF (Quick Start Guide).** A one-page end-user getting-started card for the app owner to hand to their first users. 4-7 steps covering the working flows the audit observed. Written as if produced by the app owner — no mention of findings or LaunchLook. Plain language, no jargon. Ships at Starter, Scale Up, and Pro. Deep links allowed at Pro tier when the buyer's AI builder supports them. Bound by `SIMPLICITY-GUARDRAILS.md` §4.
+- **User Guide PDF.** A 2-3 page end-user documentation guide for the app owner to use as onboarding documentation, embed in emails, or share in a help centre. Covers 8-12 flows (happy path + common secondary flows), a short FAQ section (2-3 entries), and a "get help" footer. Written from the app owner's voice. Tone and audience can be customised via the Tally intake form (3 optional fields: primary user description, brand tone, content constraints). Ships at Scale Up and Pro only.
 - **Pre-Launch Checklist PDF.** The full pre-launch list (formerly a public `/checklist` page; removed May 2026). Bundled on **every paid tier** (Starter, Scale Up, Pro). Not sold as a standalone website SKU. Customer-facing copy says "Pre-Launch Checklist" (per `SIMPLICITY-GUARDRAILS.md` §6).
 - **Cross-user data isolation check.** Verifies that one logged-in user cannot read or modify another user's data. Bundled in Scale Up and Pro. Standalone SKU is deferred (see §4).
 - **Integrations review.** A pass over any third-party integrations the buyer is using (auth, payments, email, analytics) for misconfiguration. Pro only.
@@ -152,6 +153,7 @@ When you change anything in this file:
 
 | Date | Change |
 |---|---|
+| 2026-05-28 | Added User Guide PDF deliverable (Scale Up + Pro). Updated §1 tier table and §8 deliverable definitions. Fixed §8 QSG description (was incorrectly described as "paste-ready fix prompts" — it is an end-user getting-started card). Added Tally intake tone/audience fields (3 optional, Scale Up + Pro conditional). |
 | 2026-05-26 | Initial canonical doc. Founder Roast ($229) tier dropped same day; top tier locked at Pro $99. |
 | 2026-05-26 | Added §10 (Analytics goals tracked). Plausible installed across all landing pages. |
 | 2026-05-26 | Handoff Report add-on dropped from $99 → $49 (autonomous batch worker). Anchoring math: Scale Up $49 + Handoff $49 = $98, sits just below Pro $99, intentional upsell ladder. Old bundle was $148 (above Pro), so the add-on never sold. New Stripe Payment Link `plink_1TbNP9BxCiPye3m0c5A1DNfq` (URL `https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06`) wired into `landing/assets/config.js` `stripe.handoff`. Webhook routing was already metadata-first (`product=handoff_report`); the `HANDOFF_REPORT_CENTS_TO_LABEL` dict gained a `4900` entry. Landing copy, FAQ, deliver_report.py, share_report.py, and consistency_check.py all updated to read `$49`. |

@@ -1,11 +1,12 @@
 Hi {{ customer.first_name }},
 
-Your LaunchLook checkup for {{ customer.app_name }} is attached as three PDFs:
+Your LaunchLook checkup for {{ customer.app_name }} is attached as {% if customer.tier in ('Scale Up Package', 'Pro Package') %}four{% else %}three{% endif %} PDFs:
 - Main Report ({{ n_findings }} finding{{ '' if n_findings == 1 else 's' }}, sorted by severity)
-- Quick Start Guide (a one-pager you can hand to your first users)
-- Pre-Launch Checklist (a generic 7-section list to run before sharing your live link)
+- Quick Start Guide (a one-page card you can hand to your first users)
+{% if customer.tier in ('Scale Up Package', 'Pro Package') %}- User Guide (a 2-3 page doc for onboarding emails or a help centre)
+{% endif %}- Pre-Launch Checklist (a 7-section list to run before sharing your live link)
 
-All three open in any PDF reader. No login or Notion account needed.
+All open in any PDF reader. No login or Notion account needed.
 
 Each finding includes a copy-paste fix prompt for {{ customer.builder }}. Start at the top, paste the prompts in, verify the fix on your live URL, and move down the list.
 

@@ -181,6 +181,57 @@ QSG_SCHEMA: dict[str, Any] = {
     },
 }
 
+USER_GUIDE_STEP_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["title", "body"],
+    "properties": {
+        "title": {"type": "string"},
+        "body": {"type": "string"},
+    },
+}
+
+USER_GUIDE_SECTION_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["heading", "steps"],
+    "properties": {
+        "heading": {"type": "string"},
+        "steps": {"type": "array", "items": USER_GUIDE_STEP_SCHEMA, "minItems": 1},
+    },
+}
+
+USER_GUIDE_FAQ_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["question", "answer"],
+    "properties": {
+        "question": {"type": "string"},
+        "answer": {"type": "string"},
+    },
+}
+
+USER_GUIDE_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["title", "intro", "sections", "faq", "footer_note"],
+    "properties": {
+        "title": {"type": "string"},
+        "intro": {"type": "string"},
+        "sections": {
+            "type": "array",
+            "items": USER_GUIDE_SECTION_SCHEMA,
+            "minItems": 1,
+        },
+        "faq": {
+            "type": "array",
+            "items": USER_GUIDE_FAQ_SCHEMA,
+            "minItems": 0,
+        },
+        "footer_note": {"type": "string"},
+    },
+}
+
 # Handoff Report narrative sections (q18). One free-text field per call so
 # context_paragraph / recommended_order / code_review_notes can iterate
 # their prompts independently. See scripts/ai_audit/prompts/handoff_*.txt.
@@ -244,6 +295,16 @@ class LLMClient(ABC):
         screenshots: list[tuple[str, Path]],
     ) -> dict[str, Any]:
         """Return ``{title, intro, steps:[{title, body}...], footer_note}``."""
+
+    @abstractmethod
+    def generate_user_guide(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        screenshots: list[tuple[str, Path]],
+    ) -> dict[str, Any]:
+        """Return ``{title, intro, sections:[{heading, steps:[...]}...], faq:[...], footer_note}``."""
 
     @abstractmethod
     def generate_handoff_text(
@@ -484,6 +545,27 @@ class ClaudeClient(LLMClient):
         )
         return _normalize_qsg(payload)
 
+    def generate_user_guide(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        screenshots: list[tuple[str, Path]],
+    ) -> dict[str, Any]:
+        payload = self._call_with_tool(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            screenshots=screenshots,
+            tool_name="record_user_guide",
+            call_type="user_guide_generation",
+            tool_description=(
+                "Record the 2-3 page User Guide for end users of this app. "
+                "Structured sections, each with steps, plus a FAQ block."
+            ),
+            input_schema=USER_GUIDE_SCHEMA,
+        )
+        return _normalize_user_guide(payload)
+
     def generate_handoff_text(
         self,
         *,
@@ -669,6 +751,23 @@ class GPTClient(LLMClient):
         )
         return _normalize_qsg(payload)
 
+    def generate_user_guide(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        screenshots: list[tuple[str, Path]],
+    ) -> dict[str, Any]:
+        payload = self._call_with_schema(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            screenshots=screenshots,
+            schema_name="user_guide",
+            call_type="user_guide_generation",
+            schema=USER_GUIDE_SCHEMA,
+        )
+        return _normalize_user_guide(payload)
+
     def generate_handoff_text(
         self,
         *,
@@ -701,6 +800,44 @@ def _normalize_qsg(payload: dict[str, Any]) -> dict[str, Any]:
         "title": (payload.get("title") or "").strip(),
         "intro": (payload.get("intro") or "").strip(),
         "steps": steps,
+        "footer_note": (payload.get("footer_note") or "").strip(),
+    }
+
+
+def _normalize_user_guide(payload: dict[str, Any]) -> dict[str, Any]:
+    sections_raw = payload.get("sections") or []
+    sections: list[dict[str, Any]] = []
+    for sec in sections_raw:
+        if not isinstance(sec, dict):
+            continue
+        heading = (sec.get("heading") or "").strip()
+        steps_raw = sec.get("steps") or []
+        steps: list[dict[str, str]] = []
+        for entry in steps_raw:
+            if not isinstance(entry, dict):
+                continue
+            t = (entry.get("title") or "").strip()
+            b = (entry.get("body") or "").strip()
+            if t or b:
+                steps.append({"title": t, "body": b})
+        if heading or steps:
+            sections.append({"heading": heading, "steps": steps})
+
+    faq_raw = payload.get("faq") or []
+    faq: list[dict[str, str]] = []
+    for entry in faq_raw:
+        if not isinstance(entry, dict):
+            continue
+        q = (entry.get("question") or "").strip()
+        a = (entry.get("answer") or "").strip()
+        if q or a:
+            faq.append({"question": q, "answer": a})
+
+    return {
+        "title": (payload.get("title") or "").strip(),
+        "intro": (payload.get("intro") or "").strip(),
+        "sections": sections,
+        "faq": faq,
         "footer_note": (payload.get("footer_note") or "").strip(),
     }
 
@@ -865,6 +1002,45 @@ class StubClient(LLMClient):
                 {
                     "title": "Try the main action",
                     "body": "Stub step. Replace by setting an LLM API key.",
+                },
+            ],
+            "footer_note": "Stub footer. Replace by setting an LLM API key.",
+        }
+
+    def generate_user_guide(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        screenshots: list[tuple[str, Path]],
+    ) -> dict[str, Any]:
+        with cost_tracker.track_call("user_guide_generation") as _t:
+            _t.set_usage(
+                self.model,
+                _stub_token_estimate(system_prompt, user_prompt),
+                _stub_output_estimate(1200),
+            )
+        return {
+            "title": f"{self._app_name} — User Guide",
+            "intro": (
+                "Stub User Guide. Set ANTHROPIC_API_KEY or OPENAI_API_KEY "
+                "to get a real guide written from the audit evidence."
+            ),
+            "sections": [
+                {
+                    "heading": "Getting started",
+                    "steps": [
+                        {
+                            "title": "Open the app",
+                            "body": "Stub step. Real steps are generated by the LLM from screenshots.",
+                        },
+                    ],
+                },
+            ],
+            "faq": [
+                {
+                    "question": "Stub FAQ question?",
+                    "answer": "Stub answer. Replace by setting an LLM API key.",
                 },
             ],
             "footer_note": "Stub footer. Replace by setting an LLM API key.",

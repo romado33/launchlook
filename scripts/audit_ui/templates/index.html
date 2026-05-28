@@ -266,14 +266,22 @@
     <!-- ----------------------------------------------------- -->
     <aside class="preview" data-preview>
       <header class="preview__header">
-        <h3 class="preview__title">YAML preview</h3>
+        <h3 class="preview__title">Preview</h3>
         <div class="preview__tabs">
           <button type="button" class="preview__tab is-active" data-tab="yaml">YAML</button>
           <button type="button" class="preview__tab" data-tab="log">Deliver log</button>
+          <button type="button" class="preview__tab" data-tab="docs">Docs</button>
         </div>
       </header>
       <pre class="preview__yaml" data-pane="yaml"><code>(Click "Generate YAML" to render.)</code></pre>
       <pre class="preview__log" data-pane="log" hidden><code>(No deliver job has run in this session yet.)</code></pre>
+      <div class="preview__docs" data-pane="docs" hidden>
+        <p class="preview__docs-intro">Open a live HTML preview of each document in a new tab. Save the YAML first for the latest content.</p>
+        <div class="preview-doc-links" data-doc-links>
+          <!-- populated by JS once slug is known -->
+          <span class="preview__docs-placeholder">Enter a slug above to enable previews.</span>
+        </div>
+      </div>
     </aside>
   </main>
 
@@ -288,7 +296,9 @@
         ✓ Approve all remaining &amp; ship
       </button>
       {% else %}
-      <button type="button" class="btn btn-success" data-action="deliver-send">Save + send PDFs</button>
+      <button type="button" class="btn btn-success" data-action="deliver-send" title="Render PDFs and send to customer via Resend">
+        Send to customer ✉
+      </button>
       {% endif %}
     </div>
   </footer>

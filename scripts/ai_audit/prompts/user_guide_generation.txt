@@ -1,0 +1,73 @@
+## User Guide request (Scale Up and Pro tiers)
+
+After auditing {app_name}, produce a 2-3 page User Guide for the app owner
+to share with their users as onboarding documentation. This is a longer,
+more complete companion to the Quick Start Guide (which is a one-page card).
+
+The User Guide is for the app's end users — not for the founder reviewing
+the audit. It should read as documentation produced by the app owner.
+
+### Audience
+
+{user_audience}
+
+If no audience is specified, assume: a general adult user who is comfortable
+with smartphones and web apps but has no technical background.
+
+### Tone
+
+{user_tone}
+
+If no tone is specified, use: friendly, clear, and direct. No jargon. No
+filler phrases. Contractions are fine.
+
+### Content constraints
+
+{user_content_constraints}
+
+If no constraints are specified, write naturally about what you observed.
+
+### Inputs
+
+* App name: {app_name}
+* App URL: {app_url}
+* Builder: {builder}
+* What we saw in the audit (screenshots + HTML extracts): use the same
+  evidence used for findings. Ground every section in flows that appeared
+  to work during the audit.
+
+### Required structure
+
+* title: "{app_name} — User Guide" (or a close plain-English variant)
+* intro: 2-3 sentences. What the app does, who it is for, what this guide
+  covers.
+* sections: 3-5 named sections. Each section has:
+    - heading: short, imperative or descriptive (e.g. "Getting started",
+      "Managing your account", "Common questions")
+    - steps: 2-5 steps per section, each with:
+        - title (short, imperative or descriptive)
+        - body (2-4 sentences, concrete, references what the user
+          actually sees; aim for 25-45 words per step)
+* faq: 2-3 short FAQ entries. Each has:
+    - question: what a first-time user is likely to ask
+    - answer: 1-3 sentences. Plain English. No jargon.
+* footer_note: 1-2 sentences. Where to get help. Use the app's support
+  email if inferable from the HTML/intake; otherwise use a generic
+  "Reply to your welcome email" suggestion.
+
+### Rules
+
+* Only describe flows you saw working in the audit. Do NOT invent screens
+  or features that were not observed.
+* If a flow was broken or incomplete, omit it entirely. Do not warn the
+  user about it — this is documentation, not an audit.
+* Do not reference the audit, LaunchLook, or any findings. The User Guide
+  is presented as the app owner's own documentation.
+* Do not include security or privacy advice (e.g. "use a strong password")
+  unless a specific password-reset or account-protection flow was observed.
+* Same em-dash, AI-tell, and marketing-speak rules as the audit. Plain
+  English throughout.
+* The full guide should fit comfortably on 2-3 printed pages at 10.5pt.
+  Aim for 400-650 words of body content across all sections.
+
+Return the structured response only. No preamble.

@@ -219,6 +219,7 @@ def _register_routes(app: Flask) -> None:
                 render_main_report_html,
                 render_pre_launch_checklist_html,
                 render_qsg_html,
+                render_user_guide_html,
             )
         except ImportError as exc:
             return Response(f"<pre>Import error: {exc}</pre>", status=500, mimetype="text/html")
@@ -227,15 +228,22 @@ def _register_routes(app: Flask) -> None:
         env = build_jinja_env()
         now = datetime.now(UTC).strftime("%B %-d, %Y") if sys.platform != "win32" else datetime.now(UTC).strftime("%B %#d, %Y")
 
+        tier = (data.get("customer") or {}).get("tier", "")
+        has_user_guide = tier in ("Scale Up Package", "Pro Package")
+
         nav = (
             '<div style="position:fixed;top:0;left:0;right:0;z-index:9999;'
             'background:#1a1a2e;color:#fff;padding:8px 16px;font-family:sans-serif;'
-            'font-size:13px;display:flex;gap:16px;align-items:center;">'
+            'font-size:13px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;">'
             f'<strong>LaunchLook Preview</strong> &nbsp;|&nbsp; slug: <code>{safe}</code>'
             f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=report" style="color:#7eb8f7">Main Report</a>'
-            f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=qsg" style="color:#7eb8f7">Quick Start</a>'
+            f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=qsg" style="color:#7eb8f7">Quick Start Guide</a>'
+        )
+        if has_user_guide:
+            nav += f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=user_guide" style="color:#7eb8f7">User Guide</a>'
+        nav += (
             f' &nbsp;|&nbsp; <a href="/preview/{safe}?doc=checklist" style="color:#7eb8f7">Checklist</a>'
-            f' &nbsp;|&nbsp; <a href="/review/{safe}" style="color:#a0d8a0">✎ Edit</a>'
+            f' &nbsp;|&nbsp; <a href="/review/{safe}" style="color:#a0d8a0">&#9998; Edit</a>'
             "</div>"
             '<div style="margin-top:48px;">'
         )
@@ -244,10 +252,20 @@ def _register_routes(app: Flask) -> None:
             html = render_qsg_html(env, data, now)
             if not html:
                 return Response(
-                    "<pre>No Quick Start Guide in this YAML.</pre>",
+                    "<pre>No Quick Start Guide in this YAML yet. Run the pipeline first.</pre>",
                     status=404,
                     mimetype="text/html",
                 )
+        elif doc == "user_guide":
+            html = render_user_guide_html(env, data, now)
+            if not html:
+                msg = (
+                    "<pre>No User Guide in this YAML. "
+                    "User Guide is generated for Scale Up and Pro tiers only.</pre>"
+                    if not has_user_guide
+                    else "<pre>No User Guide in this YAML yet. Run the pipeline first.</pre>"
+                )
+                return Response(msg, status=404, mimetype="text/html")
         elif doc == "checklist":
             html = render_pre_launch_checklist_html(env, data, now)
         else:
@@ -496,17 +514,17 @@ def _register_routes(app: Flask) -> None:
         a 'Notion unavailable' message without crashing the portal.
         """
         try:
+            from api._lib.notion_helpers import (  # noqa: PLC0415
+                STATUS_DELIVERED,
+                get_client,
+                get_customers_ds_id,
+            )
             from scripts.audit_automation.discover import (  # noqa: PLC0415
                 discover_all,
             )
             from scripts.stale_queue_alert import (  # noqa: PLC0415
                 DEFAULT_THRESHOLD_HOURS,
                 find_stale_rows,
-            )
-            from api._lib.notion_helpers import (  # noqa: PLC0415
-                STATUS_DELIVERED,
-                get_client,
-                get_customers_ds_id,
             )
 
             # Pending jobs (same query the worker uses)
