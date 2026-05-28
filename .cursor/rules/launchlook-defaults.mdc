@@ -1,86 +1,204 @@
 ---
-description: Rob's standing preferences and recurring corrections. Read every turn.
+description: Rob's standing preferences, canonical values, and recurring corrections. Read every turn before touching any file.
 alwaysApply: true
 ---
 
-# Standing instructions for Rob's projects
+# LaunchLook standing instructions
 
-These are corrections I've had to give Cursor repeatedly. Follow them by default.
+Read `docs/LESSONS-LEARNED.md` for the full rationale. These are the directives.
 
-## Numbers are sacred
+---
 
-Never substitute a number you "think is more common". Grep
-`scripts/launchlook_constants.py` (or the project's equivalent) before
-changing any count. Current canonical values:
+## Canonical numbers — never substitute your own
 
-- Free trial: **2 findings**
-- Starter Package ($19): **10 findings**
-- Scale Up Package ($49): **30 findings**
-- Pro Package ($99): **40 findings**
+Always grep `scripts/launchlook_constants.py` and `docs/PRODUCT-DECISIONS.md §1` first.
 
-If you change a number, update every call site and the drift test in `tests/`.
+| Value | Canonical |
+|---|---|
+| Free tier delivery | **2 findings** (`FREE_AUDIT_DELIVER_COUNT = 2`) |
+| Free tier pipeline depth | Starter cap (10) — runs at 10, delivers top 2 |
+| Starter Package ($19) | Up to **10** findings |
+| Scale Up Package ($49) | Up to **30** findings |
+| Pro Package ($99) | Up to **40** findings |
+| Tier count | Hard cap at **4**: Free / Starter / Scale Up / Pro |
+| Tester personas | Hard cap at **7**: never add an 8th |
+| Refund window | **7 days** |
+| Free → Starter dedup | **90 days** |
+| Handoff Report add-on | **$49** (not $99) |
+| Fix Check standalone / discounted | **$19** / **$9 within 14 days** |
 
-## Brand voice
+When a number appears in both code and customer-facing copy, add a drift test in `tests/`.
 
-- ❌ "Trust Gaps", "synergize", "leverage" → ✅ "embarrassing bugs", plain English
+---
+
+## Pricing copy: always "up to X", never "X"
+
+```html
+<!-- ✅ correct -->
+<li>Up to <strong class="text-ink">40</strong> findings + fix prompts</li>
+
+<!-- ❌ wrong — implies a guarantee -->
+<li><strong class="text-ink">40</strong> findings + fix prompts</li>
+```
+
+---
+
+## Brand voice — hard rules
+
+**Read `docs/SIMPLICITY-GUARDRAILS.md` before touching any customer surface.**
+
+Never on any customer-facing surface:
+- ❌ Em-dashes (exception: `— Rob` email sign-off only)
+- ❌ "Trust Gaps" → ✅ "embarrassing bugs"
 - ❌ "native apps" → ✅ "desktop and mobile width testing"
-- ❌ em-dashes in customer-facing copy → ✅ commas, periods, or rephrase
-- Voice is informal and human; Rob will ship with light edits, not a rewrite
+- ❌ "AI-powered scanner," "automation," "intelligent analysis," "next-generation"
+- ❌ "leverage," "utilize," "seamless," "robust," "elevate," "empower," "unlock," "supercharge," "revolutionize," "best-in-class," "world-class," "cutting-edge," "streamline," "powerful"
+- ❌ "advanced," "premium," "professional" (we have a Pro tier; don't repeat the word)
+- ❌ Internal taxonomy on customer surfaces: "Snoop," "fingerprint dedup," "Scale-Ready," "AI pipeline," "Compliance-Lite," "axe-core," "Core Web Vitals"
+- ❌ Technical jargon in finding titles (allowed only in fix prompt blocks per §3.1)
+- ❌ 5th tier, 8th Tester persona, or anything from `PRODUCT-DECISIONS.md §3` (killed list)
+
+Voice check: Would a non-technical vibe-coder founder understand this in under 5 seconds? Every sentence under 20 words? Second person active?
+
+---
+
+## LLM prompts for tiered products
+
+Use target ranges with explicit minimums, not just ceilings:
+- Starter: target 5-10 (cap 10)
+- Scale Up: **target 20-30, minimum 20** — walk every finding category
+- Pro: **target 30-40, minimum 30** — walk every category + integrations
+
+Always pair with anti-padding guardrail:
+> "You may NOT invent findings to pad the count. If a category truly does not apply, skip it."
+
+See `scripts/ai_audit/pipeline.py` `_tier_guidance()`.
+
+---
 
 ## UI defaults
 
-- Status messages, disclaimers, and microcopy under primary CTAs: **`text-center`**
-- Footer is Rob's personal contact card (name, 1-line bio, email, LinkedIn) — never a corporate footer
-- URL inputs accept bare hostnames (`mysite.com`); normalize client AND server side
+- Status messages and microcopy under CTAs: **always `text-center`**
+- URL inputs: **accept bare hostnames** (`mysite.com`) — normalize client AND server
+- Footer: **Rob's personal card** — name, 1-line bio, email, LinkedIn — nothing else, no duplicate email links on same page
 
-## Workflow preferences
-
-- **Clickable links in emails, not CLI commands.** If you find yourself writing "run `python ...`" in a notification, ask if it can be a link to the local Flask UI instead.
-- **Don't create new docs/markdown files proactively.** Update `docs/ROB-REMAINING-TODO.md` and the project snapshot canvas; ask before creating anything else.
-- Commit messages: one line, present tense, scoped (`fix(audit): ...`, `landing: ...`). No multi-line bodies for small changes.
-
-## Before pushing
-
-```
-python -m ruff check <changed-files>
-python -m ruff format <changed-files>
-python -m pytest tests/ -x -q
-```
-
-All three green or don't push. Pass specific paths to `ruff format`, never the whole repo.
-
-## Shell is PowerShell
-
-- ❌ `cmd1 && cmd2` → ✅ `cmd1; if ($?) { cmd2 }`
-- ❌ heredocs (`<<EOF`) → ✅ here-strings (`@"..."@`) or `git commit -F file`
-- Set `$env:PYTHONIOENCODING="utf-8"` before scripts that print Unicode
-- PowerShell wraps stderr in `NativeCommandError` even on exit 0 — read actual output before assuming failure
+---
 
 ## Email notifications
 
 - Always send **multipart HTML + text** via Resend (`html` + `text` fields)
-- Set explicit `User-Agent` on every outbound HTTP call (Cloudflare WAF blocks `Python-urllib/X.Y`)
-- Long mailto URLs go inside `<a href>` tags only — never in plain-text bodies
-
-## LLM prompts for tiered products
-
-Use **target ranges with explicit minimums**, never just "up to N". Pair with
-an anti-padding guardrail: "You may NOT invent findings to pad the count. If
-a category truly does not apply, skip it."
-
-## Vercel Python serverless
-
-`api/*.py` must be self-contained. Don't import from `scripts/` — inline
-constants and add a drift test in `tests/` instead. `FUNCTION_INVOCATION_FAILED`
-at cold start means a top-level import didn't bundle.
-
-## Notion property values
-
-Normalize at the boundary (`TIER_NORMALIZE` lowercase dict). Log a WARN when
-an unrecognised value falls through to the default — silent fallbacks (`.get(k, 7)`)
-hide bugs for weeks.
+- Long mailto URLs go inside `<a href="...">` in HTML — never in plain-text bodies
+- Plain-text fallback uses a compact subject-only mailto (no `?body=...`)
+- Set `User-Agent: LaunchLook-Automation/1.0 (+https://launchlook.app)` on every outbound API call (Cloudflare WAF blocks `Python-urllib/X.Y`)
+- Resend `FROM_EMAIL` must be a domain verified in Resend (`launchlook.app` is already verified)
 
 ---
 
-See [`docs/LESSONS-LEARNED.md`](../../docs/LESSONS-LEARNED.md) for the full
-retrospective and rationale behind each rule.
+## Workflow: clickable links beat CLI commands
+
+If a workflow step can be a link, make it a link. Founder emails include:
+- `http://localhost:8000/review/<slug>` — AI review editor
+- `http://localhost:8000/preview/<slug>` — live report preview
+- `mailto:` button — pre-composed delivery draft
+
+CLI commands appear only as fallbacks when the review server isn't running.
+
+**Customer delivery is always manual.** Never call `deliver_report.py --send` automatically. The human gate is non-negotiable.
+
+---
+
+## Before every push
+
+```powershell
+python -m ruff check <changed-files>     # specific paths, not .
+python -m ruff format <changed-files>    # specific paths, not .
+python -m pytest tests/ -x -q
+```
+
+All three green or don't push. Running `ruff format .` on the whole repo creates noise in unrelated files.
+
+---
+
+## Shell is PowerShell
+
+- ❌ `cmd1 && cmd2` → ✅ `cmd1; if ($?) { cmd2 }`
+- ❌ Heredocs (`<<EOF`) → ✅ here-strings (`@"..."@`) or `git commit -F file.txt`
+- ❌ `ruff check` → ✅ `python -m ruff check`
+- ❌ Unicode in `print()` without `$env:PYTHONIOENCODING="utf-8"`
+- Flask stderr in PowerShell shows as `NativeCommandError` even on exit 0 — smoke-check with HTTP request, not by reading stderr
+
+---
+
+## Vercel Python serverless
+
+`api/*.py` must be self-contained. Never import from `scripts/`. Inline constants and add a drift test:
+
+```python
+# In api/free-audit.py — inlined intentionally
+FREE_AUDIT_DELIVER_COUNT = 2  # enforced by tests/test_launchlook_constants.py
+```
+
+`FUNCTION_INVOCATION_FAILED` at cold start = top-level import didn't bundle.
+
+---
+
+## Commit messages
+
+Pattern: `scope: one-line present-tense summary`
+
+Examples:
+- `fix(audit): make tier guidance target minimums so Pro audits hit ~30-40 findings`
+- `landing: center status + disclaimer text under submit button`
+- `trust: add IP-theft FAQ + pricing trust note`
+
+Cite `SIMPLICITY-GUARDRAILS.md` rule numbers (e.g. `§2.1`) when making brand judgment calls.
+
+---
+
+## Notion property normalization
+
+Normalize at the boundary with a lookup dict. Never use a silent fallback (`.get(key, 7)`). Always log WARN when an unrecognised value hits the fallback.
+
+```python
+TIER_NORMALIZE = {
+    "pro package": "Pro Package",
+    "pro package ($99)": "Pro Package",
+    "pro": "Pro Package",
+    ...
+}
+```
+
+---
+
+## What not to create
+
+- ❌ New `docs/*.md` files without being asked — update `docs/ROB-REMAINING-TODO.md` instead
+- ❌ New Tester personas
+- ❌ A 5th tier
+- ❌ GitHub integration re-enable (`GITHUB_PAT` is DORMANT — see `.env.example`)
+- ❌ Anything from `PRODUCT-DECISIONS.md §3` (the killed list)
+
+---
+
+## Key files to read before editing
+
+| File | Read before touching |
+|---|---|
+| `docs/SIMPLICITY-GUARDRAILS.md` | Any `landing/`, `templates/report/`, `templates/qsg/`, `templates/email/` |
+| `docs/PRODUCT-DECISIONS.md` | Tier structure, pricing, deliverables, feature scope |
+| `docs/TESTERS-CAST.md` | Finding tags, persona voice |
+| `scripts/launchlook_constants.py` | Any number used in code or copy |
+| `docs/LESSONS-LEARNED.md` | Full rationale and pitfalls for this and next projects |
+
+---
+
+## Stripe + Notion IDs (non-secret, client-side)
+
+| Product | Stripe URL |
+|---|---|
+| Starter $19 | `https://buy.stripe.com/28EdR81OlbU00p51u83cc08` |
+| Scale Up $49 | `https://buy.stripe.com/7sY4gy0KhaPWfjZa0E3cc09` |
+| Pro $99 | `https://buy.stripe.com/9B600idx36zG3Bha0E3cc03` |
+| Tally intake form | `https://tally.so/r/QKOX1A` |
+| Support email | `hello@launchlook.app` |
+| Admin/founder email | `rob@launchlook.app` (or `romado33@gmail.com` for notifications) |
