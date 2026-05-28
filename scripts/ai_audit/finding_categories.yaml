@@ -135,19 +135,33 @@ categories:
 
   - id: compliance_lite
     display_name_buyer: "common legal must-haves"
-    display_name_internal: "Compliance-Lite (AI disclosure / accessibility statement / cookie banner)"
+    display_name_internal: "Compliance-Lite (AI disclosure / accessibility statement / cookie banner / confirmation basics)"
     severity_default: medium
     description_for_llm: >-
-      Three quick legal signals most vibe-coded sites miss: (1) AI
-      disclosure: if the site uses AI to generate user-facing content
-      (chatbot, dynamic summaries), is that disclosed somewhere
+      Six quick legal and trust signals most vibe-coded apps miss.
+      Surface 1 to 4 findings; never exceed 4 for this category.
+      (1) AI disclosure: if the site uses AI to generate user-facing
+      content (chatbot, dynamic summaries), is that disclosed somewhere
       reasonable? (2) Accessibility statement: is there a one-line
       statement of accessibility commitment, even a placeholder?
       Required in EU, increasingly expected in US. (3) Cookie banner:
       if the site uses cookies for analytics or sessions, is there a
       consent banner? Required under GDPR if any EU traffic possible.
-      Skip cookie check if no cookies are set. Surface 1 to 3 findings;
-      tier-cap them at 3 max.
+      Skip cookie check if no cookies are set. (4) Contact or lead
+      forms with no consent checkbox: any form that collects an email
+      address for marketing purposes should have an explicit opt-in
+      checkbox or statement ("I agree to receive emails") to comply
+      with GDPR / CAN-SPAM. Flag if absent and the form has no
+      visible unsubscribe or opt-out path. (5) Purchase or booking
+      confirmation page with no order reference: if the site has a
+      payment or booking flow, the confirmation page should display a
+      unique order or reference number. A blank "Thanks for your
+      order!" page with no reference is a refund and support
+      nightmare. Flag if visible. (6) Automated emails with no
+      unsubscribe link: CAN-SPAM and GDPR both require a working
+      unsubscribe mechanism in commercial emails. If the intake form
+      copy implies ongoing marketing emails and there is no mention of
+      unsubscribe, flag it as a low-severity compliance risk.
     tester: "The Skeptic"
 
   - id: performance_speed
