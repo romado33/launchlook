@@ -5,6 +5,11 @@
 
 This file is the **source of truth** for what you still need to do manually. Product/code decisions live in [`PRODUCT-DECISIONS.md`](PRODUCT-DECISIONS.md).
 
+> **Starting the next app?** Read [`LESSONS-LEARNED.md`](LESSONS-LEARNED.md) first
+> and copy [`.cursor/rules/launchlook-defaults.mdc`](../.cursor/rules/launchlook-defaults.mdc)
+> into the new repo (rename it). Those two files encode every recurring correction and pitfall
+> from building LaunchLook v1 so the next project ships faster.
+
 ---
 
 ## Shipped today (May 27, 2026)

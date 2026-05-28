@@ -1,0 +1,86 @@
+---
+description: Rob's standing preferences and recurring corrections. Read every turn.
+alwaysApply: true
+---
+
+# Standing instructions for Rob's projects
+
+These are corrections I've had to give Cursor repeatedly. Follow them by default.
+
+## Numbers are sacred
+
+Never substitute a number you "think is more common". Grep
+`scripts/launchlook_constants.py` (or the project's equivalent) before
+changing any count. Current canonical values:
+
+- Free trial: **2 findings**
+- Starter Package ($19): **10 findings**
+- Scale Up Package ($49): **30 findings**
+- Pro Package ($99): **40 findings**
+
+If you change a number, update every call site and the drift test in `tests/`.
+
+## Brand voice
+
+- ❌ "Trust Gaps", "synergize", "leverage" → ✅ "embarrassing bugs", plain English
+- ❌ "native apps" → ✅ "desktop and mobile width testing"
+- ❌ em-dashes in customer-facing copy → ✅ commas, periods, or rephrase
+- Voice is informal and human; Rob will ship with light edits, not a rewrite
+
+## UI defaults
+
+- Status messages, disclaimers, and microcopy under primary CTAs: **`text-center`**
+- Footer is Rob's personal contact card (name, 1-line bio, email, LinkedIn) — never a corporate footer
+- URL inputs accept bare hostnames (`mysite.com`); normalize client AND server side
+
+## Workflow preferences
+
+- **Clickable links in emails, not CLI commands.** If you find yourself writing "run `python ...`" in a notification, ask if it can be a link to the local Flask UI instead.
+- **Don't create new docs/markdown files proactively.** Update `docs/ROB-REMAINING-TODO.md` and the project snapshot canvas; ask before creating anything else.
+- Commit messages: one line, present tense, scoped (`fix(audit): ...`, `landing: ...`). No multi-line bodies for small changes.
+
+## Before pushing
+
+```
+python -m ruff check <changed-files>
+python -m ruff format <changed-files>
+python -m pytest tests/ -x -q
+```
+
+All three green or don't push. Pass specific paths to `ruff format`, never the whole repo.
+
+## Shell is PowerShell
+
+- ❌ `cmd1 && cmd2` → ✅ `cmd1; if ($?) { cmd2 }`
+- ❌ heredocs (`<<EOF`) → ✅ here-strings (`@"..."@`) or `git commit -F file`
+- Set `$env:PYTHONIOENCODING="utf-8"` before scripts that print Unicode
+- PowerShell wraps stderr in `NativeCommandError` even on exit 0 — read actual output before assuming failure
+
+## Email notifications
+
+- Always send **multipart HTML + text** via Resend (`html` + `text` fields)
+- Set explicit `User-Agent` on every outbound HTTP call (Cloudflare WAF blocks `Python-urllib/X.Y`)
+- Long mailto URLs go inside `<a href>` tags only — never in plain-text bodies
+
+## LLM prompts for tiered products
+
+Use **target ranges with explicit minimums**, never just "up to N". Pair with
+an anti-padding guardrail: "You may NOT invent findings to pad the count. If
+a category truly does not apply, skip it."
+
+## Vercel Python serverless
+
+`api/*.py` must be self-contained. Don't import from `scripts/` — inline
+constants and add a drift test in `tests/` instead. `FUNCTION_INVOCATION_FAILED`
+at cold start means a top-level import didn't bundle.
+
+## Notion property values
+
+Normalize at the boundary (`TIER_NORMALIZE` lowercase dict). Log a WARN when
+an unrecognised value falls through to the default — silent fallbacks (`.get(k, 7)`)
+hide bugs for weeks.
+
+---
+
+See [`docs/LESSONS-LEARNED.md`](../../docs/LESSONS-LEARNED.md) for the full
+retrospective and rationale behind each rule.
