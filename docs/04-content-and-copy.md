@@ -1,5 +1,9 @@
 # LaunchLook — Content and Copy
 
+> **⚠️ PARTIALLY HISTORICAL** — Pricing ($9/$29), tier names (Quick Checkup/Full Package), and the cold outreach Loom script at the bottom of this file reflect the original MVP and are superseded.
+> Canonical pricing and tiers: **`docs/PRODUCT-DECISIONS.md §1`** (Free/$19/$49/$99).
+> Voice rules, brand anti-patterns, and the banned word list in this file are **still valid** — they predate and align with `docs/SIMPLICITY-GUARDRAILS.md`.
+
 All writing artifacts. Use this verbatim unless explicitly approved to change by Rob.
 
 **Operator docs:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) · **Tally intake (paste):** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) · **Live emails:** [`templates/email/`](../templates/email/) (prefer files there over duplicates below)

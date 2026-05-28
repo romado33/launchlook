@@ -1,5 +1,10 @@
 # LaunchLook — Product Specification
 
+> **⚠️ HISTORICAL DOCUMENT** — This file describes the original $9/$29 MVP with Notion delivery.
+> The canonical product state is now in **`docs/PRODUCT-DECISIONS.md`** (4-tier: Free/$19/$49/$99, PDF delivery, AI pipeline).
+> Where this file conflicts with `PRODUCT-DECISIONS.md`, **PRODUCT-DECISIONS wins**.
+> Keep this file for context on why decisions were made, not as a source of current values.
+
 ## The product
 
 LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A founder pays, sends their URL plus a short intake form, and receives a Notion page with:

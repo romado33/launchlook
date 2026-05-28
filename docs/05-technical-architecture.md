@@ -1,5 +1,10 @@
 # LaunchLook — Technical Architecture
 
+> **⚠️ PARTIALLY HISTORICAL** — This file describes the original architecture (GitHub Actions scheduling, $9/$29 pricing, Notion as the customer-facing report surface, Anthropic Claude as default LLM).
+> Current state: local worker + Windows Task Scheduler, PDF delivery via Jinja2+WeasyPrint, OpenAI GPT-4o as default (Anthropic as fallback), Resend for email.
+> Canonical source for current architecture: **`docs/AUTOMATION-PIPELINE.md`** and **`docs/AI-AUDIT-PIPELINE.md`**.
+> The code skeletons and Notion integration patterns in this file are still useful as reference.
+
 ## Overall philosophy
 
 Build the minimum code that lets Rob deliver more reports per hour. Avoid building anything customer-facing that doesn't already exist in the manual workflow.
