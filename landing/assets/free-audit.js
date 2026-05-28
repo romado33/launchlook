@@ -113,7 +113,7 @@
           if (submitBtn) {
             submitBtn.removeAttribute("aria-disabled");
             submitBtn.textContent =
-              submitBtn.dataset.label || "Get my free 2 findings";
+              submitBtn.dataset.label || "Get my 2 free findings";
           }
         })
         .catch(function () {
