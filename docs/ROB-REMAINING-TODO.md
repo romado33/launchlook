@@ -67,52 +67,21 @@ This file is the **source of truth** for what you still need to do manually. Pro
 
 ---
 
-## Your next 3 actions (do in this order)
+## Your next action
 
-1. **Fix Vercel `FROM_EMAIL`** — currently set to `hello@launchlook.com` (unverified in Resend → all production emails silently failing). Change to `hello@launchlook.app` in Vercel Dashboard → Settings → Environment Variables.
-2. **Tally hidden-tier setup** (~10 min in QKOX1A editor) — see §1 below.
-3. **Run Stripe success-URL update** once locally: `python scripts/stripe_payment_links.py update-success-urls`
+**Record the 60-second Loom** and put it above the pricing section on `/`. This is the single highest-leverage thing left — estimated +30% checkout conversion. Screen-capture: show the email arriving with findings, click the review link, show the report. 60 seconds max.
 
 ---
 
-## Blocking — before cold outreach
+## Blocking — DONE ✅ (2026-05-28)
 
-### 1. Tally hidden-tier setup (~10 min) — **you**
+- [x] `FROM_EMAIL` → `hello@launchlook.app` in Vercel (was `launchlook.com`)
+- [x] Tally hidden-tier field added; Q8 deleted; conditionals updated
+- [x] Stripe success URLs updated (`?tier=starter/scale_up/pro`)
+- [x] Windows Task Scheduler registered — runs every 30 min while logged in
+- [x] Site smoke — pages loading, buy buttons wired
 
-Replace Q8 ("Which tier?") with a hidden field populated from the Stripe redirect URL.
-
-- [ ] Open `https://tally.so/r/QKOX1A` in edit mode
-- [ ] Add **Hidden field**, label `tier`, URL-param key `tier`
-- [ ] Delete **Q8**
-- [ ] Q9–Q12 conditionals: change "show when Q8 = …" → "show when [hidden tier] = `scale_up` OR `pro`"
-- [ ] Run: `python scripts/stripe_payment_links.py update-success-urls` (updates 3 Stripe links)
-
-Full guide: [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) → "Hidden-tier setup" section.
-
-### 2. Vercel environment variables (~5 min) — **you**
-
-- [ ] `FROM_EMAIL` → `hello@launchlook.app` (currently `launchlook.com` — unverified, breaks all emails)
-- [ ] `ADMIN_EMAIL` → `romado33@gmail.com`
-- [ ] Confirm `OPENAI_API_KEY` is set (automation worker uses it locally; not needed on Vercel unless running pipeline there)
-- [ ] Confirm present: `STRIPE_WEBHOOK_SECRET`, `NOTION_TOKEN`, `NOTION_CUSTOMERS_DB_ID`, `NOTION_FREE_AUDIT_DB_ID`, `RESEND_API_KEY`, `TALLY_WEBHOOK_TOKEN`
-
-### 3. Schedule local automation worker (~5 min) — **you**
-
-Run the worker automatically so new free-audit signups process without you opening a terminal.
-
-```powershell
-# Register Windows Task Scheduler entry (run this once in an admin PowerShell):
-schtasks /create /tn "LaunchLook Audit Queue" /tr "python C:\Users\RobDods\Apps\Cursor\onceover\scripts\process_audit_queue.py --provider gpt --limit 5" /sc minute /mo 30 /st 00:00 /ru SYSTEM
-```
-
-Or use the `.ps1` helper at `scripts/schedule_worker.ps1`.
-
-### 4. Site smoke — **run in incognito**
-
-- [x] Code/deploy: free-audit JS wired; pricing bullets; sample report public
-- [ ] You confirm: `/`, `/faq`, `/webflow`, `/thanks`, `/thanks-free-audit` → load
-- [ ] You confirm: Starter / Scale Up / Pro buy buttons → `buy.stripe.com`
-- [ ] Hard-refresh after latest deploy (Ctrl+Shift+R)
+**You are in outreach mode.**
 
 ---
 
