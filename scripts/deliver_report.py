@@ -37,7 +37,7 @@ import json
 import os
 import re
 import sys
-from datetime import UTC, date, datetime
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -357,7 +357,7 @@ def deliver_handoff_report(
 
     # Delayed import so the pipeline / ai_audit deps are only loaded when
     # the Handoff Report is actually requested.
-    from scripts.ai_audit import pipeline as ai_pipeline  # noqa: WPS433
+    from scripts.ai_audit import pipeline as ai_pipeline  # noqa: PLC0415
 
     narrative = ai_pipeline.run_handoff_report(
         audit_payload=data,
@@ -368,9 +368,7 @@ def deliver_handoff_report(
 
     customer = dict(data.get("customer") or {})
     handoff_data = dict(data)
-    handoff_data["findings"] = enrich_findings_for_templates(
-        data.get("findings") or [], customer
-    )
+    handoff_data["findings"] = enrich_findings_for_templates(data.get("findings") or [], customer)
     memory = render_builder_memory(
         customer,
         explicit=data.get("builder_memory") or customer.get("builder_memory"),
@@ -927,7 +925,7 @@ def _generate_shareable_page(
     customize the page for the customer (it's the LaunchLook marketing
     surface, not a customer-owned site).
     """
-    from scripts.sanitize_for_public import sanitize_report_json  # noqa: WPS433
+    from scripts.sanitize_for_public import sanitize_report_json  # noqa: PLC0415
 
     raw_report = _build_public_report_dict(
         data,

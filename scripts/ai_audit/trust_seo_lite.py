@@ -6,7 +6,7 @@ import sys
 import urllib.error
 import urllib.request
 from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 
 CATEGORY_ID = "trust_gaps"
 PERSONA = "The Skeptic"

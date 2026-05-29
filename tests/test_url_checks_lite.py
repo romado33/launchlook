@@ -5,12 +5,12 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
-from scripts.ai_audit.broken_links_lite import (  # noqa: E402
+from scripts.ai_audit.broken_links_lite import (  # noqa: E402, I001
     _build_finding,
     _collect_candidates,
     run_broken_links_lite,
@@ -64,7 +64,14 @@ class TestBrokenLinks(unittest.TestCase):
         self.assertEqual(cands[0]["href"], "/pricing")
 
     def test_build_finding_lists_dead_links(self):
-        broken = [{"text": "Pricing", "href": "/pricing", "url": "https://app.test/pricing", "status": 404}]
+        broken = [
+            {
+                "text": "Pricing",
+                "href": "/pricing",
+                "url": "https://app.test/pricing",
+                "status": 404,
+            }
+        ]
         f = _build_finding(broken)
         self.assertIsNotNone(f)
         assert f is not None

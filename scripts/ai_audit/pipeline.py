@@ -18,7 +18,6 @@ helper returns a single dict that the caller patches into its own state.
 from __future__ import annotations
 
 import csv
-import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -31,12 +30,17 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.audit_ui import yaml_writer  # noqa: E402
 
+from . import (  # noqa: E402  # noqa: E402
+    broken_links_lite,
+    console_errors_lite,
+    html_extract,
+    llm_client,
+    security_lite,
+    trust_seo_lite,
+)
 from . import feedback as feedback_log  # noqa: E402
-from . import broken_links_lite, console_errors_lite, html_extract, llm_client  # noqa: E402
-from . import security_lite, trust_seo_lite  # noqa: E402
 from .dedup import render_exclude_block  # noqa: E402
 from .free_audit_lookup import load_excluded_fingerprints  # noqa: E402
-
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
@@ -88,10 +92,11 @@ def normalize_platform(value: str | None) -> str:
         return cleaned
     return DEFAULT_PLATFORM
 
+
 DELIVER_REPORT = REPO_ROOT / "scripts" / "deliver_report.py"
 FINDINGS_CSV = REPO_ROOT / "findings_library" / "findings.csv"
-SCREENSHOTS_OUT_ROOT = REPO_ROOT / "output" / "customers"   # capture_screenshots.py landing zone
-SCREENSHOTS_MIRROR = REPO_ROOT / "screenshots"               # legacy + audit-UI lookup path
+SCREENSHOTS_OUT_ROOT = REPO_ROOT / "output" / "customers"  # capture_screenshots.py landing zone
+SCREENSHOTS_MIRROR = REPO_ROOT / "screenshots"  # legacy + audit-UI lookup path
 
 
 # ---------------------------------------------------------------------------
@@ -145,12 +150,8 @@ class PipelineResult:
 #   cap = {"Starter Package": 10, "Scale Up Package": 30, "Pro Package": 40}.get(tier, 30)
 # Captures every "Tier Name": <int> pair so the pipeline auto-tracks future
 # tier additions without a code edit here.
-_TIER_CAP_DICT_PATTERN = re.compile(
-    r'cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier'
-)
-_TIER_CAP_ENTRY_PATTERN = re.compile(
-    r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)'
-)
+_TIER_CAP_DICT_PATTERN = re.compile(r"cap\s*=\s*\{(?P<body>[^}]*)\}\s*\.get\(\s*tier")
+_TIER_CAP_ENTRY_PATTERN = re.compile(r'["\'](?P<tier>[^"\']+)["\']\s*:\s*(?P<cap>\d+)')
 
 
 def load_tier_caps() -> dict[str, int]:
@@ -173,7 +174,7 @@ def load_finding_categories() -> list[dict[str, Any]]:
     if not CATEGORIES_YAML.exists():
         return []
     try:
-        import yaml  # noqa: WPS433  -- already a project dep
+        import yaml  # noqa: PLC0415  -- already a project dep
     except ImportError:
         print(
             "[categories] WARN: PyYAML missing, prompt will skip category list",
@@ -254,9 +255,7 @@ def _format_findings_library(library: list[dict[str, Any]]) -> str:
         return "(findings.csv unavailable)"
     lines = []
     for f in library:
-        lines.append(
-            f"  - [{f['severity']:<8}] {f['id']}  {f['name']}  ({f['category']})"
-        )
+        lines.append(f"  - [{f['severity']:<8}] {f['id']}  {f['name']}  ({f['category']})")
     return "\n".join(lines)
 
 
@@ -267,8 +266,8 @@ def _format_findings_library(library: list[dict[str, Any]]) -> str:
 
 def stage_capture(customer_ctx: CustomerContext) -> dict[str, Any]:
     """Run capture_screenshots.py in-process and return the capture-meta dict."""
-    from lib.customer_loader import Customer  # noqa: WPS433
-    from scripts import capture_screenshots  # noqa: WPS433
+    from lib.customer_loader import Customer  # noqa: PLC0415
+    from scripts import capture_screenshots  # noqa: PLC0415
 
     customer = Customer(
         page_id=None,
@@ -325,7 +324,7 @@ def stage_prescreen(customer_ctx: CustomerContext) -> list[dict[str, Any]]:
     has screenshots + HTML; the prescreener is a hint, not a requirement.
     """
     try:
-        from scripts import prescreen_findings  # noqa: WPS433
+        from scripts import prescreen_findings  # noqa: PLC0415
     except Exception as exc:  # noqa: BLE001
         print(f"[prescreen] skipped, import failed: {exc}", file=sys.stderr)
         return []
@@ -353,8 +352,8 @@ def _format_prescreener_hits(hits: list[dict[str, Any]]) -> str:
         matches = hit.get("matches") or []
         sample = matches[0].get("text", "")[:60] if matches else ""
         lines.append(
-            f"  - {finding.get('id','?')} [{finding.get('severity','?')}] "
-            f"{finding.get('name','?')}  on {page.get('url','?')}  sample='{sample}'"
+            f"  - {finding.get('id', '?')} [{finding.get('severity', '?')}] "
+            f"{finding.get('name', '?')}  on {page.get('url', '?')}  sample='{sample}'"
         )
     return "\n".join(lines)
 
@@ -364,7 +363,9 @@ def _format_prescreener_hits(hits: list[dict[str, Any]]) -> str:
 # ---------------------------------------------------------------------------
 
 
-def stage_html(customer_ctx: CustomerContext, paths: list[str] | None = None) -> list[dict[str, Any]]:
+def stage_html(
+    customer_ctx: CustomerContext, paths: list[str] | None = None
+) -> list[dict[str, Any]]:
     return html_extract.extract_pages(customer_ctx.url, paths=paths)
 
 
@@ -406,7 +407,7 @@ def collect_screenshots(slug: str, *, max_shots: int = 8) -> list[tuple[str, Pat
             candidate = src / viewport / f"{name}.png"
             if candidate.exists() and candidate not in seen:
                 seen.add(candidate)
-                found.append((f"{viewport} /{('' if name=='home' else name)}", candidate))
+                found.append((f"{viewport} /{('' if name == 'home' else name)}", candidate))
             if len(found) >= max_shots:
                 break
 
@@ -632,9 +633,7 @@ def build_verdict_user_prompt(
     template = _read_prompt("verdict_generation.txt")
     summary_lines = []
     for f in findings:
-        summary_lines.append(
-            f"  - [{f.get('severity','?'):<8}] {f.get('title','?')}"
-        )
+        summary_lines.append(f"  - [{f.get('severity', '?'):<8}] {f.get('title', '?')}")
     return template.format(
         app_name=customer_ctx.app_name,
         findings_summary="\n".join(summary_lines) if summary_lines else "  (no findings)",
@@ -807,9 +806,7 @@ def compute_passed_checks(
         if min_tier and customer_rank < tier_rank.get(min_tier, 0):
             continue
         cat_findings = by_category.get(cid, [])
-        has_blocker = any(
-            (f.get("severity") or "").lower() in blocking for f in cat_findings
-        )
+        has_blocker = any((f.get("severity") or "").lower() in blocking for f in cat_findings)
         if has_blocker:
             continue
         # Security-lite also has to actually run cleanly (not just be
@@ -902,10 +899,7 @@ def run(
         items = list(batch.get("findings") or [])
         if items:
             precomputed.extend(items)
-        print(
-            f"[{label}] {len(items)} finding(s); "
-            f"failed: {batch.get('failed_check_ids')}"
-        )
+        print(f"[{label}] {len(items)} finding(s); failed: {batch.get('failed_check_ids')}")
 
     try:
         _extend_precomputed(
@@ -1013,7 +1007,9 @@ def run(
         if not verdict.get("summary") or not verdict.get("narrative"):
             raise RuntimeError("verdict missing summary or narrative")
     except Exception as exc:  # noqa: BLE001
-        print(f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr)
+        print(
+            f"[verdict] WARN: LLM verdict failed ({exc}); using heuristic default", file=sys.stderr
+        )
         verdict = _default_verdict(findings, customer_ctx.app_name)
 
     # Constrain to the four canonical labels regardless of LLM drift.
@@ -1027,7 +1023,7 @@ def run(
             qsg = client.generate_qsg(
                 system_prompt=system_prompt,
                 user_prompt=qsg_prompt,
-                screenshots=screenshots[:4],   # fewer images for the QSG call
+                screenshots=screenshots[:4],  # fewer images for the QSG call
             )
         except Exception as exc:  # noqa: BLE001
             print(f"[qsg] WARN: QSG generation failed ({exc}); leaving QSG empty", file=sys.stderr)
@@ -1093,9 +1089,7 @@ def run(
                     "The AI pipeline ran but produced zero grounded findings. "
                     "Review the screenshots and HTML extracts manually."
                 ),
-                "why_it_matters": (
-                    "Either the app is clean, or the LLM lacked enough evidence."
-                ),
+                "why_it_matters": ("Either the app is clean, or the LLM lacked enough evidence."),
                 "fix_prompt": (
                     "Review the prescreener output and screenshots. "
                     "Add findings manually or rerun with --provider gpt."
@@ -1219,9 +1213,7 @@ def context_from_kwargs(**kwargs: Any) -> CustomerContext:
 
     tier = (kwargs.get("tier") or "").strip()
     if tier not in {"Starter Package", "Scale Up Package", "Pro Package"}:
-        sys.exit(
-            "ERROR: --tier must be 'Starter Package', 'Scale Up Package', or 'Pro Package'"
-        )
+        sys.exit("ERROR: --tier must be 'Starter Package', 'Scale Up Package', or 'Pro Package'")
 
     builder = (kwargs.get("builder") or "").strip() or "Lovable"
     platform = normalize_platform(kwargs.get("platform"))

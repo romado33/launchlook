@@ -70,7 +70,7 @@ def _get_client():
     if not token:
         return None
     try:
-        from notion_client import Client  # noqa: WPS433 -- optional dep
+        from notion_client import Client  # noqa: PLC0415 -- optional dep
     except ImportError:
         print(
             "[dedup] WARN: notion-client not installed; skipping prior-audit lookup",

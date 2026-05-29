@@ -40,7 +40,7 @@ import socket
 import ssl
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from urllib.parse import urljoin, urlparse
 
@@ -255,8 +255,7 @@ def _check_permissions_policy(headers: dict[str, str]) -> dict[str, Any] | None:
         "severity": "low",
         "title": "Permissions-Policy header is not set",
         "what_we_saw": (
-            "Your homepage does not send a Permissions-Policy (or legacy "
-            "Feature-Policy) header."
+            "Your homepage does not send a Permissions-Policy (or legacy Feature-Policy) header."
         ),
         "why_it_matters": (
             "This header tells browsers which device features (camera, mic, location) "
@@ -291,10 +290,8 @@ def _check_ssl_expiry(base_url: str) -> dict[str, Any] | None:
         not_after = cert.get("notAfter")
         if not not_after:
             return None
-        expires = datetime.strptime(not_after, "%b %d %H:%M:%S %Y %Z").replace(
-            tzinfo=timezone.utc
-        )
-        days = (expires - datetime.now(timezone.utc)).days
+        expires = datetime.strptime(not_after, "%b %d %H:%M:%S %Y %Z").replace(tzinfo=UTC)
+        days = (expires - datetime.now(UTC)).days
     except Exception:  # noqa: BLE001
         return None
 
@@ -345,7 +342,10 @@ _CRED_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("Private key block", re.compile(r"-----BEGIN (?:RSA |EC )?PRIVATE KEY-----")),
     ("Firebase config (apiKey)", re.compile(r'apiKey\s*:\s*"AIza[0-9A-Za-z\-_]{35}"')),
     # Matches any JWT-shaped token; we decode and filter for service_role below.
-    ("JWT token", re.compile(r"eyJ[A-Za-z0-9+/=_-]{20,}\.[A-Za-z0-9+/=_-]{20,}\.[A-Za-z0-9+/=_-]{10,}")),
+    (
+        "JWT token",
+        re.compile(r"eyJ[A-Za-z0-9+/=_-]{20,}\.[A-Za-z0-9+/=_-]{20,}\.[A-Za-z0-9+/=_-]{10,}"),
+    ),
 ]
 
 # Patterns that match assignment of a secret to a named variable in JS/HTML.
@@ -654,7 +654,9 @@ def _check_robots(base_url: str) -> dict[str, Any] | None:
 
 def _check_noindex(pages: list[dict[str, Any]]) -> dict[str, Any] | None:
     """Flag a noindex meta tag on the homepage (common staging leftover)."""
-    noindex_re = re.compile(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex', re.IGNORECASE)
+    noindex_re = re.compile(
+        r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex', re.IGNORECASE
+    )
     for page in pages or []:
         raw_html = page.get("raw_html") or page.get("html") or ""
         if noindex_re.search(raw_html):

@@ -10,7 +10,6 @@ from __future__ import annotations
 import re
 import sys
 from typing import Any
-from urllib.parse import urljoin
 
 from .html_extract import DEFAULT_PATHS, join_url
 
@@ -97,14 +96,14 @@ def _collect_console_errors(base_url: str) -> list[dict[str, Any]]:
                 page = context.new_page()
                 page_errors: list[str] = []
 
-                def _on_console(msg) -> None:  # noqa: ANN001
+                def _on_console(msg, _errors=page_errors) -> None:  # noqa: ANN001
                     if msg.type != "error":
                         return
                     text = msg.text or ""
                     if _is_noise(text):
                         return
-                    page_errors.append(text)
-                    if len(page_errors) >= _MAX_ERRORS_PER_PAGE:
+                    _errors.append(text)
+                    if len(_errors) >= _MAX_ERRORS_PER_PAGE:
                         return
 
                 page.on("console", _on_console)
@@ -115,9 +114,7 @@ def _collect_console_errors(base_url: str) -> list[dict[str, Any]]:
                     page.wait_for_timeout(1500)
                     if page_errors and status and 200 <= status < 400:
                         hits.append({"path": path, "url": url, "errors": page_errors})
-                        print(
-                            f"  [console] {path}: {len(page_errors)} error(s)"
-                        )
+                        print(f"  [console] {path}: {len(page_errors)} error(s)")
                 except PlaywrightError:
                     pass
                 except Exception:  # noqa: BLE001
@@ -131,7 +128,9 @@ def _collect_console_errors(base_url: str) -> list[dict[str, Any]]:
     return hits
 
 
-def _build_finding(hits: list[dict[str, Any]], *, platform: str = "generic") -> dict[str, Any] | None:
+def _build_finding(
+    hits: list[dict[str, Any]], *, platform: str = "generic"
+) -> dict[str, Any] | None:
     if not hits:
         return None
 
@@ -162,15 +161,22 @@ def _build_finding(hits: list[dict[str, Any]], *, platform: str = "generic") -> 
         "lovable": "In Lovable, open the browser console while previewing the live URL, fix each error, then republish.",
         "bolt": "In Bolt, check the preview console for the same errors and fix them before redeploying.",
         "webflow": "In Webflow, publish again after fixing the underlying script or embed causing the error.",
-    }.get((platform or "generic").lower(), (
-        "Open your live site, reproduce the issue in the browser developer console "
-        "(usually F12 → Console), and fix the underlying cause — don't hide errors."
-    ))
+    }.get(
+        (platform or "generic").lower(),
+        (
+            "Open your live site, reproduce the issue in the browser developer console "
+            "(usually F12 → Console), and fix the underlying cause — don't hide errors."
+        ),
+    )
 
-    severity = "high" if any(
-        kw in bullet_block.lower()
-        for kw in ("typeerror", "referenceerror", "cannot read", "undefined", "failed to fetch")
-    ) else "medium"
+    severity = (
+        "high"
+        if any(
+            kw in bullet_block.lower()
+            for kw in ("typeerror", "referenceerror", "cannot read", "undefined", "failed to fetch")
+        )
+        else "medium"
+    )
 
     return {
         "severity": severity,

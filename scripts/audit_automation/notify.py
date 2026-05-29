@@ -40,7 +40,7 @@ def _append_send_log(
     try:
         _LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
         record = {
-            "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "ts": datetime.datetime.now(datetime.UTC).isoformat(),
             "context": context,
             "slug": slug,
             "tier": tier,
@@ -140,7 +140,9 @@ def _build_mailto(
     """Full mailto: link with pre-composed subject AND body. Used in HTML email."""
     subject = _build_delivery_subject(job)
     body = _build_delivery_body(job, findings, deliver_count)
-    params = urllib.parse.urlencode({"subject": subject, "body": body}, quote_via=urllib.parse.quote)
+    params = urllib.parse.urlencode(
+        {"subject": subject, "body": body}, quote_via=urllib.parse.quote
+    )
     return f"mailto:{job.email}?{params}"
 
 
@@ -196,16 +198,20 @@ def _render_html_email(
     Finding {i}/{findings_count} &middot; {e(sev.upper())}
   </div>
   <div style="font-weight:600;color:#111;margin-top:2px;">{title}</div>
-  {f'<div style="margin-top:6px;color:#333;font-size:13px;"><b>What we saw:</b> {saw}</div>' if saw else ''}
-  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Why it matters:</b> {matters}</div>' if matters else ''}
-  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Paste into builder:</b> {fix}</div>' if fix else ''}
+  {f'<div style="margin-top:6px;color:#333;font-size:13px;"><b>What we saw:</b> {saw}</div>' if saw else ""}
+  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Why it matters:</b> {matters}</div>' if matters else ""}
+  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Paste into builder:</b> {fix}</div>' if fix else ""}
 </div>"""
         )
     findings_html = "".join(findings_html_parts) or "<p><em>No findings in YAML.</em></p>"
 
     smoke_line = (
         f"<li><b>Form smoke:</b> {'ran &#10003;' if form_smoke_ran else 'not run (Playwright unavailable or no forms detected)'}"
-        + (f" &mdash; issues flagged: {e(', '.join(form_smoke_failed[:5]))}" if form_smoke_failed else "")
+        + (
+            f" &mdash; issues flagged: {e(', '.join(form_smoke_failed[:5]))}"
+            if form_smoke_failed
+            else ""
+        )
         + "</li>"
     )
     roundtrip_line = (

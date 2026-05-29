@@ -213,7 +213,7 @@ def _register_routes(app: Flask) -> None:
 
         try:
             sys.path.insert(0, str(app.config["REPO_ROOT"]))
-            from scripts.deliver_report import (  # noqa: WPS433
+            from scripts.deliver_report import (  # noqa: PLC0415
                 build_jinja_env,
                 load_customer_yaml,
                 render_main_report_html,
@@ -665,7 +665,7 @@ def _register_routes(app: Flask) -> None:
             return jsonify({"error": f"unknown action {action!r}"}), 400
 
         try:
-            from scripts.ai_audit import feedback as feedback_log  # noqa: WPS433
+            from scripts.ai_audit import feedback as feedback_log  # noqa: PLC0415
         except ImportError as exc:
             return jsonify({"error": f"ai_audit package missing: {exc}"}), 500
 
@@ -690,7 +690,7 @@ def _register_routes(app: Flask) -> None:
             return jsonify({"error": "slug is required"}), 400
         final_findings = data.get("final_findings") or []
         try:
-            from scripts.ai_audit import feedback as feedback_log  # noqa: WPS433
+            from scripts.ai_audit import feedback as feedback_log  # noqa: PLC0415
         except ImportError as exc:
             return jsonify({"error": f"ai_audit package missing: {exc}"}), 500
         feedback_log.finalize(
@@ -722,7 +722,7 @@ def _register_routes(app: Flask) -> None:
             return jsonify({"error": "slug is required"}), 400
 
         try:
-            from scripts.ai_audit import pipeline as ai_pipeline  # noqa: WPS433
+            from scripts.ai_audit import pipeline as ai_pipeline  # noqa: PLC0415
         except ImportError as exc:
             return jsonify({"error": f"ai_audit package missing: {exc}"}), 500
 
@@ -773,7 +773,7 @@ def _load_customer_payload(app: Flask, slug: str) -> dict[str, Any] | None:
 
 def _load_feedback(app: Flask, slug: str) -> dict[str, Any] | None:
     try:
-        from scripts.ai_audit import feedback as feedback_log  # noqa: WPS433
+        from scripts.ai_audit import feedback as feedback_log  # noqa: PLC0415
     except ImportError:
         return None
     data = feedback_log.load(app.config["REPO_ROOT"], draft_store.safe_slug(slug))

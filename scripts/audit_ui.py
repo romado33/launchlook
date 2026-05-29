@@ -165,7 +165,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
 
     try:
-        from scripts.audit_ui.app import create_app  # noqa: WPS433
+        from scripts.audit_ui.app import create_app  # noqa: PLC0415
     except ImportError as exc:
         sys.stderr.write(
             "ERROR: failed to import the audit UI package.\n"

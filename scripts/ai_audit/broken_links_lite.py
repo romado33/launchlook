@@ -18,9 +18,25 @@ _TIMEOUT_SEC = 8
 
 # Link text hints we care about (nav, footer, primary CTAs)
 _IMPORTANT_TEXT_RE = (
-    "home", "pricing", "price", "about", "contact", "login", "log in",
-    "sign", "start", "demo", "faq", "help", "privacy", "terms", "blog",
-    "features", "get", "try", "book",
+    "home",
+    "pricing",
+    "price",
+    "about",
+    "contact",
+    "login",
+    "log in",
+    "sign",
+    "start",
+    "demo",
+    "faq",
+    "help",
+    "privacy",
+    "terms",
+    "blog",
+    "features",
+    "get",
+    "try",
+    "book",
 )
 
 
@@ -97,13 +113,14 @@ def _prioritize_broken(
     return sorted(broken, key=score)[:5]
 
 
-def _build_finding(broken: list[dict[str, Any]], *, platform: str = "generic") -> dict[str, Any] | None:
+def _build_finding(
+    broken: list[dict[str, Any]], *, platform: str = "generic"
+) -> dict[str, Any] | None:
     if not broken:
         return None
     shown = _prioritize_broken(broken)
     lines = [
-        f'"{b["text"]}" points to {b["href"]} (page not found — error {b["status"]})'
-        for b in shown
+        f'"{b["text"]}" points to {b["href"]} (page not found — error {b["status"]})' for b in shown
     ]
     extra = len(broken) - len(shown)
     if extra > 0:
@@ -115,17 +132,18 @@ def _build_finding(broken: list[dict[str, Any]], *, platform: str = "generic") -
             "either create the missing page or update the link to the correct URL. "
             "Republish when done."
         ),
-        "bolt": (
-            "In Bolt, fix each href so it matches a real route or page, then redeploy."
-        ),
+        "bolt": ("In Bolt, fix each href so it matches a real route or page, then redeploy."),
         "webflow": (
             "In Webflow Designer, select each nav/footer link and point it to an "
             "existing page or a valid external URL, then publish."
         ),
-    }.get((platform or "generic").lower(), (
-        "Update each menu, footer, or button link so it goes to a page that actually "
-        "exists on your live site. Test by clicking every item in the main navigation."
-    ))
+    }.get(
+        (platform or "generic").lower(),
+        (
+            "Update each menu, footer, or button link so it goes to a page that actually "
+            "exists on your live site. Test by clicking every item in the main navigation."
+        ),
+    )
 
     count = len(broken)
     title = (
@@ -139,7 +157,7 @@ def _build_finding(broken: list[dict[str, Any]], *, platform: str = "generic") -
         "title": title,
         "what_we_saw": (
             "We followed links on your live site and these led to a 'page not found' "
-            f"error:\n" + "\n".join(f"- {line}" for line in lines)
+            "error:\n" + "\n".join(f"- {line}" for line in lines)
         ),
         "why_it_matters": (
             "People who click Pricing, Sign up, or footer links and hit a dead end "
