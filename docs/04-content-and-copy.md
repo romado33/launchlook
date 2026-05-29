@@ -26,11 +26,11 @@ Internal YAML/PDF field names may still say `fix_prompt`. Reports can label the 
 
 **Eyebrow**: LaunchLook
 
-**Headline**:
-One last look before you launch.
+**Tagline** (header, JSON-LD, agent-resources):
+One last look. Checked by a real person.
 
-**Subheadline (supporting)**:
-A friendly pre-launch checkup for your vibe-coded app.
+**Headline** (live homepage — outcome-first):
+Find the embarrassing bugs before your first users do.
 
 **Body**:
 Send us your app's URL. We'll spot what your users will notice, write you a fix list you can paste into Lovable, and draft a one-page guide your users can actually read.
@@ -41,7 +41,7 @@ Send us your app's URL. We'll spot what your users will notice, write you a fix 
 About to share your app link? Get a second pair of eyes first.
 
 **Body**:
-We review your live web URL like a first-time visitor — then send a Notion report with fix prompts for your AI builder.
+We review your live web URL like a first-time visitor — then send a Notion report with paste-into-builder fix text for your AI builder.
 
 **CTAs**:
 - Primary button: `Get Starter — $9`
@@ -51,7 +51,7 @@ We review your live web URL like a first-time visitor — then send a Notion rep
 
 1. Pay & send your URL (short intake)
 2. We walk through like a stranger (desktop + phone-width layout)
-3. You get a Notion report with fix prompts (+ Quick Start Guide on Starter)
+3. You get a Notion report with paste-into-builder fix text (+ Quick Start Guide on Starter)
 
 ### What we catch (bullets)
 
@@ -68,7 +68,7 @@ Cross-user data check: **Full Package ($29)** only.
 **Starter ($9)**
 - Up to 7 findings
 - Desktop + phone layout check (web app responsive — not App Store)
-- Copy-paste fix prompts
+- Paste-into-builder fix text on each finding
 - Quick Start Guide for your users
 - 24-hour delivery
 - CTA: `Get Starter — $9`
@@ -101,7 +101,7 @@ A: Yes. We only read your app — we never submit forms, click destructive butto
 A: That's the whole point. Every finding is explained in plain language. Every fix comes with a copy-paste prompt you can drop into Lovable, Bolt, Base44, or Replit.
 
 **Q: What if my app isn't built with one of those tools?**
-A: We work with any web app. The fix prompts are designed for AI builders, but the findings themselves apply to any app.
+A: We work with any web app. Each finding includes paste-into-builder fix text for AI builders; the findings themselves apply to any app.
 
 **Q: Do you store my app's data?**
 A: We keep screenshots and notes from the audit for 30 days, then delete them. We don't store any user data from your app beyond what appears in screenshots.
@@ -188,7 +188,7 @@ Your checkup for [app name] is ready. Here's the link:
 
 A few notes:
 - The findings are ranked by severity. Start at the top.
-- Every finding has a copy-paste fix prompt for [their platform]. Just paste them in and let your builder fix it.
+- Every finding has paste-into-[their platform] fix text. Copy each block into your builder and let it handle the tech.
 - Starter Package and Full Package include a Quick Start Guide in your report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 

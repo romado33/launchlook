@@ -1,6 +1,6 @@
 # LaunchLook — Home
 
-> Human-reviewed pre-launch checkup for vibe-coded web apps and Webflow. One last look before you launch.
+> Human-reviewed pre-launch checkup for vibe-coded web apps and Webflow. One last look. Checked by a real person.
 
 ## Value proposition
 
@@ -16,14 +16,14 @@ Lovable, Bolt, Base44, Replit, v0, Cursor, Webflow, and similar platforms.
 
 1. **Submit URL** — Free audit on the homepage, or pay then complete intake.
 2. **Test and review** — Desktop and mobile width passes, real workflow tests, then curated findings.
-3. **Delivery** — Email with findings and fix prompts (PDFs on paid tiers).
+3. **Delivery** — Email with findings and paste-into-builder fix text (PDFs on paid tiers).
 
 ## Pricing (USD)
 
 | Tier | Price | What you get |
 |------|-------|----------------|
 | Free | $0 | 2 findings by email |
-| Starter | $19 | 10 findings + fix prompts |
+| Starter | $19 | 10 findings + paste-into-builder fix text |
 | Scale Up | $49 | Up to 30 findings, user data isolation check, Quick Start Guide PDF |
 | Pro | $99 | Up to 40 findings, integrations review, Loom walkthrough |
 

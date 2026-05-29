@@ -5,7 +5,7 @@
 
    * ``is_webflow`` flips on when the YAML carries ``customer.platform: webflow``
    * ``report_label`` overrides the "LaunchLook · {tier} report" eyebrow text
-   * ``fix_prompt_label_target`` overrides "Copy-paste fix prompt for {builder}"
+   * ``fix_prompt_label_target`` overrides the default "Paste into {builder} to fix this" label
 
    Future platforms can register additional branches here.
 ---------------------------------------------------------------------- #}
@@ -291,7 +291,7 @@
       color: var(--muted);
     }
 
-    /* ---------- Fix prompt block ---------- */
+    /* ---------- Paste-into-builder block ---------- */
     .fix-prompt {
       margin-top: 10pt;
       padding: 10pt 12pt;

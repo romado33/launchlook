@@ -1,7 +1,7 @@
 {
   "name": "LaunchLook",
   "website": "https://launchlook.app",
-  "tagline": "One last look before you launch.",
+  "tagline": "One last look. Checked by a real person.",
   "description": "Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites. Live URL only; findings curated by a founder before delivery.",
   "contact": {
     "email": "hello@launchlook.app"

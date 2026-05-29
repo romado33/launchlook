@@ -6,7 +6,7 @@
 
 **0:10–0:35** — Show 2–3 specific issues (dead button, placeholder text, missing privacy, dev tools visible). No jargon.
 
-**0:35–0:50** — "I run LaunchLook — a pre-launch checkup for vibe-coded apps. Plain-English report + copy-paste fix prompts for your builder."
+**0:35–0:50** — "I run LaunchLook — a pre-launch checkup for vibe-coded apps. Plain-English report + paste-into-builder fix text."
 
 **0:50–1:00** — CTA: "Starter Package is $9 if you want the full list. Link: launchlook.app"
 
@@ -16,7 +16,7 @@
 Hey [name] — I recorded a 60-sec walkthrough of [app] before you share it wider.
 [LOOM LINK]
 
-I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $9 (Starter Package) with fix prompts you paste into [Lovable/Bolt/etc].
+I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $9 (Starter Package) with paste-into-builder fix text for [Lovable/Bolt/etc].
 
 Free checklist (~20 min): launchlook.app/checklist
 

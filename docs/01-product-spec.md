@@ -11,7 +11,7 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 
 - A summary verdict (overall ready / needs work / not ready)
 - A prioritized list of 5-10 findings (Critical / High / Medium / Low severity)
-- For each finding: plain-English explanation, screenshot evidence, and a copy-paste fix prompt for their AI builder
+- For each finding: plain-English explanation, screenshot evidence, and paste-into-builder fix text for their AI builder
 - An AI-generated one-page Quick Start Guide for their users (included on Starter)
 - (Full Package tier) Cross-user data isolation check with two temporary test accounts
 
@@ -22,7 +22,7 @@ LaunchLook is a paid pre-launch checkup service for vibe-coded web apps. A found
 - Up to 7 prioritized findings
 - Desktop + phone-width layout check (responsive web app — not native iOS/Android)
 - Plain-language explanations
-- Copy-paste fix prompts
+- Paste-into-builder fix text on each finding
 - AI-generated one-page Quick Start Guide for their users
 - Notion page delivery
 - 24-hour turnaround
@@ -59,7 +59,7 @@ Used by: founders launching publicly this week who need depth and a privacy sani
 - **Deep security scanning** — VAS, VibeEval, and Escape.tech compete here at a level we can't match. We'll partner with them, not compete.
 - **Code-level audits** — Sherlock Forensics, Beesoul, and others charge $1,500+ for human code review. Different product, different buyer.
 - **Multi-page help centers** — A one-page Quick Start is the right MVP scope. Multi-page docs are a future product.
-- **Auto-fixing issues** — We give fix prompts, not patches. The founder applies them via their AI builder.
+- **Auto-fixing issues** — We give paste-into-builder fix text, not patches. The founder applies them via their AI builder.
 - **Continuous monitoring** — One-time scans only at MVP. Continuous is a v2 offering.
 - **Mobile apps (iOS/Android)** — Web only.
 - **Backend / API security testing** — Out of scope. Recommend a security tool as a complement.
@@ -80,7 +80,7 @@ Used by: founders launching publicly this week who need depth and a privacy sani
 ## Voice and tone
 
 - Warm, plain, second person — written for **non-technical founders**.
-- **Reports:** "What I saw" and "Why it matters" use everyday language; **fix prompts** may use builder jargon (Lovable, Supabase, etc.). See `templates/report-voice-guide.md`.
+- **Reports:** "What I saw" and "Why it matters" use everyday language; **paste-into-builder blocks** may use builder jargon (Lovable, Supabase, etc.). See `templates/report-voice-guide.md`.
 - No marketing words: leverage, seamless, robust, innovative, cutting-edge, powerful, streamline.
 - Active voice over passive.
 - Short sentences. Concrete verbs.

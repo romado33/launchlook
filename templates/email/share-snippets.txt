@@ -9,7 +9,7 @@
 > Before you share your Lovable/Bolt app link — this checklist caught stuff I'd have missed: https://launchlook.app/checklist
 
 **LinkedIn**
-> LaunchLook — a human pre-launch checkup for vibe-coded web apps. Plain-English report + fix prompts for your builder. Free checklist: https://launchlook.app/checklist · Paid checkup from $9.
+> LaunchLook — a human pre-launch checkup for vibe-coded web apps. Plain-English report + paste-into-builder fix text. Free checklist: https://launchlook.app/checklist · Paid checkup from $9.
 
 ---
 
@@ -19,7 +19,7 @@
 > Ran @LaunchLook on {APP} before launch — caught {N} things I'd have missed (placeholders, trust pages, mobile). Worth it. launchlook.app
 
 **LinkedIn**
-> Used LaunchLook before sharing {APP} publicly — plain-English findings + copy-paste fix prompts for {BUILDER}. launchlook.app
+> Used LaunchLook before sharing {APP} publicly — plain-English findings + paste-into-builder fix text for {BUILDER}. launchlook.app
 
 ---
 

@@ -2,7 +2,7 @@
 
 This is the master reference of every issue type LaunchLook checks for. Used by Rob during manual audits and by the eventual scanner to look up detection patterns and fix prompts.
 
-**Customer-facing text:** Use the **Customer explanation** field (and your report's "What I saw" / "Why it matters") in **plain English** for non-technical founders. Jargon belongs in fix prompts only. See `templates/report-voice-guide.md`.
+**Customer-facing text:** Use the **Customer explanation** field (and your report's "What I saw" / "Why it matters") in **plain English** for non-technical founders. Jargon belongs in paste-into-builder blocks only. See `templates/report-voice-guide.md`.
 
 Stored as: Notion database `Findings Library` with one entry per finding. This document is the source of truth; sync from here to Notion (or vice versa) — but Notion is what Rob uses day-to-day.
 

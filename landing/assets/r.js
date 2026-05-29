@@ -267,7 +267,7 @@
               var prompt = document.createElement("details");
               prompt.className = "report-fix-prompt";
               var summary = document.createElement("summary");
-              summary.textContent = "Fix prompt for your AI builder";
+              summary.textContent = "Paste into your AI builder to fix this";
               prompt.appendChild(summary);
               var pre = document.createElement("pre");
               pre.textContent = String(f.fix_prompt).trim();

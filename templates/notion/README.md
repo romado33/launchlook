@@ -68,7 +68,7 @@ Notion natively supports Markdown import on page creation:
 
 ## What to share with the Notion integration (BL-04)
 
-Before delivering any report, skim `templates/report-voice-guide.md` — findings use plain language; fix prompts can be technical.
+Before delivering any report, skim `templates/report-voice-guide.md` — findings use plain language; paste-into-builder blocks can be technical.
 
 When Rob creates the Notion integration token (`secret_...`), he must explicitly **share** each of these databases with the integration via the `Share` button:
 

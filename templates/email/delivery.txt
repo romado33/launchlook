@@ -9,7 +9,7 @@ Your checkup for {APP_NAME} is ready. Here's the link:
 A few notes:
 - Written in plain English — you don't need to be technical to understand the findings.
 - The findings are ranked by severity. Start at the top.
-- Every finding has a copy-paste fix prompt for {PLATFORM}. Just paste them in and let your builder fix it.
+- Every finding has paste-into-{PLATFORM} fix text. Copy each block into your builder and let it handle the tech.
 - Every paid tier (Starter, Scale Up, Pro) includes a Quick Start Guide in your report.
 - The report is yours to share. Feel free to forward the link to teammates or freelancers.
 

@@ -3,7 +3,7 @@
 > **Tier:** Starter Package ($19) · **Delivered:** {DATE} · **By:** Rob at LaunchLook  
 > **Also emailed:** Main Report PDF + Pre-Launch Checklist PDF
 
-**Audience:** You built this with an AI coding tool. You don't need to be technical to use this report. Technical wording only appears inside the gray **Fix prompt** boxes (paste those into Lovable, Bolt, Webflow, etc.).
+**Audience:** You built this with an AI coding tool. You don't need to be technical to use this report. Technical wording only appears inside the gray **Paste into builder** boxes (copy those into Lovable, Bolt, Webflow, etc.).
 
 **What we tested:** Your live URL on desktop and phone width, plus the main workflows we could reach without logging in (contact/signup forms and whether follow-up emails arrived, when applicable).
 
@@ -27,7 +27,7 @@ Each finding has three parts:
 |------|---------|
 | **What I saw** | What I noticed on your live app, in everyday language |
 | **Why it matters** | What your visitors or users would think or run into |
-| **Fix prompt** | Copy the box into your builder — your AI can handle the technical details |
+| **Paste into builder** | Copy the box into your builder — your AI can handle the technical details |
 
 **How serious is it?**
 
@@ -55,7 +55,7 @@ Each finding has three parts:
 **Why it matters**  
 {What a real visitor would think or what could go wrong.}
 
-**Fix prompt for {PLATFORM}** *(paste into your builder)*
+**Paste into {PLATFORM} to fix this**
 
 ```
 {paste-ready prompt — technical terms OK here only}
@@ -75,7 +75,7 @@ Each finding has three parts:
 **Why it matters**  
 {impact in plain language}
 
-**Fix prompt for {PLATFORM}**
+**Paste into {PLATFORM} to fix this**
 
 ```
 {prompt}
@@ -109,7 +109,7 @@ Each finding has three parts:
 
 You have **{N} items** to work through. Suggested order:
 
-1. **Today** — everything marked 🔴 (usually quick with the fix prompts)
+1. **Today** — everything marked 🔴 (usually quick with the paste-into-builder fix text)
 2. **Before you promote the link** — 🟠 High items
 3. **First couple of weeks live** — 🟡 and ⚪ when you have time
 
@@ -132,4 +132,4 @@ If this helped, reply to Rob with a one-sentence quote for the site (optional).
 
 ---
 
-*LaunchLook · One last look before you launch · hello@launchlook.app*
+*LaunchLook · One last look. Checked by a real person. · hello@launchlook.app*

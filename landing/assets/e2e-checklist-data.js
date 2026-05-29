@@ -113,7 +113,7 @@ window.LAUNCHLOOK_E2E = {
         },
         {
           id: "sm-tagline",
-          label: "Header tagline “One last look before you launch.” on /, /faq, /webflow",
+          label: "Header tagline “One last look. Checked by a real person.” on /, /faq, /webflow",
           hint: "Hidden below 640px by design",
         },
         {
@@ -143,7 +143,7 @@ window.LAUNCHLOOK_E2E = {
         },
         {
           id: "sm-prompts",
-          label: "Pricing mentions fix prompts on all paid tiers; Fix Check not sold on landing",
+          label: "Pricing mentions paste-into-builder fix text on all paid tiers; Fix Check not sold on landing",
           hint: "",
         },
       ],

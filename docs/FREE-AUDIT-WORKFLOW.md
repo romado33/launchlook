@@ -109,7 +109,7 @@ you share publicly:
 1. <plain-English headline> — <one-sentence "why it matters">
 2. ...
 
-If you want the rest of the picture (up to 10 findings across every category, plus paste-ready fix prompts you can drop into your AI builder), Starter is $19: https://launchlook.app/#pricing
+If you want the rest of the picture (up to 10 findings across every category, plus paste-into-builder fix text you can drop into your AI builder), Starter is $19: https://launchlook.app/#pricing
 
 Your Starter findings build on these two, so you're not paying $19 to re-read the same things.
 

@@ -24,7 +24,7 @@ On `/auth`, a **"Dev Bypass (Skip Login)"** button opens a role picker and logs 
 **Why it matters**  
 Anyone with your URL can skip authentication on a marketplace app.
 
-**Fix prompt for Lovable**
+**Paste into Lovable to fix this**
 
 ```
 Remove the "Dev Bypass (Skip Login)" button, the "Choose Your Dev Role" modal, and all "For development purposes only" copy from /auth. Only show these when import.meta.env.DEV is true — never on the published lovable.app URL.
@@ -40,7 +40,7 @@ After sign-in, the homepage shows **"Developer Tools"** with **"Seed Sample Data
 **Why it matters**  
 Real users will think the product is unfinished.
 
-**Fix prompt for Lovable**
+**Paste into Lovable to fix this**
 
 ```
 Remove the "Developer Tools" / "Development Data Seeder" section from the published homepage. Gate behind import.meta.env.DEV only.
@@ -58,7 +58,7 @@ Remove the "Developer Tools" / "Development Data Seeder" section from the publis
 **Why it matters**  
 LiLo collects booking and account data. Visitors and payment tools expect legal pages.
 
-**Fix prompt for Lovable**
+**Paste into Lovable to fix this**
 
 ```
 Add /privacy and /terms routes with basic policy content. Link both from the footer on every page. Use hello@lilo.app (or your real support email) in the contact section.
@@ -71,7 +71,7 @@ Add /privacy and /terms routes with basic policy content. Link both from the foo
 **What I saw**  
 Every experience card shows **"Hosted by Local Host"** instead of a real host name.
 
-**Fix prompt for Lovable**
+**Paste into Lovable to fix this**
 
 ```
 Replace "Hosted by Local Host" with each experience's actual host display name from the database. If missing, show first name + last initial or hide the line.
@@ -84,7 +84,7 @@ Replace "Hosted by Local Host" with each experience's actual host display name f
 **What I saw**  
 **"Quick Book"** opens a modal but **"Choose Time Slot"** shows **"No available slots found"** and **"Book Now"** stays disabled.
 
-**Fix prompt for Lovable**
+**Paste into Lovable to fix this**
 
 ```
 Fix Quick Book so available slots appear, OR hide Quick Book when no slots exist and show "No dates available yet — check back soon."
@@ -99,7 +99,7 @@ Fix Quick Book so available slots appear, OR hide Quick Book when no slots exist
 **What I saw**  
 Cards display **4.5 (0)** — a rating with zero reviews.
 
-**Fix prompt for Lovable**
+**Paste into Lovable to fix this**
 
 ```
 When review count is 0, show "New" or "No reviews yet" instead of a numeric rating.

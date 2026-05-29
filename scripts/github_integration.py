@@ -204,7 +204,7 @@ def issue_body_from_finding(
 
     fix_prompt = (finding.get("fix_prompt") or "").strip()
     if fix_prompt:
-        parts.append("### Recommended fix prompt\n")
+        parts.append("### Paste into builder\n")
         parts.append("```text\n" + fix_prompt + "\n```\n")
 
     audit_id = audit_metadata.get("audit_id") or "(no audit id)"

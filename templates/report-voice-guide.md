@@ -1,6 +1,6 @@
 # LaunchLook — Report voice (non-technical founders)
 
-Use this when writing **any** customer report. Fix prompts can be technical (they paste into Lovable/Bolt). **Everything else** is for a smart non-coder.
+Use this when writing **any** customer report. Paste-into-builder blocks can be technical (they go into Lovable/Bolt). **Everything else** is for a smart non-coder.
 
 ---
 
@@ -18,7 +18,7 @@ Use this when writing **any** customer report. Fix prompts can be technical (the
 2. **Name what they see** — quote the **visible label** (`"Get started"`, `"Seed Sample Data"`), not `/dashboard` or `auth.uid()`.
 3. **Short sentences.** One idea per sentence when possible.
 4. **Say what users feel** — confused, don't trust it, think it's unfinished, can't complete signup.
-5. **Fix prompts are separate** — jargon belongs only inside the paste box, never in "What I saw" or "Why it matters."
+5. **Paste-into-builder text is separate** — jargon belongs only inside the paste box, never in "What I saw" or "Why it matters."
 
 ---
 
@@ -57,7 +57,7 @@ Use this when writing **any** customer report. Fix prompts can be technical (the
 
 - [ ] **What I saw** — no code, no file paths unless the customer would recognize them (e.g. "/privacy" is OK)
 - [ ] **Why it matters** — one real-world consequence
-- [ ] **Fix prompt** — paste into {platform}; technical OK here
+- [ ] **Paste into builder** — paste into {platform}; technical OK here
 - [ ] Screenshot shows the same words you quoted
 
 ---

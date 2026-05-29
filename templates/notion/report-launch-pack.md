@@ -3,7 +3,7 @@
 > **Tier:** Scale Up Package ($49) · **Delivered:** {DATE} · **By:** Rob at LaunchLook  
 > **Also emailed:** Main Report PDF · Quick Start Guide PDF · Pre-Launch Checklist PDF
 
-**Audience:** Non-technical founder. Keep **What I saw** and **Why it matters** in plain English. Only the **Fix prompt** boxes should sound technical (those go straight into your AI builder).
+**Audience:** Non-technical founder. Keep **What I saw** and **Why it matters** in plain English. Only the **Paste into builder** boxes should sound technical (those go straight into your AI builder).
 
 **What we tested:** Desktop + phone width on your live URL, key visitor workflows (forms, signup, emails that should follow), and **two temporary test accounts** for the cross-user check below.
 
@@ -25,7 +25,7 @@ This report has **up to 30 findings** (this report shows **{N}**, most important
 |------|----------------|
 | **What I saw** | What shows up on your live site |
 | **Why it matters** | What users would experience |
-| **Fix prompt** | Paste into {PLATFORM} — builder handles the tech |
+| **Paste into builder** | Paste into {PLATFORM} — builder handles the tech |
 
 | | Plain English |
 |---|----------------|
@@ -53,7 +53,7 @@ This report has **up to 30 findings** (this report shows **{N}**, most important
 **Why it matters**  
 {Real-world impact for users or trust.}
 
-**Fix prompt for {PLATFORM}**
+**Paste into {PLATFORM} to fix this**
 
 ```
 {paste-ready prompt}
@@ -116,7 +116,7 @@ Questions or **recheck** after fixes? Reply to your delivery email — Fix Check
 **Free 3-finding audit for friends:** https://launchlook.app/#hero
 
 **One-line post** (edit as you like):
-> Full LaunchLook pass on {APP_NAME} before launch — plain English + fix prompts for {PLATFORM}. launchlook.app
+> Full LaunchLook pass on {APP_NAME} before launch — plain English + paste-into-builder fix text for {PLATFORM}. launchlook.app
 
 **Referral:** Code **{REFERRAL_CODE}** — $5 off for a friend, $5 off for you.
 

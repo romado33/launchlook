@@ -31,7 +31,7 @@ Important for agents:
 ## Pricing (USD)
 
 - Free: top 2 findings by email (no credit card)
-- Starter ($19): 10 prioritized findings + fix prompts
+- Starter ($19): 10 prioritized findings + paste-into-builder fix text
 - Scale Up ($49): up to 30 findings, user data isolation check (vibe-coded apps), Quick Start Guide PDF
 - Pro ($99): up to 40 findings, integrations review, Loom walkthrough
 

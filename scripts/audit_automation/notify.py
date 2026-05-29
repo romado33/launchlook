@@ -40,7 +40,7 @@ def _append_send_log(
     try:
         _LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
         record = {
-            "ts": datetime.datetime.now(datetime.UTC).isoformat(),
+            "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "context": context,
             "slug": slug,
             "tier": tier,
@@ -198,7 +198,7 @@ def _render_html_email(
   <div style="font-weight:600;color:#111;margin-top:2px;">{title}</div>
   {f'<div style="margin-top:6px;color:#333;font-size:13px;"><b>What we saw:</b> {saw}</div>' if saw else ''}
   {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Why it matters:</b> {matters}</div>' if matters else ''}
-  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Fix prompt:</b> {fix}</div>' if fix else ''}
+  {f'<div style="margin-top:4px;color:#333;font-size:13px;"><b>Paste into builder:</b> {fix}</div>' if fix else ''}
 </div>"""
         )
     findings_html = "".join(findings_html_parts) or "<p><em>No findings in YAML.</em></p>"

@@ -7,7 +7,7 @@ Hope {APP_NAME} is in better shape after the report.
 If LaunchLook helped before you shared your link, would you mind replying with **one sentence** we can use on the site? Examples:
 
 - "Caught placeholder text and a broken signup before Product Hunt."
-- "Worth $9 — fix prompts pasted straight into Lovable."
+- "Worth $9 — paste-into-builder fix text dropped straight into Lovable."
 
 Name and app name optional. Totally fine to say no.
 

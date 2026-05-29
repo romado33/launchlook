@@ -35,7 +35,7 @@ When in doubt: cut, don't add.
 
 ## §3 PDF report rules (Main Report)
 
-1. **Plain-English finding titles.** Never jargon in the headline or description. Technical wording is allowed only inside the paste-ready fix prompt block (where the buyer is going to copy it into an AI builder anyway).
+1. **Plain-English finding titles.** Never jargon in the headline or description. Technical wording is allowed only inside the paste-into-builder block (where the buyer copies it into an AI builder anyway).
    - Bad: "Largest Contentful Paint exceeds 4.0s target on /pricing"
    - Good: "Your /pricing page takes 4+ seconds to show its main image. First visitors usually leave before that finishes."
 2. **Severity is simple:** High / Medium / Low. No numeric scores. No traffic-light colors. No "P0/P1/P2."
@@ -43,7 +43,7 @@ When in doubt: cut, don't add.
    - Headline (8 to 12 words)
    - "What happened" paragraph (2 to 3 sentences)
    - "Why it matters" sentence (one)
-   - Paste-ready fix prompt (verbatim copy-able block)
+   - Paste-into-builder fix text (verbatim copy-able block)
 4. **Persona tags are subtle.** "Caught by The Snoop" appears in small text on the finding, not as a giant badge. See `TESTERS-CAST.md` for voice rules.
 5. **Maximum 5 sections in the report:** verdict (1 paragraph), findings (sorted by severity), one-page "if you only fix three things" summary, comprehensive checklist (Scale Up and Pro only), Handoff Report (Pro only).
 6. **No glossary, no appendix, no caveats wall.** If a buyer needs to learn what a term means in order to read the report, the term doesn't belong in the report.
@@ -55,7 +55,7 @@ When in doubt: cut, don't add.
 ## §4 Quick Start Guide (QSG) PDF rules
 
 1. **Same plain-English rules as the report.** Inherits §3.1 and §3.8.
-2. **Fix prompts are SELF-CONTAINED.** A buyer who never read the main report can paste any QSG prompt into their AI builder and get something useful. Do not assume context from the report.
+2. **Paste-into-builder text is SELF-CONTAINED.** A buyer who never read the main report can paste any block into their AI builder and get something useful. Do not assume context from the report.
 3. **Deep links beat prompts when available.** If a deep link to the buyer's AI builder is available, offer it as a button. Otherwise paste-ready prompt only.
 4. **Order prompts by severity.** High-severity fixes go first. Same severity vocabulary as the report (High / Medium / Low).
 5. **No "advanced configuration" section.** If a fix requires technical decisions, simplify the prompt or split the finding into two simpler findings.
@@ -78,7 +78,7 @@ Never do these on any customer-facing surface:
 - ❌ Surface internal taxonomy names on customer-facing copy ("Snoop," "Scale-Ready audit," "Compliance-Lite," "AI pipeline," "fingerprint dedup")
 - ❌ Use "AI-powered scanner" as a value prop. That is how we deliver, not what the buyer gets.
 - ❌ Use "automation," "intelligent analysis," "next-generation," or similar SaaS-speak
-- ❌ Use industry jargon in finding titles (technical wording allowed only in paste-ready fix prompt blocks per §3.1)
+- ❌ Use industry jargon in finding titles (technical wording allowed only in paste-into-builder blocks per §3.1)
 - ❌ Add "advanced," "premium," or "professional" anything. We have a Pro tier; do not reuse the word.
 - ❌ Add another tier. We are at 4 max: Free / Starter / Scale Up / Pro. See `PRODUCT-DECISIONS.md` §1 and §3.
 - ❌ Em-dashes (associated with AI-generated content). Use parentheses, commas, or colons instead. The only exception is the "— Rob" sign-off in §5.2.

@@ -236,11 +236,21 @@ def collect_confidence_checks(client: Client) -> list[dict]:
         return []
     seen: set[str] = set()
     candidates: list[dict] = []
-    for email in sorted(TEST_EMAILS_ALL_STATUSES):
-        for row in _query_by_email(client, ds_id, "customer_email", email):
-            if row["id"] not in seen:
-                seen.add(row["id"])
-                candidates.append(row)
+    email_prop = "customer_email"
+    try:
+        for email in sorted(TEST_EMAILS_ALL_STATUSES):
+            for row in _query_by_email(client, ds_id, email_prop, email):
+                if row["id"] not in seen:
+                    seen.add(row["id"])
+                    candidates.append(row)
+    except APIResponseError as exc:
+        if "Could not find property" in str(exc):
+            print(
+                f"  [skip] Confidence Check DB — missing `{email_prop}` column "
+                f"(see docs/CONFIDENCE-CHECK-WORKFLOW.md §3)"
+            )
+            return []
+        raise
     return candidates
 
 

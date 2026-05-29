@@ -45,13 +45,13 @@ Tiers: **Starter $19** · **Scale Up $49** · **Pro $99**.
 - [ ] **Get Starter / Scale Up / Pro** open `buy.stripe.com` (not grayed `#` placeholders)
 - [ ] **Handoff Report $49** add-on link in pricing opens Stripe
 - [ ] `/faq`, `/webflow`, `/thanks`, `/thanks-free-audit`, `/privacy`, `/terms` → 200
-- [ ] Header tagline **“One last look before you launch.”** on `/`, `/faq`, `/webflow` (hidden &lt;640px by design)
+- [ ] Header tagline **“One last look. Checked by a real person.”** on `/`, `/faq`, `/webflow` (hidden &lt;640px by design)
 - [ ] Top nav: **Pricing, FAQ, Webflow** only (free audit is hero/footer, not top nav)
 - [ ] `/sample` → **Sparkle Marketplace** report (findings visible — not “report not found”)
 - [ ] `/data/reports/jane-sparkle-marketplace.json` → 200
 - [ ] `/checklist` redirects to `/`
 - [ ] Footer **Sample report** works; **no** GitHub link; privacy/terms have **no** dead `/checklist` link
-- [ ] Pricing mentions fix prompts on paid tiers; **Fix Check** not sold on landing (post-delivery only)
+- [ ] Pricing mentions paste-into-builder fix text on paid tiers; **Fix Check** not sold on landing (post-delivery only)
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **Tier:** Follow-up (quoted by email) · **Delivered:** {DATE} · **By:** Rob at LaunchLook
 
-**Audience:** Non-technical founder. Plain English in **What I saw** / **Why it matters**; technical detail only in **Fix prompt** boxes. See `templates/report-voice-guide.md`.
+**Audience:** Non-technical founder. Plain English in **What I saw** / **Why it matters**; technical detail only in **Paste into builder** boxes. See `templates/report-voice-guide.md`.
 
 ---
 
@@ -34,7 +34,7 @@ You get **{N} findings**, a **Quick Start Guide** for your users, and a **follow
 
 # Part 1 — Findings
 
-(Same structure as Launch Pack template. 10–20 findings, severity-sorted, each with screenshot + why-it-matters + fix prompt.)
+(Same structure as Launch Pack template. 10–20 findings, severity-sorted, each with screenshot + why-it-matters + paste-into-builder fix text.)
 
 ---
 
@@ -48,7 +48,7 @@ You get **{N} findings**, a **Quick Start Guide** for your users, and a **follow
 
 > **Status:** ⏳ Waiting on your fixes. Reply to this email when you're ready.
 
-Once you've applied the fix prompts above, I'll re-run the audit and update this section with:
+Once you've applied the paste-into-builder fix text above, I'll re-run the audit and update this section with:
 
 - What's now fixed ✅
 - What's still outstanding ⚠️

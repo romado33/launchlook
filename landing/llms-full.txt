@@ -1,10 +1,10 @@
 # LaunchLook — full agent context
 
-> One last look before you launch. Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites.
+> One last look. Checked by a real person. Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites.
 
 ## What LaunchLook is
 
-LaunchLook is a paid service (with a free tier) that reviews a customer's **live public URL** like a first-time visitor would. A human runs the workflows that matter (signup, forms, checkout) and checks whether confirmation and thank-you emails actually arrive. AI helps surface issues; a human founder reviews every finding before delivery. Deliverables are plain-English findings, paste-ready fix prompts for the customer's AI builder (Lovable, Cursor, Bolt, etc.), and PDFs on paid tiers.
+LaunchLook is a paid service (with a free tier) that reviews a customer's **live public URL** like a first-time visitor would. A human runs the workflows that matter (signup, forms, checkout) and checks whether confirmation and thank-you emails actually arrive. AI helps surface issues; a human founder reviews every finding before delivery. Deliverables are plain-English findings, paste-into-builder fix text for the customer's AI builder (Lovable, Cursor, Bolt, etc.), and PDFs on paid tiers.
 
 LaunchLook is **not** a security scanner, SEO tool, or code review product. It focuses on what visitors see: broken CTAs, placeholder copy, missing trust pages, mobile layout problems, dev tools on production, and Webflow-specific risks (forms, noindex, schema, breakpoints).
 
@@ -19,7 +19,7 @@ LaunchLook is **not** a security scanner, SEO tool, or code review product. It f
 | Tier | Price | Includes |
 |------|-------|----------|
 | Free | $0 | Top 2 findings by email |
-| Starter | $19 | 10 findings, fix prompts, 30-day verified badge |
+| Starter | $19 | 10 findings, paste-into-builder fix text, 30-day verified badge |
 | Scale Up | $49 | Up to 30 findings, user data isolation check (apps with logins), Quick Start Guide PDF |
 | Pro | $99 | Up to 40 findings, integrations review (Stripe/auth/email/analytics), Loom walkthrough |
 
@@ -42,11 +42,11 @@ No GitHub access, no builder login, no database access required for most audits.
 
 ## Webflow vs vibe-coded
 
-Same human review; different checks. Webflow audits emphasize form submissions, noindex/robots, JSON-LD schema, Designer-to-live mismatches, and breakpoints at 991 / 767 / 478 px. Fix prompts use Webflow Designer language.
+Same human review; different checks. Webflow audits emphasize form submissions, noindex/robots, JSON-LD schema, Designer-to-live mismatches, and breakpoints at 991 / 767 / 478 px. Paste-into-Designer fix text uses Webflow Designer language.
 
 ## vs PageLens AI
 
-PageLens targets SEO-focused marketers who want recurring scans. LaunchLook targets vibe coders who want a one-off pre-launch checkup with paste-ready fix prompts and founder review. Both are legitimate tools for different jobs.
+PageLens targets SEO-focused marketers who want recurring scans. LaunchLook targets vibe coders who want a one-off pre-launch checkup with paste-into-builder fix text and founder review. Both are legitimate tools for different jobs.
 
 ## Key URLs
 

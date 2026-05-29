@@ -12,7 +12,7 @@ They are **not** a replacement for manual QA on app workflows: they do not posit
 
 - **Audience:** Founders shipping with Lovable, Bolt, Cursor, v0, Replit, Base44, and similar (plus Webflow via a separate SKU).
 - **Job:** One-off pre-launch checkup before you share the link with real users.
-- **Deliverable:** Founder-reviewed findings, paste-ready fix prompts for your builder, PDFs on paid tiers.
+- **Deliverable:** Founder-reviewed findings, paste-into-builder fix text for your builder, PDFs on paid tiers.
 - **Wedge:** A real person clicks through signup, forms, and checkout paths, checks emails, and edits the list before you see it.
 
 ## Where they overlap
@@ -27,7 +27,7 @@ Both take a **live URL** and return prioritized issues with fix-oriented output.
 | Workflow testing | Real form submits and inbox checks by a person | Automated page capture; QA Audit explores some flows without human review |
 | Finding review | Founder reviews every finding before delivery | Software-generated report (founder help on support, not on every finding) |
 | Speed | Usually a few days | Minutes for automated scans |
-| Output | PDF by email + builder fix prompts | Health score, PDF/Markdown, agent-ready export, optional MCP |
+| Output | PDF by email + paste-into-builder fix text | Health score, PDF/Markdown, agent-ready export, optional MCP |
 | Account | No customer login | Sign-in for preview, history, re-scans |
 | Pricing (typical) | Free 2 findings, then **$19 / $49 / $99** one-off | Free preview (login), **$1** Launch Scan, **$29** Launch Pack; optional **$5/mo** monitor |
 | Refund | 7-day full refund if report isn't useful | Money-back if nothing actionable (per their terms) |

@@ -78,7 +78,7 @@ DevTools → **375px** (iPhone SE), reload homepage + main path page:
 
 1. Verdict: 🟢 Ready / 🟡 Fix first / 🔴 Don’t ship  
 2. Findings: **Critical → High → Medium** (screenshot each)  
-3. Fix prompts from library — substitute `{ACTUAL_NAME}`, `{PAGE}`, `{BUTTON_NAME}`  
+3. Paste-into-builder text from library — substitute `{ACTUAL_NAME}`, `{PAGE}`, `{BUTTON_NAME}`  
 4. **Starter:** add Quick Start Guide in Notion  
 
 ---

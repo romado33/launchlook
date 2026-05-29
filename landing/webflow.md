@@ -14,7 +14,7 @@ Webflow freelancers, agencies, and in-house teams before client handoff. **URL o
 - Designer-to-live mismatches
 - Mobile breakage at Webflow breakpoints: **991px, 767px, 478px**
 
-A human submits forms where possible, checks notification emails, and reviews every finding before delivery. Fix prompts are written in **Webflow Designer language** (Pages, Publish, etc.), not “paste into Lovable.”
+A human submits forms where possible, checks notification emails, and reviews every finding before delivery. Paste-into-Designer fix text is written in **Webflow Designer language** (Pages, Publish, etc.), not “paste into Lovable.”
 
 ## Pricing (USD)
 

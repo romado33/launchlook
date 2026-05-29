@@ -31,7 +31,7 @@ What I won't do: deep security, code review, anything that needs your repo.
 
 I'll do as many as I can fit in this week. First come first served.
 
-(If you want the long version with screenshots and copy-paste fix prompts for your builder, I do that as a paid service — but please don't pay for what I'm offering free here. Reply with your URL and let's start there.)
+(If you want the long version with screenshots and paste-into-builder fix text, I do that as a paid service — but please don't pay for what I'm offering free here. Reply with your URL and let's start there.)
 ```
 
 ---

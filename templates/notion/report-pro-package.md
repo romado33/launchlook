@@ -4,7 +4,7 @@
 > **Also emailed:** Main Report PDF · Quick Start Guide PDF · Pre-Launch Checklist PDF · Handoff Report PDF  
 > **Scheduled separately:** 30-minute Loom walkthrough (email to book)
 
-**Audience:** Non-technical founder. Plain English in **What I saw** / **Why it matters**; technical detail only in **Fix prompt** boxes. See `templates/report-voice-guide.md`.
+**Audience:** Non-technical founder. Plain English in **What I saw** / **Why it matters**; technical detail only in **Paste into builder** boxes. See `templates/report-voice-guide.md`.
 
 **What we tested:** Desktop + phone width, visitor workflows (forms, signup, confirmation emails), two test accounts for data isolation, and a surface-level review of how {STRIPE / AUTH / EMAIL / ANALYTICS} are wired from what we can see without repo access.
 
@@ -54,7 +54,7 @@ This report has **up to 40 findings** (this report shows **{N}**), a **Quick Sta
 **Why it matters**  
 {User/trust impact.}
 
-**Fix prompt for {PLATFORM}**
+**Paste into {PLATFORM} to fix this**
 
 ```
 {paste-ready prompt}
@@ -141,7 +141,7 @@ The **Handoff Report** is formatted for your repo / AI builder: stack summary, e
 2. **Before promote** — 🟠 High + integrations marked 🔴  
 3. **Publish** — Quick Start Guide somewhere users can find it  
 4. **Watch** — Loom when scheduled  
-5. **Build** — use Handoff Report + fix prompts in your AI builder  
+5. **Build** — use Handoff Report + paste-into-builder fix text in your AI builder  
 
 **Fix Check:** Reply **recheck** after you ship fixes — included once on Pro within 14 days, or $19 standalone.
 

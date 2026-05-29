@@ -172,7 +172,7 @@ class IssueBodyTests(unittest.TestCase):
         self.assertIn("### Why it matters", body)
         self.assertIn("First-time visitors usually leave before that finishes.", body)
         # Fix prompt
-        self.assertIn("### Recommended fix prompt", body)
+        self.assertIn("### Paste into builder", body)
         self.assertIn("Lazy-load the hero image", body)
         # Audit footer
         self.assertIn("From LaunchLook audit `jane-sparkle-2026-05-26`", body)
