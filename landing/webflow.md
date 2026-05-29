@@ -4,7 +4,7 @@
 
 ## Who this is for
 
-Webflow freelancers, agencies, and in-house teams before client handoff. **URL only** — no Workspace or Designer login required.
+Webflow freelancers, agencies, and in-house teams before client handoff. **URL only.** No Workspace or Designer login required.
 
 ## What we check
 

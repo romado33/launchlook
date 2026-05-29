@@ -4,7 +4,7 @@ Neutral comparison for founders deciding between a marketplace freelancer and a 
 
 ## One-line split
 
-**Fiverr sells you a freelancer. LaunchLook sells you a fixed pre-launch checkup — same scope, same founder review, every time.**
+**Fiverr sells you a freelancer. LaunchLook sells you a fixed pre-launch checkup: same scope, same founder review, every time.**
 
 ## What Fiverr is
 
@@ -13,7 +13,7 @@ Fiverr is a **marketplace**, not a single product. "UX audit," "website review,"
 Typical Fiverr experience:
 
 - Brief the seller in messages; wait days for delivery and revisions.
-- Deliverable might be PDF, Loom, or Figma — rarely paste-into-Lovable fix text.
+- Deliverable might be PDF, Loom, or Figma. Rarely paste-into-Lovable fix text.
 - Workflow depth (signup, email, forms) depends on what that seller promised.
 
 **Upside:** you can hire for ongoing design, mockups, accessibility specialists, or languages LaunchLook does not cover.
@@ -23,7 +23,7 @@ Typical Fiverr experience:
 - **Audience:** Founders shipping vibe-coded web apps (Lovable, Bolt, Cursor, v0, Replit) and Webflow sites.
 - **Job:** One-off pre-launch checkup before real users or Product Hunt.
 - **Deliverable:** Founder-reviewed findings, paste-into-builder fix text, PDFs on paid tiers.
-- **Wedge:** Fixed checklist — signup/email, forms, mobile, trust pages, dead links — edited by Rob before delivery.
+- **Wedge:** Fixed checklist: signup/email, forms, mobile, trust pages, dead links, edited by Rob before delivery.
 
 ## Side-by-side
 
@@ -41,7 +41,7 @@ Typical Fiverr experience:
 
 - You want **design deliverables** (mockups, brand refresh), not just a bug list.
 - You need a **specialist** (accessibility cert, localization) or an **ongoing freelancer**.
-- Your budget is minimal and you accept quality roulette — but read reviews and ask if they test signup email.
+- Your budget is minimal and you accept quality roulette, but read reviews and ask if they test signup email.
 
 ## When LaunchLook is the better choice
 

@@ -1,4 +1,4 @@
-# LaunchLook — Home
+# LaunchLook Home
 
 > Human-reviewed pre-launch checkup for vibe-coded web apps and Webflow. One last look. Checked by a real person.
 
@@ -14,9 +14,9 @@ Lovable, Bolt, Base44, Replit, v0, Cursor, Webflow, and similar platforms.
 
 ## How it works
 
-1. **Submit URL** — Free audit on the homepage, or pay then complete intake.
-2. **Test and review** — Desktop and mobile width passes, real workflow tests, then curated findings.
-3. **Delivery** — Email with findings and paste-into-builder fix text (PDFs on paid tiers).
+1. **Submit URL.** Free audit on the homepage, or pay then complete intake.
+2. **Test and review.** Desktop and mobile width passes, real workflow tests, then curated findings.
+3. **Delivery.** Email with findings and paste-into-builder fix text (PDFs on paid tiers).
 
 ## Pricing (USD)
 

@@ -4,27 +4,27 @@ Neutral comparison for buyers choosing a pre-launch checkup.
 
 ## One-line split
 
-**VibeDoctor checks the repo. LaunchLook checks the live app — no GitHub required.**
+**VibeDoctor checks the repo. LaunchLook checks the live app. No GitHub required.**
 
 ## What VibeDoctor sells (2026)
 
 - **Repo-first:** GitHub/GitLab read-only connection for 129+ checks (secrets, CVEs, code smells, AI-code patterns).
 - **Fast automated output:** Vitals score, file:line findings, IDE copy prompts; optional push monitoring.
 - **Subscription** from ~$15/mo (free tier with daily limits).
-- **Live URL pass** is a smaller slice — not the full repo prescription.
+- **Live URL pass** is a smaller slice. Not the full repo prescription.
 - **Best for:** devs who have exported to git and want code-level security fast.
 
 ## Who each one is for
 
 | | LaunchLook | VibeDoctor |
 |---|---|---|
-| **Best buyer** | Non-technical or vibe-coder shipping from Lovable, Bolt, v0, Cursor — often **no GitHub repo** | Devs with a **connected repo** who want fast automated security, dependencies, and code-health scans |
+| **Best buyer** | Non-technical or vibe-coder shipping from Lovable, Bolt, v0, Cursor, often **no GitHub repo** | Devs with a **connected repo** who want fast automated security, dependencies, and code-health scans |
 | **What you provide** | Live public URL (+ optional test logins on Scale Up / Pro) | GitHub/GitLab repo (read-only) and/or live URL for a smaller live-only pass |
 | **What you get** | Short curated PDF, paste-into-**builder** fix text per finding, founder review | Vitals score, file:line findings, copy prompts for **IDE** tools, optional push monitoring |
 | **Workflow testing** | A person submits forms and checks confirmation emails | Automated rules; optional journey-style passes on live URL |
 | **Turnaround** | Usually a few days (human review) | ~30 seconds to minutes (automated) |
 | **Pricing** | Free 2 findings; $19 / $49 / $99 one-off | Free tier; paid from ~$15/mo (subscription) |
-| **Account** | No login — URL + email only | Sign-in for scan history and repo connection |
+| **Account** | No login. URL + email only | Sign-in for scan history and repo connection |
 
 ## When VibeDoctor is the better choice
 
@@ -34,7 +34,7 @@ Neutral comparison for buyers choosing a pre-launch checkup.
 
 ## When LaunchLook is the better choice
 
-- You **don't have GitHub** — or you've never exported your Lovable/Bolt project to git.
+- You **don't have GitHub**, or you've never exported your Lovable/Bolt project to git.
 - You care whether a **real person** can sign up, get the email, and use the app on a phone.
 - You want a **short prescription**, not a wall of automated warnings, before Product Hunt or beta users.
 

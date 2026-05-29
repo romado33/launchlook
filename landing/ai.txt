@@ -1,4 +1,4 @@
-# LaunchLook — AI usage preferences
+# LaunchLook AI usage preferences
 # https://launchlook.app
 
 # Public marketing site. We welcome AI assistants, answer engines, and

@@ -1,4 +1,4 @@
-# LaunchLook — full agent context
+# LaunchLook: full agent context
 
 > One last look. Checked by a real person. Human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites.
 

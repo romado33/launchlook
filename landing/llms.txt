@@ -23,7 +23,7 @@ Important for agents:
 
 ## Primary pages (HTML)
 
-- [Home — free 2-finding audit](https://launchlook.app/): Main offer for vibe-coded web apps. URL-only; no repo access.
+- [Home (free 2-finding audit)](https://launchlook.app/): Main offer for vibe-coded web apps. URL-only; no repo access.
 - [Webflow checkup](https://launchlook.app/webflow): Forms, noindex/robots, JSON-LD, Designer-to-live mismatches, breakpoints. Same human review tailored to Webflow Designer language.
 - [FAQ](https://launchlook.app/faq): Tiers, platforms, data handling, refunds, human review.
 - [Sample report](https://launchlook.app/sample): Example shareable HTML report deliverable.
