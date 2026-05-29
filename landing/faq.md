@@ -2,17 +2,17 @@
 
 ## What do you actually test?
 
-We walk your live URL like a first-time visitor — desktop and phone. No GitHub, no repo. Typical checks:
+We walk your live URL like a first-time visitor on desktop and phone. No GitHub, no repo. Typical checks:
 
-- **Signup and login** — confirmation and password-reset emails actually arrive
-- **Forms and checkout** — contact, booking, payment; silent failures are #1
-- **Mobile layout** — tap targets, menus, overflow, CTAs at phone width
-- **Trust pages** — privacy, terms, contact/support links that work
-- **Dead links and buttons** — 404s and clicks that go nowhere
-- **Placeholder and dev-only content** — fake stats, seed data, dev shortcuts on prod
-- **First-visitor paths** — homepage to core action without getting stuck
+- **Signup and login.** Confirmation and password-reset emails actually arrive.
+- **Forms and checkout.** Contact, booking, payment. Silent failures are #1.
+- **Mobile layout.** Tap targets, menus, overflow, CTAs at phone width.
+- **Trust pages.** Privacy, terms, contact/support links that work.
+- **Dead links and buttons.** 404s and clicks that go nowhere.
+- **Placeholder and dev-only content.** Fake stats, seed data, dev shortcuts on prod.
+- **First-visitor paths.** Homepage to core action without getting stuck.
 
-A person edits the list before you see it — no raw dump of 200 warnings.
+A person edits the list before you see it. No raw dump of 200 warnings.
 
 ## What are human-tested workflows and human review?
 
@@ -46,7 +46,7 @@ Same human review; checks shift to forms, noindex/robots, JSON-LD, Designer-to-l
 
 ## LaunchLook vs PageLens AI?
 
-Both scan your live site. PageLens targets SEO marketers who want fast, recurring scans. LaunchLook targets vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-into-builder fix text and founder review. Side-by-side: https://launchlook.app/vs-pagelens
+Both scan your live site. PageLens targets SEO marketers who want fast, recurring scans. LaunchLook targets vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-ready fix prompts and founder review. Side-by-side: https://launchlook.app/vs-pagelens
 
 ## LaunchLook vs a Fiverr UX audit?
 
