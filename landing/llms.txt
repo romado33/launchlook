@@ -19,6 +19,7 @@ Important for agents:
 - [Webflow](https://launchlook.app/webflow.md): Webflow-specific scope and pricing.
 - [vs PageLens](https://launchlook.app/vs-pagelens.md): Neutral comparison (site scanner vs live-app checkup).
 - [vs VibeDoctor](https://launchlook.app/vs-vibedoctor.md): Neutral comparison (GitHub repo scanner vs URL-only; no repo required).
+- [vs Fiverr UX audit](https://launchlook.app/vs-fiverr-audit.md): Neutral comparison (marketplace freelancer vs fixed-scope checkup).
 
 ## Primary pages (HTML)
 
@@ -46,6 +47,7 @@ Broken flows and dead buttons, placeholder copy, missing privacy/terms/contact p
 
 - [LaunchLook vs PageLens (HTML)](https://launchlook.app/vs-pagelens): Site scanner comparison.
 - [LaunchLook vs VibeDoctor (HTML)](https://launchlook.app/vs-vibedoctor): Repo scanner comparison; emphasizes no GitHub required.
+- [LaunchLook vs Fiverr UX audit (HTML)](https://launchlook.app/vs-fiverr-audit): Marketplace freelancer vs fixed checkup.
 - [Privacy policy](https://launchlook.app/privacy)
 - [Terms of service](https://launchlook.app/terms)
 - Pages marked noindex (not product docs): /thanks, /thanks-free-audit, /e2e
