@@ -129,7 +129,7 @@
         We load your live URL at desktop and mobile width, run the workflows that matter (signup, forms, checkout), and check whether confirmation emails actually arrive. Every finding is reviewed by the founder before you see it.
       </p>
 
-      <form data-free-audit-form action="/api/free-audit" method="POST" class="card-elevated mt-6 px-4 py-4 sm:px-6 sm:py-6">
+      <form data-free-audit-form action="/api/free-audit" method="POST" class="card-elevated mt-6 px-4 py-3 sm:px-5 sm:py-4">
         <div class="grid sm:grid-cols-2 gap-3">
           <label class="block">
             <span class="text-xs font-medium text-muted-strong">App URL</span>
@@ -194,9 +194,6 @@
         </div>
 
       </div>
-      <p class="mt-4 text-xs text-muted text-center">
-        Submit your free 2-finding audit now&nbsp;&mdash; <a href="#hero" class="underline decoration-line hover:text-ink">takes 30 seconds to submit</a>, findings back within a few days.
-      </p>
     </div>
   </section>
 
@@ -242,30 +239,31 @@
       <p class="text-muted mb-8 max-w-prose">These gaps only appear when a real person uses your app cold. They happen on almost every AI-built app we review.</p>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="card-elevated p-5">
+        <div class="card-elevated p-4">
           <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">1. Silent form failures</p>
-          <p class="text-sm text-muted leading-relaxed">Your signup or contact form looks fine. Click submit. Nothing arrives. No confirmation email, no error. Your builder generated the UI; it never tested the delivery. This is the most common launch blocker we find.</p>
+          <p class="text-sm text-muted leading-relaxed">Submit looks fine — no email, no error. Your builder built the UI; it never tested whether anything actually sends. The most common blocker we find.</p>
         </div>
-        <div class="card-elevated p-5">
+        <div class="card-elevated p-4">
           <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">2. Mobile layout problems</p>
-          <p class="text-sm text-muted leading-relaxed">AI builders preview on desktop. The button that can&rsquo;t be tapped on a phone, the text that overflows off the right edge, the navigation that hides the main CTA &mdash; these are invisible until a real device opens the link.</p>
+          <p class="text-sm text-muted leading-relaxed">Untappable buttons, overflowing text, hidden CTAs — desktop previews hide what breaks on a real phone.</p>
         </div>
-        <div class="card-elevated p-5">
+        <div class="card-elevated p-4">
           <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">3. Dev artifacts in production</p>
-          <p class="text-sm text-muted leading-relaxed">&ldquo;Dev Bypass&rdquo; sign-in buttons. &ldquo;Seed sample data.&rdquo; Placeholder team photos. A zero-review rating showing &ldquo;4.5 (0)&rdquo;. These erode trust instantly &mdash; and AI builders ship them by default.</p>
+          <p class="text-sm text-muted leading-relaxed">&ldquo;Dev Bypass&rdquo; buttons, seed data, placeholder photos, fake ratings. Shipped by default — and they kill trust instantly.</p>
         </div>
-        <div class="card-elevated p-5">
+        <div class="card-elevated p-4">
           <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">4. Missing trust pages</p>
-          <p class="text-sm text-muted leading-relaxed">No privacy policy. No terms. A contact email that goes nowhere. Dead footer links. These are the first things a skeptical visitor checks &mdash; and the most common reason they leave without buying.</p>
+          <p class="text-sm text-muted leading-relaxed">No privacy policy, no terms, dead contact links. Skeptical visitors check these first — and leave.</p>
         </div>
-        <div class="card-elevated p-5">
+        <div class="card-elevated p-4">
           <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">5. Copy that reads AI-written</p>
-          <p class="text-sm text-muted leading-relaxed">Tricolons (&ldquo;comprehensive, elegant, and powerful&rdquo;). Filler phrases (&ldquo;it&rsquo;s important to note that&rdquo;). Generic hero claims with no specifics. Visitors can&rsquo;t always name it, but they feel it and leave.</p>
+          <p class="text-sm text-muted leading-relaxed">Tricolons, filler phrases, vague hero claims. Visitors can&rsquo;t always name it — but they feel it and bounce.</p>
         </div>
-        <div class="card-elevated p-5">
-          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">+ more per tier</p>
-          <p class="text-sm text-muted leading-relaxed">Scale Up and Pro add: user data isolation (can one user see another&rsquo;s records?), analytics gaps, integrations review (Stripe, login, email), compliance basics, and a full mobile-width pass.</p>
-        </div>
+      </div>
+
+      <div class="card-elevated mt-4 px-4 py-3 sm:px-5 sm:py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+        <p class="text-xs font-medium text-accent uppercase tracking-widest shrink-0">+ more per tier</p>
+        <p class="text-sm text-muted leading-relaxed">Scale Up and Pro add data isolation, analytics gaps, integrations (Stripe, login, email), compliance basics, and a full mobile pass.</p>
       </div>
     </div>
   </section>
@@ -311,7 +309,7 @@
         </div>
 
         <!-- Scale Up — most popular -->
-        <div class="card-elevated p-5 flex flex-col ring-2 ring-accent/40 relative">
+        <div class="card-elevated p-5 flex flex-col">
           <h3 class="font-serif text-lg">Scale Up</h3>
           <p class="font-serif text-3xl mt-1">$49</p>
           <p class="text-sm text-muted mt-1 italic">Ready to invite real users &mdash; and sure no one can see each other&rsquo;s data?</p>
