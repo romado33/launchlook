@@ -39,7 +39,7 @@
         "@id": "https://launchlook.app/#website",
         "url": "https://launchlook.app/",
         "name": "LaunchLook",
-        "description": "One last look before you launch.",
+        "description": "One last look. Checked by a real person.",
         "publisher": { "@id": "https://launchlook.app/#organization" }
       },
       {
@@ -106,7 +106,7 @@
       <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
-        <span class="site-brand-tagline">One last look before you launch.</span>
+        <span class="site-brand-tagline">One last look. Checked by a real person.</span>
       </a>
       <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
         <a href="#pricing" class="nav-link">Pricing</a>
@@ -278,10 +278,11 @@
         <ul class="how-checklist">
           <li><strong>Signup and login.</strong> We register (or use a test account) and check whether confirmation and password-reset emails actually arrive.</li>
           <li><strong>Forms and checkout.</strong> Contact, booking, and payment flows. We submit them and see if anything breaks or fails silently. That&rsquo;s the #1 thing we find.</li>
-          <li><strong>Mobile layout.</strong> Your URL at phone width: tap targets, menus, text spilling off-screen, CTAs that disappear.</li>
+          <li><strong>Mobile layout.</strong> Your URL at phone width: tap targets, menus, text spilling off-screen, CTAs that disappear. The in-builder preview often misses these.</li>
           <li><strong>Trust pages.</strong> Privacy policy, terms, contact or support links. Do they exist and work?</li>
           <li><strong>Dead links and buttons.</strong> Clicks that go nowhere, 404s, or error screens a visitor would hit.</li>
           <li><strong>Placeholder and dev-only content.</strong> Lorem ipsum, fake ratings, seed data, &ldquo;Dev Bypass&rdquo; still showing on the live site.</li>
+          <li><strong>On-page copy.</strong> Vague hero lines, filler words, that &ldquo;written by AI&rdquo; feel. People notice even when they can&rsquo;t say why.</li>
           <li><strong>First-visitor paths.</strong> Can someone get from your homepage to the thing you&rsquo;re selling without getting stuck?</li>
         </ul>
 
@@ -294,43 +295,6 @@
           <li><strong>A person edits the list.</strong> No raw dump of 200 warnings.</li>
           <li><strong>Paste-into-builder fixes.</strong> Each finding includes text you drop into Lovable, Bolt, Cursor, v0, and the rest.</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="five-things" class="border-b border-line bg-paper">
-    <div class="page-wrap px-6 section-inner">
-      <p class="section-label">What AI builders can&rsquo;t test</p>
-      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
-      <h2 class="font-serif text-2xl sm:text-3xl mb-2">Five things your AI builder can&rsquo;t catch</h2>
-      <p class="text-muted mb-8 max-w-prose">Your builder won&rsquo;t catch these. We see them on almost every app we review.</p>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="card-elevated p-4">
-          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">1. Silent form failures</p>
-          <p class="text-sm text-muted leading-relaxed">You hit submit. Nothing happens. No email, no error. The UI looks fine; nobody tested if it actually sends. #1 thing we find.</p>
-        </div>
-        <div class="card-elevated p-4">
-          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">2. Mobile layout problems</p>
-          <p class="text-sm text-muted leading-relaxed">Buttons you can&rsquo;t tap, text spilling off the screen, CTAs hidden behind the menu. Desktop preview lies. Your phone doesn&rsquo;t.</p>
-        </div>
-        <div class="card-elevated p-4">
-          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">3. Dev junk still live</p>
-          <p class="text-sm text-muted leading-relaxed">&ldquo;Dev Bypass&rdquo; login, seed data, fake team photos, ratings that say 4.5 (0). Builders ship this stuff unless you catch it.</p>
-        </div>
-        <div class="card-elevated p-4">
-          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">4. Missing trust pages</p>
-          <p class="text-sm text-muted leading-relaxed">No privacy policy, no terms, contact links that go nowhere. People check this before they pay. Then they leave.</p>
-        </div>
-        <div class="card-elevated p-4">
-          <p class="text-xs font-medium text-accent uppercase tracking-widest mb-2">5. Copy that sounds robotic</p>
-          <p class="text-sm text-muted leading-relaxed">Vague hero lines, filler words, that &ldquo;written by AI&rdquo; vibe. People feel it even if they can&rsquo;t explain it. They leave.</p>
-        </div>
-      </div>
-
-      <div class="card-elevated mt-4 px-4 py-3 sm:px-5 sm:py-4 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-        <p class="text-xs font-medium text-accent uppercase tracking-widest shrink-0">+ more per tier</p>
-        <p class="text-sm text-muted leading-relaxed">Scale Up and Pro add data isolation, analytics gaps, integrations (Stripe, login, email), compliance basics, and a full mobile pass.</p>
       </div>
     </div>
   </section>
@@ -449,12 +413,21 @@
           <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps. Also v0, Cursor-built apps, Webflow sites, and others. If your builder outputs a shareable link, we can usually review it.</p>
         </details>
-        <details class="py-4">
+        <details class="py-4" id="builder-review">
           <summary class="flex justify-between items-center font-medium text-sm">I built my app with Lovable / Cursor / Bolt. Why do I still need a review?<span class="text-muted text-lg">+</span></summary>
-          <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
             <p>Your builder is built to ship fast. It doesn&rsquo;t pretend to be a confused first-time user, wait for signup emails, or catch the button that dies on a phone.</p>
-            <p>We do. Someone who&rsquo;s never seen your app tries to use it the way you intended. Most apps we review have 5 to 15 things a first visitor would notice before you do.</p>
-            <p>Lovable&rsquo;s SEO check helps Google. We help the friend you just texted the link to: dead buttons, forms that fail quietly, mobile layouts that break, &ldquo;Dev Bypass&rdquo; still on the login page.</p>
+            <p>Built-in tools cover one slice of launch prep. Lovable&rsquo;s SEO check helps Google index you. Bolt and similar linters catch syntax. None of them submit your contact form and wait for the confirmation email, load your URL at phone width, or flag &ldquo;Dev Bypass&rdquo; still on the login page.</p>
+            <p>What we see on almost every app we review:</p>
+            <ul class="space-y-2 list-disc list-inside sm:list-outside sm:pl-5">
+              <li><strong class="text-ink">Silent form failures.</strong> Submit looks fine. Nothing sends. No error. #1 thing we find.</li>
+              <li><strong class="text-ink">Mobile layout.</strong> Buttons you can&rsquo;t tap, CTAs hidden behind the menu. Desktop preview lies.</li>
+              <li><strong class="text-ink">Dev junk on prod.</strong> Seed data, fake ratings, &ldquo;Dev Bypass&rdquo; still live.</li>
+              <li><strong class="text-ink">Missing trust pages.</strong> No privacy policy, terms, or contact that works.</li>
+              <li><strong class="text-ink">Robotic copy.</strong> Vague hero lines people feel even if they can&rsquo;t name it.</li>
+            </ul>
+            <p>Most apps have 5 to 15 of these before the founder would notice on their own.</p>
+            <p>Scale Up and Pro go deeper: data isolation, Stripe/login/email/analytics checks, and compliance basics on paid flows.</p>
           </div>
         </details>
         <details class="py-4">

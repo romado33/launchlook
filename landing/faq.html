@@ -49,7 +49,7 @@
       <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
-        <span class="site-brand-tagline">One last look before you launch.</span>
+        <span class="site-brand-tagline">One last look. Checked by a real person.</span>
       </a>
       <nav class="flex items-center gap-5 text-sm text-muted" aria-label="Site">
         <a href="/#pricing" class="nav-link">Pricing</a>
@@ -130,12 +130,21 @@
           <summary class="flex justify-between items-center font-medium text-sm">How is this different from a security scanner?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">We focus on what visitors <em>see</em>: broken UI, placeholders, trust pages. For deep security, use something like <a href="https://vibeappscanner.com" class="underline hover:text-ink" rel="noopener noreferrer">VAS</a>. Use both if you can.</p>
         </details>
-        <details class="py-4">
+        <details class="py-4" id="builder-review">
           <summary class="flex justify-between items-center font-medium text-sm">I built my app with Lovable / Cursor / Bolt. Why do I still need a review?<span class="text-muted text-lg">+</span></summary>
-          <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
             <p>Your builder is built to ship fast. It doesn&rsquo;t pretend to be a confused first-time user, wait for signup emails, or catch the button that dies on a phone.</p>
-            <p>We do. Someone who&rsquo;s never seen your app tries to use it the way you intended. Most apps we review have 5 to 15 things a first visitor would notice before you do.</p>
-            <p>Lovable&rsquo;s SEO check helps Google. We help the friend you just texted the link to: dead buttons, forms that fail quietly, mobile layouts that break, &ldquo;Dev Bypass&rdquo; still on the login page.</p>
+            <p>Built-in tools cover one slice of launch prep. Lovable&rsquo;s SEO check helps Google index you. Bolt and similar linters catch syntax. None of them submit your contact form and wait for the confirmation email, load your URL at phone width, or flag &ldquo;Dev Bypass&rdquo; still on the login page.</p>
+            <p>What we see on almost every app we review:</p>
+            <ul class="space-y-2 list-disc list-inside sm:list-outside sm:pl-5">
+              <li><strong class="text-ink">Silent form failures.</strong> Submit looks fine. Nothing sends. No error. #1 thing we find.</li>
+              <li><strong class="text-ink">Mobile layout.</strong> Buttons you can&rsquo;t tap, CTAs hidden behind the menu. Desktop preview lies.</li>
+              <li><strong class="text-ink">Dev junk on prod.</strong> Seed data, fake ratings, &ldquo;Dev Bypass&rdquo; still live.</li>
+              <li><strong class="text-ink">Missing trust pages.</strong> No privacy policy, terms, or contact that works.</li>
+              <li><strong class="text-ink">Robotic copy.</strong> Vague hero lines people feel even if they can&rsquo;t name it.</li>
+            </ul>
+            <p>Most apps have 5 to 15 of these before the founder would notice on their own.</p>
+            <p>Scale Up and Pro go deeper: data isolation, Stripe/login/email/analytics checks, and compliance basics on paid flows.</p>
           </div>
         </details>
         <details class="py-4">

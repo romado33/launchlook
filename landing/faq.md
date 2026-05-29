@@ -36,9 +36,21 @@ Any vibe-coded **web app** with a public URL: Lovable, Bolt, Base44, Replit, v0,
 
 No. Public URL only (plus temporary test accounts on Scale Up / Pro when the app has logins). No GitHub, codebase, or builder login.
 
-## Lovable SEO review vs LaunchLook?
+## Built-in AI builder tools vs LaunchLook?
 
-SEO tools help Google. LaunchLook helps the person you send the link to: dead buttons, dev tools on prod, missing legal pages, fake-looking social proof.
+Lovable's SEO check, Bolt linters, and similar built-in tools each cover one slice of launch prep. SEO tools help Google. Linters catch syntax. None of them submit your contact form and wait for the confirmation email, load your URL at phone width, or flag "Dev Bypass" still on the login page.
+
+What we see on almost every app we review:
+
+- **Silent form failures.** Submit looks fine. Nothing sends. No error. #1 thing we find.
+- **Mobile layout.** Buttons you can't tap, CTAs hidden behind the menu. Desktop preview lies.
+- **Dev junk on prod.** Seed data, fake ratings, "Dev Bypass" still live.
+- **Missing trust pages.** No privacy policy, terms, or contact that works.
+- **Robotic copy.** Vague hero lines people feel even if they can't name it.
+
+Most apps have 5 to 15 of these before the founder would notice on their own. LaunchLook helps the person you text the link to, not the search crawler.
+
+Scale Up and Pro go deeper: data isolation, Stripe/login/email/analytics checks, and compliance basics on paid flows.
 
 ## Webflow vs vibe-coded checkup?
 
