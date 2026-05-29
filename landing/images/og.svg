@@ -9,6 +9,6 @@
   <text x="260" y="248" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="500" fill="#1F1B16">LaunchLook</text>
   <text x="260" y="318" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#6B6359">Pre-launch checkup for vibe-coded apps</text>
   <text x="260" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#5C554C">Human review, screenshots, paste-into-builder fix text</text>
-  <rect x="260" y="430" width="280" height="56" rx="14" fill="#B45309"/>
+  <rect x="260" y="430" width="280" height="56" rx="14" fill="#0F766E"/>
   <text x="400" y="468" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#FAF7F2">launchlook.app</text>
 </svg>
