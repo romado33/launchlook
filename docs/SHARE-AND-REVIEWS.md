@@ -15,6 +15,7 @@ Quick ops guide for Rob. No Supabase required.
 ## Weekly rhythm (~30 min)
 
 - **Mon:** 3 Looms → link checklist in DM ([`cold-outreach-loom-script.md`](../templates/cold-outreach-loom-script.md))
+- **Tue–Thu:** 1 X post — one finding + screenshot ([`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md)); 10 min/day on launch-window replies (§2a in [`OUTREACH-PLAYBOOK.md`](OUTREACH-PLAYBOOK.md))
 - **Wed:** 1 LinkedIn post — one finding type + checklist link
 - **Fri:** Ask last week's customers for a quote ([`ask-for-quote.txt`](../templates/email/ask-for-quote.txt))
 

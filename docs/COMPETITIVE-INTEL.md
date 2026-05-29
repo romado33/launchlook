@@ -10,7 +10,7 @@ LaunchLook is entering a market that **looks like a beach but is in fact a coral
 
 The market's "table stakes" have stabilized: a free or near-free hook, markdown/Cursor-ready fix prompts, security headers + secret scanning, and a 30–60 second turnaround. **Head-on competition with PageSpeed Insights / Lighthouse / Microsoft Clarity is suicidal** — they are free, Google-/Microsoft-backed, and have ~100% awareness among technical users. Head-on with PageLens AI is also painful: same wedge, lower price, more checks already shipped.
 
-LaunchLook's defensible angle is **the human in the loop** ("founder-curated" spot-check) plus the **persona-tagged "Testers" cast** — emotionally distinctive in a market drowning in lookalike "vibe-X" SAST wrappers. The 2-3 most leveraged moves are: (1) lean harder into curation as anti-AI-slop positioning, (2) ship the free 3-finding hook *immediately* because it is now the genre's price of admission, (3) raise the Pro tier ceiling and add a $199-$299 "human roast + AI audit" hybrid that flanks Dan Kulkov ($99 video roast, 300+ sold) and Olly Meakings ($350, 850+ sold). The $19/$49/$99 ladder is **directionally correct but mispriced at the Starter tier** — $19 for 5 findings is more expensive per finding than every competitor; $1-$5 free-trial-with-upsell is the proven hook.
+LaunchLook's defensible angle is **founder-curated live-workflow testing** (signup, forms, mobile, plain English) in a market drowning in lookalike scanners. **Resolved May 2026 (see §4.4):** (1) market curation as anti-AI-slop positioning, (2) **Free $0 / 2 findings shipped** — the hook comp vs PageLens $1, not Starter $19, (3) **hold $49 / $99**; Pro includes Loom + Handoff — **no** $199+ Founder Roast tier (`PRODUCT-DECISIONS.md` §3). Testers cast stays internal on customer surfaces. Distribution (X, Lovable Discord) beats feature parity — see [`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md).
 
 The biggest surprise: the "vibe coding audit" niche has gone from empty in late 2024 to ~12 tracked entrants by May 2026, with three Product Hunt launches in the last 90 days alone. **The land grab window closes in Q3/Q4 2026.** Whoever owns the SEO terms "vibe coding security," "AI app audit," and "is my Lovable app safe" by year-end will compound. Rob should treat distribution (content + communities) as a higher priority than feature parity.
 
@@ -90,7 +90,7 @@ Top 3 most relevant:
 
 ### What has consistently worked
 
-1. **Free/near-free hook → paid upgrade.** PageLens ($1 Launch Scan), VibeDoctor (3 free scans/day), SchemaReports (1 free audit/mo), Launly AI SEO Auditor (open-source, 135 PH votes in 2 weeks), ZeriFlow (free 80-check), AuditAI (free Chrome extension, no signup). **Every tool with traction has a $0–$5 entry point.** LaunchLook's $19 Starter is the highest entry price in the cohort.
+1. **Free/near-free hook → paid upgrade.** PageLens ($1 Launch Scan), VibeDoctor (3 free scans/day), SchemaReports (1 free audit/mo), Launly AI SEO Auditor (open-source, 135 PH votes in 2 weeks), ZeriFlow (free 80-check), AuditAI (free Chrome extension, no signup). **Every tool with traction has a $0–$5 entry point.** LaunchLook answers with **Free $0, 2 findings (email-gated, human-reviewed)** — not Starter $19. **Do not compare PageLens $1 to Starter $19**; compare PageLens to Free, then sell paid tiers on workflow + curation. Starter $19 is the first *paid* upgrade (10 findings + PDFs). Re-evaluate Starter → $9 only per `PRODUCT-DECISIONS.md` §7 conversion trigger.
 
 2. **Markdown / Cursor / Claude fix-prompt export.** PageLens, VibeDoctor, VibeSafe, Vibe Audit, Launly all converged on this. The "paste-ready fix prompt" is now table stakes, not a differentiator. LaunchLook's Quick Start Guide is the right product — it's just no longer unique.
 
@@ -118,7 +118,7 @@ Top 3 most relevant:
 
 ### Table stakes (must-have)
 
-- Free or sub-$5 entry scan (LaunchLook's queued "free 3-findings hook" is this — **prioritize shipping**).
+- Free or sub-$5 entry scan (**shipped:** LaunchLook Free — 2 findings, email-gated, founder-reviewed).
 - Markdown / Cursor-ready paste-prompt export per finding.
 - Security headers, secret scanning, basic accessibility checks.
 - Sub-60-second turnaround for the freemium hook.
@@ -152,7 +152,7 @@ Top 3 most relevant:
 
 ### 4.2 Who can be uprooted
 
-1. **PageLens AI — uproot via founder-curation positioning + community distribution. Timeline: 6 months.** PageLens has shipped a strong product but appears to lack a brand voice / community presence (no review counts surfaced; thin social proof). Their weakness is they look like a tool, not a person. LaunchLook's "founder-curated" + "Testers" cast can outflank them on emotional differentiation while the field is still small. Move now: (1) ship the free 3-finding hook to match their $1 floor, (2) write the "I personally reviewed 100 vibe-coded apps and here's what I found" content piece (Marc Lou playbook), (3) **launch on Product Hunt with a side-by-side comparison** that shows persona-tagged findings the AI alone misses. PageLens has no human in the loop — that's the lever.
+1. **PageLens AI — uproot via founder-curation positioning + community distribution. Timeline: 6 months.** PageLens has shipped a strong product but appears to lack a brand voice / community presence (no review counts surfaced; thin social proof). Their weakness is they look like a tool, not a person. LaunchLook's wedge is **founder-curated live-workflow testing** (signup, email, mobile), not more automated checks. Move now: (1) market the **shipped Free 2-finding hook** against their $1 scan — different job, not lower Starter price, (2) write the "I personally reviewed 100 vibe-coded apps and here's what I found" content piece (Marc Lou playbook; see [`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md)), (3) **PH or comparison content** that shows workflow findings scanners miss. PageLens has no human in the loop — that's the lever. Testers cast stays **internal-only** on customer surfaces (`TESTERS-CAST.md`).
 
 2. **Fiverr/Upwork "UX audit" gigs (~$50-$200 tier).** Vulnerable because trust has cratered as AI-slop infiltrates the platform; turnaround is days, not hours; quality is variable. **LaunchLook at $49 with founder spot-check + branded PDF + 24-hour turnaround eats this segment without competing on price.** Timeline: 3 months once distribution is dialed in. The play: (a) buy 5-10 Fiverr UX audits yourself, screenshot their outputs vs. yours, post the comparison. (b) Run Google Ads on "Fiverr UX audit" — Fiverr buyers have wallet open, AI-slop is the wedge. (c) List on Indie Hackers + r/SaaS as the antidote to "I paid $25 and got a ChatGPT printout."
 
@@ -164,11 +164,13 @@ Top 3 most relevant:
 
 **BUILD (high leverage, proven elsewhere):**
 
-1. **Free 3-finding hook (already queued — ship first).** Validated by Launly's 135 PH votes, PageLens's $1 scan, VibeDoctor's free tier, SchemaReports's free audit. The market has standardized on this as the front door. Without it, LaunchLook starts every customer conversation at a $19 disadvantage. **This is the single most important shipping priority.**
+1. **Free 2-finding hook (shipped).** Validated by Launly's 135 PH votes, PageLens's $1 scan, VibeDoctor's free tier, SchemaReports's free audit. **Next leverage:** conversion free → Starter, not a cheaper paid tier. Distribution: X, Lovable Discord, PH (`X-CONTENT-PLAYBOOK.md`).
 
-2. **Persona-tagged findings ("The Testers" cast — already queued).** PageLens shipped "persona reviews" already and it's their most distinctive feature in screenshots. LaunchLook's planned "Testers" cast is more emotionally rich (named characters vs. generic personas). **Brand-defining feature. Build it next.**
+2. **Live-workflow checks in the URL pipeline** (console errors, broken internal links, trust/SEO lite, security lite) — complements human curation; don't market as "another scanner."
 
-3. **MCP server / Cursor integration.** PageLens shipped this in 2026 and it positions them inside the workflow. LaunchLook should ship an MCP server so the buyer can ask Claude inside Cursor "what should I fix from my LaunchLook scan?" — this creates a *second* moment of value after the PDF. Low cost, high differentiation against the OSS cohort that doesn't have MCP infrastructure.
+3. **MCP server / Cursor integration (deferred).** PageLens shipped MCP in 2026. Revisit after ≥30 paying customers (`PRODUCT-DECISIONS.md` §4). Not a launch blocker.
+
+**Deprioritized on customer surfaces:** Persona-tagged "Testers" cast marketing — internal report tags only (`TESTERS-CAST.md`, `SIMPLICITY-GUARDRAILS.md` §2.6).
 
 **SKIP (graveyard — competitors have proven these don't move the needle):**
 
@@ -178,30 +180,34 @@ Top 3 most relevant:
 
 3. **Multi-model AI consensus.** "We ran your site past Claude + GPT + Gemini" sounds smart and adds zero conversion. Computationally expensive, marketing-flat. Use Claude Sonnet 4.5 alone and put the savings into curation depth.
 
-### 4.4 Pricing reality check
+### 4.4 Pricing reality check (resolved May 2026)
 
-LaunchLook's $19 / $49 / $99 ladder is **directionally right but mispriced at the bottom**. Cross-checking:
+**Canonical decision:** [`PRODUCT-DECISIONS.md`](PRODUCT-DECISIONS.md) §1, §3, §7. This section records competitor context + what we **did** vs raw intel recommendations.
 
-- **PageLens AI:** $1 / $15 / $29. LaunchLook is **6-20× more expensive per tier**, with no clear feature delta in the buyer's mind (both deliver markdown export + PDF + 25+ findings). At Starter, the PageLens $1 trial *is* the comp.
-- **VibeDoctor:** Free / $15 / $49 / $129. Same shape, lower entry.
-- **SchemaReports:** $19 / $49 / $99 — **identical ladder, validates the upper tiers** for tracked-site/monitoring use cases. This is your strongest pricing precedent at $99.
-- **Dan Kulkov:** $99 (human, 20-min video). Pro tier comp — buyers comparing LaunchLook Pro to Dan need to understand the AI + curation hybrid value clearly.
-- **Olly:** $350 (human, 15-min video, 850+ done). Validates a $200-300 "Pro+" or "Founder Roast" tier above current Pro.
-- **fffuel:** $89 (human video). Same comp as Dan.
+| Comp | Pricing | How LaunchLook responds |
+|------|---------|-------------------------|
+| **PageLens AI** | $1 / $15 / $29 | **Not** Starter vs $1. **Free $0 (2 findings)** is the hook comp; paid tiers sell workflow + founder review + PDFs. PageLens = fast scanner; different job (`§6` one-liner). |
+| **VibeDoctor** | Free / $15 / $49 / $129 sub | Complementary (repo); URL-only live pass is our lane. |
+| **SchemaReports** | $19 / $49 / $99 | Validates **paid** ladder shape (different wedge: AI-search audits). |
+| **Dan Kulkov / fffuel** | ~$89–$99 human video roast | **Pro $99** — breadth + integrations + Handoff + Loom; not CRO roast video. |
+| **Olly** | $350 human roast | Validates premium human market; **no** $199–249 Founder Roast tier (killed §3). |
+| **Fiverr UX gigs** | ~$50–$200 | **Scale Up $49** positioning — structured PDF, founder, workflow proof. |
 
-**Concrete pricing recommendations:**
+**Adopted (hold):**
 
-1. **Replace the $19 Starter with a $0 / $5 / $9 entry** to match the genre's $0-$5 hook standard. The 5-findings cap is fine; the price is wrong. Even **$9** would beat every direct AI competitor on margin while staying above OSS noise.
-2. **Hold $49 Full** — this is the sweet spot validated by SchemaReports, MakerBox bundle pricing, and Fiverr midpoint.
-3. **Hold $99 Pro** — validated by SchemaReports, Dan Kulkov.
-4. **Add a $199-$249 "Founder Roast"** that bundles AI audit + a Rob-recorded Loom walkthrough (your current Pro deliverable, productized + premium-priced). Fills the gap between LaunchLook Pro ($99) and Olly ($350). Caps your delivery capacity (you can only do so many Looms/week), but each one converts referrals.
-5. **Eventually a $19-29/mo "Watch" tier** for repeat re-scan + regression detection — but only after 100+ one-off buyers ask for it. **Do not lead with subscription.**
+1. **Free $0, 2 findings** — closes genre's $0–$5 entry (replaces intel item "replace $19 with $0/$5/$9 paid entry").
+2. **Hold Starter $19** — first paid tier; drop to **$9** only if free→Starter conversion stalls (§7 trigger).
+3. **Hold Scale Up $49** and **Pro $99**.
+4. **No Founder Roast ($199–249)** — Pro includes recorded Loom; fifth tier killed (`PRODUCT-DECISIONS.md` §3).
+5. **Watch subscription** — deferred until 100+ paying one-offs ask (§4). **Fix Check** one-off is the repeat SKU.
+
+**Do not:** Add a $5 paid "mini scan" tier — duplicates Free and trains scanner-buyer expectations.
 
 ### 4.5 Distribution lessons (solo founder, no ad budget)
 
 What worked for the winners in this segment:
 
-- **Marc Lou's playbook (works):** Build in public on X, sell the founder personality, document revenue publicly. He's at $90K/mo solo and influences Dan Kulkov's bookings. Indie founders in this segment trust other indie founders. **Rob should be tweeting his vibe-coded findings library and dogfooding LaunchLook on his own old projects.**
+- **Marc Lou's playbook (works):** Build in public on X, sell the founder personality, document revenue publicly. He's at $90K/mo solo and influences Dan Kulkov's bookings. Indie founders in this segment trust other indie founders. **Rob:** post one finding/screenshot per day from real audits — playbook in [`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md). Lovable-heavy prospecting is fine; URL findings transfer across builders ([`PLATFORM-CHEAT-SHEET.md`](PLATFORM-CHEAT-SHEET.md)).
 - **VibeDoctor's playbook (works):** PRLog press release + Bolt Discord + Indie Hackers post + Reddit r/vibecoding. Free version as the hook. The press release was the single distribution event documented in their origin story. **Replicable for $0-$300.**
 - **PageLens's playbook (mixed):** Blog content about dogfooding ("we audited our own site"), MCP server launch as a content event. Strong content; unclear traction. Worth borrowing the content idea.
 - **Olly's playbook (works):** 850+ landing page roasts as proof; specific guarantee ("if conversion doesn't go up, I refund"); long-form testimonial library. **Refund guarantee converts at the $99-$350 tier.**
@@ -213,9 +219,9 @@ What didn't work:
 - **Enterprise content.** Hordus.ai, FullStory, Baymard all over-index on enterprise content marketing. Not your buyer.
 
 **Top 3 actions for Rob this quarter:**
-1. Ship free 3-finding hook → tweet a side-by-side "I audited 10 Lovable apps free — here's the worst finding" thread weekly.
-2. Get on the Bolt + Lovable + Cursor Discords; offer one free Pro audit per week to a community member, document publicly.
-3. Pitch Marc Lou / Pieter Levels / Dan Kulkov on giving them a free founder roast in exchange for a tweet if they like it. Asymmetric upside.
+1. **X content:** one finding/screenshot post per day from real audits — [`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md). Free hook = **2 findings**, not 3.
+2. Lovable Discord daily (§2a launch-window search on X); offer free findings in replies before linking the site.
+3. Pitch Marc Lou / Pieter Levels / Dan Kulkov on a free Pro pass in exchange for a mention if they like it. Asymmetric upside.
 
 ---
 
@@ -223,7 +229,7 @@ What didn't work:
 
 ### 5.1 PageLens AI — the twin
 
-PageLens AI is the most dangerous competitor LaunchLook will face. Same audience (vibe coders shipping with Lovable/Bolt/Cursor), same workflow (URL in → markdown export for AI agents), same scan-time promise (5 minutes), same "AI-built apps" framing. They shipped a $1 Launch Scan, a $15 25-page audit, and a $29 desktop+mobile pack — pricing below LaunchLook at every tier. They shipped an MCP server and a "dogfood loop" blog post. They have persona reviews already. Public reviews are zero (Wavel.io) — meaning either they're early or they haven't generated reviews yet. **The good news:** they look like a tool, not a person. They have no founder face on the site, no "I personally reviewed X apps" content, no roast-culture energy. **LaunchLook's wedge:** founder-curated spot-check + "Testers" cast + Loom walkthrough at Pro = an emotional brand layer they don't have. **Move within 90 days or they own the SEO.**
+PageLens AI is the most dangerous competitor LaunchLook will face. Same audience (vibe coders shipping with Lovable/Bolt/Cursor), same workflow (URL in → markdown export for AI agents), same scan-time promise (5 minutes), same "AI-built apps" framing. They shipped a $1 Launch Scan, a $15 25-page audit, and a $29 desktop+mobile pack — pricing below LaunchLook at every tier. They shipped an MCP server and a "dogfood loop" blog post. They have persona reviews already. Public reviews are zero (Wavel.io) — meaning either they're early or they haven't generated reviews yet. **The good news:** they look like a tool, not a person. They have no founder face on the site, no "I personally reviewed X apps" content, no roast-culture energy. **LaunchLook's wedge:** founder-curated spot-check + live workflow testing + Loom at Pro. **Move within 90 days or they own the SEO.** Comparison framing: complementary jobs, not cheaper tiers — §4.4.
 
 ### 5.2 VibeDoctor — the engineering-heavy threat
 

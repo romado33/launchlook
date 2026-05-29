@@ -268,6 +268,11 @@
   <h2>One-paragraph context</h2>
   <p class="context-paragraph">{{ context_paragraph }}</p>
 
+  {% if builder_memory %}
+  <h2>Builder memory (for {{ customer.builder }})</h2>
+  <p class="context-paragraph">{{ builder_memory }}</p>
+  {% endif %}
+
   {% if passed_checks %}
   <section class="passed-checks">
     <h2>What's working</h2>
@@ -308,8 +313,9 @@
       {% endif %}
       {% if f.fix_prompt %}
       <div class="fix-prompt">
-        <p class="fix-prompt-label">Copy-paste fix prompt</p>
-        <p class="fix-prompt-body">{{ f.fix_prompt }}</p>
+        <p class="fix-prompt-label">Paste into {{ customer.builder }} to fix this</p>
+        <p class="fix-prompt-paste-first" style="font-size:9pt; color:var(--muted); margin:0 0 6pt; font-style:italic;">Paste this first</p>
+        <p class="fix-prompt-body">{{ f.fix_prompt_display or f.fix_prompt }}</p>
       </div>
       {% endif %}
     </article>

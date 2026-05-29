@@ -4,7 +4,9 @@ Canonical reference for tier structure, pricing, deliverables, dropped ideas, de
 
 Companion docs:
 - `SIMPLICITY-GUARDRAILS.md` (the brand discipline rules)
-- `TESTERS-CAST.md` (the 7 personas)
+- `TESTERS-CAST.md` (the 7 personas — internal only on customer surfaces)
+- `X-CONTENT-PLAYBOOK.md` (X/Twitter findings content)
+- `PLATFORM-CHEAT-SHEET.md` (auditing Bolt/v0/Cursor/Webflow when you only know Lovable)
 
 ---
 
@@ -109,14 +111,18 @@ If a new competitor appears in the "uprootable" lane, add a row above. If a new 
 
 Use this exact phrasing in `/vs-pagelens`, in comparison content, and in founder-voice copy. Do not paraphrase. Do not soften it.
 
+> **"VibeDoctor checks the repo. LaunchLook checks the live app — no GitHub required."**
+
+Use in `/vs-vibedoctor`, homepage no-GitHub sections, FAQ `#vibedoctor`, and outreach when buyers mention VibeDoctor or repo scanners. Emphasize non-technical Lovable/Bolt makers who never exported to git.
+
 ---
 
 ## §7 Pricing rationale
 
 Each tier price is intentional. Re-evaluate only against the trigger noted, not on instinct.
 
-- **Free $0.** Top-of-funnel hook. Closes the $0–$5 entry gap PageLens occupies at $1. Email-gated for lead capture.
-- **Starter $19.** Impulse buy, sub-$20 psychology. Re-evaluate after 4 weeks of free → Starter conversion data; consider dropping to $9 only if conversion stalls below target.
+- **Free $0.** Top-of-funnel hook. Closes the $0–$5 entry gap PageLens occupies at $1. Email-gated; **2 findings**, human-reviewed. **PageLens $1 is the comp for Free, not for Starter $19** — do not race scanners on paid entry price. See `COMPETITIVE-INTEL.md` §4.4 (resolved).
+- **Starter $19.** First paid upgrade (10 findings + PDF bundle). Impulse buy, sub-$20 psychology. Re-evaluate after 4 weeks of free → Starter conversion data; consider dropping to $9 only if conversion stalls below target.
 - **Scale Up $49.** Matches SchemaReports's mid-tier identically. Full offer for serious pre-launchers (cross-user isolation check, full checklist).
 - **Pro $99.** Anchors the upper end. Matches Dan Kulkov's roast price. Includes recorded Loom + integrations review + Handoff Report. This replaces the killed Founder Roast tier (see §3).
 
@@ -153,6 +159,8 @@ When you change anything in this file:
 
 | Date | Change |
 |---|---|
+| 2026-05-28 | **Docs:** `X-CONTENT-PLAYBOOK.md`, `PLATFORM-CHEAT-SHEET.md` added. `COMPETITIVE-INTEL.md` §4.4 pricing resolved (Free 2 = hook comp; hold $19/$49/$99; no Founder Roast). Companion doc links in header. §7 PageLens vs Starter framing. |
+| 2026-05-28 | **`/vs-vibedoctor` + no-GitHub positioning.** Comparison page and markdown mirror; homepage band `#no-github`, hero line, pricing callout; FAQ `#vibedoctor`; canonical one-liner in §6. Sitemap + `llms.txt` + `agent-resources.json` updated. |
 | 2026-05-28 | **Edge-case hardening (live test run).** `notion_helpers.py`: `intake_received_at` remapped as `rich_text` (was `date` — live Notion column is not a Date field; the type mismatch caused a 400 on every Tally intake write). `free_audit_lookup.recent_delivery()` now skips non-delivered rows so stale/crashed jobs don't permanently block new lead capture. Slug de-collision: SHA-256 hex suffix appended so two accounts on the same hostname get distinct YAML slugs. Paid pipeline lock (`[automation:processing]` in Notes) written immediately and reclaimed after 2 h if stale. Dedup fingerprint exclusion injected into finding prompt for paid re-runs. Attachment size guard in `deliver_report.py` (strips if base64 > 9 MB). 34 new edge-case tests; all 280 pass. |
 | 2026-05-28 | Tier cards on `landing/index.html` and `landing/webflow.html` rewritten: all deliverables now listed, cumulative "Everything in X, plus:" framing, intent question under each tier name, Scale Up badged "Most popular", Handoff Report save shown on Pro. |
 | 2026-05-28 | `SUCCESS-METRICS.md` created. §0 Lorelight problem-validation test added as the primary gate before all revenue metrics. |

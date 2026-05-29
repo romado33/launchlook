@@ -45,6 +45,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.fix_pack import (  # noqa: E402
+    enrich_findings_for_templates,
+    render_builder_memory,
+    render_fix_pack_markdown,
+)
+
 try:
     from dotenv import load_dotenv
 
@@ -290,6 +296,7 @@ def render_handoff_markdown(
         context_paragraph=narrative.get("context_paragraph", "").strip(),
         recommended_order=narrative.get("recommended_order", "").strip(),
         code_review_notes=(narrative.get("code_review_notes") or "").strip() or None,
+        builder_memory=(narrative.get("builder_memory") or "").strip() or None,
         tier=narrative.get("effective_tier") or customer.get("tier"),
         **buckets,
     )
@@ -310,6 +317,7 @@ def render_handoff_html(
         context_paragraph=narrative.get("context_paragraph", "").strip(),
         recommended_order=narrative.get("recommended_order", "").strip(),
         code_review_notes=(narrative.get("code_review_notes") or "").strip() or None,
+        builder_memory=(narrative.get("builder_memory") or "").strip() or None,
         tier=narrative.get("effective_tier") or customer.get("tier"),
         groups=buckets,
     )
@@ -358,14 +366,27 @@ def deliver_handoff_report(
         provider=provider,
     )
 
+    customer = dict(data.get("customer") or {})
+    handoff_data = dict(data)
+    handoff_data["findings"] = enrich_findings_for_templates(
+        data.get("findings") or [], customer
+    )
+    memory = render_builder_memory(
+        customer,
+        explicit=data.get("builder_memory") or customer.get("builder_memory"),
+    )
+    if memory:
+        narrative = dict(narrative)
+        narrative["builder_memory"] = memory
+
     env = build_jinja_env()
 
-    md_text = render_handoff_markdown(env, data, narrative, delivered_at)
+    md_text = render_handoff_markdown(env, handoff_data, narrative, delivered_at)
     md_path = out_dir / "handoff-report.md"
     md_path.write_text(md_text, encoding="utf-8")
     print(f"  âœ“ wrote {md_path.name} ({md_path.stat().st_size / 1024:.1f} KB)")
 
-    html = render_handoff_html(env, data, narrative, delivered_at)
+    html = render_handoff_html(env, handoff_data, narrative, delivered_at)
     pdf_path = out_dir / "handoff-report.pdf"
     try:
         html_to_pdf(html, pdf_path, data.get("customer", {}).get("first_name", "customer"))
@@ -389,11 +410,13 @@ def render_main_report_html(
         bool(customer.get("url_redacted")),
     )
 
+    findings = enrich_findings_for_templates(data.get("findings") or [], customer)
+
     template = env.get_template("report.html.j2")
     return template.render(
         customer=customer,
         verdict=data["verdict"],
-        findings=data["findings"],
+        findings=findings,
         delivered_at=delivered_at,
         qsg_link=qsg_link,
         readiness_score=data.get("readiness_score"),
@@ -502,6 +525,11 @@ def render_email_bodies(env, data: dict[str, Any], delivered_at: str) -> tuple[s
     n_findings = len(data["findings"])
     subject = f"Your LaunchLook report is ready, {customer['first_name']}"
 
+    builder_memory = render_builder_memory(
+        customer,
+        explicit=data.get("builder_memory") or customer.get("builder_memory"),
+    )
+
     html_tpl = env.get_template("delivery_pdf.html.j2")
     text_tpl = env.get_template("delivery_pdf.txt.j2")
 
@@ -509,6 +537,8 @@ def render_email_bodies(env, data: dict[str, Any], delivered_at: str) -> tuple[s
         "customer": customer,
         "n_findings": n_findings,
         "delivered_at": delivered_at,
+        "builder_memory": builder_memory,
+        "is_pro": customer.get("tier") == "Pro Package",
     }
     return subject, html_tpl.render(**ctx), text_tpl.render(**ctx)
 
@@ -545,13 +575,23 @@ def send_via_resend(
     encoded_attachments = []
     total_b64_bytes = 0
     for path in attachments:
-        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+        raw = path.read_bytes()
+        encoded = base64.b64encode(raw).decode("ascii")
         total_b64_bytes += len(encoded)
+        suffix = path.suffix.lower()
+        if suffix == ".pdf":
+            content_type = "application/pdf"
+        elif suffix in (".md", ".markdown"):
+            content_type = "text/markdown"
+        elif suffix == ".txt":
+            content_type = "text/plain"
+        else:
+            content_type = "application/octet-stream"
         encoded_attachments.append(
             {
                 "filename": path.name,
                 "content": encoded,
-                "content_type": "application/pdf",
+                "content_type": content_type,
             }
         )
 
@@ -650,19 +690,22 @@ def render_confidence_check_email(
 ) -> tuple[str, str, str]:
     cc = data["confidence_check"]
     first_name = cc.get("customer_first_name") or "there"
-    subject = f"The Saboteur's back with your re-scan, {first_name}"
+    subject = f"Your Fix Check is ready, {first_name}"
 
-    fixed_count = len(data.get("fixed") or [])
-    still_count = len(data.get("still_present") or [])
-    new_count = len(data.get("new") or [])
+    fixed = data.get("fixed") or []
+    still_present = data.get("still_present") or []
+    new = data.get("new") or []
 
     ctx = {
         "first_name": first_name,
         "app_name": cc.get("app_name", ""),
         "verdict": data["verdict"],
-        "fixed_count": fixed_count,
-        "still_count": still_count,
-        "new_count": new_count,
+        "fixed_count": len(fixed),
+        "still_count": len(still_present),
+        "new_count": len(new),
+        "fixed": fixed,
+        "still_present": still_present,
+        "new": new,
         "delivered_at": delivered_at,
     }
 
@@ -1074,6 +1117,12 @@ def main() -> int:
     print(f"  - wrote {checklist_pdf.name} ({checklist_pdf.stat().st_size / 1024:.1f} KB)")
     attachments.append(checklist_pdf)
 
+    fix_pack_md = render_fix_pack_markdown(data, delivered_at)
+    fix_pack_path = out_dir / "fix-pack.md"
+    fix_pack_path.write_text(fix_pack_md, encoding="utf-8")
+    print(f"  - wrote {fix_pack_path.name} ({fix_pack_path.stat().st_size / 1024:.1f} KB)")
+    attachments.append(fix_pack_path)
+
     # q22: shareable hosted report page. Default is private (no
     # surprises). Customer opts in by replying 'share' to the delivery
     # email; Rob then runs scripts/share_report.py to flip.
@@ -1157,78 +1206,6 @@ def main() -> int:
     )
     msg_id = result.get("id") if isinstance(result, dict) else None
     print(f"\nâœ“ Sent. Resend message id: {msg_id or '(none returned)'}")
-
-    # P0 #7: Auto-mark the Notion Customers DB row as Delivered + set Delivered At.
-    # Best-effort: a Notion blip must not fail the overall delivery.
-    try:
-        from api._lib.notion_helpers import (  # noqa: PLC0415
-            STATUS_DELIVERED,
-            find_customer_by_email,
-            get_client,
-            get_customers_ds_id,
-            update_customer_fields,
-        )
-        _nc = get_client()
-        _ds = get_customers_ds_id(_nc)
-        _existing = find_customer_by_email(_nc, _ds, customer["email"])
-        if _existing:
-            update_customer_fields(
-                _nc,
-                _existing["id"],
-                {
-                    "status": STATUS_DELIVERED,
-                    "delivered_at": datetime.now(UTC).isoformat(),
-                },
-            )
-            print("[deliver] Notion row marked as Delivered")
-        else:
-            print("[deliver] WARN: no Notion row found to mark Delivered", file=sys.stderr)
-    except Exception as _exc:  # noqa: BLE001
-        print(f"[deliver] WARN: could not mark Delivered in Notion: {_exc}", file=sys.stderr)
-
-    # P0 #2: For Starter Package deliveries, persist the fingerprints of the
-    # delivered findings back to the free-audit row (if one exists). This
-    # enables the dedup gate in future paid runs to skip already-seen findings.
-    # The function is a no-op when there is no matching free-audit row.
-    if customer.get("tier") == "Starter Package":
-        try:
-            from scripts.ai_audit.dedup import fingerprints as compute_fps  # noqa: PLC0415
-            from scripts.ai_audit.free_audit_lookup import (  # noqa: PLC0415
-                load_excluded_fingerprints,
-                persist_free_audit_fingerprints,
-            )
-            _delivered_findings = data.get("findings") or []
-            _fps_to_persist = compute_fps(
-                _delivered_findings, base_url=customer.get("app_url")
-            )
-            if _fps_to_persist:
-                _, _, _free_row_id = load_excluded_fingerprints(
-                    email=customer["email"],
-                    url=customer.get("app_url") or "",
-                    window_days=90,
-                )
-                if _free_row_id:
-                    _summaries = [
-                        f.get("title") or ""
-                        for f in _delivered_findings
-                        if f.get("title")
-                    ]
-                    _ok = persist_free_audit_fingerprints(
-                        row_id=_free_row_id,
-                        fingerprints=_fps_to_persist,
-                        summaries=_summaries or None,
-                    )
-                    if _ok:
-                        print(
-                            f"[deliver] persisted {len(_fps_to_persist)} free-audit "
-                            "fingerprint(s) to Notion"
-                        )
-        except Exception as _exc:  # noqa: BLE001
-            print(
-                f"[deliver] WARN: could not persist free-audit fingerprints: {_exc}",
-                file=sys.stderr,
-            )
-
     return 0
 
 

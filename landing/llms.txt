@@ -17,7 +17,8 @@ Important for agents:
 - [Home](https://launchlook.app/index.md): Product summary, pricing, how it works, free audit.
 - [FAQ](https://launchlook.app/faq.md): Tiers, human review, platforms, data safety, refunds.
 - [Webflow](https://launchlook.app/webflow.md): Webflow-specific scope and pricing.
-- [vs PageLens](https://launchlook.app/vs-pagelens.md): Neutral comparison for buyers choosing an audit tool.
+- [vs PageLens](https://launchlook.app/vs-pagelens.md): Neutral comparison (site scanner vs live-app checkup).
+- [vs VibeDoctor](https://launchlook.app/vs-vibedoctor.md): Neutral comparison (GitHub repo scanner vs URL-only; no repo required).
 
 ## Primary pages (HTML)
 
@@ -43,7 +44,8 @@ Broken flows and dead buttons, placeholder copy, missing privacy/terms/contact p
 
 ## Optional
 
-- [LaunchLook vs PageLens (HTML)](https://launchlook.app/vs-pagelens): Comparison page.
+- [LaunchLook vs PageLens (HTML)](https://launchlook.app/vs-pagelens): Site scanner comparison.
+- [LaunchLook vs VibeDoctor (HTML)](https://launchlook.app/vs-vibedoctor): Repo scanner comparison; emphasizes no GitHub required.
 - [Privacy policy](https://launchlook.app/privacy)
 - [Terms of service](https://launchlook.app/terms)
 - Pages marked noindex (not product docs): /thanks, /thanks-free-audit, /e2e

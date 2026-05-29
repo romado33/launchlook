@@ -22,7 +22,7 @@
               <p style="margin:0 0 14px; color:#1F1B16;">Hi {{ customer.first_name }},</p>
 
               <p style="margin:0 0 14px; color:#1F1B16;">
-                Here's what your first users will hit on <strong>{{ customer.app_name }}</strong>. The findings are attached as{% if customer.tier in ('Scale Up Package', 'Pro Package') %} four{% else %} three{% endif %} PDFs, sorted by who encounters what first:
+                Here's what your first users will hit on <strong>{{ customer.app_name }}</strong>. The findings are attached as{% if customer.tier in ('Scale Up Package', 'Pro Package') %} four{% else %} three{% endif %} PDFs plus a <strong>Fix Pack</strong> (<code style="font-size:12px;">fix-pack.md</code>) you can paste into {{ customer.builder }} or Cursor:
               </p>
 
               <ul style="margin:0 0 18px; padding-left:18px; color:#1F1B16;">
@@ -40,19 +40,31 @@
                   (a 2-3 page doc you can use as onboarding material or share in a help centre)
                 </li>
                 {% endif %}
-                <li>
+                <li style="margin-bottom:6px;">
                   <strong>Pre-Launch Checklist</strong>
                   (a 7-section list to run before sharing your live link)
+                </li>
+                <li>
+                  <strong>Fix Pack</strong>
+                  (<code style="font-size:12px;">fix-pack.md</code> — all findings and paste-ready fix text in one file)
                 </li>
               </ul>
 
               <p style="margin:0 0 14px; color:#1F1B16;">
-                All open in any PDF reader. No login or Notion account needed.
+                All PDFs open in any reader. No login or Notion account needed.
               </p>
 
               <p style="margin:0 0 14px; color:#1F1B16;">
-                Each finding includes a copy-paste fix prompt for {{ customer.builder }}. Start at the top, paste the prompts in, verify the fix on your live URL, and move down the list.
+                Each finding in the PDF has paste-into-{{ customer.builder }} fix text with a <strong>&ldquo;Paste this first&rdquo;</strong> line at the top. Work highest severity first, verify on your live URL, then move down. Or open <code style="font-size:12px;">fix-pack.md</code> and run through it in one chat session.
               </p>
+
+              {% if builder_memory and is_pro %}
+              <div style="border:1px solid #E7E0D6; padding:14px 16px; margin:0 0 18px; background:#F4EFE7; border-radius:4px;">
+                <p style="margin:0 0 6px; font-weight:600; font-size:13px; color:#1F1B16;">Builder memory (Pro)</p>
+                <p style="margin:0; font-size:13px; color:#1F1B16;">Paste this into {{ customer.builder }} before the Fix Pack if you start a fresh session:</p>
+                <p style="margin:10px 0 0; font-size:13px; color:#6B6359; line-height:1.55;">{{ builder_memory }}</p>
+              </div>
+              {% endif %}
 
               <p style="margin:0 0 18px; color:#1F1B16;">
                 If anything in the report isn't clear, or you want a re-scan after fixes, just reply to this email.

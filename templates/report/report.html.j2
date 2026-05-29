@@ -501,10 +501,11 @@
             <div class="fix-prompt">
               <p class="fix-prompt-label">
                 {%- if is_webflow %}Step-by-step fix in Webflow Designer
-                {%- else %}Copy-paste fix prompt for {{ fix_prompt_label_target }}
+                {%- else %}Paste into {{ fix_prompt_label_target }} to fix this
                 {%- endif %}
               </p>
-              <p class="fix-prompt-body">{{ f.fix_prompt }}</p>
+              <p class="fix-prompt-paste-first" style="font-size:9pt; color:var(--muted); margin:0 0 6pt; font-style:italic;">Paste this first</p>
+              <p class="fix-prompt-body">{{ f.fix_prompt_display or f.fix_prompt }}</p>
             </div>
             {% endif %}
           </article>
@@ -529,7 +530,7 @@
         <strong>What to do next.</strong>
         Start at the top.
         {%- if is_webflow %} Open Webflow Designer, follow each fix step, click <strong>Publish</strong> in the top right, and verify the change on your live URL before moving to the next finding.
-        {%- else %} Paste each fix prompt into {{ customer.builder }} and verify the change on your live URL before moving to the next finding.
+        {%- else %} Paste each block into {{ customer.builder }} — read the “Paste this first” line, verify on your live URL, then move to the next finding.
         {%- endif %}
       </p>
       {% if qsg_link %}

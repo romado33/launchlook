@@ -16,6 +16,10 @@ customer:
   url_redacted: false        # true to print "URL redacted" in the report
   tier: Starter Package      # Starter (cap 10) | Scale Up (cap 30) | Pro (cap 40)
   builder: Lovable           # used in the fix-prompt headers
+  # Optional (Pro): paste-into-builder context for a fresh AI session
+  # builder_memory: |
+  #   Sparkle is a local-experiences marketplace. Primary users are weekend travelers.
+  #   Keep the warm, casual tone. Do not refactor auth — only fix audit findings.
   # Demo example: Starter caps at 10; this YAML deliberately ships 7 to show
   # well-under-cap output and to keep the rendered report short for review.
 

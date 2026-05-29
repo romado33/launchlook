@@ -12,57 +12,78 @@
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px; background:#FFFFFF; border:1px solid #E7E0D6; border-radius:8px; padding:32px 32px 28px;">
           <tr>
             <td>
-              <p style="margin:0 0 4px; font-size:11px; font-weight:600; color:#B45309; letter-spacing:0.18em; text-transform:uppercase;">
-                LaunchLook · Fix Check
-              </p>
+              <p style="margin:0 0 4px; font-size:11px; font-weight:600; color:#B45309; letter-spacing:0.18em; text-transform:uppercase;">LaunchLook · Fix Check</p>
               <h1 style="margin:0 0 18px; font-family:Georgia,'Times New Roman',serif; font-size:24px; line-height:1.25; color:#1F1B16; font-weight:500;">
-                Your Fix Check is ready, {{ first_name }}.
+                Your re-scan is ready, {{ first_name }}.
               </h1>
 
-              <p style="margin:0 0 14px; color:#1F1B16;">Hi {{ first_name }},</p>
-
               <p style="margin:0 0 14px; color:#1F1B16;">
-                I re-walked <strong>{{ app_name }}</strong> after your fixes and packaged what I found into the attached PDF.
+                Here's what changed on <strong>{{ app_name }}</strong> since your last report. The full diff is in the attached PDF.
               </p>
 
-              <p style="margin:0 0 6px; color:#1F1B16; font-weight:500;">
-                Quick read: {{ verdict.emoji }} {{ verdict.label }}
-              </p>
-              <p style="margin:0 0 14px; color:#6B6359;">
-                {{ verdict.summary }}
-              </p>
-
-              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px; border-collapse:collapse;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px; font-size:14px;">
                 <tr>
-                  <td style="padding:4px 16px 4px 0; color:#1F1B16;"><strong>✓ Now fixed</strong></td>
-                  <td style="padding:4px 0; color:#1F1B16;">{{ fixed_count }}</td>
-                </tr>
-                <tr>
-                  <td style="padding:4px 16px 4px 0; color:#1F1B16;"><strong>✗ Still showing up</strong></td>
-                  <td style="padding:4px 0; color:#1F1B16;">{{ still_count }}</td>
-                </tr>
-                <tr>
-                  <td style="padding:4px 16px 4px 0; color:#1F1B16;"><strong>⚠ New things that turned up</strong></td>
-                  <td style="padding:4px 0; color:#1F1B16;">{{ new_count }}</td>
+                  <td style="padding:8px 12px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:4px; width:33%; vertical-align:top;">
+                    <strong style="color:#15803D;">Fixed</strong><br />{{ fixed_count }}
+                  </td>
+                  <td style="width:8px;"></td>
+                  <td style="padding:8px 12px; background:#FFF7ED; border:1px solid #FED7AA; border-radius:4px; width:33%; vertical-align:top;">
+                    <strong style="color:#C2410C;">Still open</strong><br />{{ still_count }}
+                  </td>
+                  <td style="width:8px;"></td>
+                  <td style="padding:8px 12px; background:#F4EFE7; border:1px solid #E7E0D6; border-radius:4px; width:33%; vertical-align:top;">
+                    <strong style="color:#B45309;">New</strong><br />{{ new_count }}
+                  </td>
                 </tr>
               </table>
 
-              <p style="margin:0 0 14px; color:#1F1B16;">
-                Open the attached PDF for the full breakdown, with one line per finding.
+              <p style="margin:0 0 8px; font-weight:600; color:#1F1B16;">
+                {{ verdict.emoji }} {{ verdict.label }}
+              </p>
+              {% if verdict.summary %}
+              <p style="margin:0 0 18px; color:#6B6359;">{{ verdict.summary }}</p>
+              {% endif %}
+
+              {% if fixed %}
+              <p style="margin:0 0 6px; font-weight:600; font-size:13px; color:#15803D;">What's now fixed</p>
+              <ul style="margin:0 0 14px; padding-left:18px; color:#1F1B16; font-size:14px;">
+                {% for f in fixed %}
+                <li style="margin-bottom:4px;">{{ f.original_title }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+
+              {% if still_present %}
+              <p style="margin:0 0 6px; font-weight:600; font-size:13px; color:#C2410C;">Still showing up</p>
+              <ul style="margin:0 0 14px; padding-left:18px; color:#1F1B16; font-size:14px;">
+                {% for s in still_present %}
+                <li style="margin-bottom:4px;">{{ s.original_title }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+
+              {% if new %}
+              <p style="margin:0 0 6px; font-weight:600; font-size:13px; color:#B45309;">New since last scan</p>
+              <ul style="margin:0 0 14px; padding-left:18px; color:#1F1B16; font-size:14px;">
+                {% for n in new %}
+                <li style="margin-bottom:4px;">{{ n.title }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+
+              <p style="margin:0 0 18px; font-size:14px; color:#6B6359;">
+                If you fixed something we still flagged, reply with what you changed — sometimes the live site needs a hard refresh or a republish.
               </p>
 
-              <p style="margin:0 0 18px; color:#1F1B16;">
-                Need another Fix Check after the next round of fixes? Just reply to this email.
-              </p>
-
-              <p style="margin:0 0 4px; color:#1F1B16;">Thanks,</p>
-              <p style="margin:0; color:#1F1B16;">LaunchLook</p>
+              <div style="border-top:1px solid #E7E0D6; border-left:3px solid #B45309; padding:14px 16px; margin-top:8px; background:#F4EFE7; border-radius:4px;">
+                <p style="margin:0; font-size:13px; color:#1F1B16;">
+                  Need another pass after the next round? Reply <strong>recheck</strong> ($19, or $9 within 14 days of your original report).
+                </p>
+              </div>
 
               <hr style="border:0; border-top:1px solid #E7E0D6; margin:24px 0 16px;" />
-
               <p style="margin:0; font-size:12px; color:#6B6359;">
-                LaunchLook · <a href="https://launchlook.app" style="color:#B45309; text-decoration:none;">launchlook.app</a> · prepared {{ delivered_at }}<br />
-                Confidential. Prepared for {{ first_name }} only.
+                LaunchLook · <a href="https://launchlook.app" style="color:#B45309; text-decoration:none;">launchlook.app</a> · prepared {{ delivered_at }}
               </p>
             </td>
           </tr>

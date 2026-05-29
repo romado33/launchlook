@@ -16,6 +16,10 @@ Read in order for full context, or jump to what you need.
 
 | Doc | Purpose |
 |-----|---------|
+| [`OUTREACH-PLAYBOOK.md`](OUTREACH-PLAYBOOK.md) | Where to post, pitch library, launch-window X search |
+| [`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md) | X account: findings posts, screenshots, ethics |
+| [`PLATFORM-CHEAT-SHEET.md`](PLATFORM-CHEAT-SHEET.md) | Bolt/v0/Cursor/Webflow vs Lovable (audit + fix-prompt voice) |
+| [`COMPETITIVE-INTEL.md`](COMPETITIVE-INTEL.md) | Competitor map; §4.4 pricing resolved |
 | [`TALLY-INTAKE-PASTE.txt`](TALLY-INTAKE-PASTE.txt) | **Manual Tally editor** — all fields + thank-you (`>>> PASTE START`) |
 | [`TALLY-INTAKE-SETUP.md`](TALLY-INTAKE-SETUP.md) | Build checklist |
 | [`SHARE-AND-REVIEWS.md`](SHARE-AND-REVIEWS.md) | Share links, quotes, weekly outreach rhythm |

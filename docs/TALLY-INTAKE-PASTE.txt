@@ -55,11 +55,13 @@ BLOCK 0 — Add block type: Text (statement, NOT a question)
 >>> PASTE START
 Please read before submitting
 
-• Only submit temporary test accounts. Do not submit personal passwords, admin credentials, API keys, database credentials, real customer data, health data, children's data, or payment information.
+• Use dedicated test accounts with dummy data only — not your personal login, not admin, not billing, and not real customers.
 
-• For Scale Up Package ($49) and Pro Package ($99) only: create temporary test accounts (not real users). Submit credentials here only — not by email.
+• Do not submit API keys, database credentials, health data, children's data, or payment information.
 
-• We delete test credentials within 24 hours of delivery. Rotate or delete test accounts after your report arrives.
+• Scale Up ($49) and Pro ($99): if you share logins for the data-isolation check, they must be temporary test accounts you created for this audit.
+
+• Submit credentials in this form only — never by email. We delete them within 24 hours of delivery.
 <<< PASTE END
 
 
@@ -216,7 +218,7 @@ Can we use test accounts?
 
 Description:
 >>> PASTE START
-The cross-user check needs two signed-in sessions. We can sign up fresh test accounts ourselves if you prefer — we delete them after the audit.
+Scale Up and Pro include a check that one user cannot see another user's data. That needs two signed-in sessions. Use dedicated test accounts with dummy data — not admin, billing, or real customer accounts. We can also sign up fresh test accounts ourselves if you prefer.
 <<< PASTE END
 
 Options:
@@ -244,7 +246,7 @@ Test account 1 — email and password
 
 Description:
 >>> PASTE START
-We'll only use these for the audit. Credentials are deleted within 24 hours of delivery.
+Dummy test user only — not admin, billing, or a real customer. Submit here only (not by email). Deleted within 24 hours of delivery.
 <<< PASTE END
 
 Placeholder:
@@ -370,9 +372,9 @@ We'll start your checkup within a few hours of this submission.
 
 • Starter Package ($19): report within 48 hours (usually 24)
 • Scale Up Package ($49): report within 24 hours (usually 12)
-• Pro Package ($99): report within 24 hours (usually 12), plus integrations review and 30-minute Loom walkthrough
+• Pro Package ($99): report within 24 hours (usually 12), plus integrations review and Ask Rob anything (up to 5 questions)
 
-Your responses are stored privately. Test account credentials are deleted within 24 hours of delivery.
+Your responses are stored privately. Any test account credentials you submit are deleted within 24 hours of delivery.
 
 Privacy policy: https://launchlook.app/privacy
 Questions: hello@launchlook.app

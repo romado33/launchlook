@@ -76,6 +76,22 @@
   <section class="bg-paper">
     <div class="page-wrap px-6 section-inner">
       <div class="card-elevated divide-y divide-line px-4 sm:px-5">
+        <details class="py-4" id="what-we-test">
+          <summary class="flex justify-between items-center font-medium text-sm">What do you actually test?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p>We walk your live URL like a first-time visitor — desktop and phone. No GitHub, no repo. Typical checks:</p>
+            <ul class="space-y-2 list-disc list-inside sm:list-outside sm:pl-5">
+              <li><strong class="text-ink">Signup and login</strong> — confirmation and password-reset emails actually arrive</li>
+              <li><strong class="text-ink">Forms and checkout</strong> — contact, booking, payment; silent failures are #1</li>
+              <li><strong class="text-ink">Mobile layout</strong> — tap targets, menus, overflow, CTAs at phone width</li>
+              <li><strong class="text-ink">Trust pages</strong> — privacy, terms, contact/support links that work</li>
+              <li><strong class="text-ink">Dead links and buttons</strong> — 404s and clicks that go nowhere</li>
+              <li><strong class="text-ink">Placeholder and dev-only content</strong> — fake stats, seed data, dev shortcuts on prod</li>
+              <li><strong class="text-ink">First-visitor paths</strong> — homepage to core action without getting stuck</li>
+            </ul>
+            <p>A person edits the list before you see it — no raw dump of 200 warnings.</p>
+          </div>
+        </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">What do you mean by &ldquo;we actually use it&rdquo;?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
@@ -95,8 +111,9 @@
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Do you need my code, GitHub, or any account access?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
-            <p>No. We only need your public URL (and for Scale Up / Pro Package, two temporary test accounts to check data isolation). We never ask for GitHub access, your codebase, your builder login, or any access keys. If a tool ever asks for those things just to spot broken UI, be wary.</p>
-            <p>We don&rsquo;t request database access or store credentials. Anything you provide through the intake form is deleted promptly after delivery. See our <a href="/privacy" class="underline hover:text-ink">privacy policy</a>.</p>
+            <p><strong class="text-ink">No.</strong> We only need your public URL (and for Scale Up / Pro, optionally two <strong class="text-ink">dummy test accounts</strong> for the data-isolation check). We never ask for GitHub, a repo export, your codebase, or your Lovable login.</p>
+            <p>That matters if you built in Lovable or Bolt and <strong class="text-ink">never set up GitHub</strong> — you&rsquo;re not doing anything wrong. Tools like VibeDoctor are built around connecting a repo; LaunchLook is built around the link you already share with beta users.</p>
+            <p>If you share logins, use dedicated test accounts with dummy data — <strong class="text-ink">not</strong> admin, billing, or real customers. Submit them in the <a href="https://tally.so/r/QKOX1A" class="underline hover:text-ink" rel="noopener noreferrer">intake form</a> only, never by email. Deleted within 24 hours of delivery. See our <a href="/privacy" class="underline hover:text-ink">privacy policy</a>.</p>
           </div>
         </details>
         <details class="py-4">
@@ -141,12 +158,22 @@
           <summary class="flex justify-between items-center font-medium text-sm">Refunds?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Not happy? Email <a href="#" data-launchlook-email="support" class="underline hover:text-ink">hello@launchlook.app</a> within 7 days of delivery for a full refund.</p>
         </details>
+        <details class="py-4" id="vibedoctor">
+          <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to VibeDoctor?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p class="text-ink font-medium">VibeDoctor checks the repo. LaunchLook checks the live app — no GitHub required.</p>
+            <p><strong class="text-ink">VibeDoctor</strong> is a fast automated scanner: connect a <strong class="text-ink">GitHub repo</strong> for 129+ checks (secrets, CVEs, code quality, AI-code patterns) plus optional live URL checks. You get a Vitals score, file paths, line numbers, and copy prompts for Cursor or Claude Code. Paid plans are subscription-based.</p>
+            <p><strong class="text-ink">LaunchLook</strong> only needs your <strong class="text-ink">live URL</strong>. A person walks through signup and forms, checks whether confirmation emails arrive, tests mobile width, and the founder edits the list before you get a PDF with paste-into-builder text for Lovable, Bolt, or Cursor. No repo required.</p>
+            <p><strong class="text-ink">Rule of thumb:</strong> VibeDoctor if you have a repo and want code-level security fast. LaunchLook if you don&rsquo;t have GitHub, or you want to know whether real users will bounce before you ship. Use both when you have both.</p>
+            <p>Full comparison: <a href="/vs-vibedoctor" class="underline hover:text-ink font-medium">LaunchLook vs VibeDoctor</a>.</p>
+          </div>
+        </details>
         <details class="py-4" id="pagelens">
           <summary class="flex justify-between items-center font-medium text-sm">How does LaunchLook compare to PageLens AI?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
             <p>Both start with your live URL. They are not the same job.</p>
             <p><strong class="text-ink">PageLens AI</strong> (as of 2026) focuses on <strong class="text-ink">public website launch-readiness</strong>: a fast scored report with health score, SEO/accessibility/security/trust checks, screenshots, and Markdown or agent-ready exports. One-off scans run from about <strong class="text-ink">$1</strong> to <strong class="text-ink">$29</strong>, with an optional weekly monitor. You sign in for scan history and the free one-page preview. It is built for speed on the public surface, not for proving that your signup email actually arrived.</p>
-            <p><strong class="text-ink">LaunchLook</strong> is for founders shipping with <strong class="text-ink">Lovable, Cursor, Bolt, v0,</strong> and similar who want a one-off check before real users show up. A person submits your forms, checks inbox delivery, tests mobile width, and the founder edits every finding before you get a PDF with paste-ready prompts for your builder. Free tier: 2 findings by email. Paid: $19 / $49 / $99. No customer account required.</p>
+            <p><strong class="text-ink">LaunchLook</strong> is for founders shipping with <strong class="text-ink">Lovable, Cursor, Bolt, v0,</strong> and similar who want a one-off check before real users show up. A person submits your forms, checks inbox delivery, tests mobile width, and the founder edits every finding before you get a PDF with paste-into-builder fix text. Free tier: 2 findings by email. Paid: $19 / $49 / $99. No customer account required.</p>
             <p><strong class="text-ink">Rule of thumb:</strong> PageLens for &ldquo;is my site indexable and technically clean?&rdquo; LaunchLook for &ldquo;will a confused first-timer complete signup and trust this app?&rdquo; Use both if you can.</p>
             <p>Full comparison: <a href="/vs-pagelens" class="underline hover:text-ink font-medium">LaunchLook vs PageLens</a>.</p>
           </div>
@@ -182,6 +209,7 @@
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
         <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
         <li><a href="/vs-pagelens" class="hover:text-ink">vs PageLens</a></li>
+        <li><a href="/vs-vibedoctor" class="hover:text-ink">vs VibeDoctor</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

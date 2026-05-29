@@ -1,22 +1,37 @@
 Hi {{ first_name }},
 
-Your Fix Check is ready. I re-walked {{ app_name }} after your fixes and packaged what I found into the attached PDF.
+Your Fix Check for {{ app_name }} is attached — a short re-scan after your fixes.
 
-Quick read:
-- {{ verdict.emoji }} {{ verdict.label }}
-- {{ verdict.summary }}
+Since your last report:
+- Fixed: {{ fixed_count }}
+- Still open: {{ still_count }}
+- New: {{ new_count }} (things that surfaced or regressed)
 
-Counts:
-- Now fixed: {{ fixed_count }}
-- Still showing up: {{ still_count }}
-- New things that turned up: {{ new_count }}
+Verdict: {{ verdict.emoji }} {{ verdict.label }}
+{% if verdict.summary %}{{ verdict.summary }}
+{% endif %}
+{% if fixed %}
+What's now fixed:
+{% for f in fixed %}
+  ✓ {{ f.original_title }}
+{% endfor %}
+{% endif %}
+{% if still_present %}
+Still showing up:
+{% for s in still_present %}
+  ✗ {{ s.original_title }}
+{% endfor %}
+{% endif %}
+{% if new %}
+New since last scan:
+{% for n in new %}
+  ⚠ {{ n.title }}
+{% endfor %}
+{% endif %}
 
-Open the attached PDF for the full breakdown, with one line per finding.
+Open the PDF for notes on each item. If you fixed something we still flagged, reply with what you changed — sometimes the live URL needs a hard refresh or a republish.
 
-Need another Fix Check after the next round of fixes? Just reply to this email.
+Need another pass after the next round? Reply "recheck" ($19, or $9 within 14 days of your original report).
 
 — LaunchLook
-
----
-LaunchLook · launchlook.app · prepared {{ delivered_at }}
-Confidential. Prepared for {{ first_name }} only.
+launchlook.app · prepared {{ delivered_at }}

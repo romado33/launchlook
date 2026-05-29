@@ -25,6 +25,12 @@
 
 {{ context_paragraph }}
 
+{% if builder_memory %}
+## Builder memory (for {{ customer.builder }})
+
+{{ builder_memory }}
+
+{% endif %}
 {% if passed_checks %}
 ## What's working
 
@@ -42,10 +48,10 @@
 
 - What I saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
 - Why it matters: {{ finding.why_it_matters | replace('\n', ' ') | trim }}
-- Fix prompt:
+- Fix text (paste into {{ customer.builder }}):
 
   ```
-  {{ finding.fix_prompt | indent(2) }}
+  {{ (finding.fix_prompt_display or finding.fix_prompt) | indent(2) }}
   ```
 
 {% endfor %}
@@ -58,10 +64,10 @@
 
 - What I saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
 - Why it matters: {{ finding.why_it_matters | replace('\n', ' ') | trim }}
-- Fix prompt:
+- Fix text (paste into {{ customer.builder }}):
 
   ```
-  {{ finding.fix_prompt | indent(2) }}
+  {{ (finding.fix_prompt_display or finding.fix_prompt) | indent(2) }}
   ```
 
 {% endfor %}
@@ -74,10 +80,10 @@
 
 - What I saw: {{ finding.what_we_saw | replace('\n', ' ') | trim }}
 - Why it matters: {{ finding.why_it_matters | replace('\n', ' ') | trim }}
-- Fix prompt:
+- Fix text (paste into {{ customer.builder }}):
 
   ```
-  {{ finding.fix_prompt | indent(2) }}
+  {{ (finding.fix_prompt_display or finding.fix_prompt) | indent(2) }}
   ```
 
 {% endfor %}

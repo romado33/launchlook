@@ -1,14 +1,20 @@
 Hi {{ customer.first_name }},
 
-Here's what your first users will hit on {{ customer.app_name }}. Findings attached as {% if customer.tier in ('Scale Up Package', 'Pro Package') %}four{% else %}three{% endif %} PDFs, sorted by who encounters what first:
+Here's what your first users will hit on {{ customer.app_name }}. Findings attached as {% if customer.tier in ('Scale Up Package', 'Pro Package') %}four{% else %}three{% endif %} PDFs plus a Fix Pack (.md) you can paste into {{ customer.builder }} or Cursor:
 - Main Report ({{ n_findings }} finding{{ '' if n_findings == 1 else 's' }}, sorted by severity)
 - Quick Start Guide (a one-page card you can hand to your first users)
 {% if customer.tier in ('Scale Up Package', 'Pro Package') %}- User Guide (a 2-3 page doc for onboarding emails or a help centre)
 {% endif %}- Pre-Launch Checklist (a 7-section list to run before sharing your live link)
+- Fix Pack (fix-pack.md — all findings + paste-ready fix text in one Markdown file)
 
 All open in any PDF reader. No login or Notion account needed.
 
-Each finding includes a copy-paste fix prompt for {{ customer.builder }}. Start at the top, paste the prompts in, verify the fix on your live URL, and move down the list.
+Each finding in the PDF includes paste-into-{{ customer.builder }} fix text with a “Paste this first” line at the top. Start at the highest severity, verify on your live URL, then move down. Or open fix-pack.md and work straight through it in one chat session.
+{% if builder_memory and is_pro %}
+
+BUILDER MEMORY (Pro — paste this into {{ customer.builder }} before the Fix Pack if you start a fresh session):
+{{ builder_memory }}
+{% endif %}
 
 If anything in the report isn't clear, or you want a re-scan after fixes, just reply to this email.
 

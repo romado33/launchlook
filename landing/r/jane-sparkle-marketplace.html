@@ -5,17 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LaunchLook audit for Sparkle Marketplace</title>
-  <meta name="description" content="Sample Starter audit for Sparkle Marketplace: dev tools on prod, dead booking, mobile modal issues, and trust gaps to fix before you share the link." />
+  <meta name="description" content="Pre-launch audit. Verdict: Needs fixes before launch. 7 findings across trust, broken CTAs, mobile layout, and more." />
 
   <meta property="og:title" content="LaunchLook audit for Sparkle Marketplace" />
-  <meta property="og:description" content="Sample audit for Sparkle Marketplace. Dev bypass on prod, broken Quick Book, mobile booking modal, missing legal pages." />
+  <meta property="og:description" content="Pre-launch audit. Verdict: Needs fixes before launch. 7 findings across trust, broken CTAs, mobile layout, and more." />
   <meta property="og:image" content="https://launchlook.app/images/og.png" />
   <meta property="og:url" content="https://launchlook.app/r/jane-sparkle-marketplace" />
   <meta property="og:type" content="article" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="LaunchLook audit for Sparkle Marketplace" />
-  <meta name="twitter:description" content="Sample audit for Sparkle Marketplace: dev UI on prod, dead booking, mobile modal, trust gaps." />
+  <meta name="twitter:description" content="Pre-launch audit. Verdict: Needs fixes before launch. 7 findings across trust, broken CTAs, mobile layout, and more." />
   <meta name="twitter:image" content="https://launchlook.app/images/og.png" />
 
   <link rel="canonical" href="https://launchlook.app/r/jane-sparkle-marketplace" />
@@ -27,13 +27,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/site.css" />
-
 </head>
 
-<body class="bg-paper text-ink font-sans antialiased" data-slug="jane-sparkle-marketplace" data-is-sample="true">
+<body class="bg-paper text-ink font-sans antialiased" data-slug="jane-sparkle-marketplace">
 
   <header class="border-b border-line">
-    <div class="page-wrap px-6 py-5 flex items-center justify-between">
+    <div class="page-wrap px-6 py-3 flex items-center justify-between">
       <a href="/" class="site-brand">
         <img src="/images/logo-icon.svg" alt="" width="24" height="24" class="shrink-0" aria-hidden="true" />
         <span class="font-serif text-xl font-medium text-ink">LaunchLook</span>
@@ -43,7 +42,7 @@
     </div>
   </header>
 
-  <main class="page-wrap px-6 py-12 sm:py-16" data-report-root>
+  <main class="max-w-3xl mx-auto px-6 py-12 sm:py-16" data-report-root>
 
     <section data-r-state="loading" class="rounded-xl border border-line bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
       <p class="text-sm text-muted">Loading the audit...</p>
@@ -78,16 +77,16 @@
     </section>
 
     <section data-r-state="public" class="hidden report-content">
-      <p class="section-label" data-r-eyebrow>LaunchLook · sample audit</p>
+      <p class="section-label" data-r-eyebrow>LaunchLook audit</p>
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h1 class="font-serif text-3xl sm:text-4xl mb-3" data-r-app-name>Sparkle Marketplace</h1>
-      <p class="text-sm text-muted" data-r-audit-line>Pre-launch audit prepared May 26, 2026.</p>
+      <p class="text-sm text-muted" data-r-audit-line>Pre-launch audit prepared May 29, 2026.</p>
 
-      <div class="report-verdict-card mt-8 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
+      <div class="mt-8 rounded-xl border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8 shadow-sm shadow-ink/5">
         <p class="text-xs font-medium text-accent uppercase tracking-widest">Overall verdict</p>
         <p class="mt-2 font-serif text-xl sm:text-2xl" data-r-verdict-label>-</p>
-        <p class="mt-2 text-muted leading-relaxed report-body-copy" data-r-verdict-summary></p>
-        <p class="mt-3 text-muted leading-relaxed report-body-copy" data-r-verdict-narrative></p>
+        <p class="mt-2 text-muted leading-relaxed" data-r-verdict-summary></p>
+        <p class="mt-3 text-muted leading-relaxed whitespace-pre-line" data-r-verdict-narrative></p>
       </div>
 
       <section data-r-passed-wrap class="mt-10 hidden">
@@ -96,8 +95,7 @@
       </section>
 
       <section data-r-findings-wrap class="mt-10 hidden">
-        <h2 class="font-serif text-2xl mb-1">What needs fixing</h2>
-        <p class="text-sm text-muted mb-4 report-body-copy">Ranked by severity. Paid audits include paste-ready fix prompts for your AI builder. Expand any finding below.</p>
+        <h2 class="font-serif text-2xl mb-4">What needs fixing</h2>
         <div class="space-y-5" data-r-findings></div>
       </section>
 
@@ -105,25 +103,24 @@
         <h2 class="font-serif text-xl mb-2">Handoff Report</h2>
         <p class="text-sm text-muted leading-relaxed">
           The customer also published the Handoff Report, formatted for the
-          developer they hire next. Readable copy with honest scope notes.
+          developer they hire next. Plain English with honest scope statements.
         </p>
-        <a href="#" data-r-handoff-link class="launchlook-btn launchlook-btn-secondary mt-4">
+        <a href="#" data-r-handoff-link class="launchlook-btn launchlook-btn-secondary mt-4 plausible-event-name=ShareableHandoffDownload">
           Download the Handoff Report (PDF)
         </a>
       </section>
 
       <section class="mt-12 rounded-xl border border-line bg-surface-tint p-6 sm:p-8">
-        <h2 class="font-serif text-2xl mb-2">Want this on your app?</h2>
+        <h2 class="font-serif text-2xl mb-2">Get your own LaunchLook audit</h2>
         <p class="text-muted leading-relaxed text-sm report-body-copy">
-          Send your live URL. We email a report like this: screenshots, severity, and fix prompts you can paste into Lovable, Cursor, or Bolt. Paid tiers include extra PDFs.
+          A human pre-launch checkup for vibe-coded apps. Findings, fix
+          prompts, and a Quick Start Guide PDF. From $19.
         </p>
-        <div class="mt-5 flex flex-col sm:flex-row gap-3">
-          <a href="/#pricing" class="launchlook-btn launchlook-btn-accent">
-            Get my audit from $19
+        <div class="mt-5">
+          <a href="/#pricing" class="launchlook-btn launchlook-btn-primary plausible-event-name=ShareableCTAPricing">
+            See pricing
           </a>
-          <a href="/#hero" class="launchlook-btn launchlook-btn-secondary">
-            Start with 3 free findings
-          </a>
+          
         </div>
       </section>
     </section>

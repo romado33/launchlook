@@ -3,6 +3,11 @@
 This doc describes how to configure the Tally intake form fields, including
 the 3 optional tone/audience fields for Scale Up and Pro customers.
 
+**Canonical safety copy** (Block 0 at top of form, Q9–Q11 help text, `/thanks` page):
+use **dedicated test accounts with dummy data**; **not** admin, billing, or real
+customers; credentials **only in this form** (never email); **deleted within 24 hours**
+of delivery. Paste-ready text lives in `TALLY-INTAKE-PASTE.txt` (Block 0, Q9–Q11, Thank you page).
+
 ---
 
 ## Standard fields (all paid tiers)

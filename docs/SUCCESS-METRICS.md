@@ -36,7 +36,7 @@ After **20 free deliveries**:
 
 ### The deduplication corollary
 
-`PRODUCT-DECISIONS.md` §2 states: *"You're not paying $19 to re-read your free preview."* The free hook must deliver two findings that are **immediately actionable** — not vague observations. If a free user opens the email and the finding says "your mobile experience could be improved," they won't act on it and they won't upgrade. If it says "your signup button is hidden off-screen on a 375px iPhone — here is the exact fix prompt," they'll paste it in before closing the email.
+`PRODUCT-DECISIONS.md` §2 states: *"You're not paying $19 to re-read your free preview."* The free hook must deliver two findings that are **immediately actionable** — not vague observations. If a free user opens the email and the finding says "your mobile experience could be improved," they won't act on it and they won't upgrade. If it says "your signup button is hidden off-screen on a 375px iPhone — here is the exact paste-into-builder text to fix it," they'll paste it in before closing the email.
 
 Review the quality of every free delivery manually for the first 30 free audits. The free findings are the product validation instrument, not just a marketing hook.
 

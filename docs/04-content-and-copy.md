@@ -8,6 +8,18 @@ All writing artifacts. Use this verbatim unless explicitly approved to change by
 
 **Operator docs:** [`ROB-REMAINING-TODO.md`](ROB-REMAINING-TODO.md) · **Tally intake (paste):** [`TALLY-COPY-PASTE.md`](TALLY-COPY-PASTE.md) · **Live emails:** [`templates/email/`](../templates/email/) (prefer files there over duplicates below)
 
+## Terminology (canonical May 2026)
+
+| Prefer (customer-facing) | Avoid / internal only |
+|--------------------------|------------------------|
+| Paste-into-your-builder fix text / copy-paste text to fix each finding | "Fix prompt" alone (jargon; sounds like a dev CLI) |
+| Pre-launch checkup / once-over | Scanner, audit platform, regression detection |
+| 2 free findings (Free tier) | "3 free findings" (stale) |
+
+Internal YAML/PDF field names may still say `fix_prompt`. Reports can label the block **"Paste into {builder} to fix this"** when updated.
+
+---
+
 ## Landing page copy
 
 ### Hero section

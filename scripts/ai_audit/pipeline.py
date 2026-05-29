@@ -18,6 +18,7 @@ helper returns a single dict that the caller patches into its own state.
 from __future__ import annotations
 
 import csv
+import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -31,13 +32,11 @@ if str(REPO_ROOT) not in sys.path:
 from scripts.audit_ui import yaml_writer  # noqa: E402
 
 from . import feedback as feedback_log  # noqa: E402
-from . import (  # noqa: E402
-    html_extract,
-    llm_client,
-    security_lite,  # noqa: E402
-)
+from . import broken_links_lite, console_errors_lite, html_extract, llm_client  # noqa: E402
+from . import security_lite, trust_seo_lite  # noqa: E402
 from .dedup import render_exclude_block  # noqa: E402
 from .free_audit_lookup import load_excluded_fingerprints  # noqa: E402
+
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 CATEGORIES_YAML = Path(__file__).resolve().parent / "finding_categories.yaml"
@@ -897,6 +896,48 @@ def run(
         f"passed: {snoop['passed_check_ids']}; failed: {snoop['failed_check_ids']}"
     )
 
+    precomputed: list[dict[str, Any]] = list(snoop.get("findings") or [])
+
+    def _extend_precomputed(label: str, batch: dict[str, Any]) -> None:
+        items = list(batch.get("findings") or [])
+        if items:
+            precomputed.extend(items)
+        print(
+            f"[{label}] {len(items)} finding(s); "
+            f"failed: {batch.get('failed_check_ids')}"
+        )
+
+    try:
+        _extend_precomputed(
+            "trust-seo",
+            trust_seo_lite.run_trust_seo_lite(base_url=customer_ctx.url, pages=pages),
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[trust-seo] WARN: skipped: {exc}", file=sys.stderr)
+
+    try:
+        _extend_precomputed(
+            "broken-links",
+            broken_links_lite.run_broken_links_lite(
+                base_url=customer_ctx.url,
+                pages=pages,
+                platform=customer_ctx.platform,
+            ),
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[broken-links] WARN: skipped: {exc}", file=sys.stderr)
+
+    try:
+        _extend_precomputed(
+            "console-errors",
+            console_errors_lite.run_console_errors_lite(
+                base_url=customer_ctx.url,
+                platform=customer_ctx.platform,
+            ),
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[console-errors] WARN: skipped: {exc}", file=sys.stderr)
+
     # ---- 4. Screenshots for vision ----
     screenshots = collect_screenshots(customer_ctx.slug)
     print(f"[vision] {len(screenshots)} screenshot(s) ready for LLM")
@@ -952,13 +993,12 @@ def run(
         max_findings=cap,
     )
 
-    # Merge Snoop's pre-generated security-lite findings before the cap is
-    # applied so a critical exposed credential isn't dropped because the
-    # LLM filled the cap with lower-severity items.
-    snoop_findings = list(snoop.get("findings") or [])
-    if snoop_findings:
-        findings = snoop_findings + list(findings or [])
-        print(f"[merge] +{len(snoop_findings)} Snoop finding(s) merged")
+    # Merge deterministic URL checks before the cap so critical items (exposed
+    # keys, console errors, dead nav links) aren't dropped when the LLM fills
+    # the tier cap with lower-severity noise.
+    if precomputed:
+        findings = precomputed + list(findings or [])
+        print(f"[merge] +{len(precomputed)} precomputed finding(s) merged")
 
     findings = yaml_writer.sort_findings(findings)[:cap]
     print(f"[llm] {len(findings)} finding(s) after merge + cap")

@@ -1,5 +1,19 @@
 # LaunchLook — FAQ
 
+## What do you actually test?
+
+We walk your live URL like a first-time visitor — desktop and phone. No GitHub, no repo. Typical checks:
+
+- **Signup and login** — confirmation and password-reset emails actually arrive
+- **Forms and checkout** — contact, booking, payment; silent failures are #1
+- **Mobile layout** — tap targets, menus, overflow, CTAs at phone width
+- **Trust pages** — privacy, terms, contact/support links that work
+- **Dead links and buttons** — 404s and clicks that go nowhere
+- **Placeholder and dev-only content** — fake stats, seed data, dev shortcuts on prod
+- **First-visitor paths** — homepage to core action without getting stuck
+
+A person edits the list before you see it — no raw dump of 200 warnings.
+
 ## What are human-tested workflows and human review?
 
 **Human-tested workflows:** A real person clicks through signup, booking, contact, and checkout paths, submits forms, and checks whether confirmation, thank-you, and notification emails actually arrive.

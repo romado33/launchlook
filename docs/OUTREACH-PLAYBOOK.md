@@ -4,7 +4,7 @@
 **Owner:** Rob
 **Status:** Canonical reference for soft customer acquisition. Use this as your single source of truth for *where* to post, *what* to say, and *what not* to do.
 
-This consolidates every forum/community recommendation and every ready-to-paste pitch wording generated across the LaunchLook planning sessions. Mine it; don't re-derive it.
+**Companion:** [`X-CONTENT-PLAYBOOK.md`](X-CONTENT-PLAYBOOK.md) (public findings on X) · [`PLATFORM-CHEAT-SHEET.md`](PLATFORM-CHEAT-SHEET.md) (auditing Bolt/v0/Cursor/Webflow when you only know Lovable)
 
 ---
 
@@ -72,8 +72,8 @@ That's the only number that matters right now. Three paying strangers proves the
 ### Reality check: what proven from research
 
 - **Demand is real and self-initiated.** The Lovable Discord already builds free peer tools (Testers Helping Testers) and reaches for Claude + MCP. Nobody in those communities is currently selling a paid, structured, plain-English pre-launch pass. The wedge is open.
-- **Competing positioning to avoid:** "raw AI scanner that dumps 100 findings," "security audit," "QA platform," "peer testing." You are **the AI-powered scan with founder-curated quality, fix-prompt-included once-over**.
-- **Best wedge sentence:** *"A 10-minute pre-launch pass: AI scans every screen, I personally review every finding before it reaches you. Plain English, with copy-paste fix prompts for your builder."*
+- **Competing positioning to avoid:** "raw AI scanner that dumps 100 findings," "security audit," "QA platform," "peer testing." You are **the AI-powered scan with founder-curated quality, paste-into-your-builder fix text on every finding**.
+- **Best wedge sentence:** *"A 10-minute pre-launch pass: AI scans every screen, I personally review every finding before it reaches you. Plain English, with copy-paste text you drop into Lovable/Bolt/v0 to fix each issue."*
 
 ---
 
@@ -205,7 +205,7 @@ What I won't do: deep security, code review, anything that needs your repo.
 
 I'll do as many as I can fit in this week. First come first served.
 
-(If you want the long version with screenshots and copy-paste fix prompts for your builder, I do that as a paid service. Please don't pay for what I'm offering free here. Reply with your URL and let's start there.)
+(If you want the long version with screenshots and paste-into-builder fix text for each finding, I do that as a paid service. Please don't pay for what I'm offering free here. Reply with your URL and let's start there.)
 ```
 
 ---
@@ -254,7 +254,7 @@ Quick offer for {PLATFORM} builders: I'm doing free pre-launch checkups this wee
 
 What you get: I'll spend 10 to 15 minutes on your live app. AI scans every screen at desktop and mobile, then I personally review and curate 2 to 3 specific things I'd want fixed before you share the link wider: placeholders, dead buttons, mobile layout, trust pages. Plain English, no security jargon.
 
-What I'm getting: I'm building a paste-ready fix-prompt library for {PLATFORM}, so seeing real {PLATFORM} apps helps me get the prompts right.
+What I'm getting: I'm building a paste-into-{PLATFORM} fix-text library — see [`PLATFORM-CHEAT-SHEET.md`](PLATFORM-CHEAT-SHEET.md). Seeing real {PLATFORM} apps helps me get the wording right.
 
 Reply with your public URL (staging OK). First 3 in are guaranteed; I'll do as many more as I can fit.
 ```
@@ -288,7 +288,7 @@ Glad the {SPECIFIC_THING} catch was useful.
 
 If you want the full version, with ranked findings with screenshots, the fixes that actually matter, and copy-paste prompts you drop into {BUILDER}, that's what LaunchLook does ($19 Starter, $49 Scale Up, $99 Pro). AI scans every screen; I personally review and curate every finding before delivery. No GitHub access. 48-hour turnaround.
 
-launchlook.app — or drop your URL on the home page for 3 free findings from a real person (24-hour turnaround, no credit card). No pressure either way.
+launchlook.app — or drop your URL on the home page for **2 free findings** from a real person (~48-hour turnaround, no credit card). No pressure either way.
 ```
 
 ---
@@ -318,7 +318,7 @@ After running a dozen pre-launch apps built with Lovable / Bolt / v0 through our
 
 "Your Company Name" in the footer. "Hosted by …" in the metadata. "Get Started" button that goes to /undefined. The builder fills these in once and forgets them in three other places.
 
-Drop your live URL at launchlook.app and a real person will email you back 3 free findings within 24 hours. No credit card.
+Drop your live URL at launchlook.app and a real person will email you back **2 free findings** within ~48 hours. No credit card.
 
 (Disclosure: I run LaunchLook, a $19 pre-launch checkup for vibe-coded apps. AI scans every screen, I personally review and curate every finding before delivery. The free 3-finding audit is a stripped-down version of the paid Starter.)
 ```
@@ -368,7 +368,7 @@ hello@launchlook.app
 |------|--------------------|
 | 0:00–0:10 | Show their app in the browser. *"Hey [name], I ran [app name] through our pre-launch pass and clicked through the screenshots."* |
 | 0:10–0:35 | Show 2 to 3 specific issues (dead button, placeholder text, missing privacy, dev tools visible). No jargon. |
-| 0:35–0:50 | *"I run LaunchLook, a pre-launch checkup for vibe-coded apps. AI scans every screen, I personally curate the findings. Plain-English report plus copy-paste fix prompts for your builder."* |
+| 0:35–0:50 | *"I run LaunchLook, a pre-launch checkup for vibe-coded apps. AI scans every screen, I personally curate the findings. Plain-English report plus paste-into-your-builder text to fix each issue."* |
 | 0:50–1:00 | CTA: *"Starter Package is $19 if you want the full list. Link: launchlook.app"* |
 
 **DM text to pair with the Loom:**
@@ -377,9 +377,9 @@ hello@launchlook.app
 Hey [name] — I recorded a 60-sec walkthrough of [app] before you share it wider.
 [LOOM LINK]
 
-I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $19 (Starter Package) with fix prompts you paste into [Lovable/Bolt/etc].
+I flagged [issue 1] and [issue 2]. LaunchLook does a full pass for $19 (Starter Package) with paste-into-[Lovable/Bolt/etc] fix text for each finding.
 
-Or drop your URL on launchlook.app for 3 free findings from a real person — 24-hour turnaround, no credit card.
+Or drop your URL on launchlook.app for **2 free findings** from a real person — ~48-hour turnaround, no credit card.
 
 No pressure — launchlook.app if useful.
 ```
@@ -458,14 +458,14 @@ Real ones surfaced in the Lovable Discord research thread and review feedback.
 | Objection | Response |
 |-----------|----------|
 | *"Isn't this just an AI scanner? I can use Claude / MCP / VibeDoctor."* | "Honest answer: AI does the first pass. It scans every screen, finds patterns, drafts findings. Then I personally review and curate every finding before it reaches you. That's the part raw AI scanners skip. AI scanners are noisy and speak in `SEC-001` jargon; the founder review rejects the false positives, edits anything that reads off, and adds the human judgment AI tools miss. You get scanner-speed delivery with human-curated quality." |
-| *"How is this different from PageLens AI?"* | Point them to the canonical comparison: [`launchlook.app/vs-pagelens`](https://launchlook.app/vs-pagelens). Short answer: PageLens is built for SEO marketers who want recurring dashboards; LaunchLook is built for vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-ready fix prompts and a real founder reviewing every finding. Both are real tools; they solve different problems. Do **not** trash PageLens in the conversation, let the comparison page (with its built-in "Honest trade-offs" section) do the heavy lifting. Stay neutral per `SIMPLICITY-GUARDRAILS.md` §6 (brand voice). |
+| *"How is this different from PageLens AI?"* | Point them to the canonical comparison: [`launchlook.app/vs-pagelens`](https://launchlook.app/vs-pagelens). Short answer: PageLens is a fast site scanner; LaunchLook is a founder-reviewed pre-launch checkup (signup, mobile, workflow) with paste-into-builder fix text. **Free 2 findings** is our hook vs their $1 scan — not Starter $19. Do **not** trash PageLens; stay neutral per `SIMPLICITY-GUARDRAILS.md` §6. |
 | *"Is the AI part going to fill my report with hallucinated issues?"* | "That's exactly why the founder review exists. I look at every AI-drafted finding against the actual screenshots before sending. If a finding isn't grounded in real evidence, it doesn't ship. Most reports end with fewer findings than the AI initially drafted; that's the curation working." |
 | *"I already know my app has issues — I don't need someone to tell me."* | "Probably true for the bugs you already see. The point is the ones you **stopped seeing** weeks ago — every founder has them. If you want, send the URL and I'll do a free 10-min pass; if it's all stuff you already knew, no harm done." |
 | *"$19 seems steep for something automated."* | "It's AI-drafted, founder-curated. AI gives me scanner-speed; the founder review is what keeps the bar high. That's why it's $19 instead of free (a real human reads every finding) and $19 instead of $99 (the AI carries the volume work). Rather you buy Starter now and Scale Up closer to launch, than pay once for something generic." |
 | *"Will this catch the scary security stuff?"* | "Not deep security (no pentest, no code review). I do catch obvious visible risks though — dev bypasses, exposed test controls, broken auth screens, and (Full Package only) one user seeing another user's data via cross-account checks." |
 | *"Why should I trust you?"* | "Two ways: drop your URL on [launchlook.app](https://launchlook.app/#hero) for a free 3-finding audit — that's a stripped-down sample of what a paid checkup looks like. Or read the [sample report](https://launchlook.app/sample) and decide if the output is worth $19. And there's a 7-day full refund if it isn't." |
 | *"Do I need to give you my GitHub / repo access?"* | "Never. Just the live URL. If your Full Package run needs to check cross-user data, you give me two temporary test accounts via the intake form. No code, no repo, no admin." |
-| *"My app is built with v0 / Cursor / Base44, not Lovable. Do you do those?"* | "Yes. The fix prompts are tailored per builder — Lovable, Bolt, v0, Cursor, Base44, Replit, and a generic one for everything else. The findings are the same; the prompt syntax differs." |
+| *"My app is built with v0 / Cursor / Base44, not Lovable. Do you do those?"* | "Yes. The paste-into-builder fix text is tailored per platform — see [`PLATFORM-CHEAT-SHEET.md`](PLATFORM-CHEAT-SHEET.md). Lovable, Bolt, v0, Cursor, Base44, Replit, Webflow. Findings are the same; prompt dialect differs. I'm Lovable-heavy in my own builds — honest framing for other platforms is Variant #3.5." |
 | *"Will the report tell me anything I can't get for free?"* | "The free 3-finding audit gives you the top 3 a real person would flag. What you can't get for free: the full ranked list (10 to 40 items) with paste-ready prompts, plus (Starter+) a one-page Quick Start Guide you can hand to your users. No competitor includes that last one." |
 | Silence / no reply after 5 days | Don't follow up. Log the no-response. That's data. |
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LaunchLook | Pre-launch checkup for vibe-coded apps</title>
-  <meta name="description" content="Send your live URL. We test at desktop and mobile width, run key workflows (forms, signup, emails that should follow), and a founder reviews every finding. Free 2-finding audit; paid from $19." />
+  <meta name="description" content="Pre-launch checkup with just your live URL — no GitHub, no repo, no code access. We test signup, forms, and mobile like a real user; a founder reviews every finding. Free 2 findings; paid from $19." />
 
   <meta property="og:site_name" content="LaunchLook" />
   <meta property="og:title" content="LaunchLook | Pre-launch checkup for vibe-coded apps" />
@@ -47,7 +47,7 @@
         "name": "Pre-launch checkup",
         "provider": { "@id": "https://launchlook.app/#organization" },
         "serviceType": "Website quality audit",
-        "description": "Tests at desktop and mobile width, real workflow checks (forms, signup, confirmation emails), and founder review on every finding. Plain-English fixes and paste-ready builder prompts.",
+        "description": "Tests at desktop and mobile width, real workflow checks (forms, signup, confirmation emails), and founder review on every finding. Plain-English fixes and paste-into-builder text for each finding.",
         "areaServed": "Worldwide",
         "url": "https://launchlook.app/",
         "offers": [
@@ -128,6 +128,9 @@
       <p class="mt-2 text-sm text-muted leading-relaxed max-w-3xl mx-auto text-center hidden sm:block">
         We open your live link on desktop and phone, click through signup and forms, and see if confirmation emails actually show up. The founder reads every finding before it goes out.
       </p>
+      <p class="mt-3 text-sm text-ink leading-snug max-w-2xl mx-auto text-center">
+        <strong>No GitHub. No repo.</strong> If you built in Lovable or Bolt and never exported code, you can still get a checkup — we only need your published link.
+      </p>
 
       <form data-free-audit-form action="/api/free-audit" method="POST" class="card-elevated mt-6 px-4 py-3 sm:px-5 sm:py-4">
         <div class="grid sm:grid-cols-2 gap-3">
@@ -159,7 +162,7 @@
         <a href="/r/jane-sparkle-marketplace.html" target="_blank" rel="noopener" class="launchlook-btn launchlook-btn-secondary text-sm">
           See a sample report &rarr;
         </a>
-        <span class="text-xs text-muted">No repo access needed &middot; 7-day refund on paid tiers</span>
+        <span class="text-xs text-muted">No GitHub &middot; no repo &middot; 7-day refund on paid tiers</span>
       </div>
 
       <p class="mt-4 text-xs text-center text-muted/70 italic">
@@ -197,6 +200,35 @@
     </div>
   </section>
 
+  <section id="no-github" class="border-b border-line bg-paper">
+    <div class="page-wrap px-6 section-inner-tight">
+      <p class="section-label">No repo? No problem.</p>
+      <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl mb-3">Built in Lovable or Bolt and never touched GitHub?</h2>
+      <p class="text-muted leading-relaxed max-w-prose">
+        Most production-readiness tools — including <strong class="text-ink">VibeDoctor</strong> — want a connected repo for secrets, dependencies, and code health. If your app only exists as a live link, that&rsquo;s normal. LaunchLook is built for the URL you already send to beta users.
+      </p>
+      <p class="mt-3 text-sm text-ink font-medium max-w-prose">
+        VibeDoctor checks the repo. LaunchLook checks the live app — no GitHub required.
+      </p>
+      <div class="mt-5 grid sm:grid-cols-2 gap-3 max-w-3xl">
+        <div class="card-elevated px-4 py-4 text-sm text-muted">
+          <p class="font-medium text-ink">Repo scanners (VibeDoctor, etc.)</p>
+          <p class="mt-1.5">Keys, CVEs, file:line fixes, scores on every push. Needs git.</p>
+        </div>
+        <div class="card-elevated px-4 py-4 text-sm text-muted border-l-2 border-accent/40">
+          <p class="font-medium text-ink">LaunchLook</p>
+          <p class="mt-1.5">Signup, forms, confirmation email, mobile layout, trust pages. Live URL only.</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-muted">
+        <a href="/vs-vibedoctor" class="underline hover:text-ink font-medium">Compare with VibeDoctor</a>
+        &middot;
+        <a href="/vs-pagelens" class="underline hover:text-ink font-medium">Compare with PageLens</a>
+      </p>
+    </div>
+  </section>
+
   <section id="how" class="border-b border-line bg-paper">
     <div class="page-wrap px-6 section-inner-tight">
       <div class="card-elevated px-4 py-5 sm:px-6 sm:py-6">
@@ -205,7 +237,7 @@
           <li>
             <p class="font-serif text-2xl text-ink leading-none">1</p>
             <p class="font-medium mt-2">Send your link</p>
-            <p class="text-muted mt-1">Quick form after checkout. Your live URL is all we need.</p>
+            <p class="text-muted mt-1">Your live URL is all we need. No GitHub, no repo export.</p>
           </li>
           <li>
             <p class="font-serif text-2xl text-ink leading-none">2</p>
@@ -218,14 +250,30 @@
             <p class="text-muted mt-1">PDFs by email. Paid tiers include extra guides and checklists.</p>
           </li>
         </ol>
+        <p class="mt-4 text-sm text-muted leading-relaxed max-w-prose">
+          We screenshot at laptop width and phone width because layout bugs often only show on one — hamburger menus, tiny tap targets, and CTAs that disappear on a real phone.
+        </p>
+
+        <h3 class="font-serif text-lg mt-6">What do you actually test?</h3>
+        <p class="mt-2 text-sm text-muted leading-relaxed max-w-prose">We walk your live URL like a first-time visitor — desktop and phone. Typical checks include:</p>
+        <ul class="mt-3 space-y-2 text-sm text-muted max-w-prose">
+          <li><strong class="text-ink font-medium">Signup and login.</strong> We register (or use a test account) and check whether confirmation and password-reset emails actually arrive.</li>
+          <li><strong class="text-ink font-medium">Forms and checkout.</strong> Contact, booking, and payment flows — we submit them and see if anything breaks or fails silently. That&rsquo;s the #1 thing we find.</li>
+          <li><strong class="text-ink font-medium">Mobile layout.</strong> Your URL at phone width: tap targets, menus, text spilling off-screen, CTAs that disappear.</li>
+          <li><strong class="text-ink font-medium">Trust pages.</strong> Privacy policy, terms, contact or support links — do they exist and work?</li>
+          <li><strong class="text-ink font-medium">Dead links and buttons.</strong> Clicks that go nowhere, 404s, or error screens a visitor would hit.</li>
+          <li><strong class="text-ink font-medium">Placeholder and dev-only content.</strong> Lorem ipsum, fake ratings, seed data, &ldquo;Dev Bypass&rdquo; still showing on the live site.</li>
+          <li><strong class="text-ink font-medium">First-visitor paths.</strong> Can someone get from your homepage to the thing you&rsquo;re selling without getting stuck?</li>
+        </ul>
 
         <hr class="my-5 border-line" />
 
         <h3 class="font-serif text-lg">Why this isn&rsquo;t a scanner</h3>
-        <ul class="mt-3 grid sm:grid-cols-3 gap-4 text-sm text-muted">
+        <ul class="mt-3 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-muted">
+          <li><strong class="text-ink font-medium">No repo required.</strong> Live link only. You don&rsquo;t need GitHub or to know what a repo is.</li>
           <li><strong class="text-ink font-medium">We click things.</strong> Forms, signup, checkout. We check if emails actually land.</li>
           <li><strong class="text-ink font-medium">A person edits the list.</strong> No raw dump of 200 warnings.</li>
-          <li><strong class="text-ink font-medium">Fix prompts for your builder.</strong> Paste into Lovable, Bolt, Cursor, v0, and the rest.</li>
+          <li><strong class="text-ink font-medium">Paste-into-builder fixes.</strong> Each finding includes text you drop into Lovable, Bolt, Cursor, v0, and the rest.</li>
         </ul>
       </div>
     </div>
@@ -272,7 +320,7 @@
     <div class="page-wrap px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <p class="font-medium text-sm">Building with Webflow?</p>
-        <p class="text-sm text-muted mt-0.5">Same review, but fix prompts talk Webflow (Designer, breakpoints at 991 / 767 / 478), not Lovable-speak.</p>
+        <p class="text-sm text-muted mt-0.5">Same review, but fix text talks Webflow (Designer, breakpoints at 991 / 767 / 478), not Lovable-speak.</p>
         <p class="text-xs text-muted/70 mt-1">We often catch noindex still on after publish, or forms that work in Designer but drop submissions on the live site.</p>
       </div>
       <a href="/webflow" class="launchlook-btn launchlook-btn-secondary shrink-0">Webflow pricing &rarr;</a>
@@ -283,10 +331,15 @@
     <div class="page-wrap px-6 section-inner-tight">
       <h2 class="font-serif text-2xl sm:text-3xl">Pricing</h2>
       <p class="text-sm text-muted mt-2">Your builder is good at shipping fast. It won&rsquo;t click through like a confused first-timer, check if signup emails arrive, or spot the button that breaks on a phone. That&rsquo;s what we do.</p>
-      <p class="text-sm text-muted mt-2">Every tier gets desktop + phone checks and fix prompts you can paste back into your builder. The founder signs off on every finding.</p>
+      <p class="text-sm text-muted mt-2">Every tier gets desktop + phone checks and paste-into-builder fix text on each finding. The founder signs off on every item.</p>
 
-      <div class="mt-4 card-elevated bg-surface-warm px-4 py-4 text-sm text-muted border-l-2 border-amber-500/60">
-        <p><strong class="text-ink font-medium">Already ran a scanner?</strong> Tools like PageLens are great for indexing, schema, headers, and page-level SEO. They won&rsquo;t submit your signup form, wait for the confirmation email, or notice the button stuck off-screen on mobile. We cover the &ldquo;would a real person bounce?&rdquo; layer. <a href="/vs-pagelens" class="underline hover:text-ink">Compare with PageLens</a>.</p>
+      <div class="mt-4 space-y-3">
+        <div class="card-elevated bg-surface-warm px-4 py-4 text-sm text-muted border-l-2 border-amber-500/60">
+          <p><strong class="text-ink font-medium">No GitHub?</strong> Most production-readiness tools (including VibeDoctor) want a connected repo for secrets, dependencies, and code health. If you built in Lovable or Bolt and only have a live link, LaunchLook is built for you — we test the app people actually use. <a href="/vs-vibedoctor" class="underline hover:text-ink">Compare with VibeDoctor</a>.</p>
+        </div>
+        <div class="card-elevated bg-surface-warm px-4 py-4 text-sm text-muted border-l-2 border-line">
+          <p><strong class="text-ink font-medium">Already ran a site scanner?</strong> PageLens is great for indexing, schema, and headers. It won&rsquo;t submit your signup form or wait for the confirmation email. We cover the &ldquo;would a real person bounce?&rdquo; layer. <a href="/vs-pagelens" class="underline hover:text-ink">Compare with PageLens</a>.</p>
+        </div>
       </div>
 
       <p class="delivery-sla">Reports delivered within 48 hours · 7-day full refund if it's not useful</p>
@@ -299,7 +352,7 @@
           <p class="font-serif text-3xl mt-1">$19</p>
           <p class="text-sm text-muted mt-1 italic">Catch what would embarrass you on day&nbsp;one.</p>
           <ul class="tier-features mt-3 space-y-2 text-sm flex-1 text-muted">
-            <li><strong class="text-ink">Main Report PDF:</strong> up to 10 findings, each with a fix prompt</li>
+            <li><strong class="text-ink">Main Report PDF:</strong> up to 10 findings, each with paste-into-builder fix text</li>
             <li><strong class="text-ink">Quick Start Guide PDF:</strong> one-page card for your first users</li>
             <li><strong class="text-ink">Pre-Launch Checklist PDF:</strong> work through before you share the link</li>
             <li><strong class="text-ink">Desktop + mobile tested:</strong> real clicks, not just screenshots</li>
@@ -315,7 +368,7 @@
           <p class="text-sm text-muted mt-1 italic">Inviting real users? Make sure they can&rsquo;t see each other&rsquo;s data.</p>
           <ul class="tier-features mt-3 space-y-2 text-sm flex-1 text-muted">
             <li class="text-ink font-medium">Everything in Starter, plus:</li>
-            <li>Up to <strong class="text-ink">30 findings</strong>, each with a fix prompt</li>
+            <li>Up to <strong class="text-ink">30 findings</strong>, each with paste-into-builder fix text</li>
             <li><strong class="text-ink">Data isolation check:</strong> can one user peek at another&rsquo;s stuff?</li>
             <li><strong class="text-ink">User Guide PDF:</strong> short onboarding doc for your users</li>
             <li><strong class="text-ink">Fix Check included:</strong> re-audit after you fix things ($9 within 14 days)</li>
@@ -328,6 +381,7 @@
           <h3 class="font-serif text-lg">Pro</h3>
           <p class="font-serif text-3xl mt-1">$99</p>
           <p class="text-sm text-muted mt-1 italic">Taking real money or handing off to a developer? This is the full package.</p>
+          <p class="text-xs text-muted mt-2 leading-snug">Same test-account rules as Scale Up: <strong class="text-ink">dummy accounts only</strong> in the intake form; deleted within 24 hours.</p>
           <ul class="tier-features mt-3 space-y-2 text-sm flex-1 text-muted">
             <li class="text-ink font-medium">Everything in Scale Up, plus:</li>
             <li><strong class="text-ink">Ask Rob anything:</strong> up to 5 questions on your findings, personal reply within 24 hours</li>
@@ -366,6 +420,21 @@
       <div class="section-rule mt-2 mb-3" aria-hidden="true"></div>
       <h2 class="font-serif text-2xl mb-6">Common questions</h2>
       <div class="card-elevated divide-y divide-line px-4 sm:px-5 max-w-2xl">
+        <details class="py-4" id="what-we-test">
+          <summary class="flex justify-between items-center font-medium text-sm">What do you actually test?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
+            <p>We walk your live URL like a first-time visitor — desktop and phone. Typical checks:</p>
+            <ul class="space-y-2 list-disc list-inside sm:list-outside sm:pl-5">
+              <li><strong class="text-ink">Signup and login</strong> — confirmation emails actually arrive</li>
+              <li><strong class="text-ink">Forms and checkout</strong> — silent failures are the #1 thing we find</li>
+              <li><strong class="text-ink">Mobile layout</strong> — phone width, tap targets, menus, CTAs</li>
+              <li><strong class="text-ink">Trust pages</strong> — privacy, terms, working contact links</li>
+              <li><strong class="text-ink">Dead links and buttons</strong> — 404s and dead-end clicks</li>
+              <li><strong class="text-ink">Placeholder and dev-only content</strong> — fake stats, dev shortcuts on prod</li>
+              <li><strong class="text-ink">First-visitor paths</strong> — homepage to core action without getting stuck</li>
+            </ul>
+          </div>
+        </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">What do you mean by &ldquo;we actually use it&rdquo;?<span class="text-muted text-lg">+</span></summary>
           <div class="mt-2 text-muted text-sm leading-relaxed space-y-3">
@@ -381,6 +450,13 @@
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">Which platforms do you support?<span class="text-muted text-lg">+</span></summary>
           <p class="mt-2 text-muted text-sm leading-relaxed">Any vibe-coded <strong>web app</strong> with a public URL. We often review Lovable, Bolt, Base44, and Replit apps. Also v0, Cursor-built apps, Webflow sites, and others. If your builder outputs a shareable link, we can usually review it.</p>
+        </details>
+        <details class="py-4">
+          <summary class="flex justify-between items-center font-medium text-sm">How is this different from VibeDoctor or PageLens?<span class="text-muted text-lg">+</span></summary>
+          <div class="mt-2 text-muted text-sm leading-relaxed space-y-2">
+            <p><strong class="text-ink">VibeDoctor</strong> needs a GitHub repo for most checks (secrets, CVEs, code health). <strong class="text-ink">PageLens</strong> is a fast site scanner (SEO, schema, headers). LaunchLook only needs your live URL and focuses on whether a real person can sign up, get email, and use the app on a phone.</p>
+            <p><a href="/vs-vibedoctor" class="underline hover:text-ink">vs VibeDoctor</a> &middot; <a href="/vs-pagelens" class="underline hover:text-ink">vs PageLens</a></p>
+          </div>
         </details>
         <details class="py-4">
           <summary class="flex justify-between items-center font-medium text-sm">I built my app with Lovable / Cursor / Bolt. Why do I still need a review?<span class="text-muted text-lg">+</span></summary>
@@ -426,6 +502,7 @@
         <li><a href="/faq" class="hover:text-ink">FAQ</a></li>
         <li><a href="/webflow" class="hover:text-ink">Webflow</a></li>
         <li><a href="/vs-pagelens" class="hover:text-ink">vs PageLens</a></li>
+        <li><a href="/vs-vibedoctor" class="hover:text-ink">vs VibeDoctor</a></li>
         <li><a href="/privacy" class="hover:text-ink">Privacy</a></li>
         <li><a href="/terms" class="hover:text-ink">Terms</a></li>
       </ul>

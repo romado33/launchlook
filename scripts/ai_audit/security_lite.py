@@ -36,8 +36,11 @@ from __future__ import annotations
 import base64
 import json
 import re
+import socket
+import ssl
 import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urljoin, urlparse
 
@@ -215,6 +218,114 @@ def _check_xcto(headers: dict[str, str]) -> dict[str, Any] | None:
         "tagged_by_persona": SNOOP_PERSONA,
         "tag": SNOOP_TAG,
         "check_id": "x_content_type_options",
+    }
+
+
+def _check_referrer_policy(headers: dict[str, str]) -> dict[str, Any] | None:
+    if headers.get("referrer-policy"):
+        return None
+    return {
+        "severity": "low",
+        "title": "Referrer-Policy header is not set",
+        "what_we_saw": (
+            "Your homepage response does not include a Referrer-Policy header. "
+            "We checked the live URL's response headers."
+        ),
+        "why_it_matters": (
+            "Without it, other sites may see full URLs when people click links "
+            "away from your app — including pages with private IDs in the address bar. "
+            "It's a small privacy and trust polish item before launch."
+        ),
+        "fix_prompt": (
+            "Add a Referrer-Policy response header on production. A sensible default "
+            "for most apps: Referrer-Policy: strict-origin-when-cross-origin. "
+            "Set it in your host's custom headers (Vercel, Netlify, Cloudflare, Webflow)."
+        ),
+        "category": CATEGORY_ID,
+        "tagged_by_persona": SNOOP_PERSONA,
+        "tag": SNOOP_TAG,
+        "check_id": "referrer_policy",
+    }
+
+
+def _check_permissions_policy(headers: dict[str, str]) -> dict[str, Any] | None:
+    if headers.get("permissions-policy") or headers.get("feature-policy"):
+        return None
+    return {
+        "severity": "low",
+        "title": "Permissions-Policy header is not set",
+        "what_we_saw": (
+            "Your homepage does not send a Permissions-Policy (or legacy "
+            "Feature-Policy) header."
+        ),
+        "why_it_matters": (
+            "This header tells browsers which device features (camera, mic, location) "
+            "your site can request. It's optional for simple apps but good practice "
+            "before you handle payments or accounts."
+        ),
+        "fix_prompt": (
+            "Add a Permissions-Policy response header that only allows what your app "
+            "needs. Example for a basic SaaS with no camera: "
+            "Permissions-Policy: camera=(), microphone=(), geolocation=(). "
+            "Adjust in your hosting platform's security/header settings."
+        ),
+        "category": CATEGORY_ID,
+        "tagged_by_persona": SNOOP_PERSONA,
+        "tag": SNOOP_TAG,
+        "check_id": "permissions_policy",
+    }
+
+
+def _check_ssl_expiry(base_url: str) -> dict[str, Any] | None:
+    parsed = urlparse(base_url)
+    if parsed.scheme != "https":
+        return None
+    host = parsed.hostname
+    if not host:
+        return None
+    try:
+        ctx = ssl.create_default_context()
+        with socket.create_connection((host, 443), timeout=HEAD_TIMEOUT_SEC) as sock:
+            with ctx.wrap_socket(sock, server_hostname=host) as ssock:
+                cert = ssock.getpeercert()
+        not_after = cert.get("notAfter")
+        if not not_after:
+            return None
+        expires = datetime.strptime(not_after, "%b %d %H:%M:%S %Y %Z").replace(
+            tzinfo=timezone.utc
+        )
+        days = (expires - datetime.now(timezone.utc)).days
+    except Exception:  # noqa: BLE001
+        return None
+
+    if days > 30:
+        return None
+
+    severity = "critical" if days < 7 else "high"
+    when = "today" if days <= 0 else f"in about {days} day(s)"
+    return {
+        "severity": severity,
+        "title": "Your site's security certificate expires soon",
+        "what_we_saw": (
+            f"Your live site's HTTPS certificate expires {when} "
+            f"(on {expires.strftime('%B %d, %Y')}). Browsers will show scary warnings "
+            "after that and people may not be able to open your app at all."
+        ),
+        "why_it_matters": (
+            "If the certificate lapses during launch week, every visitor sees a "
+            "'connection not private' warning — signup and payments stop cold."
+        ),
+        "fix_prompt": (
+            "Renew HTTPS on your hosting provider before launch. On Vercel, Netlify, "
+            "Cloudflare, or Webflow this is usually automatic once DNS is correct — "
+            "log in to the host, check SSL/TLS status, and force renewal if needed. "
+            "If you use a custom domain, confirm it is verified and not pointing at "
+            "an old server."
+        ),
+        "category": CATEGORY_ID,
+        "tagged_by_persona": SNOOP_PERSONA,
+        "tag": SNOOP_TAG,
+        "check_id": "ssl_expiry",
     }
 
 
@@ -612,6 +723,8 @@ def run_security_lite(
         ("csp", _check_csp(headers)),
         ("x_frame_options", _check_xfo(headers)),
         ("x_content_type_options", _check_xcto(headers)),
+        ("referrer_policy", _check_referrer_policy(headers)),
+        ("permissions_policy", _check_permissions_policy(headers)),
     ]
 
     findings: list[dict[str, Any]] = []
@@ -630,6 +743,13 @@ def run_security_lite(
         findings.extend(cred_findings)
     else:
         passed_ids.append("exposed_credentials_or_paths")
+
+    ssl_finding = _check_ssl_expiry(base_url)
+    if ssl_finding is None:
+        passed_ids.append("ssl_expiry")
+    else:
+        failed_ids.append("ssl_expiry")
+        findings.append(ssl_finding)
 
     crawl_checks = [
         ("sitemap_xml", _check_sitemap(base_url)),
