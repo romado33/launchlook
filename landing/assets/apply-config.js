@@ -22,6 +22,7 @@
   // Handoff Report add-on (q18). landing/index.html attaches
   // data-launchlook-stripe="handoff_report" to the add-on CTA.
   var handoffUrl = stripe.handoff || stripe.handoffReport || "";
+  var brokenFlowUrl = stripe.brokenFlowReview || stripe.broken_flow_review || "";
 
   function $(selector) {
     return document.querySelectorAll(selector);
@@ -90,6 +91,11 @@
     "[data-launchlook-stripe='handoff_report'], [data-launchlook-stripe='handoff']",
     safeHttpsUrl(handoffUrl),
     "Payment link not configured (Handoff Report - see docs/MANUAL-APPROVAL-2026-05-26.md)",
+  );
+  setLinkState(
+    "[data-launchlook-stripe='broken_flow_review']",
+    safeHttpsUrl(brokenFlowUrl),
+    "Payment link not configured (Broken Flow Review $49 - see docs/BROKEN-FLOW-REVIEW-WORKFLOW.md)",
   );
 
   function intakeMailto(email) {

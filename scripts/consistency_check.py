@@ -1004,6 +1004,10 @@ def scan_stripe_pricing() -> list[Issue]:
             'HANDOFF_REPORT_METADATA_VALUE = "handoff_report"',
             "q18 Handoff Report metadata routing present.",
         ),
+        (
+            'BROKEN_FLOW_REVIEW_METADATA_VALUE = "broken_flow_review"',
+            "Broken Flow Review metadata routing present.",
+        ),
     ]
     for needle, _explanation in expected_pairs:
         if needle not in text:

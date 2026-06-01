@@ -27,6 +27,7 @@ The tier ladder is **fixed at 4 tiers**: Free / Starter / Scale Up / Pro. Do not
 |---|---|---|
 | Fix Check (re-scan after fixes) | $19 standalone, $9 within 14 days of original audit | Customer-facing name as of May 2026; internal routing/template filenames keep `confidence_check`. Free 1x with Pro. No longer surfaced on landing pricing pages — offered only via the post-delivery email + report PDF footer for paid customers. |
 | Handoff Report for Starter / Scale Up | $49 add-on | Pro tier already includes it. Dropped from $99 on 2026-05-26 to slot into the upsell ladder: Scale Up + Handoff = $98, intentionally $1 below Pro $99. Old $99 add-on made the bundle $148, above Pro, so it never sold. |
+| Broken Flow Review | $49 one-off | Post-launch only. Customer names **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 findings + paste-into-builder fix text in a short PDF. **Not** on the main landing pricing grid (FAQ + footer link only). Stripe metadata `product=broken_flow_review` (required: $4900 collides with Scale Up and Handoff). |
 
 ### Webflow SKU
 

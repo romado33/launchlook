@@ -48,6 +48,7 @@ _stripe = _load_hyphenated("stripe_webhook_api", REPO_ROOT / "api" / "stripe-web
 
 import _lib.notion_helpers as _nh  # noqa: E402
 
+
 # ---------------------------------------------------------------------------
 # (a) Tally webhook — null / missing field tests
 # ---------------------------------------------------------------------------
@@ -192,11 +193,15 @@ class StripeProcessCheckoutCase(unittest.TestCase):
 
 
 class StripeMetadataRoutingCase(unittest.TestCase):
-    """is_handoff_report_session and is_confidence_check_session."""
+    """is_handoff_report_session, is_broken_flow_review_session, is_confidence_check_session."""
 
     def test_handoff_report_session_detected(self) -> None:
         session = _make_session(metadata={"product": "handoff_report"})
         self.assertTrue(_stripe.is_handoff_report_session(session))
+
+    def test_broken_flow_review_session_detected(self) -> None:
+        session = _make_session(metadata={"product": "broken_flow_review"})
+        self.assertTrue(_stripe.is_broken_flow_review_session(session))
 
     def test_confidence_check_session_detected(self) -> None:
         session = _make_session(metadata={"product": "confidence_check"})
@@ -329,6 +334,7 @@ class SlugDeCollisionCase(unittest.TestCase):
 
     def test_slug_contains_6_char_hex_suffix(self) -> None:
         """The last segment of the slug must be a 6-char lowercase hex string."""
+        import re
         slug = self._slug("alice@example.com", "https://myapp.io")
         parts = slug.split("-")
         suffix = parts[-1]

@@ -164,6 +164,22 @@ class ProcessEventRoutingCase(unittest.TestCase):
         self.assertEqual(result.get("product"), "handoff_report")
         self.assertNotIn("tier", result)
 
+    def test_broken_flow_review_metadata_routes_to_broken_flow_review(self) -> None:
+        session = _make_session(
+            amount_cents=4900,
+            metadata={"product": "broken_flow_review"},
+        )
+        event = _make_event(session)
+        import _lib.notion_helpers as _nh
+        with patch.object(stripe_webhook, "get_client", return_value=MagicMock()), \
+             patch.object(stripe_webhook, "get_customers_ds_id", return_value="ds-id"), \
+             patch.object(_nh, "find_customer_by_email", return_value=None), \
+             patch.object(stripe_webhook, "upsert_customer", side_effect=_noop_upsert):
+            result = stripe_webhook.process_event(event)
+        self.assertEqual(result.get("product"), "broken_flow_review")
+        self.assertEqual(result.get("status"), "broken_flow_review_recorded")
+        self.assertNotIn("tier", result)
+
 
 # ---------------------------------------------------------------------------
 # Idempotency: duplicate checkout.session.completed

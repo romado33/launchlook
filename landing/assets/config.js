@@ -55,6 +55,10 @@ window.LAUNCHLOOK_CONFIG = {
     // this link; see docs/PRODUCT-DECISIONS.md §9 for the upsell-ladder
     // rationale (Scale Up + Handoff = $98, intentionally $1 below Pro).
     handoff: "https://buy.stripe.com/3cIdR864B3nu7Rx4Gk3cc06",
+    // Broken Flow Review ($49 post-launch, one named flow). Not on the main
+    // pricing grid—FAQ + footer only. Create a Payment Link with metadata
+    // product=broken_flow_review and paste the URL here (or in config.local.js).
+    brokenFlowReview: "https://buy.stripe.com/fZu00i1Ol3nu3BhegU3cc0a",
   },
   linkedinUrl: "https://www.linkedin.com/in/rob-dods/",
   // Shown on shareable report footers (landing stays "human reviewer" in prose).

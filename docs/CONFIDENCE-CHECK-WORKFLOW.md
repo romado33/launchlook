@@ -73,7 +73,7 @@ workspace and share it with the existing Notion integration. Schema:
 | `customer_email` | Email | The Stripe customer email |
 | `original_audit_id` | Text | Slug of the original audit (best-effort, blank if unknown) |
 | `paid_at` | Date | Set automatically by the webhook |
-| `price_paid` | Text | "Confidence Check ($19)" or "Confidence Check ($9)" |
+| `price_paid` | Number | Amount in **cents** (e.g. `1900` = $19, `900` = $9). Set by webhook. |
 | `status` | Select | Options: `queued`, `delivered` |
 
 After creation, paste the DB ID into Vercel env vars and into local `.env`:

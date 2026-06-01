@@ -91,6 +91,14 @@ HANDOFF_REPORT_CENTS_TO_LABEL = {
 }
 
 
+# Post-launch one-flow review ($49). Discriminated by metadata.product because
+# $4900 collides with Scale Up Package and Handoff Report add-on.
+BROKEN_FLOW_REVIEW_METADATA_VALUE = "broken_flow_review"
+BROKEN_FLOW_REVIEW_CENTS_TO_LABEL = {
+    4900: "Broken Flow Review ($49)",
+}
+
+
 def cents_to_tier(amount_cents: int | None) -> str | None:
     if amount_cents is None:
         return None
@@ -203,6 +211,11 @@ def is_handoff_report_session(session: dict[str, Any]) -> bool:
     return _session_product_metadata(session) == HANDOFF_REPORT_METADATA_VALUE
 
 
+def is_broken_flow_review_session(session: dict[str, Any]) -> bool:
+    """True when the Stripe checkout session is a $49 Broken Flow Review (post-launch)."""
+    return _session_product_metadata(session) == BROKEN_FLOW_REVIEW_METADATA_VALUE
+
+
 def handoff_report_label(amount_cents: int | None) -> str:
     if amount_cents is None:
         return "Handoff Report add-on"
@@ -215,6 +228,12 @@ def confidence_check_label(amount_cents: int | None) -> str:
     return CONFIDENCE_CHECK_CENTS_TO_LABEL.get(
         amount_cents, f"Confidence Check (${amount_cents / 100:.2f})"
     )
+
+
+def broken_flow_review_label(amount_cents: int | None) -> str:
+    if amount_cents is None:
+        return "Broken Flow Review"
+    return BROKEN_FLOW_REVIEW_CENTS_TO_LABEL.get(int(amount_cents), "Broken Flow Review")
 
 
 def handle_confidence_check_purchase(session: dict[str, Any]) -> dict[str, Any]:
@@ -342,6 +361,60 @@ def handle_handoff_report_purchase(session: dict[str, Any]) -> dict[str, Any]:
     return {
         "status": "handoff_report_recorded",
         "product": HANDOFF_REPORT_METADATA_VALUE,
+        "label": label,
+        "amount_cents": amount_cents,
+        "customer_email": customer_email,
+        "session_id": session_id,
+        "notion": notion_status,
+    }
+
+
+def handle_broken_flow_review_purchase(session: dict[str, Any]) -> dict[str, Any]:
+    """Process a $49 Broken Flow Review payment (post-launch, one named flow).
+
+    Scoped add-on: customer names one failing flow in intake; delivery is a
+    short PDF (up to ~5 findings). Not a full tier audit. See
+    docs/BROKEN-FLOW-REVIEW-WORKFLOW.md.
+    """
+    amount_cents = (session.get("amount_total") or 0) or None
+    amount_dollars = round((amount_cents or 0) / 100, 2)
+    customer_email = ((session.get("customer_details") or {}).get("email") or "").strip() or (
+        session.get("customer_email") or ""
+    ).strip()
+    session_id = session.get("id") or ""
+    label = broken_flow_review_label(amount_cents)
+
+    notion_status = "skipped"
+    if customer_email:
+        try:
+            client = get_client()
+            ds_id = get_customers_ds_id(client)
+            upsert_customer(
+                client,
+                ds_id,
+                {
+                    "email": customer_email,
+                    "notes": f"[broken_flow_review_paid] stripe_session={session_id}",
+                },
+                email_for_match=customer_email,
+            )
+            notion_status = "updated"
+        except Exception as exc:  # noqa: BLE001
+            sys.stderr.write(
+                f"[broken_flow_review] Notion upsert failed for {customer_email}: {exc}\n"
+            )
+            notion_status = "error"
+
+    _send_purchase_alert(
+        email=customer_email or "(unknown)",
+        tier=label,
+        amount_usd=amount_dollars,
+        session_id=session_id,
+    )
+
+    return {
+        "status": "broken_flow_review_recorded",
+        "product": BROKEN_FLOW_REVIEW_METADATA_VALUE,
         "label": label,
         "amount_cents": amount_cents,
         "customer_email": customer_email,
@@ -512,6 +585,8 @@ def process_event(event: dict[str, Any]) -> dict[str, Any]:
     # also still labeled). Metadata-first routing prevents the $4900 collision with Scale Up (and the legacy $9900 collision with Pro).
     if is_handoff_report_session(session):
         return handle_handoff_report_purchase(session)
+    if is_broken_flow_review_session(session):
+        return handle_broken_flow_review_purchase(session)
     # q6: Confidence Check / Saboteur re-scan add-on. Metadata-first
     # routing prevents the $1900 price collision with the Starter SKU.
     if is_confidence_check_session(session):

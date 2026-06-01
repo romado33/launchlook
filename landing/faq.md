@@ -22,11 +22,11 @@ A person edits the list before you see it. No raw dump of 200 warnings.
 
 ## Tier differences
 
-**Starter ($19).** Top 10 launch-blocking issues for first-time visitors. Best when you are about to share the link.
+**Starter ($19).** Up to 10 founder-reviewed findings with paste-into-builder fix text; Main Report, Quick Start Guide, and Pre-Launch Checklist PDFs; desktop + mobile walkthrough (real form submits and email checks).
 
-**Scale Up ($49).** Full audit (up to 30 findings), user data isolation check with 2 test accounts (vibe-coded apps with logins), Quick Start Guide PDF.
+**Scale Up ($49).** Everything in Starter, plus up to 30 findings, cross-user data isolation check (2 dummy test accounts), User Guide PDF, and Fix Check included ($9 re-audit within 14 days).
 
-**Pro ($99).** Up to 40 findings, integrations review (Stripe, auth, email, analytics), 30-minute Loom walkthrough.
+**Pro ($99).** Everything in Scale Up, plus up to 40 findings, integrations review (Stripe, auth, email, analytics), recorded Loom walkthrough, Handoff Report PDF included, Ask Rob anything (5 questions / 24h), and one Fix Check included after delivery.
 
 ## Which platforms?
 
@@ -67,6 +67,10 @@ Fiverr is a marketplace ($5–$200+ per gig). Scope and quality vary by seller; 
 ## Why isn't this $1 like PageLens or other scanners?
 
 Scanners ($1–$29) are automated: fast scores, headers, SEO, software-generated reports. LaunchLook is a person walking your app: forms submitted, confirmation emails checked, mobile tested, and the founder edits every finding before delivery. **Fair comparison:** our **free 2 findings** (human-reviewed) vs PageLens's $1 hook; **Starter $19** is the first paid tier when you want up to 10 findings plus PDFs. PageLens for site scorecards; LaunchLook for "will a real user complete signup?" Use both if you can. Details: https://launchlook.app/vs-pagelens
+
+## Broken Flow Review ($49)
+
+Post-launch only. You name **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 focused findings with paste-into-builder fix text in a short PDF—not a full audit. Sold via FAQ only (not on the main pricing grid). https://launchlook.app/faq#broken-flow-review
 
 ## Refunds
 

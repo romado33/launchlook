@@ -52,6 +52,7 @@ API_PRODUCTS = frozenset(
         "pro_package",
         "confidence_check",
         "handoff_report",
+        "broken_flow_review",
     }
 )
 
@@ -173,7 +174,9 @@ def deactivate_link(key: str, plink_id: str, dry_run: bool) -> tuple[bool, str]:
     return not data.get("active", True), "deactivated"
 
 
-def cmd_enable_tax(key: str, dry_run: bool, deactivate_reverify: bool, all_active: bool) -> int:
+def cmd_enable_tax(
+    key: str, dry_run: bool, deactivate_reverify: bool, all_active: bool
+) -> int:
     links = list_all(key, "payment_links", {"active": "true"})
     if not links:
         print("No active payment links found.")
