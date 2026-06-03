@@ -1,14 +1,14 @@
 # LaunchLook vs. a Fiverr UX audit
 
-Neutral comparison for founders deciding between a marketplace freelancer and a fixed-scope checkup. Last updated May 2026.
+Quick comparison: marketplace freelancer vs fixed checkup. Last updated May 2026.
 
 ## One-line split
 
-**Fiverr sells you a freelancer. LaunchLook sells you a fixed pre-launch checkup: same scope, same founder review, every time.**
+**Fiverr sells you a freelancer. LaunchLook sells you the same pre-launch checkup every time.**
 
 ## What Fiverr is
 
-Fiverr is a **marketplace**, not a single product. "UX audit," "website review," and "QA testing" gigs span roughly **$5–$500+**. At the low end, many buyers report generic bullet lists (including AI-generated output). Credible human passes often land around **$50–$200**, but scope still varies gig by gig.
+Fiverr is a **marketplace**, not a single product. "UX audit," "website review," and "QA testing" gigs span roughly **$5 to $500+**. At the low end, many buyers report generic bullet lists (including AI-generated output). Credible human passes often land around **$50 to $200**, but scope still varies gig by gig.
 
 Typical Fiverr experience:
 
@@ -22,19 +22,19 @@ Typical Fiverr experience:
 
 - **Audience:** Founders shipping vibe-coded web apps (Lovable, Bolt, Cursor, v0, Replit) and Webflow sites.
 - **Job:** One-off pre-launch checkup before real users or Product Hunt.
-- **Deliverable:** Founder-reviewed findings, paste-into-builder fix text, PDFs on paid tiers.
-- **Wedge:** Fixed checklist: signup/email, forms, mobile, trust pages, dead links, edited by Rob before delivery.
+- **Deliverable:** Edited findings, paste-into-builder fix text, PDFs on paid tiers.
+- **Wedge:** Fixed checklist: signup/email, forms, mobile, trust pages, dead links. I edit everything before delivery.
 
-## Side-by-side
+## Comparison table
 
 | | LaunchLook | Typical Fiverr UX / website review gig |
 |---|------------|----------------------------------------|
 | What you buy | Fixed product | Individual freelancer |
 | Workflow testing | Person submits forms; checks confirmation emails | Varies; often screenshots only |
 | Fix output | Paste-into-builder text per finding | Often generic recommendations |
-| Review | Founder on every finding | One seller; no platform-wide quality bar |
-| Turnaround | Usually within 48 hours | Often 2–7 days + revisions |
-| Pricing | Free 2 findings; **$19 / $49 / $99** one-off | **~$5–$200+** depending on gig |
+| Review | Same reviewer every time | One seller; no platform-wide quality bar |
+| Turnaround | Usually within 48 hours | Often 2 to 7 days plus revisions |
+| Pricing | Free 2 findings; **$19 / $49 / $99** one-off | **~$5 to $200+** depending on gig |
 | Refund | 7-day full refund if report isn't useful | Fiverr resolution / gig terms |
 
 ## When Fiverr is the better choice
@@ -51,8 +51,8 @@ Typical Fiverr experience:
 
 ## Related comparisons
 
-- Site scanner: [LaunchLook vs PageLens](https://launchlook.app/vs-pagelens.md)
-- Repo scanner: [LaunchLook vs VibeDoctor](https://launchlook.app/vs-vibedoctor.md)
+- Site scanner: [LaunchLook vs PageLens](https://launchlook.app/compare#pagelens)
+- Repo scanner: [LaunchLook vs VibeDoctor](https://launchlook.app/compare#vibedoctor)
 
 ## Links
 

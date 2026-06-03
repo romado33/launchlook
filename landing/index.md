@@ -15,7 +15,7 @@ Lovable, Bolt, Base44, Replit, v0, Cursor, Webflow, and similar platforms.
 ## How it works
 
 1. **Submit URL.** Free audit on the homepage, or pay then complete intake.
-2. **Test and review.** Desktop and mobile width passes, real workflow tests, then curated findings.
+2. **Test and review.** Desktop and mobile width passes, real workflow tests, then I edit the finding list.
 3. **Delivery.** Email with findings and paste-into-builder fix text (PDFs on paid tiers).
 
 ## Pricing (USD)

@@ -1,6 +1,6 @@
 # LaunchLook
 
-> Human-tested workflows and human-reviewed pre-launch checkups for vibe-coded web apps and Webflow sites. Real submits, inbox checks, and curated findings before delivery.
+> Pre-launch checkups for vibe-coded web apps and Webflow sites. Real form submits, inbox checks, and a short edited finding list before delivery.
 
 LaunchLook (https://launchlook.app) helps founders ship Lovable, Bolt, Base44, Replit, v0, Cursor, and Webflow projects without embarrassing UI bugs or silent failures reaching first users.
 
@@ -17,7 +17,7 @@ Important for agents:
 - [Home](https://launchlook.app/index.md): Product summary, pricing, how it works, free audit.
 - [FAQ](https://launchlook.app/faq.md): Tiers, human review, platforms, data safety, refunds.
 - [Webflow](https://launchlook.app/webflow.md): Webflow-specific scope and pricing.
-- [Comparisons](https://launchlook.app/compare.md): PageLens, VibeDoctor, and Fiverr side-by-side tables (single page).
+- [Comparisons](https://launchlook.app/compare.md): PageLens, VibeDoctor, and Fiverr comparison tables (single page).
 
 ## Primary pages (HTML)
 

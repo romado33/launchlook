@@ -8,7 +8,7 @@ Webflow freelancers, agencies, and in-house teams before client handoff. **URL o
 
 ## What we check
 
-- Form submissions (including post–Nov 2024 failure modes)
+- Form submissions (including post-Nov 2024 failure modes)
 - Accidental noindex and robots.txt blocking production
 - JSON-LD / structured data
 - Designer-to-live mismatches

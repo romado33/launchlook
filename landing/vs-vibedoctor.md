@@ -1,6 +1,6 @@
 # LaunchLook vs. VibeDoctor
 
-Neutral comparison for buyers choosing a pre-launch checkup.
+Quick comparison for picking a pre-launch checkup.
 
 ## One-line split
 
@@ -20,9 +20,9 @@ Neutral comparison for buyers choosing a pre-launch checkup.
 |---|---|---|
 | **Best buyer** | Non-technical or vibe-coder shipping from Lovable, Bolt, v0, Cursor, often **no GitHub repo** | Devs with a **connected repo** who want fast automated security, dependencies, and code-health scans |
 | **What you provide** | Live public URL (+ optional test logins on Scale Up / Pro) | GitHub/GitLab repo (read-only) and/or live URL for a smaller live-only pass |
-| **What you get** | Short curated PDF, paste-into-**builder** fix text per finding, founder review | Vitals score, file:line findings, copy prompts for **IDE** tools, optional push monitoring |
+| **What you get** | Short PDF, paste-into-**builder** fix text per finding, human review | Vitals score, file:line findings, copy prompts for **IDE** tools, optional push monitoring |
 | **Workflow testing** | A person submits forms and checks confirmation emails | Automated rules; optional journey-style passes on live URL |
-| **Turnaround** | Usually a few days (human review) | ~30 seconds to minutes (automated) |
+| **Turnaround** | Usually a few days | ~30 seconds to minutes (automated) |
 | **Pricing** | Free 2 findings; $19 / $49 / $99 one-off | Free tier; paid from ~$15/mo (subscription) |
 | **Account** | No login. URL + email only | Sign-in for scan history and repo connection |
 
@@ -36,13 +36,13 @@ Neutral comparison for buyers choosing a pre-launch checkup.
 
 - You **don't have GitHub**, or you've never exported your Lovable/Bolt project to git.
 - You care whether a **real person** can sign up, get the email, and use the app on a phone.
-- You want a **short prescription**, not a wall of automated warnings, before Product Hunt or beta users.
+- You want a **short list**, not a wall of automated warnings, before Product Hunt or beta users.
 
 ## Use both?
 
 Yes, when you have a repo **and** a live app: VibeDoctor for code and dependencies; LaunchLook before you share the link with humans.
 
-For **marketing-site** scans (SEO, schema, headers), see [LaunchLook vs PageLens](https://launchlook.app/vs-pagelens.md).
+For **marketing-site** scans (SEO, schema, headers), see [LaunchLook vs PageLens](https://launchlook.app/compare#pagelens).
 
 - HTML: https://launchlook.app/compare#vibedoctor (was /vs-vibedoctor)
 - Main site: https://launchlook.app/

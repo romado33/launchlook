@@ -18,11 +18,11 @@ A person edits the list before you see it. No raw dump of 200 warnings.
 
 **Human-tested workflows:** A real person clicks through signup, booking, contact, and checkout paths, submits forms, and checks whether confirmation, thank-you, and notification emails actually arrive.
 
-**Human-reviewed findings:** AI helps surface issues quickly. Every finding still goes through a person before you see it: false positives dropped, wording tightened, gaps added when they matter.
+**Human review:** AI helps surface issues quickly. Every finding still gets a pass from a person before you see it: false positives dropped, wording tightened, gaps added when they matter.
 
 ## Tier differences
 
-**Starter ($19).** Up to 10 founder-reviewed findings with paste-into-builder fix text; Main Report, Quick Start Guide, and Pre-Launch Checklist PDFs; desktop + mobile walkthrough (real form submits and email checks).
+**Starter ($19).** Up to 10 findings with paste-into-builder fix text; Main Report, Quick Start Guide, and Pre-Launch Checklist PDFs; desktop + mobile walkthrough (real form submits and email checks).
 
 **Scale Up ($49).** Everything in Starter, plus up to 30 findings, cross-user data isolation check (2 dummy test accounts), User Guide PDF, and Fix Check included ($9 re-audit within 14 days).
 
@@ -48,7 +48,7 @@ What we see on almost every app we review:
 - **Missing trust pages.** No privacy policy, terms, or contact that works.
 - **Robotic copy.** Vague hero lines people feel even if they can't name it.
 
-Most apps have 5 to 15 of these before the founder would notice on their own. LaunchLook helps the person you text the link to, not the search crawler.
+Most apps have 5 to 15 of these before you'd notice on your own. LaunchLook helps the person you text the link to, not the search crawler.
 
 Scale Up and Pro go deeper: data isolation, Stripe/login/email/analytics checks, and compliance basics on paid flows.
 
@@ -58,19 +58,19 @@ Same human review; checks shift to forms, noindex/robots, JSON-LD, Designer-to-l
 
 ## LaunchLook vs PageLens AI?
 
-Both scan your live site. PageLens targets SEO marketers who want fast, recurring scans. LaunchLook targets vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-into-builder fix text and founder review. Side-by-side: https://launchlook.app/compare#pagelens
+Both scan your live site. PageLens targets SEO folks who want fast, recurring scans. LaunchLook targets vibe coders on Lovable / Cursor / Bolt who want a one-off pre-launch check with paste-into-builder fix text. Table: https://launchlook.app/compare#pagelens
 
 ## LaunchLook vs a Fiverr UX audit?
 
-Fiverr is a marketplace ($5–$200+ per gig). Scope and quality vary by seller; many cheap gigs are generic. LaunchLook is a fixed pre-launch checkup: founder-reviewed findings, paste-into-builder fix text, usually within 48 hours. Fiverr fits design work or ongoing freelancers; LaunchLook fits vibe-coded apps before beta users. Side-by-side: https://launchlook.app/compare#fiverr
+Fiverr is a marketplace ($5 to $200+ per gig). Scope and quality vary by seller; many cheap gigs are generic. LaunchLook is a fixed pre-launch checkup: same checklist every time, paste-into-builder fix text, usually within 48 hours. Fiverr fits design work or ongoing freelancers; LaunchLook fits vibe-coded apps before beta users. Table: https://launchlook.app/compare#fiverr
 
 ## Why isn't this $1 like PageLens or other scanners?
 
-Scanners ($1–$29) are automated: fast scores, headers, SEO, software-generated reports. LaunchLook is a person walking your app: forms submitted, confirmation emails checked, mobile tested, and the founder edits every finding before delivery. **Fair comparison:** our **free 2 findings** (human-reviewed) vs PageLens's $1 hook; **Starter $19** is the first paid tier when you want up to 10 findings plus PDFs. PageLens for site scorecards; LaunchLook for "will a real user complete signup?" Use both if you can. Details: https://launchlook.app/vs-pagelens
+Scanners ($1 to $29) are automated: fast scores, headers, SEO, software-generated reports. LaunchLook is a person walking your app: forms submitted, confirmation emails checked, mobile tested, and I edit every finding before delivery. **Fair comparison:** our **free 2 findings** (human review) vs PageLens's $1 hook; **Starter $19** is the first paid tier when you want up to 10 findings plus PDFs. PageLens for site scorecards; LaunchLook for "will a real user complete signup?" Use both if you can. Details: https://launchlook.app/compare#pagelens
 
 ## Broken Flow Review ($49)
 
-Post-launch only. You name **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 focused findings with paste-into-builder fix text in a short PDF—not a full audit. https://launchlook.app/faq#broken-flow-review (own section on the FAQ page, not in the accordion).
+Post-launch only. You name **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 focused findings with paste-into-builder fix text in a short PDF. Not a full audit. https://launchlook.app/faq#broken-flow-review (own section on the FAQ page, not in the accordion).
 
 ## Do you offer refunds?
 
