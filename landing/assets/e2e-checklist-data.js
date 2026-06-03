@@ -123,8 +123,8 @@ window.LAUNCHLOOK_E2E = {
         },
         {
           id: "sm-sample",
-          label: "/sample → Sparkle Marketplace report (findings visible)",
-          hint: "Not “We don't have a report at that link”",
+          label: "/sample → Sparkle Marketplace Main Report PDF (opens in browser)",
+          hint: "Same layout as paid email delivery",
         },
         {
           id: "sm-sample-json",
@@ -138,7 +138,7 @@ window.LAUNCHLOOK_E2E = {
         },
         {
           id: "sm-footer",
-          label: "Footer Sample report works; no GitHub link; privacy/terms have no dead checklist link",
+          label: "Footer Sample PDF link works; no GitHub link; privacy/terms have no dead checklist link",
           hint: "",
         },
         {

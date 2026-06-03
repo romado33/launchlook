@@ -30,7 +30,7 @@ LaunchLook is **not** a security scanner, SEO tool, or code review product. It f
 1. Customer submits live URL (and email for free tier, or pays via Stripe then completes Tally intake).
 2. LaunchLook walks desktop and mobile viewports.
 3. A human reviews every finding (drops false positives, tightens wording).
-4. Customer receives email with report link and/or PDFs.
+4. Customer receives email with PDF report(s) (and fix-pack Markdown on paid tiers).
 
 No GitHub access, no builder login, no database access required for most audits.
 
@@ -53,7 +53,7 @@ PageLens targets SEO-focused marketers who want recurring scans. LaunchLook targ
 - Home: https://launchlook.app/
 - Webflow: https://launchlook.app/webflow
 - FAQ: https://launchlook.app/faq
-- Sample report: https://launchlook.app/sample (redirects to public sample HTML report)
+- Sample Main Report PDF: https://launchlook.app/sample (Sparkle Marketplace demo; same layout as paid delivery)
 - Comparison: https://launchlook.app/vs-pagelens
 - Contact: hello@launchlook.app
 

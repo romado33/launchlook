@@ -39,7 +39,7 @@
     { "url": "https://launchlook.app/", "title": "Home" },
     { "url": "https://launchlook.app/webflow", "title": "Webflow" },
     { "url": "https://launchlook.app/faq", "title": "FAQ" },
-    { "url": "https://launchlook.app/sample", "title": "Sample report" }
+    { "url": "https://launchlook.app/sample", "title": "Sample Main Report PDF" }
   ],
   "pricing_usd": {
     "free": { "price": 0, "findings": 2 },

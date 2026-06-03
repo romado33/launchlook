@@ -17,14 +17,14 @@ Important for agents:
 - [Home](https://launchlook.app/index.md): Product summary, pricing, how it works, free audit.
 - [FAQ](https://launchlook.app/faq.md): Tiers, human review, platforms, data safety, refunds.
 - [Webflow](https://launchlook.app/webflow.md): Webflow-specific scope and pricing.
-- [Comparisons](https://launchlook.app/compare.md): PageLens, VibeDoctor, and Fiverr comparison tables (single page).
+- [Comparisons](https://launchlook.app/compare.md): PageLens, VibeDoctor, and Fiverr side-by-side tables (single page).
 
 ## Primary pages (HTML)
 
 - [Home (free 2-finding audit)](https://launchlook.app/): Main offer for vibe-coded web apps. URL-only; no repo access.
 - [Webflow checkup](https://launchlook.app/webflow): Forms, noindex/robots, JSON-LD, Designer-to-live mismatches, breakpoints. Same human review tailored to Webflow Designer language.
 - [FAQ](https://launchlook.app/faq): Tiers, platforms, data handling, refunds, human review.
-- [Sample report](https://launchlook.app/sample): Example shareable HTML report deliverable.
+- [Sample Main Report PDF](https://launchlook.app/sample): Example paid deliverable (Sparkle Marketplace demo).
 
 ## Pricing (USD)
 

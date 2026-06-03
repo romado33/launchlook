@@ -38,5 +38,5 @@ POST `https://launchlook.app/api/free-audit` with `url` and `email`, or use the 
 - HTML home: https://launchlook.app/
 - FAQ: https://launchlook.app/faq.md
 - Webflow: https://launchlook.app/webflow.md
-- Sample report: https://launchlook.app/sample
+- Sample Main Report PDF: https://launchlook.app/sample
 - Contact: hello@launchlook.app

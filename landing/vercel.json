@@ -16,7 +16,7 @@
     }
   ],
   "redirects": [
-    { "source": "/sample", "destination": "/r/jane-sparkle-marketplace.html", "permanent": true },
+    { "source": "/sample", "destination": "/samples/sparkle-marketplace-main-report.pdf", "permanent": false },
     { "source": "/checklist", "destination": "/", "permanent": true }
   ],
   "rewrites": [

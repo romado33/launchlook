@@ -66,7 +66,7 @@ Stripe Payment Link **success URL** (dashboard): `https://launchlook.app/thanks`
 |-----|------|
 | `/` | `index.html` (vibe-coder SKU) |
 | `/webflow` | `webflow.html` (Webflow SKU — parallel landing page) |
-| `/sample` | 301 → `/r/jane-sparkle-marketplace.html` (sample report — formerly `sample.html`, deleted May 2026) |
+| `/sample` | Redirect → `/samples/sparkle-marketplace-main-report.pdf` (demo Main Report PDF) |
 | `/checklist` | 301 → `/` (standalone checklist page deleted May 2026; the Pre-Launch Checklist is now a bundled PDF deliverable on every paid tier — see `templates/pre_launch_checklist.html.j2`) |
 | `/privacy` | `privacy.html` |
 | `/terms` | `terms.html` |
@@ -76,7 +76,7 @@ Stripe Payment Link **success URL** (dashboard): `https://launchlook.app/thanks`
 ## Before launch
 
 1. Add `images/og.png` (1200×630) or remove `og:image` meta until ready.
-2. Replace sample report placeholder with a real screenshot.
+2. Regenerate sample PDF: `python scripts/generate_sample_pdf.py` (writes `landing/samples/sparkle-marketplace-main-report.pdf`, served at `/sample`).
 
 ## Lighthouse (BL-05 acceptance)
 
