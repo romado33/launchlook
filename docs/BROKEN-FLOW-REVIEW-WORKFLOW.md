@@ -16,7 +16,7 @@ Deliverable:
 
 - Full-site pre-launch audit (10 / 30 / 40 findings)
 - Data isolation check, User Guide, Loom, Handoff Report, or Fix Check bundle
-- Listed on the main landing pricing grid (FAQ `#broken-flow-review` + footer link only)
+- Listed on the main landing pricing grid (FAQ page section `#broken-flow-review` + footer link only)
 
 ## Stripe
 
