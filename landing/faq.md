@@ -1,6 +1,6 @@
 # LaunchLook FAQ
 
-## What we test
+## What do you actually test?
 
 We walk your live URL like a first-time visitor on desktop and phone. No GitHub, no repo. Typical checks:
 
@@ -72,7 +72,7 @@ Scanners ($1–$29) are automated: fast scores, headers, SEO, software-generated
 
 Post-launch only. You name **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 focused findings with paste-into-builder fix text in a short PDF—not a full audit. https://launchlook.app/faq#broken-flow-review (own section on the FAQ page, not in the accordion).
 
-## Refunds
+## Do you offer refunds?
 
 Email hello@launchlook.app within 7 days of delivery for a full refund if the report is not useful.
 
