@@ -263,11 +263,13 @@
               p2.appendChild(document.createTextNode(flowText(f.why_it_matters)));
               card.appendChild(p2);
             }
-            if (isSample && f.fix_prompt) {
+            if (f.fix_prompt) {
+              var builder =
+                (data.customer && data.customer.builder) || "your builder";
               var prompt = document.createElement("details");
               prompt.className = "report-fix-prompt";
               var summary = document.createElement("summary");
-              summary.textContent = "Paste into your AI builder to fix this";
+              summary.textContent = "Paste into " + builder + " to fix this";
               prompt.appendChild(summary);
               var pre = document.createElement("pre");
               pre.textContent = String(f.fix_prompt).trim();
