@@ -70,7 +70,7 @@ Scanners ($1 to $29) are automated: fast scores, headers, SEO, software-generate
 
 ## Broken Flow Review ($49)
 
-Post-launch only. You name **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 focused findings with paste-into-builder fix text in a short PDF. Not a full audit. https://launchlook.app/faq#broken-flow-review (own section on the FAQ page, not in the accordion).
+Post-launch only. You name **one** failing flow (signup, checkout, onboarding, etc.). Up to ~5 focused findings with paste-into-builder fix text in a short PDF. Not a full audit. FAQ accordion: https://launchlook.app/faq#broken-flow-review
 
 ## Do you offer refunds?
 
