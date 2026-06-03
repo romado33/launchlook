@@ -66,7 +66,13 @@
     { "source": "/sample", "destination": "/r/jane-sparkle-marketplace.html", "permanent": true },
     { "source": "/sample.html", "destination": "/r/jane-sparkle-marketplace.html", "permanent": true },
     { "source": "/checklist", "destination": "/", "permanent": true },
-    { "source": "/checklist.html", "destination": "/", "permanent": true }
+    { "source": "/checklist.html", "destination": "/", "permanent": true },
+    { "source": "/vs-pagelens", "destination": "/compare#pagelens", "permanent": true },
+    { "source": "/vs-pagelens.html", "destination": "/compare#pagelens", "permanent": true },
+    { "source": "/vs-vibedoctor", "destination": "/compare#vibedoctor", "permanent": true },
+    { "source": "/vs-vibedoctor.html", "destination": "/compare#vibedoctor", "permanent": true },
+    { "source": "/vs-fiverr-audit", "destination": "/compare#fiverr", "permanent": true },
+    { "source": "/vs-fiverr-audit.html", "destination": "/compare#fiverr", "permanent": true }
   ],
   "rewrites": [
     { "source": "/thanks", "destination": "/thanks.html" },

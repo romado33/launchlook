@@ -56,6 +56,6 @@ Typical Fiverr experience:
 
 ## Links
 
-- HTML: https://launchlook.app/vs-fiverr-audit
+- HTML: https://launchlook.app/compare#fiverr (was /vs-fiverr-audit)
 - Main site: https://launchlook.app/
 - Fiverr search (external): https://www.fiverr.com/search/gigs?query=ux%20audit

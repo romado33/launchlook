@@ -58,11 +58,11 @@ Same human review; checks shift to forms, noindex/robots, JSON-LD, Designer-to-l
 
 ## LaunchLook vs PageLens AI?
 
-Both scan your live site. PageLens targets SEO marketers who want fast, recurring scans. LaunchLook targets vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-into-builder fix text and founder review. Side-by-side: https://launchlook.app/vs-pagelens
+Both scan your live site. PageLens targets SEO marketers who want fast, recurring scans. LaunchLook targets vibe coders shipping with Lovable / Cursor / Bolt who want a one-off pre-launch checkup with paste-into-builder fix text and founder review. Side-by-side: https://launchlook.app/compare#pagelens
 
 ## LaunchLook vs a Fiverr UX audit?
 
-Fiverr is a marketplace ($5–$200+ per gig). Scope and quality vary by seller; many cheap gigs are generic. LaunchLook is a fixed pre-launch checkup: founder-reviewed findings, paste-into-builder fix text, usually within 48 hours. Fiverr fits design work or ongoing freelancers; LaunchLook fits vibe-coded apps before beta users. Side-by-side: https://launchlook.app/vs-fiverr-audit
+Fiverr is a marketplace ($5–$200+ per gig). Scope and quality vary by seller; many cheap gigs are generic. LaunchLook is a fixed pre-launch checkup: founder-reviewed findings, paste-into-builder fix text, usually within 48 hours. Fiverr fits design work or ongoing freelancers; LaunchLook fits vibe-coded apps before beta users. Side-by-side: https://launchlook.app/compare#fiverr
 
 ## Why isn't this $1 like PageLens or other scanners?
 

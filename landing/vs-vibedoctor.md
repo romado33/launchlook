@@ -44,5 +44,5 @@ Yes, when you have a repo **and** a live app: VibeDoctor for code and dependenci
 
 For **marketing-site** scans (SEO, schema, headers), see [LaunchLook vs PageLens](https://launchlook.app/vs-pagelens.md).
 
-- HTML: https://launchlook.app/vs-vibedoctor
+- HTML: https://launchlook.app/compare#vibedoctor (was /vs-vibedoctor)
 - Main site: https://launchlook.app/

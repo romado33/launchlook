@@ -40,6 +40,6 @@ Both take a **live URL** and return prioritized issues with fix-oriented output.
 
 ## Links
 
-- HTML comparison: https://launchlook.app/vs-pagelens
+- HTML: https://launchlook.app/compare#pagelens (was /vs-pagelens)
 - LaunchLook home: https://launchlook.app/
 - PageLens: https://www.pagelensai.com/
